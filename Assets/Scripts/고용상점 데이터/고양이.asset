@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b845241c147b05140acb39de88eb50c5, type: 3}
   m_Name: "\uACE0\uC591\uC774"
   m_EditorClassIdentifier: 
-  displayName: 
-  icon: {fileID: 0}
-  price: 0
+  displayName: "\uACE0\uC591\uC774"
+  icon: {fileID: 21300000, guid: a86fdff0405b7e94b90c68441e28153a, type: 3}
+  price: 9000
   useQuantity: 0
   defaultQty: 1
   minQty: 1
