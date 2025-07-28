@@ -1,0 +1,83 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+public class Table : MonoBehaviour
+{
+    public GameObject popupPrefab;
+    private GameObject currentPopup;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void OnMouseDown()
+    {
+        // 마우스가 UI 위에 있을 경우 → 클릭 무시
+        if (IsPointerOverUI())
+        {
+            Debug.Log("UI 위 클릭 → Table 클릭 무시");
+            return;
+        }
+
+        if (popupPrefab == null) return;
+
+        if (currentPopup != null)
+        {
+            Destroy(currentPopup);
+        }
+
+        Canvas canvas = FindObjectOfType<Canvas>();
+        Camera uiCam = canvas.worldCamera;
+
+        if (canvas.renderMode != RenderMode.ScreenSpaceCamera)
+        {
+            Debug.LogWarning("Canvas is not in Screen Space - Camera mode.");
+            return;
+        }
+
+        // 1. 오브젝트 월드 위치 → 화면 픽셀 좌표
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+        // 2. 화면 픽셀 좌표 → UI용 월드 좌표
+        Vector3 uiWorldPos = uiCam.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, canvas.planeDistance));
+
+        // 3. 팝업 생성 및 위치 설정
+        currentPopup = Instantiate(popupPrefab, canvas.transform);
+        currentPopup.transform.position = uiWorldPos;
+
+        RectTransform rect = currentPopup.GetComponent<RectTransform>();
+        rect.pivot = new Vector2(0.5f, 0f); // 중심 아래
+
+        // 위치 설정
+        currentPopup.transform.position = uiWorldPos;
+    }
+
+    // 실제 UI 위에 있는지 확인하는 정밀 메서드
+    private bool IsPointerOverUI()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        GraphicRaycaster gr = FindObjectOfType<GraphicRaycaster>();
+
+        if (gr != null)
+        {
+            gr.Raycast(eventData, results);
+            return results.Count > 0;
+        }
+
+        return false;
+    }
+}
