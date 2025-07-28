@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557fedd953c4cfc4599524de6e6faab4, type: 3}
+  m_Name: RibbonBlanket
+  m_EditorClassIdentifier: 
+  fabricName: RibbonBlanket
+  fabricSprite: {fileID: 21300000, guid: c9c6fdde21970aa4b8118c62e59f55ef, type: 3}
+  requiredMaterials:
+  - materialName: moonpiece
+    materialIcon: {fileID: 21300000, guid: 60e5fd3204e58254a9664cc87f732282, type: 3}
+    materialquantity: 1
+  - materialName: pinkthread
+    materialIcon: {fileID: 21300000, guid: 5dbfcd7bfc88c8147b59c2281214a8e6, type: 3}
+    materialquantity: 1
+  - materialName: woonmucotton
+    materialIcon: {fileID: 21300000, guid: 442797e8e365fd444ac81023e020571e, type: 3}
+    materialquantity: 3
