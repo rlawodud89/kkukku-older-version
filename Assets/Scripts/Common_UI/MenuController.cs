@@ -138,7 +138,7 @@ public class MenuController : MonoBehaviour
         {
             if (confirmText != null)
             {
-                confirmText.text = $"게게를 여시겠습니까?";
+                confirmText.text = $"가게를 여시겠습니까?";
 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
                 yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); });
@@ -157,7 +157,7 @@ public class MenuController : MonoBehaviour
         {
             if (confirmText != null)
             {
-                confirmText.text = $"게게를 닫으시겠습니까?";
+                confirmText.text = $"가게를 닫으시겠습니까?";
                 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
                 yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); });
