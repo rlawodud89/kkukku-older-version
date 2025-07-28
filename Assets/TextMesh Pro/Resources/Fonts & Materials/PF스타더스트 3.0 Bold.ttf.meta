@@ -3,11 +3,11 @@ guid: 75cb9aa91c061d54cb763645a7982d16
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 16
+  fontSize: 8
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
-  includeFontData: 1
+  includeFontData: 0
   fontNames:
   - PF Stardust Bold
   fallbackFontReferences: []
