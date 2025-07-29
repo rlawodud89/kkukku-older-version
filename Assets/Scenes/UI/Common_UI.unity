@@ -4654,6 +4654,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553092369}
   m_CullTransparentMesh: 1
+--- !u!1 &554195416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 554195417}
+  - component: {fileID: 554195418}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &554195417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554195416}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -273.01508, y: -6.727821, z: 0.47869098}
+  m_LocalScale: {x: 2.5296443, y: 2.5296443, z: 2.5296443}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 779491563}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &554195418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554195416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &568533050
 GameObject:
   m_ObjectHideFlags: 0
@@ -6521,6 +6565,7 @@ RectTransform:
   - {fileID: 1458351162}
   - {fileID: 1052680699}
   - {fileID: 1418645990}
+  - {fileID: 554195417}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10767,6 +10812,10 @@ MonoBehaviour:
   mapPanel: {fileID: 38039681}
   energy: {fileID: 2039937345}
   energyLevel: {fileID: 992864200}
+  energyLevelText: {fileID: 292279426}
+  energyPercentText: {fileID: 367901409}
+  GoldText: {fileID: 1069381724}
+  MoonrockText: {fileID: 449758284}
   storeSignPopup: {fileID: 1166330755}
   confirmPopup: {fileID: 1273353749}
 --- !u!4 &1418645990
