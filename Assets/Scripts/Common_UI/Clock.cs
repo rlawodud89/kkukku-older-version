@@ -12,6 +12,8 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Transform clockHandTransform;
     private GameObject timeTextObject;
 
+    private GameManager gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +22,10 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         timeTextObject = transform.Find("TimeText")?.gameObject;
 
-        InvokeRepeating("AddOneMinute", 0f, 1.25f); 
+        InvokeRepeating("AddOneMinute", 0f, 1.25f);
         //InvokeRepeating("AddOneMinute", 0f, 0.05f); 
+
+        gameManager = GameManager.instance;
     }
 
     // Update is called once per frame
@@ -32,11 +36,14 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     void AddOneMinute()
     {
-        totalGameTime += 1;  // 1분을 증가
+        //totalGameTime += 1;  // 1분을 증가
 
-        // 게임 내 하루를 24시간으로 나누어 실제 시간으로 변환
-        float gameHour = (totalGameTime / 60f) % hoursInGameDay;  // 60분당 1시간
-        float gameMinutes = (totalGameTime % 60);  // 1시간을 넘어가지 않도록 60분으로 나눈 나머지
+        //// 게임 내 하루를 24시간으로 나누어 실제 시간으로 변환
+        //float gameHour = (totalGameTime / 60f) % hoursInGameDay;  // 60분당 1시간
+        //float gameMinutes = (totalGameTime % 60);  // 1시간을 넘어가지 않도록 60분으로 나눈 나머지
+
+        int gameHour = gameManager.Get_Hours();
+        int gameMinutes = gameManager.Get_Minutes();
 
         // 게임 시간을 시, 분 형식으로 포맷
         string gameTimeFormatted = string.Format("{0:D2}시 {1:D2}분", (int)gameHour, (int)gameMinutes);
