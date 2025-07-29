@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEditor.Tilemaps;
 
 
 public class MenuController : MonoBehaviour
@@ -27,19 +28,27 @@ public class MenuController : MonoBehaviour
     
     public GameObject energy;
     public GameObject energyLevel;
-    
+    public TMP_Text energyLevelText;
+    public TMP_Text energyPercentText;
+
+    public TMP_Text GoldText;
+    public TMP_Text MoonrockText;
+
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameManager.instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        GoldText.text = gameManager.Get_Gold().ToString();
+        MoonrockText.text = gameManager.Get_Moonrock().ToString();
     }
-    
+
 
     public void ToggleMenuItems()
     {
@@ -251,6 +260,9 @@ public class MenuController : MonoBehaviour
         {
             energyLevel.SetActive(true);
             energy.SetActive(false);
+
+            energyLevelText.text = "Lv " + gameManager.Get_EnergyLevel().ToString();
+            energyPercentText.text = gameManager.Get_EnergyPercent().ToString() + "%";
         }   
     }
 
