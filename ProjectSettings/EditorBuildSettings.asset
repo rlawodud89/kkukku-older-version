@@ -14,4 +14,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Work_Room.unity
     guid: 61a5d8f45e1db42439b41ca71e4337a8
+  - enabled: 1
+    path: Assets/Scenes/UI/Common_UI.unity
+    guid: e129a8d0cdf905240b223ab4a931c633
+  - enabled: 1
+    path: Assets/Scenes/Cloud_Pond.unity
+    guid: c1443bdfade5ee7478ffd59ac7d22449
+  - enabled: 1
+    path: Assets/Scenes/Moonlight_Hill.unity
+    guid: aa476410a3c6d154c9662ea21c75ae28
+  - enabled: 1
+    path: Assets/Scenes/Sleeping_Garden.unity
+    guid: 502da40a3615d3540bde97a49f2b7d53
+  - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 2fc1fe6f6e78a854181f7d05623b8ee0
+  - enabled: 1
+    path: Assets/Scenes/Village.unity
+    guid: 95492463e6613834daa30a071d96929a
   m_configObjects: {}

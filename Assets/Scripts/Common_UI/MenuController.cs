@@ -257,8 +257,17 @@ public class MenuController : MonoBehaviour
     public GameObject confirmPopup;
 
     public void OnPlaceClicked(GameObject clickedObject){
-        string placeName = clickedObject.tag;
-        ShowConfirmPopup(placeName);
+        string placeName = clickedObject.name;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        if (placeName != currentSceneName)
+        {
+            ShowConfirmPopup(placeName);
+        }
+        else
+        {
+            Debug.Log("현재 씬과 같은 장소이므로 팝업을 띄우지 않습니다.");
+        }
     }
 
     private void ShowConfirmPopup(string placeName)
@@ -268,7 +277,29 @@ public class MenuController : MonoBehaviour
         TextMeshProUGUI confirmText = confirmPopup.GetComponentInChildren<TextMeshProUGUI>();
         if (confirmText != null)
         {
-            confirmText.text = $"{placeName}에 가시겠습니까?";
+            switch (placeName)
+            {
+                case "Moonlight_Hill":
+                    confirmText.text = $"달빛언덕에 가시겠습니까?";
+                    break;
+                case "Sleeping_Garden":
+                    confirmText.text = $"수면정원에 가시겠습니까?";
+                    break;
+                case "Cloud_Pond":
+                    confirmText.text = $"구름연못에 가시겠습니까?";
+                    break;
+                case "Village":
+                    confirmText.text = $"마을에 가시겠습니까?";
+                    break;
+                case "Work_Shop":
+                    confirmText.text = $"이불가게에 가시겠습니까?";
+                    break;
+                default:
+                    Debug.LogError("이동할 장소 씬이 없습니다.");
+                    Debug.LogError($"Unknown place name: {placeName}");
+                    break;
+            }
+            
         }else
         {
             Debug.LogError("Text 컴포넌트가 confirmPopup 안에 없습니다.");
@@ -288,28 +319,6 @@ public class MenuController : MonoBehaviour
 
     private void OnConfirm(string placeName)
     {
-        // 태그에 맞는 씬으로 이동
-        switch (placeName)
-        {
-            case "달빛언덕":
-                SceneManager.LoadScene("Moonlight_Hill");
-                break;
-            case "수면정원":
-                SceneManager.LoadScene("Sleeping_Garden");
-                break;
-            case "구름연못":
-                SceneManager.LoadScene("Cloud_Pond");
-                break;
-            case "마을":
-                SceneManager.LoadScene("Village");
-                break;
-            case "이불가게":
-                SceneManager.LoadScene("Blanket_Shop");
-                break;
-            default:
-                Debug.LogError("이동할 장소 씬이 없습니다.");
-                Debug.LogError($"Unknown place name: {placeName}");
-                break;
-        }
+        SceneManager.LoadScene(placeName);
     }
 }
