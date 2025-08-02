@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using SQLite4Unity3d;
-using static UnityEditor.Progress;
-using static UnityEngine.EventSystems.EventTrigger;
 
 
 public class DBManager
@@ -31,11 +28,14 @@ public class DBManager
 
         User user = new User();
         user.name = "user";
-        user.energyLevel = 1;
-        user.energyPercent = 0;
+        user.energy = 0;
         user.gold = 1000;
         user.moonrock = 1000;
         user.playTime = 0;
+        user.designshopLevel = 1;
+        user.itemshopLevel = 1;
+        user.workroomLevel = 1;
+        user.endScene = "Work_Shop";
 
         testconn.Insert(user);
     }
@@ -45,11 +45,10 @@ public class DBManager
         return testconn.Find<User>(userName); //지정한 이름(기본키)으로 찾기
     }
 
-    public void Set_User(int energyLevel, int energyPercent, int gold, int moonrock, float playTime)
+    public void Set_User(int energy, int gold, int moonrock, float playTime)
     {
         User user = testconn.Find<User>(userName);
-        user.energyLevel = energyLevel;
-        user.energyPercent = energyPercent;
+        user.energy = energy;
         user.gold = gold;
         user.moonrock = moonrock;
         user.playTime = playTime;

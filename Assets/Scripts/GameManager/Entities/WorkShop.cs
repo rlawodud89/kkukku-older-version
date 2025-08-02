@@ -7,10 +7,4 @@ public class WorkShop
 
     [NotNull]
     public string tableName { get; set; }
-
-    [NotNull]
-    public int x { get; set; }
-
-    [NotNull]
-    public int y { get; set; }
 }

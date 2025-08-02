@@ -6,18 +6,26 @@ public class User
     public string name { get; set; }
 
     [NotNull]
-    public int energyLevel {  get; set; }
+    public int energy { get; set; }
 
     [NotNull]
-    public int energyPercent { get; set; }
-
-    [NotNull]
-    public int gold {  get; set; }
+    public int gold { get; set; }
 
     [NotNull]
     public int moonrock { get; set; }
 
     [NotNull]
     public float playTime { get; set; }
-    
+
+    [NotNull]
+    public int designshopLevel { get; set; }
+
+    [NotNull]
+    public int itemshopLevel { get; set; }
+
+    [NotNull]
+    public int workroomLevel { get; set; }
+
+    [NotNull]
+    public string endScene { get; set; }
 }

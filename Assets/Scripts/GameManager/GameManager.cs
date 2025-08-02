@@ -24,8 +24,12 @@ public class GameManager : MonoBehaviour
 
     private int gold;
     private int moonrock;
-    private int energyLevel;
-    private int energyPercent;
+    private int energy;
+
+    private int designshopLevel;
+    private int itemshopLevel;
+    private int workroomLevel;
+    private string endScene;
 
     private Dictionary<string, ItemScript> Items = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 0;
+    private static float oneEnergyLevel = 3844;
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
     private GameManager() { }
@@ -54,13 +59,17 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             dbManager = DBManager.getInstance();
-            User user = dbManager.Get_User();
+            //dbManager.InitDB();
 
+            User user = dbManager.Get_User();
+            energy = user.energy;
             gold = user.gold;
             moonrock = user.moonrock;
+            designshopLevel = user.designshopLevel;
+            itemshopLevel = user.itemshopLevel;
+            workroomLevel = user.workroomLevel;
             playTime = user.playTime;
-            energyLevel = user.energyLevel;
-            energyPercent = user.energyPercent;
+            endScene = user.endScene;
 
             //LoadAllScriptableObjects();
 
@@ -93,7 +102,7 @@ public class GameManager : MonoBehaviour
             nowTime = NOW.EVENING;
         }
 
-        dbManager.Set_User(energyLevel, energyPercent, gold, moonrock, playTime);
+        dbManager.Set_User(energy, gold, moonrock, playTime);
     }
 
     private void LoadAllScriptableObjects()
@@ -134,17 +143,26 @@ public class GameManager : MonoBehaviour
     public void Set_Moonrock(int moonrock) { this.moonrock = moonrock; }
     public void Change_Moonrock(int delta) { moonrock += delta; }
 
-    public int Get_EnergyLevel() { return energyLevel; }
-    public void Set_EnergyLevel(int energyLevel) { this.energyLevel = energyLevel; }
-    public void Change_EnergyLevel(int delta) { energyLevel += delta; }
-
-    public int Get_EnergyPercent() { return energyPercent; }
-    public void Set_EnergyPercent(int energyPercent) { this.energyPercent = energyPercent; }
-    public void Change_EnergyPercent(int delta) { energyPercent += delta; }
+    public int Get_EnergyLevel() { return (int)(energy / oneEnergyLevel); }
+    public float Get_EnergyPercent() { return ((energy % oneEnergyLevel) / oneEnergyLevel) * 100; }
+    public void Set_Energy(int energy) { this.energy = energy; }
+    public void Change_Energy(int delta) { energy += delta; }
 
     public int Get_Days() { return days; }
     public int Get_Hours() { return hours; }
     public int Get_Minutes() { return minutes; }
+
+    public int Get_DesignShopLevel() { return designshopLevel; }
+    public void Set_DesignShopLevel(int level) { designshopLevel = level; }
+    public void Change_DesignShopLevel(int delta) { designshopLevel += delta; }
+
+    public int Get_ItemShopLevel() { return itemshopLevel; }
+    public void Set_ItemShopLevel(int level) { itemshopLevel = level; }
+    public void Change_ItemShopLevel(int delta) { itemshopLevel += delta; }
+
+    public int Get_WorkRoomLevel() { return workroomLevel; }
+    public void Set_WorkRoomLevel(int level) { workroomLevel = level; }
+    public void Change_WorkRoomLevel(int delta) { workroomLevel += delta; }
 
 
     public ItemScript Get_Item(string itemName) { return Items[itemName]; }
