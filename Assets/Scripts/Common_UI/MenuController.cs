@@ -39,7 +39,7 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.instance;
+        gameManager = GameManager.getInstance();
     }
 
     // Update is called once per frame

@@ -38,29 +38,22 @@ public class Table : MonoBehaviour
         }
 
         Canvas canvas = FindObjectOfType<Canvas>();
-        Camera uiCam = canvas.worldCamera;
 
-        if (canvas.renderMode != RenderMode.ScreenSpaceCamera)
+        if (canvas.renderMode != RenderMode.ScreenSpaceOverlay)
         {
-            Debug.LogWarning("Canvas is not in Screen Space - Camera mode.");
+            Debug.LogWarning("Canvas is not in Screen Space - Overlay mode.");
             return;
         }
 
         // 1. 오브젝트 월드 위치 → 화면 픽셀 좌표
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
-        // 2. 화면 픽셀 좌표 → UI용 월드 좌표
-        Vector3 uiWorldPos = uiCam.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, canvas.planeDistance));
-
-        // 3. 팝업 생성 및 위치 설정
+        // 2. 팝업 생성 및 위치 설정
         currentPopup = Instantiate(popupPrefab, canvas.transform);
-        currentPopup.transform.position = uiWorldPos;
 
         RectTransform rect = currentPopup.GetComponent<RectTransform>();
         rect.pivot = new Vector2(0.5f, 0f); // 중심 아래
-
-        // 위치 설정
-        currentPopup.transform.position = uiWorldPos;
+        rect.position = screenPos; // 바로 픽셀 좌표로 설정 (WorldToScreenPoint 결과 사용)
     }
 
     // 실제 UI 위에 있는지 확인하는 정밀 메서드

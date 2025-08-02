@@ -1,0 +1,24 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "NewItem", menuName = "ScriptableObject/ItemScript")]
+public class ItemScript : ScriptableObject
+{
+    public string itemName;
+    public Sprite image;
+    public ItemType itemType;
+
+    [Header("이불 제작 때 필요한 재료 이름, 수량 리스트")]
+    public List<RecipeEntry> recipe; // <(아이템 이름, 필요 수량)>
+
+    [Header("간식은 회복량, 나머지는 판매가격")]
+    public int value;
+}
+
+[System.Serializable]
+public class RecipeEntry
+{
+    public string itemName;
+    public int count;
+}
+

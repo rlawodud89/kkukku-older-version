@@ -25,7 +25,7 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         InvokeRepeating("AddOneMinute", 0f, 1.25f);
         //InvokeRepeating("AddOneMinute", 0f, 0.05f); 
 
-        gameManager = GameManager.instance;
+        gameManager = GameManager.getInstance();
     }
 
     // Update is called once per frame
