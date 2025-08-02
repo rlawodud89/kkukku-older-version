@@ -71,21 +71,18 @@ public class UpgradeShopController1 : MonoBehaviour
     {
         // TODO: 코인 차감/효과 적용
         loomUpgraded = true;
-        loomButton.interactable = false;   // 다시 못 누르게
         Debug.Log("직조기 업그레이드 완료!");
     }
 
     void DoFillerUpgrade()
     {
         fillerUpgraded = true;
-        fillerButton.interactable = false;
         Debug.Log("충진기 업그레이드 완료!");
     }
 
     void DoDecoTableUpgrade()
     {
         decoTableUpgraded = true;
-        decoTableButton.interactable = false;
         Debug.Log("장식 테이블 업그레이드 완료!");
     }
 }
