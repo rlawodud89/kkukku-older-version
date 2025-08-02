@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro; 
+using System.Linq;
+
 
 public class QuestManager : MonoBehaviour
 {
+    public List<QuestSO> activeQuests = new List<QuestSO>();  // 퀘스트 리스트
+
     public GameObject questPanel; // 퀘스트 패널
     public GameObject scrollContent; // 스크롤 콘텐츠
     public GameObject questButtonPrefab;
@@ -17,7 +21,7 @@ public class QuestManager : MonoBehaviour
     public Sprite MoonRockImage; // 월석 이미지
     public Sprite CozyEnergyImage; // 포근에너지 이미지
 
-    public QuestSO[] quests;
+    //public QuestSO[] quests;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +30,8 @@ public class QuestManager : MonoBehaviour
         //QuestSO quest = Resources.Load<QuestSO>("Quest1"); 
         //StartQuest(quest);  // 퀘스트 시작
 
-        StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
+        //StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
+        StartNewDay(); // 새로운 날 시작 시 퀘스트 초기화
     }
 
     // Update is called once per frame
@@ -35,13 +40,38 @@ public class QuestManager : MonoBehaviour
         
     }
 
+    public void StartNewDay(){
+        // 새로운 날 시작 시 퀘스트 초기화
+        activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
+        LoadRandomQuests(3); // 새로운 퀘스트 로드
+        StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
+    }
+
+    // 퀘스트 랜덤으로 불러오기
+    void LoadRandomQuests(int count)
+    {
+        // 모든 퀘스트 불러오기
+        QuestSO[] allQuests = Resources.LoadAll<QuestSO>("Quest");
+
+        // 중복 없이 랜덤으로 섞고 일부만 선택
+        activeQuests = allQuests.OrderBy(q => Random.value).Take(count).ToList();
+
+        // 결과 확인
+        foreach (var quest in activeQuests)
+        {
+            Debug.Log($"선택된 퀘스트: {quest.questTitle}");
+        }
+    }
+
     // 퀘스트 시작
-    public void StartQuest(QuestSO[] quests)
+    public void StartQuest(List<QuestSO> quests)
     {
         foreach (QuestSO currentQuest in quests)
         {
             // 퀘스트 초기화
             currentQuest.getReward = false; // 보상 수령 여부 초기화
+            currentQuest.questProcess = 0; // 퀘스트 진행 상태 초기화
+            //currentQuest.isCompleted = false; // 퀘스트 완료 여부 초기화
 
             // 퀘스트 패널 설정
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
@@ -130,6 +160,16 @@ public class QuestManager : MonoBehaviour
             questContentPanel.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questTitle;
             questContentPanel.transform.Find("QuestDetail").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questDescription;
 
+            // 퀘스트 진행 상태 표시
+            if(quest.questComplete > 1)
+            {
+                questContentPanel.transform.Find("QuestProgress").GetComponent<TMPro.TextMeshProUGUI>().text = $"{quest.questProcess} / {quest.questComplete}";
+            }
+            else
+            {
+                questContentPanel.transform.Find("QuestProgress").gameObject.SetActive(false); // 진행 상태가 없으면 숨김
+            }
+
             int rewardCount = quest.rewards.Length;    // 보상의 개수
             
             // 퀘스트 보상 패널 설정
@@ -171,75 +211,25 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    /*
 
-    // 퀘스트 완료 처리
-    public void CompleteQuest()
+    // 퀘스트 진행 상태 업데이트
+    public void AddProcessToQuest(QuestSO quest, int amount)
     {
-        if (currentQuest != null && !currentQuest.isCompleted)
-        {
-            currentQuest.isCompleted = true;  // 퀘스트 완료 처리
-            Debug.Log("퀘스트 완료: " + currentQuest.questTitle);
+        // 퀘스트 진행 상태 업데이트
+        quest.questProcess += amount;
 
-            // 보상 지급
-            foreach (var reward in currentQuest.rewards)
-            {
-                ProcessReward(reward);
-            }
+        // 퀘스트 완료 여부 확인
+        if (quest.questProcess >= quest.questComplete)
+        {
+            quest.isCompleted = true; // 퀘스트 완료 상태로 변경
+            Debug.Log($"퀘스트 '{quest.questTitle}' 완료!");
         }
         else
         {
-            Debug.LogWarning("퀘스트가 아직 시작되지 않았거나 이미 완료되었습니다.");
+            Debug.Log($"퀘스트 '{quest.questTitle}' 진행 중: {quest.questProcess} / {quest.questComplete}");
         }
     }
-
-    // 보상 처리
-    private void ProcessReward(Reward reward)
-    {
-        switch (reward.rewardType)
-        {
-            case "재화":
-                Debug.Log($"보상: {reward.amount} 재화");
-                // 실제로 재화를 지급하는 로직 추가 (예: 플레이어의 재화 양 증가)
-                break;
-
-            case "월석":
-                Debug.Log($"보상: {reward.amount} 월석");
-                // 실제로 월석을 지급하는 로직 추가 (예: 인벤토리에 월석 추가)
-                break;
-
-            case "포근에너지":
-                Debug.Log($"보상: {reward.amount} 포근에너지");
-                // 실제로 포근에너지를 지급하는 로직 추가 (예: 플레이어 포근에너지 증가)
-                break;
-
-            default:
-                Debug.Log("알 수 없는 보상 종류입니다.");
-                break;
-        }
-    }
-
     
-
-    // 퀘스트 상태 확인
-    public void CheckQuestStatus()
-    {
-        if (currentQuest != null)
-        {
-            if (currentQuest.isCompleted)
-            {
-                Debug.Log("퀘스트가 완료되었습니다!");
-            }
-            else
-            {
-                Debug.Log("퀘스트가 아직 진행 중입니다.");
-            }
-        }
-        else
-        {
-            Debug.Log("진행 중인 퀘스트가 없습니다.");
-        }
-    }   */
 
     // 보상받기 버튼 클릭 이벤트
     public void ProcessReward(QuestSO quest, Button getButton)
@@ -253,11 +243,13 @@ public class QuestManager : MonoBehaviour
                 case "재화":
                     Debug.Log($"보상: {reward.amount} 재화");
                 // 실제로 재화를 지급하는 로직 추가 (예: 플레이어의 재화 양 증가)
+                    GameManager.instance.Change_Gold(reward.amount);
                 break;
 
                 case "월석":
                     Debug.Log($"보상: {reward.amount} 월석");
                     // 실제로 월석을 지급하는 로직 추가 (예: 인벤토리에 월석 추가)
+                    GameManager.instance.Change_Moonrock(reward.amount);
                     break;
 
                 case "포근에너지":

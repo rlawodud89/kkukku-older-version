@@ -12,11 +12,13 @@ public class MenuController : MonoBehaviour
 {
     public GameObject menuButton; // MenuItems 오브젝트
     public List<GameObject> menuButtons; // 메뉴 버튼들
+    public GameObject interiorButton;
     public float spacing = 60f;          // 버튼 사이 간격
     public float delay = 0.05f;          // 애니메이션 간 딜레이
     public float fadeTime = 0.2f;        // 투명도 애니메이션 시간
     private bool isMenuOpen = false;
 
+    public GameObject storeSign;
     public Sprite openSprite;     // 클릭 후 보여줄 이미지
     public Image targetImage;       // 현재 버튼의 이미지
     public Sprite closeSprite;   // 원래 이미지 저장
@@ -40,6 +42,8 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
+        
+        storeSign.SetActive(false); // 초기에는 가게 간판 숨김
     }
 
     // Update is called once per frame
@@ -47,6 +51,47 @@ public class MenuController : MonoBehaviour
     {
         GoldText.text = gameManager.Get_Gold().ToString();
         MoonrockText.text = gameManager.Get_Moonrock().ToString();
+
+        int hours = gameManager.Get_Hours();
+        int minutes = gameManager.Get_Minutes();
+
+        if(hours==8 && minutes==0)
+            storeSign.SetActive(true); 
+
+        string currentSceneName = SceneManager.GetActiveScene().name;  // 현재 씬
+        if(currentSceneName=="Work_Shop"||currentSceneName=="Work_Room"){
+            if(!menuButtons.Contains(interiorButton))
+            {
+                interiorButton.SetActive(true);
+                RectTransform baseRT = menuButton.GetComponent<RectTransform>();
+                Vector2 basePos = baseRT.anchoredPosition;
+                interiorButton.GetComponent<RectTransform>().anchoredPosition = basePos + new Vector2(0, -spacing * (menuButtons.Count + 1));
+                interiorButton.GetComponent<CanvasGroup>().alpha = 0;
+                menuButtons.Add(interiorButton);
+            }
+        }else{
+            if (menuButtons.Contains(interiorButton))
+            {
+                menuButtons.Remove(interiorButton);
+            }
+        }
+
+        if(currentSceneName=="Moonlight_Hill")
+        {
+            energy.SetActive(false);
+            energyLevel.SetActive(false);
+        }
+        else
+        {
+            if(energyLevel.activeSelf)
+            {
+                energy.SetActive(false);
+            }
+            else
+            {
+                energy.SetActive(true);
+            }
+        }
     }
 
 

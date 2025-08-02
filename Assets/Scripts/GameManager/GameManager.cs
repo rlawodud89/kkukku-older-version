@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using SQLite;
 using System.IO;
 using Unity.VisualScripting;
-using UnityEngine.AddressableAssets;
+//using UnityEngine.AddressableAssets;
 using System.Linq;
 
 enum NOW
@@ -28,10 +28,10 @@ public class GameManager : MonoBehaviour
     private int energyLevel;
     private int energyPercent;
 
-    private Dictionary<string, Item> Items = new Dictionary<string, Item>();
+    //private Dictionary<string, Item> Items = new Dictionary<string, Item>();
 
-    private static float gameStartTime = 25200; // ¿ÀÀü 7½Ã (7 * 3600)
-    private static float gameDuration = 1f; // 75ÃÊ(1.25ºÐ)¿¡ 1½Ã°£ (30ºÐ¿¡ 24½Ã°£)
+    private static float gameStartTime = 25200; // ï¿½ï¿½ï¿½ï¿½ 7ï¿½ï¿½ (7 * 3600)
+    private static float gameDuration = 1f; // 75ï¿½ï¿½(1.25ï¿½ï¿½)ï¿½ï¿½ 1ï¿½Ã°ï¿½ (30ï¿½Ð¿ï¿½ 24ï¿½Ã°ï¿½)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 0;
@@ -44,14 +44,14 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            //Å×½ºÆ®¿ë ÃÊ±âÈ­
+            //ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Ê±ï¿½È­
             gold = 100;
             moonrock = 100;
             playTime = 0;
             energyLevel = 0;
             energyPercent = 0;
 
-            LoadAllScriptableObjects();
+            //LoadAllScriptableObjects();
         }
         else
         {
@@ -64,32 +64,32 @@ public class GameManager : MonoBehaviour
         playTime += (Time.deltaTime / gameDuration) * 3600;
         hours = (int)(playTime / 3600) % 24;
         minutes = (int)(playTime % 3600) / 60;
-        days = (int)(playTime / (3600 * 24)) + 1; // Day1ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î +1
+        days = (int)(playTime / (3600 * 24)) + 1; // Day1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¹Ç·ï¿½ +1
 
-        if (hours == nightHours) // ¹ã ÁøÀÔ
+        if (hours == nightHours) // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
-            playTime += gameStartTime; // 0½Ã 0ºÐ µÇ¸é ¾ÆÄ§ ½Ã°£(7½Ã 0ºÐ)À¸·Î ³Ñ¾î°¨
+            playTime += gameStartTime; // 0ï¿½ï¿½ 0ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½Ä§ ï¿½Ã°ï¿½(7ï¿½ï¿½ 0ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¨
             nowTime = NOW.NIGHT;
             Debug.Log("Days:" + days);
         }
-        else if (hours == dayHours) // ¾ÆÄ§ ÁøÀÔ
+        else if (hours == dayHours) // ï¿½ï¿½Ä§ ï¿½ï¿½ï¿½ï¿½
         {
             nowTime = NOW.DAY;
         }
-        else if (hours == eveningHours) // Àú³á ÁøÀÔ
+        else if (hours == eveningHours) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             nowTime = NOW.EVENING;
         }
     }
 
-    private void LoadAllScriptableObjects()
-    {
-        Items = Addressables.LoadAssetsAsync<Item>("Item", null)
-                .WaitForCompletion()
-                .ToDictionary(i => i.itemName);
+    // private void LoadAllScriptableObjects()
+    // {
+    //     Items = Addressables.LoadAssetsAsync<Item>("Item", null)
+    //             .WaitForCompletion()
+    //             .ToDictionary(i => i.itemName);
 
-        Debug.Log(Items["Á¹¸°º£¸®´ýºÒ"].value);
-    }
+    //     Debug.Log(Items["ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"].value);
+    // }
 
 
     public int Get_Gold()
