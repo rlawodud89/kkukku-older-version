@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 557fedd953c4cfc4599524de6e6faab4, type: 3}
+  m_Name: FlowerBlanket
+  m_EditorClassIdentifier: 
+  BlanketName: "\uAF43\uBB34\uB2AC \uC774\uBD88"
+  BlanketSprite: {fileID: 21300000, guid: 2bf93db617616a14688f44a05333049c, type: 3}
+  requiredMaterials:
+  - data: {fileID: 11400000, guid: 408c114499ef25b4ba9c76df86c0c5f1, type: 2}
+    count: 2
+  - data: {fileID: 11400000, guid: c89cf0bd1b4d55a49993b2ec797c6712, type: 2}
+    count: 2
+  - data: {fileID: 11400000, guid: 90189ab314310db44a2e5ac36a95cd8e, type: 2}
+    count: 2
+  Fabric: {fileID: 0}
+  FabricCount: 0

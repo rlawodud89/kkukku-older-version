@@ -29,4 +29,10 @@ public class Staminar : MonoBehaviour
         // 항상 카메라를 향하도록 (옵션)
         transform.forward = Camera.main.transform.forward;
     }
+
+    public void Addstamina(int extrastamina)
+    {
+        Debug.Log(extrastamina + "만큼 줄어들었습니다.");
+        currentStamina += extrastamina;
+    }
 }

@@ -5,10 +5,11 @@ using UnityEngine;
 public class ExitButton : MonoBehaviour
 {
     public GameObject scrollView;
-
+    public GameObject Panel;
     public void CloseScrollView()
     {
         scrollView.SetActive(false);
+        Panel.SetActive(false);
     }
     void Start()
     {

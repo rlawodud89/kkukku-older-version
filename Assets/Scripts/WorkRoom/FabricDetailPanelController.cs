@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class FabricDetailPanelController : MonoBehaviour
 {
-    public Text fabricNameText;
+    public TextMeshProUGUI fabricNameText;
     public Image fabricImage;
 
     public List<Image> materialImageSlots; // 인스펙터에서 순서대로 연결
