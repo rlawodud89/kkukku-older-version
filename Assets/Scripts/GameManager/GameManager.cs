@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using SQLite;
 using System.IO;
 using Unity.VisualScripting;
-using UnityEngine.AddressableAssets;
+//using UnityEngine.AddressableAssets;
 using System.Linq;
 
 enum NOW
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private int energyLevel;
     private int energyPercent;
 
-    private Dictionary<string, Item> Items = new Dictionary<string, Item>();
+    //private Dictionary<string, Item> Items = new Dictionary<string, Item>();
 
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
     private static float gameDuration = 1f; // 75초(1.25분)에 1시간 (30분에 24시간)
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
             energyLevel = 0;
             energyPercent = 0;
 
-            LoadAllScriptableObjects();
+            //LoadAllScriptableObjects();
         }
         else
         {
@@ -82,14 +82,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void LoadAllScriptableObjects()
-    {
-        Items = Addressables.LoadAssetsAsync<Item>("Item", null)
-                .WaitForCompletion()
-                .ToDictionary(i => i.itemName);
+    //private void LoadAllScriptableObjects()
+    //{
+    //    Items = Addressables.LoadAssetsAsync<Item>("Item", null)
+    //            .WaitForCompletion()
+    //            .ToDictionary(i => i.itemName);
 
-        Debug.Log(Items["졸린베리덤불"].value);
-    }
+    //    Debug.Log(Items["졸린베리덤불"].value);
+    //}
 
 
     public int Get_Gold()

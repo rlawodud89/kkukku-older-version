@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,14 +6,11 @@ using UnityEngine.UI;
 public class SnacksPanel : MonoBehaviour
 {
     [Header("Snack Data")]
-    public SnacksData[] itemDatas;           // 간식 데이터 (외부에서 주입)
+    public SnacksData[] itemDatas;
 
     [Header("Slot References")]
-    public Transform scrollContent;          // StoragePanel이 만든 슬롯들
-                                             // (20개 고정 슬롯이 미리 존재해야 함)
-    public SnacksPanel snacksPanel;
+    public Transform scrollContent;
     public SnacksInventory snacksInventory;
-
     public StoragePanel storagePanel;
 
     void Start()
@@ -20,27 +18,40 @@ public class SnacksPanel : MonoBehaviour
         if (snacksInventory == null)
         {
             snacksInventory = FindObjectOfType<SnacksInventory>();
-
-            Debug.Log("SnacksInventory 찾음: " + (snacksInventory != null));
         }
 
-        // 이벤트 리스너 등록
-        snacksInventory.OnInventoryChanged.AddListener(RefreshUI);
+        if (storagePanel == null)
+        {
+            storagePanel = FindObjectOfType<StoragePanel>();
+        }
+
+        // 이벤트 등록
+        if (snacksInventory != null)
+        {
+            snacksInventory.OnInventoryChanged.AddListener(RefreshUI);
+        }
+
+        // 최초 갱신
+        StartCoroutine(WaitForSlotsAndApply());
 
         storagePanel.InitScroll();
 
-        // itemDatas 설정
-        itemDatas = snacksInventory.ownedSnacks
-            .Where(e => e != null && e.data != null)
-            .Select(e => e.data)
-            .ToArray();
+    }
 
-        ApplyDataToSlots();
+    void OnEnable()
+    {
+        // 패널이 꺼졌다 켜졌을 때도 갱신되도록
+        if (snacksInventory == null)
+            snacksInventory = FindObjectOfType<SnacksInventory>();
+
+        if (storagePanel == null)
+            storagePanel = FindObjectOfType<StoragePanel>();
+
+        StartCoroutine(WaitForSlotsAndApply());
     }
 
     void RefreshUI()
     {
-        // 최신 데이터 반영
         itemDatas = snacksInventory.ownedSnacks
             .Where(e => e != null && e.data != null && e.count > 0)
             .Select(e => e.data)
@@ -48,8 +59,6 @@ public class SnacksPanel : MonoBehaviour
 
         ApplyDataToSlots();
     }
-
-
 
     public void ApplyDataToSlots()
     {
@@ -78,7 +87,6 @@ public class SnacksPanel : MonoBehaviour
                 }
                 else
                 {
-                    // count 0 이면 슬롯 비우기
                     ui.ClearSlot();
 
                     if (drag != null)
@@ -90,7 +98,6 @@ public class SnacksPanel : MonoBehaviour
             }
             else
             {
-                // 슬롯 인덱스 초과하거나 데이터 없으면 비우기
                 ui.ClearSlot();
 
                 if (drag != null)
@@ -102,7 +109,14 @@ public class SnacksPanel : MonoBehaviour
         }
     }
 
+    IEnumerator WaitForSlotsAndApply()
+    {
+        // 슬롯이 준비될 때까지 대기
+        while (scrollContent.childCount < storagePanel.itemCount)
+        {
+            yield return null;
+        }
 
-
-
+        RefreshUI();
+    }
 }

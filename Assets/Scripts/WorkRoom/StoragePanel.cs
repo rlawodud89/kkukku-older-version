@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,18 +11,24 @@ public class StoragePanel : MonoBehaviour
 
     public int itemCount = 20;
 
+    public bool isInit=false;
 
     void Start()
     {
+
         InitScroll();
+
     }
 
     public void InitScroll()
     {
+        if (ScrollContent.childCount > 0) return;
+
         for (int i = 0; i < itemCount; i++)
         {
             GameObject item = Instantiate(ItemPrefab, ScrollContent);
             item.name = $"Slots_{i + 1}";
         }
     }
+
 }

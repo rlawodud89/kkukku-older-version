@@ -9,8 +9,8 @@ public class MaterialItemUI : MonoBehaviour
 
     public void Set(MaterialData data)
     {
-        icon.sprite = data.materialIcon;
-        label.text = data.materialName;
-        quantity.text = data.materialquantity;
+        icon.sprite = data.MaterialSprite;
+        label.text = data.MaterialName;
+        //quantity.text = data.Materialquantity;
     }
 }

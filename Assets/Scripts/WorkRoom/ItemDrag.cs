@@ -57,16 +57,16 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 globalMousePos;
-        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
             dragCanvas.transform as RectTransform,
             eventData.position,
-            dragCanvas.worldCamera,
-            out globalMousePos))
-        {
-            rectTransform.position = globalMousePos;
-        }
+            dragCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : dragCanvas.worldCamera,
+            out localPoint);
+
+        rectTransform.anchoredPosition = localPoint;
     }
+
 
     // 드래그 끝날 때 위치 기준으로 직원 감지
     // 드래그 끝날 때 위치 기준으로 직원 감지
@@ -80,7 +80,6 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         if (hit != null && hit.CompareTag("Employee"))
         {
-            Debug.Log("HIT");
             var dropZone = hit.GetComponent<EmployeeDropZone>();
             if (dropZone != null)
             {
@@ -123,4 +122,4 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         droppedOnEmployee = true;
     }
-}
+}  

@@ -9,12 +9,10 @@ public class Staminar : MonoBehaviour
     public float maxStamina = 100f;
     public float currentStamina = 100f;
     public float time = 5f;
-    void Update()
-    {
-        // 예시로 1초에 10씩 감소
-        currentStamina -= Time.deltaTime * time;
-        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
 
+
+    void StaminarUI()
+    {
         fillImage.fillAmount = currentStamina / maxStamina;
 
         if (currentStamina<50)
@@ -34,5 +32,6 @@ public class Staminar : MonoBehaviour
     {
         Debug.Log(extrastamina + "만큼 줄어들었습니다.");
         currentStamina += extrastamina;
+        StaminarUI();
     }
 }

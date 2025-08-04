@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,6 +49,7 @@ public class Make_Fabric : MonoBehaviour
 
             progresscircle.OnComplete = () =>
             {
+                Debug.Log("complete");
                 showfabric(); 
             };
 
@@ -72,13 +74,20 @@ public class Make_Fabric : MonoBehaviour
                 currentBlanket.FabricCount += 1;
                 Debug.Log($"{currentBlanket.BlanketName} 원단 수량: {currentBlanket.FabricCount}");
 
+          
                 cottonPanel?.SetSelectedBlanket(currentBlanket);
 
 
                 BallonPanel.SetActive(false);
                 FabricButton.gameObject.SetActive(false);
+                progresscircle.ProgressInit();
+
             });
 
+        }
+        else
+        {
+            Debug.Log("null");
         }
     }
 

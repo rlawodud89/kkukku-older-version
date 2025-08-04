@@ -5,30 +5,30 @@ using TMPro;
 
 public class FabricDetailPanelController : MonoBehaviour
 {
-    public TextMeshProUGUI fabricNameText;
-    public Image fabricImage;
+    public TextMeshProUGUI BlanketNameText;
+    public Image BlanketImage;
 
     public List<Image> materialImageSlots; // 인스펙터에서 순서대로 연결
     public List<Text> materialQuantitySlots;
 
     public Sprite defaultMaterialSprite; // 기본 이미지 (인스펙터에서 연결)
 
-    public void OpenPanel(FabricData fabric)
+    public void OpenPanel(BlanketData blanket)
     {
 
         gameObject.SetActive(true);
 
-        fabricNameText.text = fabric.fabricName;
-        fabricImage.sprite = fabric.fabricSprite;
+        BlanketNameText.text = blanket.BlanketName;
+        BlanketImage.sprite = blanket.BlanketSprite;
 
         // 슬롯 초기화
         for (int i = 0; i < materialImageSlots.Count; i++)
         {
-            if (i < fabric.requiredMaterials.Length && fabric.requiredMaterials[i] != null)
+            if (i < blanket.requiredMaterials.Length && blanket.requiredMaterials[i] != null)
             {
-                materialImageSlots[i].sprite = fabric.requiredMaterials[i].materialIcon;
+                materialImageSlots[i].sprite = blanket.requiredMaterials[i].data.MaterialSprite;
                 materialImageSlots[i].gameObject.SetActive(true);
-                materialQuantitySlots[i].text = fabric.requiredMaterials[i].materialquantity;
+                materialQuantitySlots[i].text = blanket.requiredMaterials[i].count.ToString();
                 materialQuantitySlots[i].gameObject.SetActive(true);
             }
             else
