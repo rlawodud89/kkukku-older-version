@@ -8,11 +8,14 @@ public class ItemScript : ScriptableObject
     public Sprite image;
     public ItemType itemType;
 
+    [Header("간식은 회복량, 나머지는 판매가격")]
+    public int value;
+
     [Header("이불 제작 때 필요한 재료 이름, 수량 리스트")]
     public List<RecipeEntry> recipe; // <(아이템 이름, 필요 수량)>
 
-    [Header("간식은 회복량, 나머지는 판매가격")]
-    public int value;
+    [Header("이불창 찼을 때 이미지")]
+    public Sprite fullImage;
 }
 
 [System.Serializable]

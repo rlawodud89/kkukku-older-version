@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +10,11 @@ public class UpgradeShopController1 : MonoBehaviour
     [SerializeField] Button fillerButton;      // 충진기 업그레이드
     [SerializeField] Button decoTableButton;   // 장식 테이블 업그레이드
 
+    [Header("레벨 텍스트들")]
+    [SerializeField] TMP_Text loomLevelText;        
+    [SerializeField] TMP_Text fillerLevelText;     
+    [SerializeField] TMP_Text decoLevelText;   
+
     [Header("팝업")]
     [SerializeField] PurchaseConfirmPopup popup;
 
@@ -16,23 +23,25 @@ public class UpgradeShopController1 : MonoBehaviour
     [SerializeField] int fillerPrice = 5000;
     [SerializeField] int decoTablePrice = 8000;
 
-    // 업그레이드 완료 여부
-    bool loomUpgraded = false;
-    bool fillerUpgraded = false;
-    bool decoTableUpgraded = false;
+    private GameManager gameManager;
 
     void Awake()
     {
+        gameManager = GameManager.getInstance();
         loomButton.onClick.AddListener(OnLoomClick);
         fillerButton.onClick.AddListener(OnFillerClick);
         decoTableButton.onClick.AddListener(OnDecoTableClick);
+
+        loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel();
+        fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
+        decoLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
     }
 
     void OnLoomClick()
     {
-        if (loomUpgraded)
+        if (!CanBuy(loomPrice))
         {
-            Debug.Log("직조기 이미 업그레이드됨");
+            Debug.Log("재화 부족");
             return;
         }
 
@@ -43,9 +52,9 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnFillerClick()
     {
-        if (fillerUpgraded)
+        if (!CanBuy(fillerPrice))
         {
-            Debug.Log("충진기 이미 업그레이드됨");
+            Debug.Log("재화 부족");
             return;
         }
 
@@ -56,9 +65,9 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnDecoTableClick()
     {
-        if (decoTableUpgraded)
+        if (!CanBuy(decoTablePrice))
         {
-            Debug.Log("장식 테이블 이미 업그레이드됨");
+            Debug.Log("재화 부족");
             return;
         }
 
@@ -69,20 +78,31 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void DoLoomUpgrade()
     {
-        // TODO: 코인 차감/효과 적용
-        loomUpgraded = true;
+        gameManager.Change_Gold(-loomPrice);
+        gameManager.Change_LoomLevel(1);
+        loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel().ToString();
         Debug.Log("직조기 업그레이드 완료!");
     }
 
     void DoFillerUpgrade()
     {
-        fillerUpgraded = true;
+        gameManager.Change_Gold(-fillerPrice);
+        gameManager.Change_FillerLevel(1);
+        fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel().ToString();
         Debug.Log("충진기 업그레이드 완료!");
     }
 
     void DoDecoTableUpgrade()
     {
-        decoTableUpgraded = true;
+        gameManager.Change_Gold(-decoTablePrice);
+        gameManager.Change_DecoLevel(1);
+        decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel().ToString();
         Debug.Log("장식 테이블 업그레이드 완료!");
+    }
+
+    private bool CanBuy(int value)
+    {
+        if (value <= gameManager.Get_Gold()) return true;
+        else return false;
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public float hoursInGameDay = 24f;
-    private float totalGameTime=0;
+    //private float totalGameTime=0;
 
     private Transform clockHandTransform;
     private GameObject timeTextObject;

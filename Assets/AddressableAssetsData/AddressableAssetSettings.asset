@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8a6c2451754f9ec46a8a7c76fe19ece3
   m_currentHash:
     serializedVersion: 2
-    Hash: 4600824c844d22b348a910c7a74c17e6
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -86,10 +86,11 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - item
+    - material
     - blanket
     - snack
-    - interior
+    - shop_interior
+    - room_interior
     - customer
     - worker
     - quest

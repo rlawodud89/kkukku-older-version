@@ -24,8 +24,17 @@ public class User
     public int itemshopLevel { get; set; }
 
     [NotNull]
-    public int workroomLevel { get; set; }
+    public int loomLevel { get; set; }
+
+    [NotNull]
+    public int fillerLevel { get; set; }
+
+    [NotNull]
+    public int decoLevel { get; set; }
 
     [NotNull]
     public string endScene { get; set; }
+
+    [NotNull]
+    public bool isOpen { get; set; }
 }

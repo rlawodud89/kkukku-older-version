@@ -2,8 +2,9 @@ using UnityEngine;
 
 public enum ItemType
 {
-    ITEM,
+    MATERIAL,
     BLANKET,
     SNACK,
-    INTERIOR
+    SHOP_INTERIOR,
+    ROOM_INTERIROR
 }

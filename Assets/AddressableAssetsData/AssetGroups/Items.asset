@@ -17,17 +17,53 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8a6c2451754f9ec46a8a7c76fe19ece3
   m_SerializeEntries:
-  - m_GUID: 8a25a3b265a1c4d4b82149776cddc7f8
-    m_Address: "Assets/ScriptableObject/Items/\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F.asset"
+  - m_GUID: 812dd16a5bd668444a27e572179bfcee
+    m_Address: "Assets/ScriptableObject/Shop_Interiors/\uAE4C\uC9C4\uB098\uBB34\uBCBD\uC7A5.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - item
+    - shop_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0e61d4ea23cec0f49a545df76539efb2
-    m_Address: "Assets/ScriptableObject/Items/\uC878\uB9B0\uBCA0\uB9AC\uB364\uBD88.asset"
+  - m_GUID: 1a2194a2f8a36d449a14eb17894b9d3f
+    m_Address: "Assets/ScriptableObject/Shop_Interiors/\uD1A0\uB07C\uACC4\uC0B0\uC6D0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - item
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a93cd87b940b20f4dac8fa42edd63927
+    m_Address: "Assets/ScriptableObject/Room_Interiors/\uB098\uBB34\uC758\uC790.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9dce0040ff32c047b7412f79c4b719d
+    m_Address: "Assets/ScriptableObject/Room_Interiors/\uB098\uBB34\uC774\uBD88\uC7AC\uACE0\uD568.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06464fec112e4a2428ac56bfaff37954
+    m_Address: Assets/ScriptableObject/Room_Interiors/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e30d1527e74dbdb49a32505ba47346c5
+    m_Address: "Assets/ScriptableObject/Shop_Interiors/\uAE4C\uC9C4\uB098\uBB34\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8e9d1959291935409f2de75a48905ef
+    m_Address: "Assets/ScriptableObject/Materials/\uC878\uB9B0\uBCA0\uB9AC.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf1860182bef45f4a8915917be6bc4de
+    m_Address: "Assets/ScriptableObject/Materials/\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

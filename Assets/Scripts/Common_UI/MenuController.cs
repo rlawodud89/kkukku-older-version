@@ -40,6 +40,8 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.getInstance();
+        isOpen = gameManager.Get_IsOpen();
+        targetImage.sprite = isOpen ? openSprite : closeSprite;
     }
 
     // Update is called once per frame
@@ -143,14 +145,14 @@ public class MenuController : MonoBehaviour
         }
 
         TextMeshProUGUI confirmText = storeSignPopup.GetComponentInChildren<TextMeshProUGUI>();
-        if (isOpen)
+        if (!isOpen)
         {
             if (confirmText != null)
             {
-                confirmText.text = $"게게를 여시겠습니까?";
+                confirmText.text = $"가게를 여시겠습니까?";
 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
-                yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); });
+                yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); gameManager.Set_IsOpen(true); });
 
                 // No 버튼 클릭 시 팝업 닫기
                 Button noButton = storeSignPopup.transform.Find("NoButton").GetComponent<Button>();
@@ -166,10 +168,10 @@ public class MenuController : MonoBehaviour
         {
             if (confirmText != null)
             {
-                confirmText.text = $"게게를 닫으시겠습니까?";
+                confirmText.text = $"가게를 닫으시겠습니까?";
                 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
-                yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); });
+                yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); gameManager.Set_IsOpen(false); });
 
                 // No 버튼 클릭 시 팝업 닫기
                 Button noButton = storeSignPopup.transform.Find("NoButton").GetComponent<Button>();
@@ -213,7 +215,7 @@ public class MenuController : MonoBehaviour
         rt.localEulerAngles = new Vector3(0, 90f, 0);
 
         // 이미지 교체
-        isOpen = !isOpen;
+        isOpen = gameManager.Get_IsOpen();
         targetImage.sprite = isOpen ? openSprite : closeSprite;
 
         // 2단계: 90 → 180도 회전

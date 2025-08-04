@@ -28,20 +28,25 @@ public class GameManager : MonoBehaviour
 
     private int designshopLevel;
     private int itemshopLevel;
-    private int workroomLevel;
-    private string endScene;
+    private int loomLevel;
+    private int fillerLevel;
+    private int decoLevel;
 
-    private Dictionary<string, ItemScript> Items = new Dictionary<string, ItemScript>();
+    private string endScene;
+    private bool isOpen;
+
+    private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
-    private Dictionary<string, ItemScript> Interiors = new Dictionary<string, ItemScript>();
+    private Dictionary<string, ItemScript> Shop_Interiors = new Dictionary<string, ItemScript>();
+    private Dictionary<string, ItemScript> Room_Interiors = new Dictionary<string, ItemScript>();
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, WorkerScript> Workers = new Dictionary<string, WorkerScript>();
     private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
-    private static float gameDuration = 1f; // 75초(1.25분)에 1시간 (30분에 24시간)
+    private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 0;
@@ -67,11 +72,14 @@ public class GameManager : MonoBehaviour
             moonrock = user.moonrock;
             designshopLevel = user.designshopLevel;
             itemshopLevel = user.itemshopLevel;
-            workroomLevel = user.workroomLevel;
+            loomLevel = user.loomLevel;
+            fillerLevel = user.fillerLevel;
+            decoLevel = user.decoLevel;
             playTime = user.playTime;
             endScene = user.endScene;
+            isOpen = user.isOpen;
 
-            //LoadAllScriptableObjects();
+            LoadAllScriptableObjects();
 
         }
         else
@@ -102,25 +110,28 @@ public class GameManager : MonoBehaviour
             nowTime = NOW.EVENING;
         }
 
-        dbManager.Set_User(energy, gold, moonrock, playTime);
+        dbManager.Update_User(energy, gold, moonrock, playTime);
     }
 
     private void LoadAllScriptableObjects()
     {
         //"...": addressable 라벨 이름
-        Items = Addressables.LoadAssetsAsync<ItemScript>("item", null)
+        Materials = Addressables.LoadAssetsAsync<ItemScript>("material", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
-        Blankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
+        /*Blankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
         Snacks = Addressables.LoadAssetsAsync<ItemScript>("snack", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.itemName);
-        Interiors = Addressables.LoadAssetsAsync<ItemScript>("interior", null)
+                .ToDictionary(i => i.itemName);*/
+        Shop_Interiors = Addressables.LoadAssetsAsync<ItemScript>("shop_interior", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
-        Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
+        Room_Interiors = Addressables.LoadAssetsAsync<ItemScript>("room_interior", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.itemName);
+        /*Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.customerName);
         Workers = Addressables.LoadAssetsAsync<WorkerScript>("worker", null)
@@ -131,7 +142,7 @@ public class GameManager : MonoBehaviour
                 .ToDictionary(i => i.questName);
         Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.letterName);
+                .ToDictionary(i => i.letterName);*/
     }
 
 
@@ -153,24 +164,79 @@ public class GameManager : MonoBehaviour
     public int Get_Minutes() { return minutes; }
 
     public int Get_DesignShopLevel() { return designshopLevel; }
-    public void Set_DesignShopLevel(int level) { designshopLevel = level; }
-    public void Change_DesignShopLevel(int delta) { designshopLevel += delta; }
+    public void Set_DesignShopLevel(int level)
+    {
+        designshopLevel = level;
+        dbManager.Update_DesginShopLevel(designshopLevel);
+    }
+    public void Change_DesignShopLevel(int delta)
+    {
+        designshopLevel += delta;
+        dbManager.Update_DesginShopLevel(designshopLevel);
+    }
 
     public int Get_ItemShopLevel() { return itemshopLevel; }
-    public void Set_ItemShopLevel(int level) { itemshopLevel = level; }
-    public void Change_ItemShopLevel(int delta) { itemshopLevel += delta; }
-
-    public int Get_WorkRoomLevel() { return workroomLevel; }
-    public void Set_WorkRoomLevel(int level) { workroomLevel = level; }
-    public void Change_WorkRoomLevel(int delta) { workroomLevel += delta; }
-
-
-    public ItemScript Get_Item(string itemName) { return Items[itemName]; }
-    public ItemScript Get_Random_Item()
+    public void Set_ItemShopLevel(int level)
     {
-        int randomIdx = UnityEngine.Random.Range(0, Items.Count);
-        var randomItem = Items.ElementAt(randomIdx);
-        return randomItem.Value;
+        itemshopLevel = level;
+        dbManager.Update_ItemShopLevel(itemshopLevel);
+    }
+    public void Change_ItemShopLevel(int delta)
+    {
+        itemshopLevel += delta;
+        dbManager.Update_ItemShopLevel(itemshopLevel);
+    }
+
+    public int Get_LoomLevel() { return loomLevel; }
+    public void Set_LoomLevel(int level)
+    {
+        loomLevel += level;
+        dbManager.Update_LoomLevel(loomLevel);
+    }
+    public void Change_LoomLevel(int delta)
+    {
+        loomLevel += delta;
+        dbManager.Update_LoomLevel(loomLevel);
+    }
+
+    public int Get_FillerLevel() { return fillerLevel; }
+    public void Set_FillerLevel(int level)
+    {
+        fillerLevel = level;
+        dbManager.Update_FillerLevel(fillerLevel);
+    }
+    public void Change_FillerLevel(int delta)
+    {
+        fillerLevel += delta;
+        dbManager.Update_FillerLevel(fillerLevel);
+    }
+
+    public int Get_DecoLevel() { return decoLevel; }
+    public void Set_DecoLevel(int level)
+    {
+        decoLevel = level;
+        dbManager.Update_DecoLevel(decoLevel);
+    }
+    public void Change_DecoLevel(int delta)
+    {
+        decoLevel += delta;
+        dbManager.Update_DecoLevel(decoLevel);
+    }
+
+    public bool Get_IsOpen() { return isOpen; }
+    public void Set_IsOpen(bool isOpen)
+    {
+        this.isOpen = isOpen;
+        dbManager.Update_IsOpen(this.isOpen);
+    }
+
+
+    public ItemScript Get_Material(string materialName) { return Materials[materialName]; }
+    public ItemScript Get_Random_Material()
+    {
+        int randomIdx = UnityEngine.Random.Range(0, Materials.Count);
+        var randomMaterial = Materials.ElementAt(randomIdx);
+        return randomMaterial.Value;
     }
 
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
@@ -189,21 +255,30 @@ public class GameManager : MonoBehaviour
         return randomSnack.Value;
     }
 
-    public ItemScript Get_Interior(string interiorName) { return Interiors[interiorName]; }
-    public ItemScript Get_Random_Interior()
+    public ItemScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
+    public ItemScript Get_Random_ShopInterior()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Interiors.Count);
-        var randomInterior = Interiors.ElementAt(randomIdx);
+        int randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
+        var randomInterior = Shop_Interiors.ElementAt(randomIdx);
+        return randomInterior.Value;
+    }
+
+    public ItemScript Get_RoomInterior(string interiorName) { return Room_Interiors[interiorName]; }
+    public ItemScript Get_Random_RoomInterior()
+    {
+        int randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
+        var randomInterior = Room_Interiors.ElementAt(randomIdx);
         return randomInterior.Value;
     }
 
     public ItemScript Get_Random_InAll()
     {
         Func<ItemScript>[] funcs = new Func<ItemScript>[] {
-            Get_Random_Item,
+            Get_Random_Material,
             Get_Random_Blanket,
             Get_Random_Snack,
-            Get_Random_Interior
+            Get_Random_ShopInterior,
+            Get_Random_RoomInterior
         };
 
         int random = UnityEngine.Random.Range(0, funcs.Length);
@@ -228,6 +303,29 @@ public class GameManager : MonoBehaviour
         var randomQuest = Quests.ElementAt(randomIdx);
         return randomQuest.Value;
     }
-
     public LetterSciprt Get_Letter(string letterName) { return Letters[letterName]; }
+
+    public ItemScript Get_Item(string itemName)
+    {
+        if (Materials.ContainsKey(itemName)) return Materials[itemName];
+        else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
+        else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
+        else if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
+        else if (Shop_Interiors.ContainsKey(itemName)) return Shop_Interiors[itemName];
+        else return null;
+    }
+
+    public void Add_to_Inventory(string itemName, int count)
+    {
+        
+        if (dbManager.isIn_Inventory(itemName))
+        {
+            dbManager.Change_Item_Count(itemName, count);
+        }
+        else
+        {
+            ItemScript itemScript = Get_Item(itemName);
+            if(itemScript != null) dbManager.Insert_Item(itemName, itemScript.itemType, count);
+        }
+    }
 }

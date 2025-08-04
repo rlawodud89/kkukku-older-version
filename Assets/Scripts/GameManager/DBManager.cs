@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using SQLite4Unity3d;
+using System.Linq;
 
 
 public class DBManager
@@ -34,8 +36,11 @@ public class DBManager
         user.playTime = 0;
         user.designshopLevel = 1;
         user.itemshopLevel = 1;
-        user.workroomLevel = 1;
+        user.loomLevel = 1;
+        user.fillerLevel = 1;
+        user.decoLevel = 1;
         user.endScene = "Work_Shop";
+        user.isOpen = false;
 
         testconn.Insert(user);
     }
@@ -45,7 +50,7 @@ public class DBManager
         return testconn.Find<User>(userName); //지정한 이름(기본키)으로 찾기
     }
 
-    public void Set_User(int energy, int gold, int moonrock, float playTime)
+    public void Update_User(int energy, int gold, int moonrock, float playTime)
     {
         User user = testconn.Find<User>(userName);
         user.energy = energy;
@@ -56,5 +61,68 @@ public class DBManager
         testconn.Update(user);
     }
 
-    
+    public void Update_DesginShopLevel(int level)
+    {
+        User user = testconn.Find<User>(userName);
+        user.designshopLevel = level;
+        testconn.Update(user);
+    }
+
+    public void Update_ItemShopLevel(int level)
+    {
+        User user = testconn.Find<User>(userName);
+        user.itemshopLevel = level;
+        testconn.Update(user);
+    }
+
+    public void Update_LoomLevel(int level)
+    {
+        User user = testconn.Find<User>(userName);
+        user.loomLevel = level;
+        testconn.Update(user);
+    }
+
+    public void Update_FillerLevel(int level)
+    {
+        User user = testconn.Find<User>(userName);
+        user.fillerLevel = level;
+        testconn.Update(user);
+    }
+
+    public void Update_DecoLevel(int level)
+    {
+        User user = testconn.Find<User>(userName);
+        user.decoLevel = level;
+        testconn.Update(user);
+    }
+
+    public void Update_IsOpen(bool isOpen)
+    {
+        User user = testconn.Find<User>(userName);
+        user.isOpen = isOpen;
+        testconn.Update(user);
+    }
+
+    public bool isIn_Inventory(string itemName)
+    {
+        return testconn.Table<Inventory>()
+            .Any(x => x.itemName == itemName);
+    }
+
+    public void Insert_Item(string itemName, ItemType itemType, int count)
+    {
+        Inventory inven = new Inventory();
+        inven.itemName = itemName;
+        inven.itemType = itemType;
+        inven.count = count;
+
+        testconn.Insert(inven);
+    }
+
+    public void Change_Item_Count(string itemName, int delta)
+    {
+        Inventory inven = testconn.Find<Inventory>(itemName);
+        inven.count += delta;
+        testconn.Update(inven);
+    }
 }

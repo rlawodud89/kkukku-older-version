@@ -413,9 +413,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentRoot: {fileID: 107304517}
   cardPrefab: {fileID: 1445214200595009348, guid: c976ff32c4abb2e4ba17fb9ed1149da5, type: 3}
-  stock:
-  - {fileID: 11400000, guid: 83ea27d7798d0d645aedd587b0bc3843, type: 2}
+  stock: []
   popup: {fileID: 1797094300}
+  isShop: 1
 --- !u!114 &107304520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2641,7 +2641,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lv.1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2705,7 +2705,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &841416190
@@ -2969,7 +2969,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lv.1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3033,7 +3033,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &868617065
@@ -4533,6 +4533,9 @@ MonoBehaviour:
   loomButton: {fileID: 745954435}
   fillerButton: {fileID: 1221816514}
   decoTableButton: {fileID: 1855368870}
+  loomLevelText: {fileID: 841416189}
+  fillerLevelText: {fileID: 1539440194}
+  decoLevelText: {fileID: 868617064}
   popup: {fileID: 1797094300}
   loomPrice: 3000
   fillerPrice: 5000
@@ -4730,7 +4733,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lv.1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4794,7 +4797,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1539440195
@@ -4946,9 +4949,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentRoot: {fileID: 1685907207}
   cardPrefab: {fileID: 1445214200595009348, guid: c976ff32c4abb2e4ba17fb9ed1149da5, type: 3}
-  stock:
-  - {fileID: 11400000, guid: 1a6dc17b1738db34692149247a7cf096, type: 2}
+  stock: []
   popup: {fileID: 1797094300}
+  isShop: 0
 --- !u!114 &1685907210
 MonoBehaviour:
   m_ObjectHideFlags: 0
