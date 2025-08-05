@@ -38,10 +38,13 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
-    private Dictionary<string, ItemScript> Shop_Interiors = new Dictionary<string, ItemScript>();
-    private Dictionary<string, ItemScript> Room_Interiors = new Dictionary<string, ItemScript>();
+
+    private Dictionary<string, InteriorScript> Shop_Interiors = new Dictionary<string, InteriorScript>();
+    private Dictionary<string, InteriorScript> Room_Interiors = new Dictionary<string, InteriorScript>();
+    private Dictionary<string, InteriorScript> Workers = new Dictionary<string, InteriorScript>();
+    private Dictionary<string, InteriorScript> Tiles = new Dictionary<string, InteriorScript>();
+
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
-    private Dictionary<string, WorkerScript> Workers = new Dictionary<string, WorkerScript>();
     private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
@@ -119,24 +122,27 @@ public class GameManager : MonoBehaviour
         Materials = Addressables.LoadAssetsAsync<ItemScript>("material", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
-        /*Blankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
+        Blankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
         Snacks = Addressables.LoadAssetsAsync<ItemScript>("snack", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.itemName);*/
-        Shop_Interiors = Addressables.LoadAssetsAsync<ItemScript>("shop_interior", null)
-                .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
-        Room_Interiors = Addressables.LoadAssetsAsync<ItemScript>("room_interior", null)
+        Shop_Interiors = Addressables.LoadAssetsAsync<InteriorScript>("shop_interior", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.itemName);
-        /*Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
+                .ToDictionary(i => i.interiorName);
+        Room_Interiors = Addressables.LoadAssetsAsync<InteriorScript>("room_interior", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.interiorName);
+        Workers = Addressables.LoadAssetsAsync<InteriorScript>("worker", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.interiorName);
+        /*Tiles = Addressables.LoadAssetsAsync<InteriorScript>("tile", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.interiorName);
+        Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.customerName);
-        Workers = Addressables.LoadAssetsAsync<WorkerScript>("worker", null)
-                .WaitForCompletion()
-                .ToDictionary(i => i.workerName);
         Quests = Addressables.LoadAssetsAsync<QuestScript>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questName);
@@ -255,36 +261,29 @@ public class GameManager : MonoBehaviour
         return randomSnack.Value;
     }
 
-    public ItemScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
-    public ItemScript Get_Random_ShopInterior()
+    public InteriorScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
+    public InteriorScript Get_Random_ShopInterior()
     {
         int randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
         var randomInterior = Shop_Interiors.ElementAt(randomIdx);
         return randomInterior.Value;
     }
 
-    public ItemScript Get_RoomInterior(string interiorName) { return Room_Interiors[interiorName]; }
-    public ItemScript Get_Random_RoomInterior()
+    public InteriorScript Get_RoomInterior(string interiorName) { return Room_Interiors[interiorName]; }
+    public InteriorScript Get_Random_RoomInterior()
     {
         int randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
         var randomInterior = Room_Interiors.ElementAt(randomIdx);
         return randomInterior.Value;
     }
 
-    public ItemScript Get_Random_InAll()
+    public InteriorScript Get_Tile(string tileName) { return Tiles[tileName]; }
+    public InteriorScript Get_Random_Tile()
     {
-        Func<ItemScript>[] funcs = new Func<ItemScript>[] {
-            Get_Random_Material,
-            Get_Random_Blanket,
-            Get_Random_Snack,
-            Get_Random_ShopInterior,
-            Get_Random_RoomInterior
-        };
-
-        int random = UnityEngine.Random.Range(0, funcs.Length);
-        return funcs[random]();
+        int randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
+        var randomTile = Tiles.ElementAt(randomIdx);
+        return randomTile.Value;
     }
-
 
     public CustomerScript Get_Customer(string customerName) { return Customers[customerName]; }
     public CustomerScript Get_Random_Customer()
@@ -293,8 +292,6 @@ public class GameManager : MonoBehaviour
         var randomCustomer = Customers.ElementAt(randomIdx);
         return randomCustomer.Value;
     }
-
-    public WorkerScript Get_Worker(string workerName) { return Workers[workerName]; }
 
     public QuestScript Get_Quest(string questName) { return Quests[questName]; }
     public QuestScript Get_Random_Quest()
@@ -305,27 +302,59 @@ public class GameManager : MonoBehaviour
     }
     public LetterSciprt Get_Letter(string letterName) { return Letters[letterName]; }
 
-    public ItemScript Get_Item(string itemName)
+    public ItemScript Get_InventoryItem(string itemName)
     {
         if (Materials.ContainsKey(itemName)) return Materials[itemName];
         else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
-        else if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
+        else return null;
+    }
+    
+    public InteriorScript Get_InteriorItem(string itemName)
+    {
+        if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
         else if (Shop_Interiors.ContainsKey(itemName)) return Shop_Interiors[itemName];
+        else if (Workers.ContainsKey(itemName)) return Workers[itemName];
         else return null;
     }
 
-    public void Add_to_Inventory(string itemName, int count)
+    public void Add_InventoryItem(string itemName, int count)
     {
-        
         if (dbManager.isIn_Inventory(itemName))
         {
-            dbManager.Change_Item_Count(itemName, count);
+            dbManager.Change_InventoryItem_Count(itemName, count);
         }
         else
         {
-            ItemScript itemScript = Get_Item(itemName);
-            if(itemScript != null) dbManager.Insert_Item(itemName, itemScript.itemType, count);
+            ItemScript itemScript = Get_InventoryItem(itemName);
+            if (itemScript != null) dbManager.Insert_InventoryItem(itemName, itemScript.itemType, count);
+        }
+    }
+
+    public bool Add_Design(string blanketName)
+    {
+        if (dbManager.Have_Design(blanketName)) return false;
+        else
+        {
+            dbManager.Insert_Design(blanketName);
+            return true;
+        }
+    }
+
+    public void Add_InteriorItem(string interiorName, int count)
+    {
+        InteriorScript interiorScript = Get_InteriorItem(interiorName);
+        dbManager.Insert_InteriorItem(interiorName, interiorScript.interiorType, count);
+    }
+
+    public bool Add_TileItem(string tileName)
+    {
+        if (dbManager.Have_Tile(tileName)) return false;
+        else
+        {
+            InteriorScript tileScript = Get_Tile(tileName);
+            dbManager.Insert_Tile(tileName, tileScript.interiorType);
+            return true;
         }
     }
 }

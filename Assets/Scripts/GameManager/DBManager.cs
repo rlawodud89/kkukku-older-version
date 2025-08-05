@@ -22,9 +22,12 @@ public class DBManager
     {
         testconn.CreateTable<User>();
         testconn.CreateTable<Inventory>();
+        testconn.CreateTable<Design>();
         testconn.CreateTable<WorkShop>();
         testconn.CreateTable<ShopTable>();
         testconn.CreateTable<WorkRoom>();
+        testconn.CreateTable<Interior>();
+        testconn.CreateTable<Tile>();
         testconn.CreateTable<QuestBox>();
         testconn.CreateTable<LetterBox>();
 
@@ -43,6 +46,8 @@ public class DBManager
         user.isOpen = false;
 
         testconn.Insert(user);
+
+        // TODO: 처음에 기본으로 주는 아이템 저장
     }
 
     public User Get_User()
@@ -109,7 +114,7 @@ public class DBManager
             .Any(x => x.itemName == itemName);
     }
 
-    public void Insert_Item(string itemName, ItemType itemType, int count)
+    public void Insert_InventoryItem(string itemName, ItemType itemType, int count)
     {
         Inventory inven = new Inventory();
         inven.itemName = itemName;
@@ -119,10 +124,53 @@ public class DBManager
         testconn.Insert(inven);
     }
 
-    public void Change_Item_Count(string itemName, int delta)
+    public void Change_InventoryItem_Count(string itemName, int delta)
     {
         Inventory inven = testconn.Find<Inventory>(itemName);
         inven.count += delta;
         testconn.Update(inven);
+    }
+
+    public bool Have_Design(string blanketName)
+    {
+        return testconn.Table<Design>()
+            .Any(x => x.blanketName == blanketName);
+    }
+
+    public void Insert_Design(string blanketName)
+    {
+        Design design = new Design();
+        design.blanketName = blanketName;
+
+        testconn.Insert(design);
+    }
+
+    public void Insert_InteriorItem(string interiorName, InteriorType interiorType, int count)
+    {
+        for(int i = 0; i < count; i++)
+        {
+            Interior interior = new Interior();
+            interior.interiorName = interiorName;
+            interior.interiorType = interiorType;
+            interior.isSet = false;
+
+            testconn.Insert(interior);
+        }
+    }
+
+    public bool Have_Tile(string tileName)
+    {
+        return testconn.Table<Interior>()
+            .Any(x => x.interiorName == tileName);
+    }
+
+    public void Insert_Tile(string tileName, InteriorType interiorType)
+    {
+        Interior interior = new Interior();
+        interior.interiorName = tileName;
+        interior.interiorType = interiorType;
+        interior.isSet = false;
+
+        testconn.Insert(interior);
     }
 }

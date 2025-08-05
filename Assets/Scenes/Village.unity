@@ -415,7 +415,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 1445214200595009348, guid: c976ff32c4abb2e4ba17fb9ed1149da5, type: 3}
   stock: []
   popup: {fileID: 1797094300}
-  isShop: 1
+  shopType: 0
 --- !u!114 &107304520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4951,7 +4951,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 1445214200595009348, guid: c976ff32c4abb2e4ba17fb9ed1149da5, type: 3}
   stock: []
   popup: {fileID: 1797094300}
-  isShop: 0
+  shopType: 1
 --- !u!114 &1685907210
 MonoBehaviour:
   m_ObjectHideFlags: 0

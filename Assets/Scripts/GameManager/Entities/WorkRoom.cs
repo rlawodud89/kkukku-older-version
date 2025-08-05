@@ -9,12 +9,6 @@ public class WorkRoom
     public string workerName { get; set; }
 
     [NotNull]
-    public int x { get; set; }
-
-    [NotNull]
-    public int y { get; set; }
-
-    [NotNull]
     public int stamina { get; set; }
 
     [NotNull]

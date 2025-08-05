@@ -86,13 +86,17 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
+    - yarn
+    - cotton
+    - deco
     - material
     - blanket
     - snack
     - shop_interior
     - room_interior
-    - customer
     - worker
+    - tile
+    - customer
     - quest
     - letter
   m_SchemaTemplates: []
