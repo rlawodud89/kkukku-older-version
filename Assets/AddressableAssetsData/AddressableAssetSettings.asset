@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: f1b03a5e90c65334e87a203fec20f56d
+
+  m_DefaultGroup: 8a6c2451754f9ec46a8a7c76fe19ece3
   m_currentHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -44,8 +45,9 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: 4ce858659508691468ca833680fd4e87, type: 2}
-  - {fileID: 11400000, guid: ef733f63470c73148bb2678528a6e597, type: 2}
+
+  - {fileID: 11400000, guid: 7207e6f95ebe1f64798cca462b7d6b9d, type: 2}
+  - {fileID: 11400000, guid: cc3e23b929de85e4890fff27d7c2f12d, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -54,53 +56,67 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-      m_Id: 06fc5169f4667f74da0dfcbece0c0949
+
+      m_Id: d1f4406bf855dd547a8cb4fce9ac33b9
       m_ProfileName: Default
       m_Values:
-      - m_Id: 03fada104f200984cb743ce0dbf6c729
+      - m_Id: 87616dd88aee129408c0ba9d1e9572fa
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: 10ab5843513fbc940b0b0442935cd8b0
+      - m_Id: 43ce63784cd79ae4ebe12d2e2bf9b77a
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 28555b494d6ccec4080e702e5569dd98
+      - m_Id: 2f257108a81b77747841e7e71d3be724
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 93f7747bf093f3340a6d2d8314e92111
+      - m_Id: 53061ef0073852644b6e9ae4c456ce71
         m_Value: ServerData/[BuildTarget]
-      - m_Id: 38c088112048913468175fee5c776f56
+      - m_Id: 88c375d8c3dcee048bb2cdeb5e960c49
         m_Value: http://[PrivateIpAddress]:[HostingServicePort]
     m_ProfileEntryNames:
-    - m_Id: 03fada104f200984cb743ce0dbf6c729
+    - m_Id: 87616dd88aee129408c0ba9d1e9572fa
       m_Name: BuildTarget
       m_InlineUsage: 0
-    - m_Id: 10ab5843513fbc940b0b0442935cd8b0
+    - m_Id: 43ce63784cd79ae4ebe12d2e2bf9b77a
       m_Name: Local.BuildPath
       m_InlineUsage: 0
-    - m_Id: 28555b494d6ccec4080e702e5569dd98
+    - m_Id: 2f257108a81b77747841e7e71d3be724
       m_Name: Local.LoadPath
       m_InlineUsage: 0
-    - m_Id: 93f7747bf093f3340a6d2d8314e92111
+    - m_Id: 53061ef0073852644b6e9ae4c456ce71
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
-    - m_Id: 38c088112048913468175fee5c776f56
+    - m_Id: 88c375d8c3dcee048bb2cdeb5e960c49
       m_Name: Remote.LoadPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - default
+
+    - yarn
+    - cotton
+    - deco
+    - material
+    - blanket
+    - snack
+    - shop_interior
+    - room_interior
+    - worker
+    - tile
+    - customer
+    - quest
+    - letter
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
-  - {fileID: 11400000, guid: 44cbd3a5872a1b349953dfbfec51c07f, type: 2}
+  - {fileID: 11400000, guid: ace579f1e0d93c447aa64bdae88edb00, type: 2}
   m_InitializationObjects: []
   m_CertificateHandlerType:
     m_AssemblyName: 
     m_ClassName: 
   m_ActivePlayerDataBuilderIndex: 3
   m_DataBuilders:
-  - {fileID: 11400000, guid: 2cdc12300da0a9d42a1ea32737e5b777, type: 2}
-  - {fileID: 11400000, guid: 461b8715aa81de54ba0a2bef80322195, type: 2}
-  - {fileID: 11400000, guid: 1eabba8706caac948a96460f42662767, type: 2}
-  - {fileID: 11400000, guid: 44818107da9e38544a946bce647a69bc, type: 2}
-  m_ActiveProfileId: 06fc5169f4667f74da0dfcbece0c0949
+  - {fileID: 11400000, guid: 10292b707ad9a6b4aa4d557e5f3d3035, type: 2}
+  - {fileID: 11400000, guid: d0048b1aa7bdf3e478bef4ec0918fd01, type: 2}
+  - {fileID: 11400000, guid: 1a1a4d9d879dd3747a50aa6c951daa4b, type: 2}
+  - {fileID: 11400000, guid: 38b9f8495a4a53f449a2d8baa8b8f14f, type: 2}
+  m_ActiveProfileId: d1f4406bf855dd547a8cb4fce9ac33b9
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}

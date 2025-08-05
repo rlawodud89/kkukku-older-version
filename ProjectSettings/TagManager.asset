@@ -4,12 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Employee
+  - Door
+  - Cashier
+  - Display
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - obstacleLayer
   - Water
   - UI
   - 

@@ -7,6 +7,7 @@ public class ItemData : ScriptableObject
     public string displayName;
     public Sprite icon;
     public int price;
+    public bool isGold; // 일반 재화 사용하면 true, 월석 사용하면 false
 
     [Header("수량이 필요한 일반 아이템인가?")]
     public bool useQuantity = true;
