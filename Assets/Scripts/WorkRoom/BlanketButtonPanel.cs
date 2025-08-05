@@ -64,17 +64,21 @@ public class BlanketButtonPanel : MonoBehaviour
             if (btn != null)
             {
                 btn.onClick.RemoveAllListeners();
+                int capturedIndex = index;
+                BlanketData capturedData = data;
+
                 btn.onClick.AddListener(() =>
                 {
-                    Debug.Log($"¿Ã∫“ {index + 1} ≈¨∏Øµ ");
-                    detailPanel.OpenPanel(data);
+                    Debug.Log($"¿Ã∫“ {capturedIndex + 1} ≈¨∏Øµ ");
+                    detailPanel.OpenPanel(capturedData);
 
                     if (makeFabric != null)
                     {
-                        makeFabric.currentBlanket = data;
-                        Debug.Log($"makeFabric.currentBlanket º≥¡§µ : {data.name}");
+                        makeFabric.currentBlanket = capturedData;
+                        Debug.Log($"makeFabric.currentBlanket º≥¡§µ : {capturedData.name}");
                     }
                 });
+
             }
         }
     }

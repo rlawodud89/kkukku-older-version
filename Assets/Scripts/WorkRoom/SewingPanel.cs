@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CottonPanel : MonoBehaviour
+public class SewingPanel : MonoBehaviour
 {
     [Header("Slot References")]
     public Transform scrollContent;
@@ -49,7 +49,7 @@ public class CottonPanel : MonoBehaviour
             var ui = slot.GetComponent<BlanketSlotUI>();
 
             // Cotton 슬롯만 사용
-            if (ui != null && ui.slotType == SlotType.Cotton && ui.HasData(currentBlanket))
+            if (ui != null && ui.slotType == SlotType.Sewing && ui.HasData(currentBlanket))
             {
                 ui.SetData(currentBlanket);
                 foundSlot = true;
@@ -65,7 +65,7 @@ public class CottonPanel : MonoBehaviour
                 var slot = scrollContent.GetChild(i);
                 var ui = slot.GetComponent<BlanketSlotUI>();
 
-                if (ui != null && ui.slotType == SlotType.Cotton && !ui.HasAnyData())
+                if (ui != null && ui.slotType == SlotType.Sewing && !ui.HasAnyData())
                 {
                     ui.SetData(currentBlanket);
                     foundSlot = true;
@@ -77,7 +77,7 @@ public class CottonPanel : MonoBehaviour
         // 3. 슬롯 없을 때만 경고
         if (!foundSlot)
         {
-            Debug.LogWarning("빈 Cotton 슬롯이 없습니다! 더 이상 추가할 수 없습니다.");
+            Debug.LogWarning("빈 Sewing 슬롯이 없습니다! 더 이상 추가할 수 없습니다.");
         }
     }
 }

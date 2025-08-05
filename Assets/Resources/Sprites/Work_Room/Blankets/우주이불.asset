@@ -22,4 +22,6 @@ MonoBehaviour:
   - data: {fileID: 11400000, guid: 90189ab314310db44a2e5ac36a95cd8e, type: 2}
     count: 3
   Fabric: {fileID: 21300000, guid: 08d22414aa58f2940bb31efc99b1f2c8, type: 3}
-  FabricCount: 0
+  FabricCount: 6
+  Cotton: {fileID: 21300000, guid: 396943abf36d81a4b86d0ff25c19ab49, type: 3}
+  CottonCount: 5

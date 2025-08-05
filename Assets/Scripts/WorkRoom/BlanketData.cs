@@ -11,4 +11,6 @@ using UnityEngine;
         public MaterialInventoryEntry[] requiredMaterials;
         public Sprite Fabric;
         public int FabricCount;
+        public Sprite Cotton;
+        public int CottonCount;
     }

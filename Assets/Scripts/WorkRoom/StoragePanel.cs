@@ -9,6 +9,8 @@ public class StoragePanel : MonoBehaviour
     public Transform ScrollContent;     // ScrollView > Viewport > Content
     public GameObject ItemPrefab;  // 그냥 Image + 자식 Image 프리팹
 
+
+
     public int itemCount = 20;
 
     public bool isInit=false;
