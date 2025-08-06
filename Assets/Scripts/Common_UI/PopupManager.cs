@@ -8,17 +8,6 @@ public class PopupManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> allPopups;
 
-    public Transform popupContainer; // 빈 부모 오브젝트
-    
-    private List<GameObject> popupList = new List<GameObject>();
-
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
 
     public void ShowOnly(GameObject targetPopup)
     {
@@ -39,23 +28,4 @@ public class PopupManager : MonoBehaviour
             popup.SetActive(false);
         }
     } 
-
-    
-    public void ShowPopup(GameObject popupPrefab)
-    {
-        HideAllPopups(); // 기존 거 다 끔
-
-        GameObject popup = Instantiate(popupPrefab, popupContainer);
-        popup.SetActive(true);
-        popupList.Add(popup);
-    }
-
-    
-    public void HideAllPopups()
-    {
-        foreach (Transform child in popupContainer)
-        {
-            child.gameObject.SetActive(false);
-        }
-    }
 }

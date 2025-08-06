@@ -24,7 +24,8 @@ public class QuestManager : MonoBehaviour
     public Sprite MoonRockImage; // 월석 이미지
     public Sprite CozyEnergyImage; // 포근에너지 이미지
 
-    public GameObject alertIcon;
+    public GameObject completeAlertIcon;
+    public GameObject startAlertIcon;
 
     //public QuestSO[] quests;
 
@@ -57,11 +58,31 @@ public class QuestManager : MonoBehaviour
                 if(quest.isCompleted)
                 {
                     qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
+                    //qb.transform.Find("Alert").gameObject.SetActive(true); 
+
+                    if (!quest.getReward)
+                    {
+                        qb.transform.Find("Alert").gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        qb.transform.Find("Alert").gameObject.SetActive(false);
+                    }
                 }
                 else
                 {
                     qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
+                    qb.transform.Find("Alert").gameObject.SetActive(false);
                 }
+            }
+
+            if(qb.transform.Find("Alert").gameObject.activeSelf)
+            {
+                completeAlertIcon.SetActive(true); // 퀘스트가 활성화되어 있으면 아이콘 표시
+            }
+            else
+            {
+                completeAlertIcon.SetActive(false); // 퀘스트가 비활성화되면 아이콘 숨김
             }
         }
     }
@@ -88,8 +109,8 @@ public class QuestManager : MonoBehaviour
         {
             Debug.Log($"선택된 퀘스트: {quest.questTitle}");
         }
-        
-        alertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
+
+        startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
     }
 
     // 퀘스트 시작
@@ -114,12 +135,12 @@ public class QuestManager : MonoBehaviour
 
             // 버튼 클릭 이벤트
             questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
-                OnQuestButtonClicked(currentQuest);
+                OnQuestButtonClicked(questButton, currentQuest);
             });
         }
     }
 
-    void OnQuestButtonClicked(QuestSO quest)
+    void OnQuestButtonClicked(GameObject questButton, QuestSO quest)
     {
         // 퀘스트 완료 시
         if(quest.isCompleted)
@@ -162,7 +183,7 @@ public class QuestManager : MonoBehaviour
                 float positionX = startX + i * spacing; // 보상별 X 위치 계산
 
 
-                rewardRect.anchoredPosition = new Vector2(positionX, 18);
+                rewardRect.anchoredPosition = new Vector2(positionX, 5);
                
             }
 
@@ -236,7 +257,7 @@ public class QuestManager : MonoBehaviour
                 float positionX = startX + i * spacing; // 보상별 X 위치 계산
 
 
-                rewardRect.anchoredPosition = new Vector2(positionX, -245);
+                rewardRect.anchoredPosition = new Vector2(positionX, -195);
             }
         }
     }
@@ -313,8 +334,8 @@ public class QuestManager : MonoBehaviour
     {
         questPanel.SetActive(true);
 
-        if(alertIcon.activeSelf){
-            alertIcon.SetActive(false);
+        if(startAlertIcon.activeSelf){
+            startAlertIcon.SetActive(false);
         }
     }
 

@@ -25,5 +25,5 @@ MonoBehaviour:
     amount: 5
   questProcess: 0
   questComplete: 0
-  isCompleted: 0
+  isCompleted: 1
   getReward: 0

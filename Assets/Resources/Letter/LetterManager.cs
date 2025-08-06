@@ -10,8 +10,9 @@ public class LetterManager : MonoBehaviour
     public GameObject scrollContent;
     public GameObject letterButtonPrefab; // 편지 아이템 프리팹
 
-    public GameObject letterContentPrefab; // 편지 내용 패널
-    public GameObject sleepingImagePrefab; // 잠자는 이미지 프리팹
+    //public GameObject letterContentPrefab; // 편지 내용 패널
+    //public GameObject sleepingImagePrefab; // 잠자는 이미지 프리팹
+    public GameObject letterContentPanel; // 편지 내용 패널
 
     public LetterSO[] letters;
 
@@ -50,27 +51,28 @@ public class LetterManager : MonoBehaviour
     public void OnLetterButtonClicked(LetterSO letter)
     {
         letterPanel.SetActive(false);
-        sleepingLetter.SetActive(true);
+        //sleepingLetter.SetActive(true);
+        letterContentPanel.SetActive(true);
 
         // 편지 내용 설정
-        GameObject letterContent = Instantiate(letterContentPrefab, sleepingLetter.transform);
-        letterContent.transform.Find("LetterText").GetComponent<TMPro.TextMeshProUGUI>().text = letter.content; 
-        letterContent.transform.Find("ExitButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
-            HideLetterContent();
-        });
+        //GameObject letterContent = Instantiate(letterContentPrefab, sleepingLetter.transform);
+        letterContentPanel.transform.Find("LetterText").GetComponent<TMPro.TextMeshProUGUI>().text = letter.content; 
+       // letterContentPanel.transform.Find("ExitButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
+        //    HideLetterContent();
+        //});
 
         // 삽화 이미지 설정
-        GameObject sleepingImage = Instantiate(sleepingImagePrefab, sleepingLetter.transform);
-        sleepingImage.transform.Find("Image").GetComponent<UnityEngine.UI.Image>().sprite = letter.sleepingImage;
+        //GameObject sleepingImage = Instantiate(sleepingImagePrefab, sleepingLetter.transform);
+        letterContentPanel.transform.Find("SleepingImage").GetComponent<UnityEngine.UI.Image>().sprite = letter.sleepingImage;
 
     }
 
     // 편지 내용 숨기기
     public void HideLetterContent()
     {
-        if (sleepingLetter != null)
+        if (letterContentPanel != null)
         {
-            sleepingLetter.SetActive(false);
+            letterContentPanel.SetActive(false);
         }
 
         letterPanel.SetActive(true);

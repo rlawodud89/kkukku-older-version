@@ -105,8 +105,11 @@ public class MenuController : MonoBehaviour
 
         foreach (var menu in menuButtons)
         {
-            Transform alert = menu.transform.Find("Alert");
-            if (alert != null && alert.gameObject.activeSelf)
+
+            var alerts = menu.GetComponentsInChildren<Transform>(true)
+                         .Where(t => t.name == "Alert");
+
+            if (alerts.Any(alert => alert.gameObject.activeSelf))
             {
                 shouldShow = true;
                 break;
