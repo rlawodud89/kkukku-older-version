@@ -8,11 +8,14 @@ using System.Linq;
 
 public class QuestManager : MonoBehaviour
 {
+    public static QuestManager Instance;
+
     public List<QuestSO> activeQuests = new List<QuestSO>();  // 퀘스트 리스트
 
     public GameObject questPanel; // 퀘스트 패널
     public GameObject scrollContent; // 스크롤 콘텐츠
     public GameObject questButtonPrefab;
+    public List<GameObject> questButtons = new List<GameObject>(); // 퀘스트 버튼 리스트
 
     public GameObject questContentPanel; // 퀘스트 내용 패널
     public GameObject questRewardPanel; // 퀘스트 보상 패널
@@ -21,7 +24,15 @@ public class QuestManager : MonoBehaviour
     public Sprite MoonRockImage; // 월석 이미지
     public Sprite CozyEnergyImage; // 포근에너지 이미지
 
+    public GameObject alertIcon;
+
     //public QuestSO[] quests;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -37,12 +48,28 @@ public class QuestManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // 퀘스트 완료 상태 업데이트
+        foreach(GameObject qb in questButtons)
+        {
+            QuestSO quest = activeQuests.Find(q => q.questTitle == qb.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text);
+            if(quest != null)
+            {
+                if(quest.isCompleted)
+                {
+                    qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
+                }
+                else
+                {
+                    qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
+                }
+            }
+        }
     }
 
     public void StartNewDay(){
         // 새로운 날 시작 시 퀘스트 초기화
         activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
+        questButtons.Clear(); // 기존 퀘스트 버튼 리스트 초기화
         LoadRandomQuests(3); // 새로운 퀘스트 로드
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
     }
@@ -61,6 +88,8 @@ public class QuestManager : MonoBehaviour
         {
             Debug.Log($"선택된 퀘스트: {quest.questTitle}");
         }
+        
+        alertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
     }
 
     // 퀘스트 시작
@@ -71,10 +100,11 @@ public class QuestManager : MonoBehaviour
             // 퀘스트 초기화
             currentQuest.getReward = false; // 보상 수령 여부 초기화
             currentQuest.questProcess = 0; // 퀘스트 진행 상태 초기화
-            //currentQuest.isCompleted = false; // 퀘스트 완료 여부 초기화
+            currentQuest.isCompleted = false; // 퀘스트 완료 여부 초기화
 
             // 퀘스트 패널 설정
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
+            questButtons.Add(questButton);
             questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
             if( currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
@@ -267,6 +297,12 @@ public class QuestManager : MonoBehaviour
         getButton.onClick.RemoveAllListeners();
     }
 
+    public bool IsQuestActive(QuestSO quest)
+    {
+        // 주어진 퀘스트가 활성화되어 있는지 확인
+        return activeQuests.Contains(quest) && !quest.isCompleted;
+    }   
+
 
     public void PanelClose()
     {
@@ -276,6 +312,10 @@ public class QuestManager : MonoBehaviour
     public void PanelOpen()
     {
         questPanel.SetActive(true);
+
+        if(alertIcon.activeSelf){
+            alertIcon.SetActive(false);
+        }
     }
 
     // 퀘스트 내용 패널 닫기

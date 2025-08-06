@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEditor.Tilemaps;
+using System.Linq;
 
 
 public class MenuController : MonoBehaviour
 {
     public GameObject menuButton; // MenuItems 오브젝트
     public List<GameObject> menuButtons; // 메뉴 버튼들
+    public GameObject menuAlertIcon; // 알림 아이콘
     public GameObject interiorButton;
     public float spacing = 60f;          // 버튼 사이 간격
     public float delay = 0.05f;          // 애니메이션 간 딜레이
@@ -92,8 +94,29 @@ public class MenuController : MonoBehaviour
                 energy.SetActive(true);
             }
         }
+
+        UpdateNotification();
     }
 
+    // 알림 아이콘 업데이트
+    public void UpdateNotification()
+    {
+        bool shouldShow = false;
+
+        foreach (var menu in menuButtons)
+        {
+            Transform alert = menu.transform.Find("Alert");
+            if (alert != null && alert.gameObject.activeSelf)
+            {
+                shouldShow = true;
+                break;
+            }
+        }
+
+        menuAlertIcon.SetActive(shouldShow);
+        Debug.Log($"🔔 menuAlertIcon.SetActive({shouldShow})");
+    }
+    
 
     public void ToggleMenuItems()
     {

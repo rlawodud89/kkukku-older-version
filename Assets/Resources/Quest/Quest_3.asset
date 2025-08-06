@@ -10,11 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
-  m_Name: Quest 3
+  m_Name: Quest_3
   m_EditorClassIdentifier: 
-  questTitle: 3
-  questDescription: 
-  rewards: []
+  questTitle: "\uB09A\uC2DC\uD558\uAE30"
+  questDescription: "\uAD6C\uB984\uD638\uC218\uC5D0 \uAC00\uC11C \uB09A\uC2DC\uB97C
+    \uD574\uBD10\uC694"
+  rewards:
+  - rewardType: "\uC6D4\uC11D"
+    amount: 10
   questProcess: 0
+  questComplete: 1
   isCompleted: 0
   getReward: 0

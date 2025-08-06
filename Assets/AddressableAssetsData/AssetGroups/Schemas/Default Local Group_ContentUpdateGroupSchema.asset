@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
-  m_Name: Quest 5
+  m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
+  m_Name: Default Local Group_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  questTitle: 5
-  questDescription: 
-  rewards: []
-  questProcess: 0
-  isCompleted: 0
-  getReward: 0
+  m_Group: {fileID: 11400000, guid: 061af6f3b4b1f4449a3593ddc4428cea, type: 2}
+  m_StaticContent: 0

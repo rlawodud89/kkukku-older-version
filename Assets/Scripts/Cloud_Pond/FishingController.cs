@@ -14,6 +14,14 @@ public class FishingController : MonoBehaviour
     public float minDelay = 4f;
     public float maxDelay = 7f;
 
+    
+    private void Awake()
+    {
+        
+    }
+    
+
+
     public void click_fishingbtn()
     {
         if (!fishing_start)
@@ -24,6 +32,8 @@ public class FishingController : MonoBehaviour
 
         fishing_btn.gameObject.SetActive(false);
         fishing_closebtn.gameObject.SetActive(true);
+
+       
     }
 
     public void click_fishingstopbtn()
@@ -38,7 +48,7 @@ public class FishingController : MonoBehaviour
                 fishingRoutine = null;
             }
 
-            fishing_txt.text = ""; // ÅØ½ºÆ® ÃÊ±âÈ­
+            fishing_txt.text = ""; // ï¿½Ø½ï¿½Æ® ï¿½Ê±ï¿½È­
         }
 
         fishing_closebtn.gameObject.SetActive(false);
@@ -49,14 +59,14 @@ public class FishingController : MonoBehaviour
     {
         while (fishing_start)
         {
-            fishing_txt.text = "³¬½Ã¸¦ ½ÃÀÛÇÕ´Ï´Ù.";
+            fishing_txt.text = "ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.";
             yield return new WaitForSeconds(2f);
             fishing_txt.text = "";
 
             float waitTime = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(waitTime);
 
-            fishing_txt.text = "Àç·á È¹µæ!";
+            fishing_txt.text = "ï¿½ï¿½ï¿½ È¹ï¿½ï¿½!";
             yield return new WaitForSeconds(2f);
             fishing_txt.text = "";
         }
