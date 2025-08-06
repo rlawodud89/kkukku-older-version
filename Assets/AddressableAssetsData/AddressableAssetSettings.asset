@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
+
   m_DefaultGroup: 8a6c2451754f9ec46a8a7c76fe19ece3
   m_currentHash:
     serializedVersion: 2
@@ -44,6 +45,7 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+
   - {fileID: 11400000, guid: 7207e6f95ebe1f64798cca462b7d6b9d, type: 2}
   - {fileID: 11400000, guid: cc3e23b929de85e4890fff27d7c2f12d, type: 2}
   m_BuildSettings:
@@ -54,6 +56,7 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
+
       m_Id: d1f4406bf855dd547a8cb4fce9ac33b9
       m_ProfileName: Default
       m_Values:
@@ -86,6 +89,7 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
+
     - yarn
     - cotton
     - deco

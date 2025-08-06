@@ -15,6 +15,7 @@ MonoBehaviour:
   m_GroupName: Built In Data
   m_Data:
     m_SerializedData: []
+
   m_GUID: 378f561374bdd9e4e86ee171da4c6b40
   m_SerializeEntries:
   - m_GUID: Resources

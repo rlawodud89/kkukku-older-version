@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+
 using UnityEngine.AddressableAssets;
 using System.Linq;
 
@@ -82,7 +83,6 @@ public class GameManager : MonoBehaviour
             isOpen = user.isOpen;
 
             LoadAllScriptableObjects();
-
         }
         else
         {

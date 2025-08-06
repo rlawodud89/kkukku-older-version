@@ -1,62 +1,134 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class ItemTree : MonoBehaviour
 {
-    [SerializeField] Button item1;
-    [SerializeField] Button item2;
+    public List<Button> items;
 
-    private ItemScript itemScript1;
-    private ItemScript itemScript2;
-
+    public SnacksManager snacksManager;
+    public SnacksInventory snacksInventory;
     private int count1;
-    private int count2;
     private static int MAXCOUNT = 5;
+    private List<SnacksData> Snackslist;
+    private Dictionary<Button, SnacksData> buttonToSnackMap = new Dictionary<Button, SnacksData>();
 
-    private GameManager gameManager;
-
+    // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.getInstance();
 
-        //·£´ýÀ¸·Î ¾ÆÀÌÅÛ ¹öÆ° Ç¥½Ã
-        int random = Random.Range(0, 2);
-        item1.gameObject.SetActive(random == 1);
-        random = Random.Range(0, 2);
-        item2.gameObject.SetActive(random == 1);
-
-        if(item1.gameObject.activeSelf || item2.gameObject.activeSelf)
+        if (snacksManager == null)
         {
-            itemScript1 = gameManager.Get_Random_Material();
-            itemScript2 = gameManager.Get_Random_Material();
-
-            item1.GetComponent<Image>().sprite = itemScript1.image;
-            item2.GetComponent<Image>().sprite = itemScript2.image;
+            snacksManager = FindObjectOfType<SnacksManager>();
         }
 
+        Snackslist = snacksManager.GetSnacksList();
+
+        if (snacksInventory == null)
+        {
+            snacksInventory = FindObjectOfType<SnacksInventory>();
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½");
+        }
+
+        //ï¿½ï¿½Æ° ï¿½î°³ È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        int randomCount = Random.Range(1, items.Count + 1);
+
+        // ï¿½Ì¹ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+        List<int> usedIndices = new List<int>();
+
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð·ï¿½
+        List<SnacksData> level1Snacks = Snackslist.FindAll(s => s.level == 1);
+        List<SnacksData> level2Snacks = Snackslist.FindAll(s => s.level == 2);
+        List<SnacksData> level3Snacks = Snackslist.FindAll(s => s.level == 3);
+
+        // È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+        int weight1 = 60;
+        int weight2 = 30;
+        int weight3 = 10;
+
+        // ï¿½ï¿½ï¿½ï¿½
+        int totalWeight = weight1 + weight2 + weight3;
+
+        // ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        for (int i = 0; i < randomCount; i++)
+        {
+            int buttonIndex;
+            do
+            {
+                buttonIndex = Random.Range(0, items.Count);
+
+            } while (usedIndices.Contains(buttonIndex));
+
+            usedIndices.Add(buttonIndex);
+
+            Button btn = items[buttonIndex];
+            btn.gameObject.SetActive(true);
+
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+            int rand = Random.Range(1, totalWeight + 1); // 1~100
+            SnacksData selectedSnack = null;
+
+            if (rand <= weight1 && level1Snacks.Count > 0)
+            {
+                selectedSnack = level1Snacks[Random.Range(0, level1Snacks.Count)];
+            }
+            else if (rand <= weight1 + weight2 && level2Snacks.Count > 0)
+            {
+                selectedSnack = level2Snacks[Random.Range(0, level2Snacks.Count)];
+            }
+            else if (level3Snacks.Count > 0)
+            {
+                selectedSnack = level3Snacks[Random.Range(0, level3Snacks.Count)];
+            }
+            else
+            {
+                // ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½: ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½
+                selectedSnack = Snackslist[Random.Range(0, Snackslist.Count)];
+            }
+
+            // ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            Sprite selectedSprite = selectedSnack.SnackSprite;
+            items[buttonIndex].GetComponent<Image>().sprite = selectedSprite;
+
+            Button btnCopy = btn;
+            buttonToSnackMap[btnCopy] = selectedSnack;
+            btn.onClick.AddListener(() => ClickItem(btnCopy));
+
+
+
+        }
         count1 = 0;
-        count2 = 0;
     }
 
-    public void ClickItem1()
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void ClickItem(Button clickedButton)
     {
         count1++;
-        if(count1 == MAXCOUNT)
+        Debug.Log(count1);
+        if (count1 == MAXCOUNT)
         {
             count1 = 0;
-            item1.gameObject.SetActive(false);
-            gameManager.Add_InventoryItem(itemScript1.itemName, 1);
+
+            if (buttonToSnackMap.TryGetValue(clickedButton, out SnacksData snack))
+            {
+                snacksInventory.AddSnack(snack, 1);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½: " + snack.name);
+                clickedButton.gameObject.SetActive(false);
+            }
+
         }
     }
 
-    public void ClickItem2()
-    {
-        count2++;
-        if(count2 == MAXCOUNT)
-        {
-            count2 = 0;
-            item2.gameObject.SetActive(false);
-            gameManager.Add_InventoryItem(itemScript2.itemName, 1);
-        }
-    }
 }
+
