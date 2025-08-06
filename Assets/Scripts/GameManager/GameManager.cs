@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-
 using UnityEngine.AddressableAssets;
 using System.Linq;
 
@@ -48,14 +47,14 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
-    private static float gameStartTime = 25200; // ���� 7�� (7 * 3600)
-    private static float gameDuration = 75f; // 75��(1.25��)�� 1�ð� (30�п� 24�ð�)
+    private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
+    private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 0;
     private static float oneEnergyLevel = 3844;
 
-    //�̱��� ���� ���� private ������, �ν��Ͻ� ��ȯ ���� �޼���
+    //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
     private GameManager() { }
     public static GameManager getInstance() { return instance; }
 
@@ -82,7 +81,8 @@ public class GameManager : MonoBehaviour
             endScene = user.endScene;
             isOpen = user.isOpen;
 
-            //LoadAllScriptableObjects();
+            LoadAllScriptableObjects();
+
         }
         else
         {
@@ -95,19 +95,19 @@ public class GameManager : MonoBehaviour
         playTime += (Time.deltaTime / gameDuration) * 3600;
         hours = (int)(playTime / 3600) % 24;
         minutes = (int)(playTime % 3600) / 60;
-        days = (int)(playTime / (3600 * 24)) + 1; // Day1���� �����ϹǷ� +1
+        days = (int)(playTime / (3600 * 24)) + 1; // Day1부터 시작하므로 +1
 
-        if (hours == nightHours) // �� ����
+        if (hours == nightHours) // 밤 진입
         {
-            playTime += gameStartTime; // 0�� 0�� �Ǹ� ��ħ �ð�(7�� 0��)���� �Ѿ
+            playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
             nowTime = NOW.NIGHT;
             Debug.Log("Days:" + days);
         }
-        else if (hours == dayHours) // ��ħ ����
+        else if (hours == dayHours) // 아침 진입
         {
             nowTime = NOW.DAY;
         }
-        else if (hours == eveningHours) // ���� ����
+        else if (hours == eveningHours) // 저녁 진입
         {
             nowTime = NOW.EVENING;
         }
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
 
     private void LoadAllScriptableObjects()
     {
-        //"...": addressable �� �̸�
+        //"...": addressable 라벨 이름
         Materials = Addressables.LoadAssetsAsync<ItemScript>("material", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
         else return null;
     }
-    
+
     public InteriorScript Get_InteriorItem(string itemName)
     {
         if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
