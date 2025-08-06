@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
 using System.Linq;
 
 
@@ -29,6 +29,8 @@ public class QuestManager : MonoBehaviour
 
     //public QuestSO[] quests;
 
+    private GameManager gameManager;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -38,6 +40,7 @@ public class QuestManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameManager.getInstance();
         // 퀘스트 데이터 로드
         //QuestSO quest = Resources.Load<QuestSO>("Quest1"); 
         //StartQuest(quest);  // 퀘스트 시작
@@ -50,12 +53,12 @@ public class QuestManager : MonoBehaviour
     void Update()
     {
         // 퀘스트 완료 상태 업데이트
-        foreach(GameObject qb in questButtons)
+        foreach (GameObject qb in questButtons)
         {
             QuestSO quest = activeQuests.Find(q => q.questTitle == qb.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text);
-            if(quest != null)
+            if (quest != null)
             {
-                if(quest.isCompleted)
+                if (quest.isCompleted)
                 {
                     qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
                     //qb.transform.Find("Alert").gameObject.SetActive(true); 
@@ -76,7 +79,7 @@ public class QuestManager : MonoBehaviour
                 }
             }
 
-            if(qb.transform.Find("Alert").gameObject.activeSelf)
+            if (qb.transform.Find("Alert").gameObject.activeSelf)
             {
                 completeAlertIcon.SetActive(true); // 퀘스트가 활성화되어 있으면 아이콘 표시
             }
@@ -87,7 +90,8 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    public void StartNewDay(){
+    public void StartNewDay()
+    {
         // 새로운 날 시작 시 퀘스트 초기화
         activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
         questButtons.Clear(); // 기존 퀘스트 버튼 리스트 초기화
@@ -127,14 +131,16 @@ public class QuestManager : MonoBehaviour
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
             questButtons.Add(questButton);
             questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
-            if( currentQuest.isCompleted)
+            if (currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
-            else{
+            else
+            {
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
             }
 
             // 버튼 클릭 이벤트
-            questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
+            questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+            {
                 OnQuestButtonClicked(questButton, currentQuest);
             });
         }
@@ -143,7 +149,7 @@ public class QuestManager : MonoBehaviour
     void OnQuestButtonClicked(GameObject questButton, QuestSO quest)
     {
         // 퀘스트 완료 시
-        if(quest.isCompleted)
+        if (quest.isCompleted)
         {
             questRewardPanel.SetActive(true); // 퀘스트 보상 패널 열기
 
@@ -184,7 +190,7 @@ public class QuestManager : MonoBehaviour
 
 
                 rewardRect.anchoredPosition = new Vector2(positionX, 5);
-               
+
             }
 
             if (quest.getReward)
@@ -192,27 +198,31 @@ public class QuestManager : MonoBehaviour
                 Debug.Log("이미 보상을 받았습니다.");
                 questRewardPanel.transform.Find("GetButton").GetComponent<Image>().color = new Color(181f / 255f, 174f / 255f, 174f / 255f);
                 return; // 이미 보상을 받은 경우
-            }else{
+            }
+            else
+            {
                 // 보상받기 버튼 클릭 이벤트
                 questRewardPanel.transform.Find("GetButton").GetComponent<Image>().color = Color.white;
                 Button getButton = questRewardPanel.transform.Find("GetButton").GetComponent<Button>();
-                getButton.onClick.AddListener(() => {
+                getButton.onClick.AddListener(() =>
+                {
                     ProcessReward(quest, getButton);
                     questRewardPanel.transform.Find("GetButton").GetComponent<Image>().color = new Color(181f / 255f, 174f / 255f, 174f / 255f);
                 });
             }
-            
 
-            
+
+
         }
         // 퀘스트 진행 중
-        else{
+        else
+        {
             questContentPanel.SetActive(true);
             questContentPanel.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questTitle;
             questContentPanel.transform.Find("QuestDetail").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questDescription;
 
             // 퀘스트 진행 상태 표시
-            if(quest.questComplete > 1)
+            if (quest.questComplete > 1)
             {
                 questContentPanel.transform.Find("QuestProgress").GetComponent<TMPro.TextMeshProUGUI>().text = $"{quest.questProcess} / {quest.questComplete}";
             }
@@ -222,7 +232,7 @@ public class QuestManager : MonoBehaviour
             }
 
             int rewardCount = quest.rewards.Length;    // 보상의 개수
-            
+
             // 퀘스트 보상 패널 설정
             for (int i = 0; i < rewardCount; i++)
             {
@@ -280,7 +290,7 @@ public class QuestManager : MonoBehaviour
             Debug.Log($"퀘스트 '{quest.questTitle}' 진행 중: {quest.questProcess} / {quest.questComplete}");
         }
     }
-    
+
 
     // 보상받기 버튼 클릭 이벤트
     public void ProcessReward(QuestSO quest, Button getButton)
@@ -293,14 +303,14 @@ public class QuestManager : MonoBehaviour
             {
                 case "재화":
                     Debug.Log($"보상: {reward.amount} 재화");
-                // 실제로 재화를 지급하는 로직 추가 (예: 플레이어의 재화 양 증가)
-                    GameManager.instance.Change_Gold(reward.amount);
-                break;
+                    // 실제로 재화를 지급하는 로직 추가 (예: 플레이어의 재화 양 증가)
+                    gameManager.Change_Gold(reward.amount);
+                    break;
 
                 case "월석":
                     Debug.Log($"보상: {reward.amount} 월석");
                     // 실제로 월석을 지급하는 로직 추가 (예: 인벤토리에 월석 추가)
-                    GameManager.instance.Change_Moonrock(reward.amount);
+                    gameManager.Change_Moonrock(reward.amount);
                     break;
 
                 case "포근에너지":
@@ -322,7 +332,7 @@ public class QuestManager : MonoBehaviour
     {
         // 주어진 퀘스트가 활성화되어 있는지 확인
         return activeQuests.Contains(quest) && !quest.isCompleted;
-    }   
+    }
 
 
     public void PanelClose()
@@ -334,7 +344,8 @@ public class QuestManager : MonoBehaviour
     {
         questPanel.SetActive(true);
 
-        if(startAlertIcon.activeSelf){
+        if (startAlertIcon.activeSelf)
+        {
             startAlertIcon.SetActive(false);
         }
     }
@@ -346,7 +357,7 @@ public class QuestManager : MonoBehaviour
 
         foreach (Transform child in questContentPanel.transform)
         {
-            if (child.name.StartsWith("RewardPanel")) 
+            if (child.name.StartsWith("RewardPanel"))
             {
                 Destroy(child.gameObject);
             }
@@ -360,7 +371,7 @@ public class QuestManager : MonoBehaviour
 
         foreach (Transform child in questRewardPanel.transform)
         {
-            if (child.name.StartsWith("RewardPanel")) 
+            if (child.name.StartsWith("RewardPanel"))
             {
                 Destroy(child.gameObject);
             }
