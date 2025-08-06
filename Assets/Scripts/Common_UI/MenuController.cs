@@ -6,17 +6,21 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEditor.Tilemaps;
+using System.Linq;
 
 
 public class MenuController : MonoBehaviour
 {
     public GameObject menuButton; // MenuItems 오브젝트
     public List<GameObject> menuButtons; // 메뉴 버튼들
+    public GameObject menuAlertIcon; // 알림 아이콘
+    public GameObject interiorButton;
     public float spacing = 60f;          // 버튼 사이 간격
     public float delay = 0.05f;          // 애니메이션 간 딜레이
     public float fadeTime = 0.2f;        // 투명도 애니메이션 시간
     private bool isMenuOpen = false;
 
+    public GameObject storeSign;
     public Sprite openSprite;     // 클릭 후 보여줄 이미지
     public Image targetImage;       // 현재 버튼의 이미지
     public Sprite closeSprite;   // 원래 이미지 저장
@@ -49,8 +53,73 @@ public class MenuController : MonoBehaviour
     {
         GoldText.text = gameManager.Get_Gold().ToString();
         MoonrockText.text = gameManager.Get_Moonrock().ToString();
+
+        int hours = gameManager.Get_Hours();
+        int minutes = gameManager.Get_Minutes();
+
+        if(hours==8 && minutes==0)
+            storeSign.SetActive(true); 
+
+        string currentSceneName = SceneManager.GetActiveScene().name;  // 현재 씬
+        if(currentSceneName=="Work_Shop"||currentSceneName=="Work_Room"){
+            if(!menuButtons.Contains(interiorButton))
+            {
+                interiorButton.SetActive(true);
+                RectTransform baseRT = menuButton.GetComponent<RectTransform>();
+                Vector2 basePos = baseRT.anchoredPosition;
+                interiorButton.GetComponent<RectTransform>().anchoredPosition = basePos + new Vector2(0, -spacing * (menuButtons.Count + 1));
+                interiorButton.GetComponent<CanvasGroup>().alpha = 0;
+                menuButtons.Add(interiorButton);
+            }
+        }else{
+            if (menuButtons.Contains(interiorButton))
+            {
+                menuButtons.Remove(interiorButton);
+            }
+        }
+
+        if(currentSceneName=="Moonlight_Hill")
+        {
+            energy.SetActive(false);
+            energyLevel.SetActive(false);
+        }
+        else
+        {
+            if(energyLevel.activeSelf)
+            {
+                energy.SetActive(false);
+            }
+            else
+            {
+                energy.SetActive(true);
+            }
+        }
+
+        UpdateNotification();
     }
 
+    // 알림 아이콘 업데이트
+    public void UpdateNotification()
+    {
+        bool shouldShow = false;
+
+        foreach (var menu in menuButtons)
+        {
+
+            var alerts = menu.GetComponentsInChildren<Transform>(true)
+                         .Where(t => t.name == "Alert");
+
+            if (alerts.Any(alert => alert.gameObject.activeSelf))
+            {
+                shouldShow = true;
+                break;
+            }
+        }
+
+        menuAlertIcon.SetActive(shouldShow);
+        Debug.Log($"🔔 menuAlertIcon.SetActive({shouldShow})");
+    }
+    
 
     public void ToggleMenuItems()
     {
@@ -271,8 +340,17 @@ public class MenuController : MonoBehaviour
     public GameObject confirmPopup;
 
     public void OnPlaceClicked(GameObject clickedObject){
-        string placeName = clickedObject.tag;
-        ShowConfirmPopup(placeName);
+        string placeName = clickedObject.name;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        if (placeName != currentSceneName)
+        {
+            ShowConfirmPopup(placeName);
+        }
+        else
+        {
+            Debug.Log("현재 씬과 같은 장소이므로 팝업을 띄우지 않습니다.");
+        }
     }
 
     private void ShowConfirmPopup(string placeName)
@@ -282,7 +360,29 @@ public class MenuController : MonoBehaviour
         TextMeshProUGUI confirmText = confirmPopup.GetComponentInChildren<TextMeshProUGUI>();
         if (confirmText != null)
         {
-            confirmText.text = $"{placeName}에 가시겠습니까?";
+            switch (placeName)
+            {
+                case "Moonlight_Hill":
+                    confirmText.text = $"달빛언덕에 가시겠습니까?";
+                    break;
+                case "Sleeping_Garden":
+                    confirmText.text = $"수면정원에 가시겠습니까?";
+                    break;
+                case "Cloud_Pond":
+                    confirmText.text = $"구름연못에 가시겠습니까?";
+                    break;
+                case "Village":
+                    confirmText.text = $"마을에 가시겠습니까?";
+                    break;
+                case "Work_Shop":
+                    confirmText.text = $"이불가게에 가시겠습니까?";
+                    break;
+                default:
+                    Debug.LogError("이동할 장소 씬이 없습니다.");
+                    Debug.LogError($"Unknown place name: {placeName}");
+                    break;
+            }
+            
         }else
         {
             Debug.LogError("Text 컴포넌트가 confirmPopup 안에 없습니다.");
@@ -302,28 +402,6 @@ public class MenuController : MonoBehaviour
 
     private void OnConfirm(string placeName)
     {
-        // 태그에 맞는 씬으로 이동
-        switch (placeName)
-        {
-            case "달빛언덕":
-                SceneManager.LoadScene("Moonlight_Hill");
-                break;
-            case "수면정원":
-                SceneManager.LoadScene("Sleeping_Garden");
-                break;
-            case "구름연못":
-                SceneManager.LoadScene("Cloud_Pond");
-                break;
-            case "마을":
-                SceneManager.LoadScene("Village");
-                break;
-            case "이불가게":
-                SceneManager.LoadScene("Blanket_Shop");
-                break;
-            default:
-                Debug.LogError("이동할 장소 씬이 없습니다.");
-                Debug.LogError($"Unknown place name: {placeName}");
-                break;
-        }
+        SceneManager.LoadScene(placeName);
     }
 }

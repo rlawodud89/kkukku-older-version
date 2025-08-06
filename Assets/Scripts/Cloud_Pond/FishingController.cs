@@ -43,7 +43,7 @@ public class FishingController : MonoBehaviour
                 fishingRoutine = null;
             }
 
-            fishing_txt.text = ""; // ÅØ½ºÆ® ÃÊ±âÈ­
+            fishing_txt.text = ""; // ï¿½Ø½ï¿½Æ® ï¿½Ê±ï¿½È­
         }
 
         fishing_closebtn.gameObject.SetActive(false);
@@ -54,14 +54,14 @@ public class FishingController : MonoBehaviour
     {
         while (fishing_start)
         {
-            fishing_txt.text = "³¬½Ã Áß...";
+            fishing_txt.text = "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½...";
 
             float waitTime = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(waitTime);
 
             getMaterial();
 
-            fishing_txt.text = currentdata.MaterialName+" È¹µæ!";
+            fishing_txt.text = currentdata.MaterialName+" È¹ï¿½ï¿½!";
             yield return new WaitForSeconds(2f);
             fishing_txt.text = "";
         }

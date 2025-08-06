@@ -48,14 +48,14 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
-    private static float gameStartTime = 25200; // ¿ÀÀü 7½Ã (7 * 3600)
-    private static float gameDuration = 75f; // 75ÃÊ(1.25ºÐ)¿¡ 1½Ã°£ (30ºÐ¿¡ 24½Ã°£)
+    private static float gameStartTime = 25200; // ï¿½ï¿½ï¿½ï¿½ 7ï¿½ï¿½ (7 * 3600)
+    private static float gameDuration = 75f; // 75ï¿½ï¿½(1.25ï¿½ï¿½)ï¿½ï¿½ 1ï¿½Ã°ï¿½ (30ï¿½Ð¿ï¿½ 24ï¿½Ã°ï¿½)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 0;
     private static float oneEnergyLevel = 3844;
 
-    //½Ì±ÛÅæ ÆÐÅÏ À§ÇÑ private »ý¼ºÀÚ, ÀÎ½ºÅÏ½º ¹ÝÈ¯ Á¤Àû ¸Þ¼­µå
+    //ï¿½Ì±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ private ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     private GameManager() { }
     public static GameManager getInstance() { return instance; }
 
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             endScene = user.endScene;
             isOpen = user.isOpen;
 
-            LoadAllScriptableObjects();
+            //LoadAllScriptableObjects();
         }
         else
         {
@@ -95,19 +95,19 @@ public class GameManager : MonoBehaviour
         playTime += (Time.deltaTime / gameDuration) * 3600;
         hours = (int)(playTime / 3600) % 24;
         minutes = (int)(playTime % 3600) / 60;
-        days = (int)(playTime / (3600 * 24)) + 1; // Day1ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î +1
+        days = (int)(playTime / (3600 * 24)) + 1; // Day1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¹Ç·ï¿½ +1
 
-        if (hours == nightHours) // ¹ã ÁøÀÔ
+        if (hours == nightHours) // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
-            playTime += gameStartTime; // 0½Ã 0ºÐ µÇ¸é ¾ÆÄ§ ½Ã°£(7½Ã 0ºÐ)À¸·Î ³Ñ¾î°¨
+            playTime += gameStartTime; // 0ï¿½ï¿½ 0ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½Ä§ ï¿½Ã°ï¿½(7ï¿½ï¿½ 0ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¨
             nowTime = NOW.NIGHT;
             Debug.Log("Days:" + days);
         }
-        else if (hours == dayHours) // ¾ÆÄ§ ÁøÀÔ
+        else if (hours == dayHours) // ï¿½ï¿½Ä§ ï¿½ï¿½ï¿½ï¿½
         {
             nowTime = NOW.DAY;
         }
-        else if (hours == eveningHours) // Àú³á ÁøÀÔ
+        else if (hours == eveningHours) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             nowTime = NOW.EVENING;
         }
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
 
     private void LoadAllScriptableObjects()
     {
-        //"...": addressable ¶óº§ ÀÌ¸§
+        //"...": addressable ï¿½ï¿½ ï¿½Ì¸ï¿½
         Materials = Addressables.LoadAssetsAsync<ItemScript>("material", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
