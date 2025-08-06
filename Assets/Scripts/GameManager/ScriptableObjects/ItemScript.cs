@@ -8,6 +8,9 @@ public class ItemScript : ScriptableObject
     public Sprite image;
     public ItemType itemType;
 
+    [Header("간식, 재료 레벨")]
+    public int level;
+
     [Header("간식은 회복량, 나머지는 판매가격")]
     public int value;
 

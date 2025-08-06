@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
   m_Name: "\uB2EC\uBE5B\uC774\uBD88"
   m_EditorClassIdentifier: 
-  itemName: "\uB2EC\uBE5B\uC774\uBD88"
-  image: {fileID: 21300000, guid: 21a772eb71dd2a149af42ba635729d02, type: 3}
+  itemName: "\uC6B0\uC8FC\uC774\uBD88"
+  image: {fileID: 21300000, guid: 37993ad8dc0245043a89fac45052ec9e, type: 3}
   itemType: 4
+  level: 0
   value: 1500
   recipe: []
   designValue: 5000

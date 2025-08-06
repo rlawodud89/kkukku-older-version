@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-
-  m_DefaultGroup: 8a6c2451754f9ec46a8a7c76fe19ece3
+  m_DefaultGroup: 
   m_currentHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -42,12 +41,11 @@ MonoBehaviour:
   m_ContentStateBuildPathProfileVariableName: 
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
-  m_BuildAddressablesWithPlayerBuild: 0
-  m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
+  m_BuildAddressablesWithPlayerBuild: 2
+  m_overridePlayerVersion: 
   m_GroupAssets:
-
   - {fileID: 11400000, guid: 7207e6f95ebe1f64798cca462b7d6b9d, type: 2}
-  - {fileID: 11400000, guid: cc3e23b929de85e4890fff27d7c2f12d, type: 2}
+  - {fileID: 11400000, guid: ef733f63470c73148bb2678528a6e597, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -56,43 +54,38 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-
-      m_Id: d1f4406bf855dd547a8cb4fce9ac33b9
+      m_Id: bb3b90c8f4f3efb48af4ef5dda405d63
       m_ProfileName: Default
       m_Values:
-      - m_Id: 87616dd88aee129408c0ba9d1e9572fa
+      - m_Id: 3a3c9eb049f57bd428198073b0a76963
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
-      - m_Id: 43ce63784cd79ae4ebe12d2e2bf9b77a
+      - m_Id: b26210b554f71174280363d3c10e2a1a
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
-      - m_Id: 2f257108a81b77747841e7e71d3be724
+      - m_Id: 5674bd9423f031644bff55b6ff172722
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
-      - m_Id: 53061ef0073852644b6e9ae4c456ce71
+      - m_Id: 9f907c0c1337f04498f8642cb3fefbc0
         m_Value: ServerData/[BuildTarget]
-      - m_Id: 88c375d8c3dcee048bb2cdeb5e960c49
+      - m_Id: 10f660c8a1e07de4ebec7e2ff325c07d
         m_Value: http://[PrivateIpAddress]:[HostingServicePort]
     m_ProfileEntryNames:
-    - m_Id: 87616dd88aee129408c0ba9d1e9572fa
+    - m_Id: 3a3c9eb049f57bd428198073b0a76963
       m_Name: BuildTarget
       m_InlineUsage: 0
-    - m_Id: 43ce63784cd79ae4ebe12d2e2bf9b77a
+    - m_Id: b26210b554f71174280363d3c10e2a1a
       m_Name: Local.BuildPath
       m_InlineUsage: 0
-    - m_Id: 2f257108a81b77747841e7e71d3be724
+    - m_Id: 5674bd9423f031644bff55b6ff172722
       m_Name: Local.LoadPath
       m_InlineUsage: 0
-    - m_Id: 53061ef0073852644b6e9ae4c456ce71
+    - m_Id: 9f907c0c1337f04498f8642cb3fefbc0
       m_Name: Remote.BuildPath
       m_InlineUsage: 0
-    - m_Id: 88c375d8c3dcee048bb2cdeb5e960c49
+    - m_Id: 10f660c8a1e07de4ebec7e2ff325c07d
       m_Name: Remote.LoadPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-
-    - yarn
-    - cotton
-    - deco
     - material
     - blanket
     - snack
@@ -116,7 +109,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d0048b1aa7bdf3e478bef4ec0918fd01, type: 2}
   - {fileID: 11400000, guid: 1a1a4d9d879dd3747a50aa6c951daa4b, type: 2}
   - {fileID: 11400000, guid: 38b9f8495a4a53f449a2d8baa8b8f14f, type: 2}
-  m_ActiveProfileId: d1f4406bf855dd547a8cb4fce9ac33b9
+  m_ActiveProfileId: bb3b90c8f4f3efb48af4ef5dda405d63
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}
