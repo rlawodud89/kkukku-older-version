@@ -1,22 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemTree : MonoBehaviour
 {
-    public Button item1;
-    public Button item2;
-    public List<Sprite> ItemSprites;
+    [SerializeField] Button item1;
+    [SerializeField] Button item2;
+
+    private ItemScript itemScript1;
+    private ItemScript itemScript2;
 
     private int count1;
     private int count2;
     private static int MAXCOUNT = 5;
 
-    // Start is called before the first frame update
+    private GameManager gameManager;
+
     void Start()
     {
+        gameManager = GameManager.getInstance();
+
         //랜덤으로 아이템 버튼 표시
         int random = Random.Range(0, 2);
         item1.gameObject.SetActive(random == 1);
@@ -25,27 +27,15 @@ public class ItemTree : MonoBehaviour
 
         if(item1.gameObject.activeSelf || item2.gameObject.activeSelf)
         {
-            //아이템 이미지 리스트 불러오기
-            Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sleeping_Garden/Objects/Items");
-            ItemSprites = new List<Sprite>(loadedSprites);
+            itemScript1 = gameManager.Get_Random_Material();
+            itemScript2 = gameManager.Get_Random_Material();
 
-            //랜덤으로 아이템 선택해서 버튼에 표시
-            int randomIndex = Random.Range(0, ItemSprites.Count);
-            Sprite selectedSprite = ItemSprites[randomIndex];
-            item1.GetComponent<Image>().sprite = selectedSprite;
-            randomIndex = Random.Range(0, ItemSprites.Count);
-            selectedSprite = ItemSprites[randomIndex];
-            item2.GetComponent<Image>().sprite = selectedSprite;
+            item1.GetComponent<Image>().sprite = itemScript1.image;
+            item2.GetComponent<Image>().sprite = itemScript2.image;
         }
 
         count1 = 0;
         count2 = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void ClickItem1()
@@ -55,6 +45,7 @@ public class ItemTree : MonoBehaviour
         {
             count1 = 0;
             item1.gameObject.SetActive(false);
+            gameManager.Add_InventoryItem(itemScript1.itemName, 1);
         }
     }
 
@@ -65,6 +56,7 @@ public class ItemTree : MonoBehaviour
         {
             count2 = 0;
             item2.gameObject.SetActive(false);
+            gameManager.Add_InventoryItem(itemScript2.itemName, 1);
         }
     }
 }

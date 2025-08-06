@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
-using System;
 
 public enum NOW
 {
@@ -320,6 +319,8 @@ public class GameManager : MonoBehaviour
 
     public void Add_InventoryItem(string itemName, int count)
     {
+        if (count <= 0) return;
+
         if (dbManager.isIn_Inventory(itemName))
         {
             dbManager.Change_InventoryItem_Count(itemName, count);
@@ -343,6 +344,8 @@ public class GameManager : MonoBehaviour
 
     public void Add_InteriorItem(string interiorName, int count)
     {
+        if (count <= 0) return;
+
         InteriorScript interiorScript = Get_InteriorItem(interiorName);
         dbManager.Insert_InteriorItem(interiorName, interiorScript.interiorType, count);
     }
