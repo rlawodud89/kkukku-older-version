@@ -5,12 +5,16 @@ public class TwoTabScrollController : MonoBehaviour
 {
     [Header("Buttons")]
     [SerializeField] Button shopButton;       // 가게 버튼
-    [SerializeField] Button workshopButton;   // 작업실 가구 디자인 버튼
+    [SerializeField] Button workshopButton;   // 작업실/디자인 버튼
 
     [Header("ScrollRect & Contents")]
     [SerializeField] ScrollRect scrollRect;
     [SerializeField] GameObject shopContent;
     [SerializeField] GameObject workshopContent;
+
+    // 옵션: 켜질 때 항상 Shop으로 리셋할지 / 스크롤 맨 위로 보낼지
+    [SerializeField] bool resetToShopOnEnable = true;
+    [SerializeField] bool scrollToTopOnEnable = true;
 
     void Awake()
     {
@@ -18,38 +22,48 @@ public class TwoTabScrollController : MonoBehaviour
         workshopButton.onClick.AddListener(ShowWorkshop);
     }
 
-    void Start()
+    // 비활성→활성 될 때마다 호출됨
+    void OnEnable()
     {
-        // 처음엔 가게 표시 (원하면 Workshop으로 바꿔도 됨)
-        ShowShop();
+        if (resetToShopOnEnable)
+            ShowShop();                 // ← 항상 가게 먼저
+
+        if (scrollToTopOnEnable && scrollRect)
+            scrollRect.verticalNormalizedPosition = 1f;
     }
+
+    // Start는 이제 필요 없음(처음에도 OnEnable이 호출됨).
+    // 남겨두고 싶다면 빈 메서드로 두세요.
+    // void Start() {}
 
     void ShowShop()
     {
+        if (!shopContent || !workshopContent) return;
+
         shopContent.SetActive(true);
         workshopContent.SetActive(false);
-
         SetScrollContent(shopContent);
     }
 
     void ShowWorkshop()
     {
+        if (!shopContent || !workshopContent) return;
+
         workshopContent.SetActive(true);
         shopContent.SetActive(false);
-
         SetScrollContent(workshopContent);
     }
 
     void SetScrollContent(GameObject go)
     {
-        // ScrollRect가 현재 활성 컨텐츠를 바라보도록 교체
         var rt = go.GetComponent<RectTransform>();
+        if (!rt || !scrollRect) return;
+
         scrollRect.content = rt;
 
-        // 레이아웃 강제 갱신 후 맨 위로
+        // 레이아웃 갱신 후 스크롤 맨 위로
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
         scrollRect.verticalNormalizedPosition = 1f;
     }
 }
-

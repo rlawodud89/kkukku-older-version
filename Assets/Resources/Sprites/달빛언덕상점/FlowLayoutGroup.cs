@@ -94,4 +94,18 @@ public class FlowLayoutGroup : LayoutGroup
         if (IsActive())
             LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
     }
+    void Update()
+    {
+#if UNITY_EDITOR
+        if (!Application.isPlaying) return;
+#endif
+        UpdateContentHeight();
+    }
+
+    void UpdateContentHeight()
+    {
+        float totalH = LayoutUtility.GetPreferredHeight(rectTransform);
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, totalH);
+    }
+
 }

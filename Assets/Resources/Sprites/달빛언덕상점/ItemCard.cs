@@ -10,12 +10,17 @@ public class ItemCard : MonoBehaviour
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text priceText;
     [SerializeField] Button buyButton;
+    [SerializeField] Image coinImage;
 
     [Header("수량 UI (없어도 OK)")]
     [SerializeField] GameObject qtyRow;     // 없으면 비워둬도 됨
     [SerializeField] Button incButton;
     [SerializeField] Button decButton;
     [SerializeField] TMP_Text qtyText;
+
+    [Header("재화 사진")]
+    public Sprite goldSprite;
+    public Sprite moonrockSprite;
 
     public ItemData Data { get; private set; }
     public int Quantity { get; private set; } = 1;
@@ -34,6 +39,7 @@ public class ItemCard : MonoBehaviour
         iconImage.sprite = data.icon;
         nameText.text = data.displayName;
         priceText.text = data.price.ToString("N0");
+        coinImage.sprite = data.isGold ? goldSprite : moonrockSprite;
 
         // 기존 리스너 정리(풀링 대비)
         buyButton.onClick.RemoveAllListeners();

@@ -7,7 +7,7 @@ public class SpeechControllerTMP : MonoBehaviour
     [Header("UI References")]
     public GameObject speechBubble;
     public TextMeshProUGUI speechText;
-    public Button triggerButton; // 👈 버튼 등록할 변수
+    public Button triggerButton;
 
     [Header("대사 설정")]
     [TextArea] public string greetingText = "안녕하세요! 준비되셨나요?";
@@ -22,12 +22,16 @@ public class SpeechControllerTMP : MonoBehaviour
 
     void Start()
     {
-        ShowSpeech(greetingText); // 씬 시작 시 인삿말
-
         if (triggerButton != null)
         {
             triggerButton.onClick.AddListener(OnTriggerButtonClicked);
         }
+    }
+
+    void OnEnable()
+    {
+        ShowSpeech(greetingText); // 패널이 활성화될 때 인삿말 출력
+        idleTimer = 0f; // 활성화될 때 타이머도 초기화
     }
 
     void Update()
@@ -66,4 +70,3 @@ public class SpeechControllerTMP : MonoBehaviour
         speechBubble.SetActive(false);
     }
 }
-
