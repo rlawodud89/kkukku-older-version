@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
-  m_Name: "\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F"
+  m_Name: "\uC5BC\uC74C\uAFC0\uCCB4\uB9AC"
   m_EditorClassIdentifier: 
-  itemName: "\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F"
-  image: {fileID: 21300000, guid: 5f3aedf0ad7122c49bfaeb7fde7e7d92, type: 3}
+  itemName: "\uC5BC\uC74C\uAFC0\uCCB4\uB9AC"
+  image: {fileID: 21300000, guid: 2df98468ad5540243b85752d58aa8df7, type: 3}
   itemType: 5
   level: 0
-  value: 500
+  value: 0
   recipe: []
   designValue: 0
   fullImage: {fileID: 0}
