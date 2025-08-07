@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,28 +8,21 @@ using UnityEngine.UI;
 public class ScrollBtn : MonoBehaviour
 {
     public TextMeshProUGUI CountText;
+    public Image blanketImage;
     public Outline outline;
-    public Sprite BtnImageSprite;
+    public ItemScript blanketScript;
+    public int BlanketCount;
 
-    protected int BlanketCount;
     protected bool selected;
 
-    protected SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>(); //¿ÃπÃ¡ˆ ∫Ø∞Ê«“ ∂ß ªÁøÎ
-        //BlanketCount = 5;
+        blanketImage.sprite = blanketScript.image;
         CountText.text = BlanketCount.ToString();
         Set_NotSelected();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void Set_Selected()
     {
@@ -42,28 +36,6 @@ public class ScrollBtn : MonoBehaviour
         outline.enabled = false;
     }
 
-    public bool Change_BlanketCount(int delta)
-    {
-        if(delta < 0 && BlanketCount < (-delta))
-        {
-            Debug.Log("ºˆ∑Æ∫∏¥Ÿ ∏π¿Ã √ﬂ∞°");
-            return false;
-        }
-        
-        BlanketCount += delta;
-
-        if(BlanketCount <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            CountText.text = BlanketCount.ToString();
-        }
-
-        return true;
-    }
-
     public void Set_BlanketCount(int count)
     {
         if(count >= 0)
@@ -73,7 +45,7 @@ public class ScrollBtn : MonoBehaviour
         }
         else
         {
-            Debug.Log("¿Ωºˆ BlanketCount");
+            Debug.Log("ÏùåÏàò BlanketCount");
         }
     }
 }

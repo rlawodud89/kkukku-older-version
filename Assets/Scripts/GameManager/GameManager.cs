@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using Unity.VisualScripting.Dependencies.NCalc;
 
 public enum NOW
 {
@@ -382,9 +381,31 @@ public class GameManager : MonoBehaviour
         return item.image;
     }
 
+    public ItemScript Blanket_to_Yarn(string blanketName)
+    {
+        ItemScript blanket = Get_Blanket(blanketName);
+        return Get_Yarn(blanket.yarnName);
+    }
+
+    public ItemScript Yarn_to_Cotton(string yarnName)
+    {
+        if (!Map_Yarn_to_Cotton.ContainsKey(yarnName)) return null;
+
+        string cottonName = Map_Yarn_to_Cotton[yarnName];
+        return Get_Cotton(cottonName);
+    }
+
+    public ItemScript Cotton_to_Blanket(string cottonName)
+    {
+        if (!Map_Cotton_to_Blanket.ContainsKey(cottonName)) return null;
+
+        string blanketName = Map_Cotton_to_Blanket[cottonName];
+        return Get_Blanket(blanketName);
+    }
 
 
-    // DB에 저장하거나, 데이터 저장하는 메서드
+
+    // DB에서 데이터 받아오거나, 저장하는 메서드
 
     public void Add_InventoryItem(string itemName, int count)
     {
@@ -465,7 +486,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-
     public List<(ItemScript item, int count)> Get_Material_Inventory()
     {
         List<Inventory> inven = dbManager.Select_Material();
@@ -478,7 +498,6 @@ public class GameManager : MonoBehaviour
 
         return result;
     }
-
 
     public List<(ItemScript item, int count)> Get_Blanket_Inventory()
     {
@@ -519,7 +538,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-
     public bool Use_InventoryItem(string itemName, int count)
     {
         if (count <= 0) return false;
@@ -539,27 +557,46 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
-    public ItemScript Blanket_to_Yarn(string blanketName)
-    {   
-        ItemScript blanket = Get_Blanket(blanketName);
-        return Get_Yarn(blanket.yarnName);
-    }
-
-    public ItemScript Yarn_to_Cotton(string yarnName)
+    public void Add_Table_Blanket(int tableID, string blanketName, int count)
     {
-        if (!Map_Yarn_to_Cotton.ContainsKey(yarnName)) return null;
+        if(count <= 0) return;
 
-        string cottonName = Map_Yarn_to_Cotton[yarnName];
-        return Get_Cotton(cottonName);
+        if (dbManager.Have_Table_Blanket(tableID, blanketName))
+        {
+            dbManager.Change_TableBlanket_Count(tableID, blanketName, count);
+        }
+        else
+        {
+            ItemScript itemScript = Get_InventoryItem(blanketName);
+            if (itemScript != null) dbManager.Insert_TableBlanket(tableID, blanketName, count);
+        }
     }
 
-    public ItemScript Cotton_to_Blanket(string cottonName)
+    public bool Use_Table_Blanket(int tableID, string blanketName, int count)
     {
-        if (!Map_Cotton_to_Blanket.ContainsKey(cottonName)) return null;
+        if (count <= 0) return false;
 
-        string blanketName = Map_Cotton_to_Blanket[cottonName];
-        return Get_Blanket(blanketName);
+        if (!dbManager.Have_Table_Blanket(tableID, blanketName)) return false;
+
+        if (dbManager.Change_TableBlanket_Count(tableID, blanketName, -count)) return true;
+        else return false;
     }
 
+    public List<(ItemScript blanket, int count)> Get_Table_Blanket(int tableID)
+    {
+        List<ShopTable> list = dbManager.Select_Table_Blanket(tableID);
+        List<(ItemScript blanket, int count)> result = new List<(ItemScript blanket, int count)>();
 
+        foreach (ShopTable st in list)
+        {
+            result.Add((Get_Blanket(st.blanketName), st.count));
+        }
+        return result;
+    }
+
+    public (InteriorScript table, bool isFull) Get_Current_Table(int tableID)
+    {
+        WorkShop workShop = dbManager.Select_WorkShop(tableID);
+        return (Get_InteriorItem(workShop.tableName), dbManager.Any_Table_Blanket(tableID));
+    }
 }

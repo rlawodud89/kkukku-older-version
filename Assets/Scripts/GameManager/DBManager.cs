@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
-using static UnityEditor.Progress;
 
 
 public class DBManager
@@ -246,5 +245,62 @@ public class DBManager
                 .GroupBy(x => x.interiorName)
                 .Select(g => (g.Key, g.Count())) // Key: GroupBy에서 사용한 키 (interiorName), Count(): 해당하는 키 그룹의 튜플 개수
                 .ToList();
+    }
+
+    public List<ShopTable> Select_Table_Blanket(int tableID)
+    {
+        return testconn.Table<ShopTable>()
+            .Where(x => x.tableID == tableID)
+            .ToList();
+    }
+
+    public bool Have_Table_Blanket(int tableID, string blanketName)
+    {
+        return testconn.Table<ShopTable>()
+            .Any(x => x.tableID == tableID && x.blanketName == blanketName);
+    }
+
+    public void Insert_TableBlanket(int tableID, string blanketName, int count)
+    {
+        ShopTable sh = new ShopTable();
+        sh.tableID = tableID;
+        sh.blanketName = blanketName;
+        sh.count = count;
+
+        testconn.Insert(sh);
+    }
+
+    public bool Change_TableBlanket_Count(int tableID, string blanketName, int delta)
+    {
+        List<ShopTable> sh = testconn.Table<ShopTable>()
+            .Where(x => x.tableID == tableID && x.blanketName == blanketName)
+            .ToList();
+        int current_count = sh[0].count;
+
+        if (current_count + delta < 0) return false;
+
+        else if (current_count + delta == 0)
+        {
+            testconn.Execute("DELETE FROM ShopTable WHERE tableID = ? AND blanketName = ?",
+                tableID, blanketName);
+        }
+        else
+        {
+            current_count += delta;
+            testconn.Execute("UPDATE ShopTable SET count = ? WHERE tableID = ? AND blanketName = ?",
+                current_count, tableID, blanketName);
+        }
+        return true;
+    }
+
+    public WorkShop Select_WorkShop(int tableID)
+    {
+        return testconn.Find<WorkShop>(tableID);
+    }
+
+    public bool Any_Table_Blanket(int tableID)
+    {
+        return testconn.Table<ShopTable>()
+            .Any(x => x.tableID == tableID);
     }
 }

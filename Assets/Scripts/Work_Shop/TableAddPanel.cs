@@ -13,27 +13,28 @@ public class TableAddPanel : MonoBehaviour
     public Image SelectImg;
     public TMP_InputField CountInput;
 
-    private int BlanketCount;
     private BlanketAddBtn SelectedBtn;
+    private Dictionary<string, BlanketAddBtn> BlanketAddBtnDic = new Dictionary<string, BlanketAddBtn>();
+    private GameManager gameManager;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        BlanketCount = 5;
+        BlanketAddBtnDic = new Dictionary<string, BlanketAddBtn>();
+        gameManager = GameManager.getInstance();
 
         InitScroll();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-
+        
     }
 
     public void ClickAddXBtn()
     {
         gameObject.SetActive(false);
     }
+
 
     public void ClickPlusBtn()
     {
@@ -42,14 +43,18 @@ public class TableAddPanel : MonoBehaviour
         int input_count = int.Parse(CountInput.text);
         if(input_count > 0)
         {
-            if (SelectedBtn.Change_BlanketCount(-input_count))
+            string Selected_itemName = SelectedBtn.blanketScript.itemName;
+
+            if (SelectedBtn.Change_BlanketCount(-input_count) 
+                && gameManager.Use_InventoryItem(Selected_itemName, input_count))
             {
-                TablePanel.Add_BlanketBtn(SelectedBtn, input_count);
+                TablePanel.Add_BlanketBtn(Selected_itemName, input_count);
+                gameManager.Add_Table_Blanket(TablePanel.tableID, Selected_itemName, input_count);
             }
         }
         else 
         {
-            Debug.Log("0 ÀÌÇÏ Input");
+            Debug.Log("0 ì´í•˜ Input");
         }
         
         if(SelectedBtn != null) SelectedBtn.Set_NotSelected();
@@ -62,25 +67,30 @@ public class TableAddPanel : MonoBehaviour
 
     private void InitScroll()
     {
-        for (int i = 0; i < BlanketCount; i++)
+        List<(ItemScript blanket, int count)> Blankets = gameManager.Get_Blanket_Inventory();
+
+        foreach(var bk in Blankets)
         {
             GameObject newButton = Instantiate(BlanketBtn, ScrollContent);
             BlanketAddBtn newBlanketAddBtn = newButton.GetComponent<BlanketAddBtn>();
             newBlanketAddBtn.AddPanel = this;
-            newBlanketAddBtn.Set_BlanketCount(5);
+            newBlanketAddBtn.blanketScript = bk.blanket;
+            newBlanketAddBtn.BlanketCount = bk.count;
+
+            BlanketAddBtnDic.Add(bk.blanket.itemName, newBlanketAddBtn);
         }
     }
 
     public void Chanage_SelectedBtn(BlanketAddBtn AfterBtn)
     {
-        Color color = SelectImg.color; //ÇÏ´Ü¿¡ ¶ß´Â ÀÌ¹ÌÁö Á¶Àı À§ÇØ
+        Color color = SelectImg.color; //í•˜ë‹¨ì— ëœ¨ëŠ” ì´ë¯¸ì§€ ì¡°ì ˆ ìœ„í•´
 
         if (AfterBtn == null)
         {
             SelectedBtn.Set_NotSelected();
             SelectedBtn = null;
-            //¼±ÅÃµÈ ÀÌ¹ÌÁö ¾øÀ¸¹Ç·Î ¾Èº¸ÀÌ°Ô ¸¸µé±â
-            color.a = 0f; //Åõ¸íÇÏ°Ô
+            //ì„ íƒëœ ì´ë¯¸ì§€ ì—†ìœ¼ë¯€ë¡œ ì•ˆë³´ì´ê²Œ ë§Œë“¤ê¸°
+            color.a = 0f; //íˆ¬ëª…í•˜ê²Œ
             SelectImg.color = color;
 
             return;
@@ -93,9 +103,36 @@ public class TableAddPanel : MonoBehaviour
         }
         AfterBtn.Set_Selected();
         SelectedBtn = AfterBtn;
-        SelectImg.sprite = AfterBtn.BtnImageSprite; //ÀÌ¹ÌÁö ±³Ã¼
-        //¼±ÅÃµÈ ÀÌ¹ÌÁö º¸ÀÌ°Ô ¸¸µé±â
-        color.a = 1f; //ºÒÅõ¸íÇÏ°Ô
+        SelectImg.sprite = AfterBtn.blanketImage.sprite; //ì´ë¯¸ì§€ êµì²´
+        //ì„ íƒëœ ì´ë¯¸ì§€ ë³´ì´ê²Œ ë§Œë“¤ê¸°
+        color.a = 1f; //ë¶ˆíˆ¬ëª…í•˜ê²Œ
         SelectImg.color = color;
+    }
+
+    public void Add_BlanketAddBtn(string blanketName, int count)
+    {
+        if (count <= 0) return;
+
+        if (BlanketAddBtnDic.ContainsKey(blanketName))
+        {
+            BlanketAddBtnDic[blanketName].Change_BlanketCount(count);
+        }
+        else
+        {
+            GameObject newButton = Instantiate(BlanketBtn, ScrollContent);
+
+            BlanketAddBtn newBlanketAddBtn = newButton.GetComponent<BlanketAddBtn>();
+            newBlanketAddBtn.AddPanel = this;
+            newBlanketAddBtn.blanketScript = gameManager.Get_Blanket(blanketName);
+            newBlanketAddBtn.BlanketCount = count;
+            newBlanketAddBtn.Set_BlanketCount(count);
+
+            BlanketAddBtnDic.Add(blanketName, newBlanketAddBtn);
+        }
+    }
+
+    public void Delete_In_BlanketAddBtnDic(string blanketName)
+    {
+        BlanketAddBtnDic.Remove(blanketName);
     }
 }
