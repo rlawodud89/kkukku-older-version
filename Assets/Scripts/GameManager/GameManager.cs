@@ -174,6 +174,9 @@ public class GameManager : MonoBehaviour
     }
 
 
+
+    // 사용자 정보 getter, setter
+
     public int Get_Gold() { return gold; }
     public void Set_Gold(int gold) { this.gold = gold; }
     public void Change_Gold(int delta) { gold += delta; }
@@ -259,9 +262,12 @@ public class GameManager : MonoBehaviour
         OnOpenChanged?.Invoke(isOpen);
     }
 
+
+
+    // ScritableObject 관련 getter, 랜덤 요소 하나 받아오는 getter
+
     public ItemScript Get_Yarn(string yarnName) { return Yarns[yarnName]; }
     public ItemScript Get_Cotton(string cottonName) { return Cottons[cottonName]; }
-
 
     public ItemScript Get_Material(string materialName) { return Materials[materialName]; }
     public ItemScript Get_Random_Material()
@@ -356,6 +362,16 @@ public class GameManager : MonoBehaviour
         else return null;
     }
 
+    public Sprite GetMaterialImage(RecipeEntry entry)
+    {
+        ItemScript item = Get_InventoryItem(entry.itemName);
+        if (item == null) return null;
+        return item.image;
+    }
+
+
+
+    // DB에 저장하거나, 데이터 저장하는 메서드
 
     public void Add_InventoryItem(string itemName, int count)
     {
@@ -510,9 +526,5 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
-    public Sprite GetMaterialImage(RecipeEntry entry)
-    {
-        ItemScript item = Get_InventoryItem(entry.itemName);
-        return item.image;
-    }
+    
 }
