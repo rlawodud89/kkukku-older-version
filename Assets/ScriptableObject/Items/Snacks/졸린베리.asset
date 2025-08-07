@@ -16,7 +16,7 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 37656ff7ff86b254b8895c7d561a3ab5, type: 3}
   itemType: 5
   level: 1
-  value: 500
+  value: 3
   recipe: []
   designValue: 0
   fullImage: {fileID: 0}

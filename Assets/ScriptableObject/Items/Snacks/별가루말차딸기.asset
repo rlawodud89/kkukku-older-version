@@ -15,8 +15,8 @@ MonoBehaviour:
   itemName: "\uBCC4\uAC00\uB8E8\uB9D0\uCC28\uB538\uAE30"
   image: {fileID: 21300000, guid: a35beec431c3273498e3c1c95b16461d, type: 3}
   itemType: 5
-  level: 0
-  value: 0
+  level: 3
+  value: 10
   recipe: []
   designValue: 0
   fullImage: {fileID: 0}

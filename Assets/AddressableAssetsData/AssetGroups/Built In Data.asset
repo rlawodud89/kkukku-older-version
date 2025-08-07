@@ -95,12 +95,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - material
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cf1860182bef45f4a8915917be6bc4de
-    m_Address: "Assets/ScriptableObject/Items/Snacks/\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - snack
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a8e9d1959291935409f2de75a48905ef
     m_Address: "Assets/ScriptableObject/Items/Snacks/\uC878\uB9B0\uBCA0\uB9AC.asset"
     m_ReadOnly: 0
