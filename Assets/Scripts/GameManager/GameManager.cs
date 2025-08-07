@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
+using System;
 
 public enum NOW
 {
@@ -150,6 +151,19 @@ public class GameManager : MonoBehaviour
                 .ToDictionary(i => i.letterName);*/
     }
 
+    private int Get_RandomLevel()
+    {
+        // 높은 레벨이 덜 선택되도록 가중치 설정 
+        int weight1 = 60;
+        int weight2 = 30;
+        int weight3 = 10;
+        int totalWeight = weight1 + weight2 + weight3;
+        int rand = UnityEngine.Random.Range(1, totalWeight + 1);
+        if (rand <= weight1) return 1;
+        else if (rand <= weight1 + weight2) return 2;
+        else return 3;
+    }
+
 
     public int Get_Gold() { return gold; }
     public void Set_Gold(int gold) { this.gold = gold; }
@@ -257,9 +271,19 @@ public class GameManager : MonoBehaviour
     public ItemScript Get_Snack(string snackName) { return Snacks[snackName]; }
     public ItemScript Get_Random_Snack()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Snacks.Count);
-        var randomSnack = Snacks.ElementAt(randomIdx);
-        return randomSnack.Value;
+        // 간식 레벨 선택 
+        int randomlevel = Get_RandomLevel();
+
+        // 해당하는 레벨의 간식 나올 때까지 랜덤 선택
+        int randomIdx;
+        KeyValuePair<string, ItemScript> randomSnank;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Snacks.Count);
+            randomSnank = Snacks.ElementAt(randomIdx);
+        } while (randomSnank.Value.level != randomlevel);
+
+        return randomSnank.Value;
     }
 
     public InteriorScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
@@ -319,11 +343,12 @@ public class GameManager : MonoBehaviour
         else return null;
     }
 
+
     public void Add_InventoryItem(string itemName, int count)
     {
         if (count <= 0) return;
 
-        if (dbManager.isIn_Inventory(itemName))
+        if (dbManager.Have_Inventory(itemName))
         {
             dbManager.Change_InventoryItem_Count(itemName, count);
         }
@@ -334,7 +359,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool Add_Design(string blanketName)
+    public bool Add_BlanketDesign(string blanketName)
     {
         if (dbManager.Have_Design(blanketName)) return false;
         else
@@ -344,22 +369,105 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Add_InteriorItem(string interiorName, int count)
+    public bool Add_InteriorItem(string interiorName, int count)
     {
-        if (count <= 0) return;
+        if (count <= 0) return false;
 
         InteriorScript interiorScript = Get_InteriorItem(interiorName);
+
+        if (interiorScript.interiorType == InteriorType.SHOP_INTERIOR)
+        {
+            if (dbManager.Have_InteriorItem(interiorName)) return false;
+            else count = 1;
+        }
+
         dbManager.Insert_InteriorItem(interiorName, interiorScript.interiorType, count);
+        return true;
+
     }
 
     public bool Add_TileItem(string tileName)
     {
-        if (dbManager.Have_Tile(tileName)) return false;
+        if (dbManager.Have_InteriorItem(tileName)) return false;
         else
         {
             InteriorScript tileScript = Get_Tile(tileName);
             dbManager.Insert_Tile(tileName, tileScript.interiorType);
             return true;
         }
+    }
+
+
+    public List<(ItemScript item, int count)> Get_Material_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Material();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Material(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+
+    public List<(ItemScript item, int count)> Get_Blanket_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Blanket();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Blanket(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+    public List<(ItemScript item, int count)> Get_Snack_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Snack();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Snack(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+    public List<(InteriorScript item, int count)> Get_RoomInterior_Inventory()
+    {
+        List<(string itemName, int count)> inven = dbManager.Select_RoomInterior();
+        List<(InteriorScript item, int count)> result = new List<(InteriorScript item, int count)>();
+
+        foreach ((string itemName, int count) i in inven)
+        {
+            result.Add((Get_RoomInterior(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+
+    public bool Use_InventoryItem(string itemName, int count)
+    {
+        if (count <= 0) return false;
+
+        if (!dbManager.Have_Inventory(itemName)) return false;
+
+        if (dbManager.Change_InventoryItem_Count(itemName, -count)) return true;
+        else return false;
+
+    }
+
+    public bool Use_RoomInteriorItem(string interiorName, int x, int y)
+    {
+        if(!dbManager.Have_InteriorItem(interiorName)) return false;
+
+        if (dbManager.Set_InteriorItem(interiorName, x, y)) return true;
+        else return false;
     }
 }

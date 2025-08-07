@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
+using static UnityEditor.Progress;
 
 
 public class DBManager
@@ -14,7 +15,7 @@ public class DBManager
     private static SQLiteConnection testconn = new SQLiteConnection(testdbPath);
     private static string userName = "user";
 
-    //½Ì±ÛÅæ ÆĞÅÏ À§ÇÑ private »ı¼ºÀÚ, ÀÎ½ºÅÏ½º ¹İÈ¯ Á¤Àû ¸Ş¼­µå
+    //ì‹±ê¸€í†¤ íŒ¨í„´ ìœ„í•œ private ìƒì„±ì, ì¸ìŠ¤í„´ìŠ¤ ë°˜í™˜ ì •ì  ë©”ì„œë“œ
     private DBManager() { }
     public static DBManager getInstance() { return instance; }
 
@@ -47,12 +48,12 @@ public class DBManager
 
         testconn.Insert(user);
 
-        // TODO: Ã³À½¿¡ ±âº»À¸·Î ÁÖ´Â ¾ÆÀÌÅÛ ÀúÀå
+        // TODO: ì²˜ìŒì— ê¸°ë³¸ìœ¼ë¡œ ì£¼ëŠ” ì•„ì´í…œ ì €ì¥
     }
 
     public User Get_User()
     {
-        return testconn.Find<User>(userName); //ÁöÁ¤ÇÑ ÀÌ¸§(±âº»Å°)À¸·Î Ã£±â
+        return testconn.Find<User>(userName); //ì§€ì •í•œ ì´ë¦„(ê¸°ë³¸í‚¤)ìœ¼ë¡œ ì°¾ê¸°
     }
 
     public void Update_User(int energy, int gold, int moonrock, float playTime)
@@ -108,7 +109,7 @@ public class DBManager
         testconn.Update(user);
     }
 
-    public bool isIn_Inventory(string itemName)
+    public bool Have_Inventory(string itemName)
     {
         return testconn.Table<Inventory>()
             .Any(x => x.itemName == itemName);
@@ -124,11 +125,22 @@ public class DBManager
         testconn.Insert(inven);
     }
 
-    public void Change_InventoryItem_Count(string itemName, int delta)
+    public bool Change_InventoryItem_Count(string itemName, int delta)
     {
         Inventory inven = testconn.Find<Inventory>(itemName);
-        inven.count += delta;
-        testconn.Update(inven);
+
+        if (inven.count + delta < 0) return false;
+
+        else if (inven.count + delta == 0)
+        {
+            testconn.Delete(inven);
+        }
+        else
+        {
+            inven.count += delta;
+            testconn.Update(inven);
+        }
+        return true;
     }
 
     public bool Have_Design(string blanketName)
@@ -145,9 +157,15 @@ public class DBManager
         testconn.Insert(design);
     }
 
+    public bool Have_InteriorItem(string interirorName)
+    {
+        return testconn.Table<Interior>()
+            .Any(x => x.interiorName == interirorName);
+    }
+
     public void Insert_InteriorItem(string interiorName, InteriorType interiorType, int count)
     {
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             Interior interior = new Interior();
             interior.interiorName = interiorName;
@@ -158,10 +176,21 @@ public class DBManager
         }
     }
 
-    public bool Have_Tile(string tileName)
+    public bool Set_InteriorItem(string interiorName, int x, int y)
     {
-        return testconn.Table<Interior>()
-            .Any(x => x.interiorName == tileName);
+        Interior inte = testconn.Table<Interior>()
+                 .Where(x => x.interiorName == interiorName && x.isSet == false)
+                 .FirstOrDefault();
+
+        if (inte == null) return false;
+        else
+        {
+            inte.isSet = true;
+            inte.x = x;
+            inte.y = y;
+            testconn.Update(inte);
+            return true;
+        }
     }
 
     public void Insert_Tile(string tileName, InteriorType interiorType)
@@ -172,5 +201,36 @@ public class DBManager
         interior.isSet = false;
 
         testconn.Insert(interior);
+    }
+
+    public List<Inventory> Select_Material()
+    {
+        return testconn.Table<Inventory>()
+               .Where(x => x.itemType == ItemType.MATERIAL)
+               .ToList();
+
+    }
+
+    public List<Inventory> Select_Blanket()
+    {
+        return testconn.Table<Inventory>()
+               .Where(x => x.itemType == ItemType.BLANKET)
+               .ToList();
+    }
+
+    public List<Inventory> Select_Snack()
+    {
+        return testconn.Table<Inventory>()
+               .Where(x => x.itemType == ItemType.SNACK)
+               .ToList();
+    }
+
+    public List<(string itemName, int count)> Select_RoomInterior()
+    {
+        return testconn.Table<Interior>()
+                .Where(x => x.isSet == false)
+                .GroupBy(x => x.interiorName)
+                .Select(g => (g.Key, g.Count())) // Key: GroupByì—ì„œ ì‚¬ìš©í•œ í‚¤ (interiorName), Count(): í•´ë‹¹í•˜ëŠ” í‚¤ ê·¸ë£¹ì˜ íŠœí”Œ ê°œìˆ˜
+                .ToList();
     }
 }
