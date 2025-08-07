@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using Unity.VisualScripting.Dependencies.NCalc;
 
 public enum NOW
 {
@@ -39,8 +40,11 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
+
     private Dictionary<string, ItemScript> Yarns = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Cottons = new Dictionary<string, ItemScript>();
+    private Dictionary<string, string> Map_Yarn_to_Cotton = new Dictionary<string, string>();
+    private Dictionary<string, string> Map_Cotton_to_Blanket = new Dictionary<string, string>();
 
     private Dictionary<string, InteriorScript> Shop_Interiors = new Dictionary<string, InteriorScript>();
     private Dictionary<string, InteriorScript> Room_Interiors = new Dictionary<string, InteriorScript>();
@@ -158,6 +162,15 @@ public class GameManager : MonoBehaviour
         Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);*/
+
+        foreach(var blanket in Blankets)
+        {
+            ItemScript value = blanket.Value;
+            if (value.yarnName == "" || value.cottonName == "") continue;
+
+            Map_Yarn_to_Cotton.Add(value.yarnName, value.cottonName);
+            Map_Cotton_to_Blanket.Add(value.cottonName, value.itemName);
+        }
     }
 
     private int Get_RandomLevel()
@@ -526,5 +539,27 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
-    
+    public ItemScript Blanket_to_Yarn(string blanketName)
+    {   
+        ItemScript blanket = Get_Blanket(blanketName);
+        return Get_Yarn(blanket.yarnName);
+    }
+
+    public ItemScript Yarn_to_Cotton(string yarnName)
+    {
+        if (!Map_Yarn_to_Cotton.ContainsKey(yarnName)) return null;
+
+        string cottonName = Map_Yarn_to_Cotton[yarnName];
+        return Get_Cotton(cottonName);
+    }
+
+    public ItemScript Cotton_to_Blanket(string cottonName)
+    {
+        if (!Map_Cotton_to_Blanket.ContainsKey(cottonName)) return null;
+
+        string blanketName = Map_Cotton_to_Blanket[cottonName];
+        return Get_Blanket(blanketName);
+    }
+
+
 }

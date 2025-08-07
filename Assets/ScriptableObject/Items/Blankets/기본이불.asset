@@ -15,7 +15,10 @@ MonoBehaviour:
   itemName: "\uAE30\uBCF8\uC774\uBD88"
   image: {fileID: 21300000, guid: 81c72012fbe2d9649b01884de9958aae, type: 3}
   itemType: 4
+  level: 0
   value: 500
   recipe: []
   designValue: 0
+  yarnName: 
+  cottonName: 
   fullImage: {fileID: 0}
