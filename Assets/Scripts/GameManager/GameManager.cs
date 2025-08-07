@@ -412,7 +412,7 @@ public class GameManager : MonoBehaviour
 
     public List<(ItemScript item, int count)> Get_Blanket_Inventory()
     {
-        List<Inventory> inven = dbManager.Select_Material();
+        List<Inventory> inven = dbManager.Select_Blanket();
         List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
 
         foreach (Inventory i in inven)
