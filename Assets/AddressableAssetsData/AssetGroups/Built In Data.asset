@@ -155,6 +155,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - snack
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfa12169db0a8d84184d01045d3d180c
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uB9AC\uBCF8\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

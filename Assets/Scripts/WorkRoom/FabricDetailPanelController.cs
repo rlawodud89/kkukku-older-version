@@ -13,20 +13,20 @@ public class FabricDetailPanelController : MonoBehaviour
 
     public Sprite defaultMaterialSprite; // 기본 이미지 (인스펙터에서 연결)
 
-    public void OpenPanel(BlanketData blanket)
+    public void OpenPanel(ItemScript blanket)
     {
 
         gameObject.SetActive(true);
 
-        BlanketNameText.text = blanket.BlanketName;
-        BlanketImage.sprite = blanket.BlanketSprite;
+        BlanketNameText.text = blanket.itemName;
+        BlanketImage.sprite = blanket.image;
 
         // 슬롯 초기화
         for (int i = 0; i < materialImageSlots.Count; i++)
         {
-            if (i < blanket.requiredMaterials.Length && blanket.requiredMaterials[i] != null)
+            if (i < blanket.recipe.Count && blanket.recipe[i] != null)
             {
-                materialImageSlots[i].sprite = blanket.requiredMaterials[i].data.MaterialSprite;
+                materialImageSlots[i].sprite = blanket.recipe[i].;
                 materialImageSlots[i].gameObject.SetActive(true);
                 materialQuantitySlots[i].text = blanket.requiredMaterials[i].count.ToString();
                 materialQuantitySlots[i].gameObject.SetActive(true);

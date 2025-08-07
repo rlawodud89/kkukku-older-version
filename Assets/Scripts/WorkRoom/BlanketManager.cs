@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BlanketManager : MonoBehaviour
 {
-    public List<BlanketData> blanketList;
+    public List<ItemScript> blanketList;
 
     public static BlanketManager Instance { get; private set; }
 
@@ -15,7 +15,7 @@ public class BlanketManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public List<BlanketData> GetBlanketList()
+    public List<ItemScript> GetBlanketList()
     {
         return blanketList;
     }
