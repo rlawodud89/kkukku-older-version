@@ -228,8 +228,9 @@ public class DBManager
     public List<(string itemName, int count)> Select_RoomInterior()
     {
         return testconn.Table<Interior>()
-                 .GroupBy(x => x.interiorName)
-                 .Select(g => (g.Key, g.Count())) // Key: GroupBy에서 사용한 키 (interiorName), Count(): 해당하는 키 그룹의 튜플 개수
-                 .ToList();
+                .Where(x => x.isSet == false)
+                .GroupBy(x => x.interiorName)
+                .Select(g => (g.Key, g.Count())) // Key: GroupBy에서 사용한 키 (interiorName), Count(): 해당하는 키 그룹의 튜플 개수
+                .ToList();
     }
 }

@@ -436,7 +436,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-
     public List<(InteriorScript item, int count)> Get_RoomInterior_Inventory()
     {
         List<(string itemName, int count)> inven = dbManager.Select_RoomInterior();
@@ -450,14 +449,15 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
+
     public bool Use_InventoryItem(string itemName, int count)
     {
         if (count <= 0) return false;
 
         if (!dbManager.Have_Inventory(itemName)) return false;
 
-        if (!dbManager.Change_InventoryItem_Count(itemName, -count)) return false;
-        else return true;
+        if (dbManager.Change_InventoryItem_Count(itemName, -count)) return true;
+        else return false;
 
     }
 
