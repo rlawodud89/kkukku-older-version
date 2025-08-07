@@ -34,10 +34,13 @@ public class GameManager : MonoBehaviour
 
     private string endScene;
     private bool isOpen;
+    public event Action<bool> OnOpenChanged;
 
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
+    private Dictionary<string, ItemScript> Yarns = new Dictionary<string, ItemScript>();
+    private Dictionary<string, ItemScript> Cottons = new Dictionary<string, ItemScript>();
 
     private Dictionary<string, InteriorScript> Shop_Interiors = new Dictionary<string, InteriorScript>();
     private Dictionary<string, InteriorScript> Room_Interiors = new Dictionary<string, InteriorScript>();
@@ -126,6 +129,12 @@ public class GameManager : MonoBehaviour
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
         Snacks = Addressables.LoadAssetsAsync<ItemScript>("snack", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.itemName);
+        Yarns = Addressables.LoadAssetsAsync<ItemScript>("yarn", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.itemName);
+        Cottons = Addressables.LoadAssetsAsync<ItemScript>("cotton", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
         Shop_Interiors = Addressables.LoadAssetsAsync<InteriorScript>("shop_interior", null)
@@ -247,7 +256,11 @@ public class GameManager : MonoBehaviour
     {
         this.isOpen = isOpen;
         dbManager.Update_IsOpen(this.isOpen);
+        OnOpenChanged?.Invoke(isOpen);
     }
+
+    public ItemScript Get_Yarn(string yarnName) { return Yarns[yarnName]; }
+    public ItemScript Get_Cotton(string cottonName) { return Cottons[cottonName]; }
 
 
     public ItemScript Get_Material(string materialName) { return Materials[materialName]; }
@@ -330,6 +343,8 @@ public class GameManager : MonoBehaviour
         if (Materials.ContainsKey(itemName)) return Materials[itemName];
         else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
+        else if (Yarns.ContainsKey(itemName)) return Yarns[itemName];
+        else if (Cottons.ContainsKey(itemName)) return Cottons[itemName];
         else return null;
     }
 
@@ -393,6 +408,32 @@ public class GameManager : MonoBehaviour
             dbManager.Insert_Tile(tileName, tileScript.interiorType);
             return true;
         }
+    }
+
+    public List<(ItemScript, int count)> Get_Yarn_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Yarn();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Yarn(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+    public List<(ItemScript, int count)> Get_Cotton_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Cotton();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Cotton(i.itemName), i.count));
+        }
+
+        return result;
     }
 
 
@@ -467,5 +508,11 @@ public class GameManager : MonoBehaviour
 
         if (dbManager.Set_InteriorItem(interiorName, x, y)) return true;
         else return false;
+    }
+
+    public Sprite GetMaterialImage(RecipeEntry entry)
+    {
+        ItemScript item = Get_InventoryItem(entry.itemName);
+        return item.image;
     }
 }

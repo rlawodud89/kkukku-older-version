@@ -203,12 +203,26 @@ public class DBManager
         testconn.Insert(interior);
     }
 
+    public List<Inventory> Select_Yarn()
+    {
+        return testconn.Table<Inventory>()
+               .Where(x => x.itemType == ItemType.YARN)
+               .ToList();
+    }
+
+    public List<Inventory> Select_Cotton()
+    {
+        return testconn.Table<Inventory>()
+               .Where(x => x.itemType == ItemType.COTTON)
+               .ToList();
+    }
+
+
     public List<Inventory> Select_Material()
     {
         return testconn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.MATERIAL)
                .ToList();
-
     }
 
     public List<Inventory> Select_Blanket()
