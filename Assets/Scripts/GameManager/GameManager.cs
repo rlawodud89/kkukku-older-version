@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using JetBrains.Annotations;
 
 public enum NOW
 {
@@ -34,7 +35,11 @@ public class GameManager : MonoBehaviour
 
     private string endScene;
     private bool isOpen;
+
+    // 가게에서 게임 매니저 값에 따라 오브젝트 바뀔 수 있도록 하는 이벤트
     public event Action<bool> OnOpenChanged;
+    public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
+    public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
 
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
@@ -162,7 +167,7 @@ public class GameManager : MonoBehaviour
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);*/
 
-        foreach(var blanket in Blankets)
+        foreach (var blanket in Blankets)
         {
             ItemScript value = blanket.Value;
             if (value.yarnName == "" || value.cottonName == "") continue;
@@ -420,6 +425,11 @@ public class GameManager : MonoBehaviour
             ItemScript itemScript = Get_InventoryItem(itemName);
             if (itemScript != null) dbManager.Insert_InventoryItem(itemName, itemScript.itemType, count);
         }
+
+        if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
+        {
+            OnBlanketInvenChanged?.Invoke(itemName, count); // 가게에 이불장에서 이불 삭제해, 재고 늘었다고 변경되었다고 알림
+        }
     }
 
     public bool Add_BlanketDesign(string blanketName)
@@ -551,7 +561,7 @@ public class GameManager : MonoBehaviour
 
     public bool Use_RoomInteriorItem(string interiorName, int x, int y)
     {
-        if(!dbManager.Have_InteriorItem(interiorName)) return false;
+        if (!dbManager.Have_InteriorItem(interiorName)) return false;
 
         if (dbManager.Set_InteriorItem(interiorName, x, y)) return true;
         else return false;
@@ -559,17 +569,20 @@ public class GameManager : MonoBehaviour
 
     public void Add_Table_Blanket(int tableID, string blanketName, int count)
     {
-        if(count <= 0) return;
+        if (count <= 0) return;
 
         if (dbManager.Have_Table_Blanket(tableID, blanketName))
         {
             dbManager.Change_TableBlanket_Count(tableID, blanketName, count);
+
         }
         else
         {
             ItemScript itemScript = Get_InventoryItem(blanketName);
             if (itemScript != null) dbManager.Insert_TableBlanket(tableID, blanketName, count);
         }
+
+        OnBlanketInvenChanged?.Invoke(blanketName, -count); // 가게에서, 이불장에 이불 넣어 인벤토리 이불량 줄어들었다고 알림
     }
 
     public bool Use_Table_Blanket(int tableID, string blanketName, int count)
@@ -598,5 +611,26 @@ public class GameManager : MonoBehaviour
     {
         WorkShop workShop = dbManager.Select_WorkShop(tableID);
         return (Get_InteriorItem(workShop.tableName), dbManager.Any_Table_Blanket(tableID));
+    }
+
+    public int Use_Random_BlanketInTable(int tableID) // 랜덤으로 해당 테이블에 있는 이불 한 개 선택, 선택된 이불의 가격 반환
+    {
+        if (!dbManager.Any_Table_Blanket(tableID)) return 0;
+
+        // 랜덤으로 한 개의 이불 선택
+        List<ShopTable> list = dbManager.Select_Table_Blanket(tableID);
+        int randomIdx = UnityEngine.Random.Range(0, list.Count);
+        ShopTable randomBlanket = list.ElementAt(randomIdx);
+        ItemScript blanketScript = Get_Blanket(randomBlanket.blanketName);
+
+        // 한 개 테이블에서 가져간 거 DB에 저장
+        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1))
+        {
+            OnTableBlanketChanged?.Invoke(tableID, blanketScript.itemName, -1); // 가게에서 변경된 값으로 UI 변경될 수 있도록 설정
+            
+            return blanketScript.value;
+        }
+        
+        else return 0;
     }
 }

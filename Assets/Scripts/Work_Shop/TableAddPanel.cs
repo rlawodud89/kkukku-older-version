@@ -21,13 +21,9 @@ public class TableAddPanel : MonoBehaviour
     {
         BlanketAddBtnDic = new Dictionary<string, BlanketAddBtn>();
         gameManager = GameManager.getInstance();
+        gameManager.OnBlanketInvenChanged += BlanketInvenChanged;
 
         InitScroll();
-    }
-
-    void Start()
-    {
-        
     }
 
     public void ClickAddXBtn()
@@ -45,8 +41,9 @@ public class TableAddPanel : MonoBehaviour
         {
             string Selected_itemName = SelectedBtn.blanketScript.itemName;
 
-            if (SelectedBtn.Change_BlanketCount(-input_count) 
-                && gameManager.Use_InventoryItem(Selected_itemName, input_count))
+            /*if (SelectedBtn.Change_BlanketCount(-input_count) 
+                && gameManager.Use_InventoryItem(Selected_itemName, input_count))*/
+            if (gameManager.Use_InventoryItem(Selected_itemName, input_count))
             {
                 TablePanel.Add_BlanketBtn(Selected_itemName, input_count);
                 gameManager.Add_Table_Blanket(TablePanel.tableID, Selected_itemName, input_count);
@@ -134,5 +131,20 @@ public class TableAddPanel : MonoBehaviour
     public void Delete_In_BlanketAddBtnDic(string blanketName)
     {
         BlanketAddBtnDic.Remove(blanketName);
+    }
+
+    // 인벤토리 수량 변화할 때마다 UI도 반응해서 변경해주는 메서드
+    private void BlanketInvenChanged(string blanketName, int invenDelta)
+    {
+        if (invenDelta == 0) return;
+
+        if(invenDelta > 0) // 재고량이 늘었음 (이불장 패널에서 선택된 이불이 삭제되면서 인벤토리에 추가됨)
+        {
+            Add_BlanketAddBtn(blanketName, invenDelta);
+        }
+        else // 재고량이 줄었음 (인벤토리 패널에서 선택된 이불이 이불장으로 들어감)
+        {
+            BlanketAddBtnDic[blanketName].Change_BlanketCount(invenDelta); // delta -> invenData: 줄어든 만큼의 음수
+        }
     }
 }

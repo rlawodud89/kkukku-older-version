@@ -30,9 +30,7 @@ public class OpenSign : MonoBehaviour
 
     void OnDisable()
     {
-
         gameManager.OnOpenChanged -= UpdateSign;
-
     }
 
     void UpdateSign(bool isOpen)

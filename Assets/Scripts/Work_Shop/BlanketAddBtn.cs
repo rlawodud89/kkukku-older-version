@@ -28,7 +28,7 @@ public class BlanketAddBtn : ScrollBtn
 
     public bool Change_BlanketCount(int delta)
     {
-        if (delta < 0 && BlanketCount < (-delta))
+        if (delta < 0 && BlanketCount + delta < 0)
         {
             Debug.Log("수량보다 많이 추가");
             return false;

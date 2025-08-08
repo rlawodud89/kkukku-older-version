@@ -22,6 +22,7 @@ public class TablePanel : MonoBehaviour
     {
         BlanketBtnDic = new Dictionary<string, BlanketBtn>();
         gameManager = GameManager.getInstance();
+        gameManager.OnTableBlanketChanged += TableBlanketChanged;
 
         AddPanel.gameObject.SetActive(false);
 
@@ -45,7 +46,7 @@ public class TablePanel : MonoBehaviour
         int Selected_BlanketCount = SelectedBtn.BlanketCount;
 
         gameManager.Add_InventoryItem(Selected_itemName, Selected_BlanketCount); // 이불장에서 뺀 만큼 다시 인벤토리로 이동
-        AddPanel.Add_BlanketAddBtn(Selected_itemName, Selected_BlanketCount);
+        //AddPanel.Add_BlanketAddBtn(Selected_itemName, Selected_BlanketCount);
 
         Delete_In_BlanketBtnDic(Selected_itemName); // 이불장에서 삭제
         Destroy(SelectedBtn.gameObject);
@@ -115,6 +116,13 @@ public class TablePanel : MonoBehaviour
     {
         BlanketBtnDic.Remove(blanketName);
         if(BlanketBtnDic.Count == 0) OnFullChanged?.Invoke(false);
+    }
+
+    private void TableBlanketChanged(int tableID, string blanketName, int delta)
+    {
+        if (this.tableID != tableID) return;
+
+        BlanketBtnDic[blanketName].Change_BlanketCount(delta);
     }
 
 }
