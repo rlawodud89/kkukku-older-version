@@ -431,9 +431,9 @@ public class GameManager : MonoBehaviour
             if (itemScript != null) dbManager.Insert_InventoryItem(itemName, itemScript.itemType, count);
         }
 
-        if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
+        if(Get_InventoryItem(itemName).itemType == ItemType.BLANKET) 
         {
-            OnBlanketInvenChanged?.Invoke(itemName, count); // 가게에 이불장에서 이불 삭제해, 재고 늘었다고 변경되었다고 알림
+            OnBlanketInvenChanged?.Invoke(itemName, count); // 가게에 인벤토리 이불량 늘었다고 알림
         }
     }
 
@@ -559,9 +559,15 @@ public class GameManager : MonoBehaviour
 
         if (!dbManager.Have_Inventory(itemName)) return false;
 
-        if (dbManager.Change_InventoryItem_Count(itemName, -count)) return true;
-        else return false;
+        if (dbManager.Change_InventoryItem_Count(itemName, -count)) {
+            if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
+            {
+                OnBlanketInvenChanged?.Invoke(itemName, -count); // 가게에 이불 사용해서 재고 줄었다고 변경되었다고 알림
+            }
 
+            return true;
+        } 
+        else return false;
     }
 
     public void Add_Table_Blanket(int tableID, string blanketName, int count)
@@ -579,16 +585,27 @@ public class GameManager : MonoBehaviour
             if (itemScript != null) dbManager.Insert_TableBlanket(tableID, blanketName, count);
         }
 
-        OnBlanketInvenChanged?.Invoke(blanketName, -count); // 가게에서, 이불장에 이불 넣어 인벤토리 이불량 줄어들었다고 알림
+        //OnBlanketInvenChanged?.Invoke(blanketName, -count); // 가게에서, 이불장에 이불 넣어 인벤토리 이불량 줄어들었다고 알림
+        OnTableBlanketChanged?.Invoke(tableID, blanketName, count); // 이불장엔 이불량 늘었다고 알림 
     }
 
-    public bool Use_Table_Blanket(int tableID, string blanketName, int count)
+    public bool Use_Table_Blanket(int tableID, string blanketName, int count, bool isCustomer)
     {
         if (count <= 0) return false;
 
         if (!dbManager.Have_Table_Blanket(tableID, blanketName)) return false;
 
-        if (dbManager.Change_TableBlanket_Count(tableID, blanketName, -count)) return true;
+        if (dbManager.Change_TableBlanket_Count(tableID, blanketName, -count))
+        {
+            OnTableBlanketChanged?.Invoke(tableID, blanketName, -count); // 이불장에 이불 줄었다고 알림
+            if (!isCustomer)
+            {
+                //OnBlanketInvenChanged?.Invoke(blanketName, count);
+            }
+            // 손님이 사간 게 아니라 사용자가 삭제한 거라면, 인벤토리 이불량 늘었다고 알림
+
+            return true;
+        }
         else return false;
     }
 
@@ -610,7 +627,7 @@ public class GameManager : MonoBehaviour
         return (Get_InteriorItem(workShop.tableName), dbManager.Any_Table_Blanket(tableID));
     }
 
-    public int Use_Random_BlanketInTable(int tableID) // 랜덤으로 해당 테이블에 있는 이불 한 개 선택, 선택된 이불의 가격 반환
+    public int Use_RandomOne_BlanketInTable(int tableID) // 랜덤으로 해당 테이블에 있는 이불 한 개 선택, 선택된 이불의 가격 반환
     {
         if (!dbManager.Any_Table_Blanket(tableID)) return 0;
 
@@ -621,13 +638,11 @@ public class GameManager : MonoBehaviour
         ItemScript blanketScript = Get_Blanket(randomBlanket.blanketName);
 
         // 한 개 테이블에서 가져간 거 DB에 저장
-        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1))
-        {
-            OnTableBlanketChanged?.Invoke(tableID, blanketScript.itemName, -1); // 가게에서 변경된 값으로 UI 변경될 수 있도록 설정
-            
+        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1, true))
+        { 
             return blanketScript.value;
         }
-        
+
         else return 0;
     }
 
