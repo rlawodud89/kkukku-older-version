@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,29 +9,46 @@ public class BlanketBtn : ScrollBtn
 {
     public TablePanel TablePanel;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>(); //ÀÌ¹ÌÁö º¯°æÇÒ ¶§ »ç¿ë
+        blanketImage.sprite = blanketScript.image;
         CountText.text = BlanketCount.ToString();
         Set_NotSelected();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void ClickBtn()
     {
-        if (selected) //¼±ÅÃ -> ¼±ÅÃ X »óÅÂ·Î
+        if (selected) //ì„ íƒ -> ì„ íƒ X ìƒíƒœë¡œ
         {
             TablePanel.Chanage_SelectedBtn(null);
         }
-        else //¼±ÅÃ X -> ¼±ÅÃ »óÅÂ·Î
+        else //ì„ íƒ X -> ì„ íƒ ìƒíƒœë¡œ
         {
             TablePanel.Chanage_SelectedBtn(this);
         }
+    }
+
+    public bool Change_BlanketCount(int delta)
+    {
+        if (delta < 0 && BlanketCount < (-delta))
+        {
+            Debug.Log("ìˆ˜ëŸ‰ë³´ë‹¤ ë§ì´ ì¶”ê°€");
+            return false;
+        }
+
+        BlanketCount += delta;
+
+        if (BlanketCount <= 0)
+        {
+            TablePanel.Delete_In_BlanketBtnDic(blanketScript.itemName);
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            CountText.text = BlanketCount.ToString();
+        }
+
+        return true;
     }
 }

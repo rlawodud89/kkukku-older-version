@@ -25,4 +25,6 @@ MonoBehaviour:
   - itemName: "\uAFC8\uC2E4"
     count: 3
   designValue: 5000
+  yarnName: "\uC6B0\uC8FC\uC6D0\uB2E8"
+  cottonName: "\uC6B0\uC8FC\uC19C"
   fullImage: {fileID: 0}

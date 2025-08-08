@@ -8,25 +8,29 @@ public class Table : MonoBehaviour
 {
     public GameObject popupPrefab;
     private GameObject currentPopup;
+    public int tableID;
+  
+    private GameManager gameManager;
+    private InteriorScript tableScript;
+    private SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        
-    }
+        gameManager = GameManager.getInstance();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
+        tableScript = current_table_data.table;
+        Change_Table_image(current_table_data.isFull);
     }
 
     void OnMouseDown()
     {
-        // ¸¶¿ì½º°¡ UI À§¿¡ ÀÖÀ» °æ¿ì ¡æ Å¬¸¯ ¹«½Ã
+        // ë§ˆìš°ìŠ¤ê°€ UI ìœ„ì— ìˆì„ ê²½ìš° â†’ í´ë¦­ ë¬´ì‹œ
         if (IsPointerOverUI())
         {
-            Debug.Log("UI À§ Å¬¸¯ ¡æ Table Å¬¸¯ ¹«½Ã");
+            Debug.Log("UI ìœ„ í´ë¦­ â†’ Table í´ë¦­ ë¬´ì‹œ");
             return;
         }
 
@@ -45,18 +49,22 @@ public class Table : MonoBehaviour
             return;
         }
 
-        // 1. ¿ÀºêÁ§Æ® ¿ùµå À§Ä¡ ¡æ È­¸é ÇÈ¼¿ ÁÂÇ¥
+        // 1. ì˜¤ë¸Œì íŠ¸ ì›”ë“œ ìœ„ì¹˜ â†’ í™”ë©´ í”½ì…€ ì¢Œí‘œ
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
-        // 2. ÆË¾÷ »ı¼º ¹× À§Ä¡ ¼³Á¤
+        // 2. íŒì—… ìƒì„± ë° ìœ„ì¹˜ ì„¤ì •
         currentPopup = Instantiate(popupPrefab, canvas.transform);
+        TablePanel popupPanel = currentPopup.GetComponent<TablePanel>();
+        popupPanel.tableID = tableID;
+        popupPanel.OnFullChanged += Change_Table_image;
+
 
         RectTransform rect = currentPopup.GetComponent<RectTransform>();
-        rect.pivot = new Vector2(0.5f, 0f); // Áß½É ¾Æ·¡
-        rect.position = screenPos; // ¹Ù·Î ÇÈ¼¿ ÁÂÇ¥·Î ¼³Á¤ (WorldToScreenPoint °á°ú »ç¿ë)
+        rect.pivot = new Vector2(0.5f, 0f); // ì¤‘ì‹¬ ì•„ë˜
+        rect.position = screenPos; // ë°”ë¡œ í”½ì…€ ì¢Œí‘œë¡œ ì„¤ì • (WorldToScreenPoint ê²°ê³¼ ì‚¬ìš©)
     }
 
-    // ½ÇÁ¦ UI À§¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â Á¤¹Ğ ¸Ş¼­µå
+    // ì‹¤ì œ UI ìœ„ì— ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ì •ë°€ ë©”ì„œë“œ
     private bool IsPointerOverUI()
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -72,5 +80,11 @@ public class Table : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void Change_Table_image(bool isFull)
+    {
+        if (isFull) spriteRenderer.sprite = tableScript.fullImage;
+        else spriteRenderer.sprite = tableScript.image;
     }
 }

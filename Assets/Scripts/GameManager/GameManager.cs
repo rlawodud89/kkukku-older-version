@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using JetBrains.Annotations;
 
 public enum NOW
 {
@@ -35,9 +36,19 @@ public class GameManager : MonoBehaviour
     private string endScene;
     private bool isOpen;
 
+    // 가게에서 게임 매니저 값에 따라 오브젝트 바뀔 수 있도록 하는 이벤트
+    public event Action<bool> OnOpenChanged;
+    public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
+    public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
+
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
+
+    private Dictionary<string, ItemScript> Yarns = new Dictionary<string, ItemScript>();
+    private Dictionary<string, ItemScript> Cottons = new Dictionary<string, ItemScript>();
+    private Dictionary<string, string> Map_Yarn_to_Cotton = new Dictionary<string, string>();
+    private Dictionary<string, string> Map_Cotton_to_Blanket = new Dictionary<string, string>();
 
     private Dictionary<string, InteriorScript> Shop_Interiors = new Dictionary<string, InteriorScript>();
     private Dictionary<string, InteriorScript> Room_Interiors = new Dictionary<string, InteriorScript>();
@@ -128,6 +139,12 @@ public class GameManager : MonoBehaviour
         Snacks = Addressables.LoadAssetsAsync<ItemScript>("snack", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.itemName);
+        Yarns = Addressables.LoadAssetsAsync<ItemScript>("yarn", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.itemName);
+        Cottons = Addressables.LoadAssetsAsync<ItemScript>("cotton", null)
+                .WaitForCompletion()
+                .ToDictionary(i => i.itemName);
         Shop_Interiors = Addressables.LoadAssetsAsync<InteriorScript>("shop_interior", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.interiorName);
@@ -149,6 +166,15 @@ public class GameManager : MonoBehaviour
         Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);*/
+
+        foreach (var blanket in Blankets)
+        {
+            ItemScript value = blanket.Value;
+            if (value.yarnName == "" || value.cottonName == "") continue;
+
+            Map_Yarn_to_Cotton.Add(value.yarnName, value.cottonName);
+            Map_Cotton_to_Blanket.Add(value.cottonName, value.itemName);
+        }
     }
 
     private int Get_RandomLevel()
@@ -164,6 +190,9 @@ public class GameManager : MonoBehaviour
         else return 3;
     }
 
+
+
+    // 사용자 정보 getter, setter
 
     public int Get_Gold() { return gold; }
     public void Set_Gold(int gold) { this.gold = gold; }
@@ -247,8 +276,15 @@ public class GameManager : MonoBehaviour
     {
         this.isOpen = isOpen;
         dbManager.Update_IsOpen(this.isOpen);
+        OnOpenChanged?.Invoke(isOpen);
     }
 
+
+
+    // ScritableObject 관련 getter, 랜덤 요소 하나 받아오는 getter
+
+    public ItemScript Get_Yarn(string yarnName) { return Yarns[yarnName]; }
+    public ItemScript Get_Cotton(string cottonName) { return Cottons[cottonName]; }
 
     public ItemScript Get_Material(string materialName) { return Materials[materialName]; }
     public ItemScript Get_Random_Material()
@@ -332,6 +368,8 @@ public class GameManager : MonoBehaviour
         if (Materials.ContainsKey(itemName)) return Materials[itemName];
         else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
+        else if (Yarns.ContainsKey(itemName)) return Yarns[itemName];
+        else if (Cottons.ContainsKey(itemName)) return Cottons[itemName];
         else return null;
     }
 
@@ -343,6 +381,38 @@ public class GameManager : MonoBehaviour
         else return null;
     }
 
+    public Sprite GetMaterialImage(RecipeEntry entry)
+    {
+        ItemScript item = Get_InventoryItem(entry.itemName);
+        if (item == null) return null;
+        return item.image;
+    }
+
+    public ItemScript Blanket_to_Yarn(string blanketName)
+    {
+        ItemScript blanket = Get_Blanket(blanketName);
+        return Get_Yarn(blanket.yarnName);
+    }
+
+    public ItemScript Yarn_to_Cotton(string yarnName)
+    {
+        if (!Map_Yarn_to_Cotton.ContainsKey(yarnName)) return null;
+
+        string cottonName = Map_Yarn_to_Cotton[yarnName];
+        return Get_Cotton(cottonName);
+    }
+
+    public ItemScript Cotton_to_Blanket(string cottonName)
+    {
+        if (!Map_Cotton_to_Blanket.ContainsKey(cottonName)) return null;
+
+        string blanketName = Map_Cotton_to_Blanket[cottonName];
+        return Get_Blanket(blanketName);
+    }
+
+
+
+    // DB에서 데이터 받아오거나, 저장하는 메서드
 
     public void Add_InventoryItem(string itemName, int count)
     {
@@ -356,6 +426,11 @@ public class GameManager : MonoBehaviour
         {
             ItemScript itemScript = Get_InventoryItem(itemName);
             if (itemScript != null) dbManager.Insert_InventoryItem(itemName, itemScript.itemType, count);
+        }
+
+        if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
+        {
+            OnBlanketInvenChanged?.Invoke(itemName, count); // 가게에 이불장에서 이불 삭제해, 재고 늘었다고 변경되었다고 알림
         }
     }
 
@@ -397,6 +472,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public List<(ItemScript, int count)> Get_Yarn_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Yarn();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Yarn(i.itemName), i.count));
+        }
+
+        return result;
+    }
+
+    public List<(ItemScript, int count)> Get_Cotton_Inventory()
+    {
+        List<Inventory> inven = dbManager.Select_Cotton();
+        List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
+
+        foreach (Inventory i in inven)
+        {
+            result.Add((Get_Cotton(i.itemName), i.count));
+        }
+
+        return result;
+    }
 
     public List<(ItemScript item, int count)> Get_Material_Inventory()
     {
@@ -410,7 +510,6 @@ public class GameManager : MonoBehaviour
 
         return result;
     }
-
 
     public List<(ItemScript item, int count)> Get_Blanket_Inventory()
     {
@@ -451,7 +550,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-
     public bool Use_InventoryItem(string itemName, int count)
     {
         if (count <= 0) return false;
@@ -465,9 +563,76 @@ public class GameManager : MonoBehaviour
 
     public bool Use_RoomInteriorItem(string interiorName, int x, int y)
     {
-        if(!dbManager.Have_InteriorItem(interiorName)) return false;
+        if (!dbManager.Have_InteriorItem(interiorName)) return false;
 
         if (dbManager.Set_InteriorItem(interiorName, x, y)) return true;
         else return false;
+    }
+
+    public void Add_Table_Blanket(int tableID, string blanketName, int count)
+    {
+        if (count <= 0) return;
+
+        if (dbManager.Have_Table_Blanket(tableID, blanketName))
+        {
+            dbManager.Change_TableBlanket_Count(tableID, blanketName, count);
+
+        }
+        else
+        {
+            ItemScript itemScript = Get_InventoryItem(blanketName);
+            if (itemScript != null) dbManager.Insert_TableBlanket(tableID, blanketName, count);
+        }
+
+        OnBlanketInvenChanged?.Invoke(blanketName, -count); // 가게에서, 이불장에 이불 넣어 인벤토리 이불량 줄어들었다고 알림
+    }
+
+    public bool Use_Table_Blanket(int tableID, string blanketName, int count)
+    {
+        if (count <= 0) return false;
+
+        if (!dbManager.Have_Table_Blanket(tableID, blanketName)) return false;
+
+        if (dbManager.Change_TableBlanket_Count(tableID, blanketName, -count)) return true;
+        else return false;
+    }
+
+    public List<(ItemScript blanket, int count)> Get_Table_Blanket(int tableID)
+    {
+        List<ShopTable> list = dbManager.Select_Table_Blanket(tableID);
+        List<(ItemScript blanket, int count)> result = new List<(ItemScript blanket, int count)>();
+
+        foreach (ShopTable st in list)
+        {
+            result.Add((Get_Blanket(st.blanketName), st.count));
+        }
+        return result;
+    }
+
+    public (InteriorScript table, bool isFull) Get_Current_Table(int tableID)
+    {
+        WorkShop workShop = dbManager.Select_WorkShop(tableID);
+        return (Get_InteriorItem(workShop.tableName), dbManager.Any_Table_Blanket(tableID));
+    }
+
+    public int Use_Random_BlanketInTable(int tableID) // 랜덤으로 해당 테이블에 있는 이불 한 개 선택, 선택된 이불의 가격 반환
+    {
+        if (!dbManager.Any_Table_Blanket(tableID)) return 0;
+
+        // 랜덤으로 한 개의 이불 선택
+        List<ShopTable> list = dbManager.Select_Table_Blanket(tableID);
+        int randomIdx = UnityEngine.Random.Range(0, list.Count);
+        ShopTable randomBlanket = list.ElementAt(randomIdx);
+        ItemScript blanketScript = Get_Blanket(randomBlanket.blanketName);
+
+        // 한 개 테이블에서 가져간 거 DB에 저장
+        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1))
+        {
+            OnTableBlanketChanged?.Invoke(tableID, blanketScript.itemName, -1); // 가게에서 변경된 값으로 UI 변경될 수 있도록 설정
+            
+            return blanketScript.value;
+        }
+        
+        else return 0;
     }
 }

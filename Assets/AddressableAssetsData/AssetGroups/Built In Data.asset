@@ -149,17 +149,17 @@ MonoBehaviour:
     m_SerializedLabels:
     - snack
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bfa12169db0a8d84184d01045d3d180c
-    m_Address: "Assets/ScriptableObject/Items/Blankets/\uB9AC\uBCF8\uC774\uBD88.asset"
+  - m_GUID: ec5cef518072c5e44a6c58d0306326d7
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uC6B0\uC8FC\uC19C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - blanket
+    - cotton
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d960f532dd4e16459fe08e3c7b1ebea
-    m_Address: "Assets/ScriptableObject/Items/Blankets/\uC6D0\uB2E8/\uC6B0\uC8FC\uC774\uBD88\uC6D0\uB2E8.asset"
+  - m_GUID: 6f84fda0c94aa7b429801e39435851ea
+    m_Address: Assets/ScriptableObject/Items/Cottons/NewItem.asset
     m_ReadOnly: 0
     m_SerializedLabels:
-    - material
+    - yarn
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

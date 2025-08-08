@@ -10,21 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
-  m_Name: "\uBE68\uAC15\uC774\uBD88"
+  m_Name: "\uC6B0\uC8FC\uC19C"
   m_EditorClassIdentifier: 
-  itemName: "\uBE68\uAC15\uC774\uBD88"
-  image: {fileID: 21300000, guid: 082a99622aa12f340b8effb5e21d0f5c, type: 3}
-  itemType: 4
+  itemName: "\uC6B0\uC8FC\uC19C"
+  image: {fileID: 21300000, guid: 396943abf36d81a4b86d0ff25c19ab49, type: 3}
+  itemType: 1
   level: 0
-  value: 1000
-  recipe:
-  - itemName: "\uC6B4\uBB34\uC19C"
-    count: 3
-  - itemName: "\uB2EC\uC870\uAC01"
-    count: 3
-  - itemName: "\uAFC8\uC2E4"
-    count: 3
-  designValue: 3000
+  value: 0
+  recipe: []
+  designValue: 0
   yarnName: 
   cottonName: 
   fullImage: {fileID: 0}
