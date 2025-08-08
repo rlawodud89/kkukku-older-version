@@ -17,16 +17,16 @@ public class Make_Cotton : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);  // Áßº¹ ¹æÁö
+            Destroy(gameObject);  // ì¤‘ë³µ ë°©ì§€
             return;
         }
 
         Instance = this;
     }
 
-    public void HandleMakeClicked(BlanketData currentBlanket)
+    public void HandleMakeClicked(ItemScript currentBlanket)
     {
-        Debug.Log("Make_Cotton¿¡¼­ Make ¹öÆ° Å¬¸¯µÊ °¨Áö!");
+        Debug.Log("Make_Cottonì—ì„œ Make ë²„íŠ¼ í´ë¦­ë¨ ê°ì§€!");
 
         cottonPanel.SetActive(false);   
         Employee2.Working();
@@ -42,21 +42,21 @@ public class Make_Cotton : MonoBehaviour
 
     }
 
-    void showcotton(BlanketData currentBlanket)
+    void showcotton(ItemScript currentBlanket)
     {
         if (currentBlanket != null)
         {
-            Debug.Log(currentBlanket.BlanketName + "¼Ø ³ÖÀº ¸ð½À");
+            Debug.Log(currentBlanket.itemName + "ì†œ ë„£ì€ ëª¨ìŠµ");
 
             BallonPanel.SetActive(true);
             CottonButton.gameObject.SetActive(true);
-            CottonButton.image.sprite = currentBlanket.Cotton;
+            //CottonButton.image.sprite = currentBlanket.Cotton;
 
             CottonButton.onClick.RemoveAllListeners();
             CottonButton.onClick.AddListener(() =>
             {
-                currentBlanket.CottonCount += 1;
-                sewingPanel?.SetSelectedBlanket(currentBlanket);
+                //currentBlanket.CottonCount += 1;
+                //sewingPanel?.SetSelectedBlanket(currentBlanket);
 
                 BallonPanel.SetActive(false);
                 CottonButton.gameObject.SetActive(false);

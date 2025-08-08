@@ -8,20 +8,27 @@ public class ItemScript : ScriptableObject
     public Sprite image;
     public ItemType itemType;
 
-    [Header("°£½Ä, Àç·á ·¹º§")]
+    [Header("ê°„ì‹, ì¬ë£Œ ë ˆë²¨")]
     public int level;
 
-    [Header("°£½ÄÀº È¸º¹·®, ³ª¸ÓÁö´Â ÆÇ¸Å°¡°İ")]
+    [Header("ê°„ì‹ì€ íšŒë³µëŸ‰, ë‚˜ë¨¸ì§€ëŠ” íŒë§¤ê°€ê²©")]
     public int value;
 
-    [Header("ÀÌºÒ Á¦ÀÛ ¶§ ÇÊ¿äÇÑ Àç·á ÀÌ¸§, ¼ö·® ¸®½ºÆ®")]
-    public List<RecipeEntry> recipe; // <(¾ÆÀÌÅÛ ÀÌ¸§, ÇÊ¿ä ¼ö·®)>
+    [Header("ì´ë¶ˆ ì œì‘ ë•Œ í•„ìš”í•œ ì¬ë£Œ ì´ë¦„, ìˆ˜ëŸ‰ ë¦¬ìŠ¤íŠ¸")]
+    public List<RecipeEntry> recipe; // <(ì•„ì´í…œ ì´ë¦„, í•„ìš” ìˆ˜ëŸ‰)>
 
-    [Header("ÀÌºÒ µğÀÚÀÎ °¡°İ")]
+    [Header("ì´ë¶ˆ ë””ìì¸ ê°€ê²©")]
     public int designValue;
 
-    [Header("ÀÌºÒÃ¢ Ã¡À» ¶§ ÀÌ¹ÌÁö")]
+    [Header("ì´ë¶ˆì°½ ì°¼ì„ ë•Œ ì´ë¯¸ì§€")]
     public Sprite fullImage;
+
+    [Header("ì†œ ë„£ì€ ìƒíƒœ ì•„ì´í…œ")]
+    public ItemScript cottonItem;
+
+    [Header("ë°”ëŠì§ˆ ì™„ë£Œ ìƒíƒœ ì•„ì´í…œ")]
+    public ItemScript sewingItem;
+
 }
 
 [System.Serializable]

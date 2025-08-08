@@ -10,7 +10,7 @@ public class CottonPanel : MonoBehaviour
     public StoragePanel storagePanel;
     public GameObject BallonPanel;
 
-    public BlanketData currentBlanket;
+    public ItemScript currentBlanket;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class CottonPanel : MonoBehaviour
         }
     }
 
-    public void SetSelectedBlanket(BlanketData blanket)
+    public void SetSelectedBlanket(ItemScript blanket)
     {
         currentBlanket = blanket;
 
@@ -42,13 +42,13 @@ public class CottonPanel : MonoBehaviour
     {
         bool foundSlot = false;
 
-        // 1. °°Àº µ¥ÀÌÅÍ °¡Áø ½½·Ô Ã£±â
+        // 1. ê°™ì€ ë°ì´í„° ê°€ì§„ ìŠ¬ë¡¯ ì°¾ê¸°
         for (int i = 0; i < scrollContent.childCount; i++)
         {
             var slot = scrollContent.GetChild(i);
             var ui = slot.GetComponent<BlanketSlotUI>();
 
-            // Cotton ½½·Ô¸¸ »ç¿ë
+            // Cotton ìŠ¬ë¡¯ë§Œ ì‚¬ìš©
             if (ui != null && ui.slotType == SlotType.Cotton && ui.HasData(currentBlanket))
             {
                 ui.SetData(currentBlanket);
@@ -57,7 +57,7 @@ public class CottonPanel : MonoBehaviour
             }
         }
 
-        // 2. ºó Cotton ½½·Ô Ã£¾Æ¼­ ¼¼ÆÃ
+        // 2. ë¹ˆ Cotton ìŠ¬ë¡¯ ì°¾ì•„ì„œ ì„¸íŒ…
         if (!foundSlot)
         {
             for (int i = 0; i < scrollContent.childCount; i++)
@@ -74,10 +74,10 @@ public class CottonPanel : MonoBehaviour
             }
         }
 
-        // 3. ½½·Ô ¾øÀ» ¶§¸¸ °æ°í
+        // 3. ìŠ¬ë¡¯ ì—†ì„ ë•Œë§Œ ê²½ê³ 
         if (!foundSlot)
         {
-            Debug.LogWarning("ºó Cotton ½½·ÔÀÌ ¾ø½À´Ï´Ù! ´õ ÀÌ»ó Ãß°¡ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ë¹ˆ Cotton ìŠ¬ë¡¯ì´ ì—†ìŠµë‹ˆë‹¤! ë” ì´ìƒ ì¶”ê°€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 }
