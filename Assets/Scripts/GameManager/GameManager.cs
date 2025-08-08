@@ -102,6 +102,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        dbManager = DBManager.getInstance();
+    }
+
     void Update()
     {
         playTime += (Time.deltaTime / gameDuration) * 3600;
@@ -559,14 +564,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public bool Use_RoomInteriorItem(string interiorName, int x, int y)
-    {
-        if (!dbManager.Have_InteriorItem(interiorName)) return false;
-
-        if (dbManager.Set_InteriorItem(interiorName, x, y)) return true;
-        else return false;
-    }
-
     public void Add_Table_Blanket(int tableID, string blanketName, int count)
     {
         if (count <= 0) return;
@@ -632,5 +629,20 @@ public class GameManager : MonoBehaviour
         }
         
         else return 0;
+    }
+
+    public bool Use_RoomInteriorItem(string interiorName, int x, int y)
+    {
+        return dbManager.Set_InteriorItem(interiorName, x, y);
+    }
+
+    public bool Move_RoomInteriorItem(int beforeX, int beforeY, int afterX, int afterY)
+    {
+        return dbManager.Change_InteriorItem_Pos(beforeX, beforeY, afterX, afterY);
+    }
+
+    public bool Back_RoomInteriorItem(int x, int y)
+    {
+        return dbManager.NotSet_InteriorItem(x, y);
     }
 }
