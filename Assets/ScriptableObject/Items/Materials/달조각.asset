@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\uB2EC\uC870\uAC01"
   image: {fileID: 21300000, guid: 7d54deec7a250e34e95c808bfce6a822, type: 3}
-  itemType: 2
+  itemType: 3
+  level: 0
   value: 200
   recipe: []
   designValue: 0

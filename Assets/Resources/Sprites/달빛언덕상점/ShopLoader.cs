@@ -5,7 +5,7 @@ public class ShopLoader : MonoBehaviour
 {
     [SerializeField] Transform contentRoot; // FlowLayoutGroup
     [SerializeField] ItemCard cardPrefab;
-    [SerializeField] List<ItemData> stock;       // ÀÎ½ºÆåÅÍ ¹è¿­
+    [SerializeField] List<ItemData> stock;       // ì¸ìŠ¤í™í„° ë°°ì—´
     [SerializeField] PurchaseConfirmPopup popup;
     [SerializeField] ShopType shopType;
 
@@ -43,6 +43,7 @@ public class ShopLoader : MonoBehaviour
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
                 itemData.price = interiorScript.value;
+                itemData.useQuantity = false;
                 itemData.isGold = true;
                 stock.Add(itemData);
                 uniqueList.Add(itemData.displayName);
@@ -82,7 +83,7 @@ public class ShopLoader : MonoBehaviour
                 uniqueList.Add(itemData.displayName);
             }
         }
-        // Á÷¿øÀº Inspector¿¡¼­ ¼³Á¤
+        // ì§ì›ì€ Inspectorì—ì„œ ì„¤ì •
 
         foreach (var data in stock)
         {
@@ -91,88 +92,105 @@ public class ShopLoader : MonoBehaviour
         }
     }
 
-    // Ä«µå°¡ ±¸¸Å ¹öÆ°À» ´­·¶À» ¶§ È£Ãâ
+    // ì¹´ë“œê°€ êµ¬ë§¤ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ í˜¸ì¶œ
     void OnBuyRequest(ItemCard card)
     {
         popup.Show(card, () => FinalizePurchase(card));
     }
 
-    // YES ´­·¶À» ¶§
+    // YES ëˆŒë €ì„ ë•Œ
     void FinalizePurchase(ItemCard card)
     {
-        if (card.IsRecruit) // ¼ö·® ÇÊ¿ä¾ø´Â °æ¿ì
+        if (card.IsRecruit) // ìˆ˜ëŸ‰ í•„ìš”ì—†ëŠ” ê²½ìš°
         {
-            Debug.Log($"µğÀÚÀÎ ! : {card.Data.displayName}");
+            Debug.Log($"ë””ìì¸ ! : {card.Data.displayName}");
 
-            if (shopType == ShopType.BLANKET) // ÀÌºÒ µğÀÚÀÎ
+            if(shopType == ShopType.SHOP_INTERIOR) // ê°€ê²Œ ì¸í…Œë¦¬ì–´ (ìˆ˜ëŸ‰ í•„ìš”ì—†ì´ ê²‰ë§Œ ë°”ë€œ)
             {
-                if (card.Data.price > gameManager.Get_Moonrock())
-                {
-                    Debug.Log("¿ù¼® ºÎÁ·");
-                    return;
-                }
-
-                if (gameManager.Add_Design(card.Data.displayName)) // ¾ø´ø µğÀÚÀÎÀÌ¶ó Ãß°¡µÆÀ¸¸é
-                {
-                    gameManager.Change_Moonrock(-card.Data.price);
-                }
-                else
-                {
-                    Debug.Log("ÀÌ¹Ì ÀÖ´Â µğÀÚÀÎÀÌ¹Ç·Î Ãß°¡ X");
-                }
-            }
-            else if(shopType == ShopType.TILE) // Å¸ÀÏ
-            {
-                // TODO: Å¸ÀÏ UI ¸¸µé¾îÁø ÈÄ, DB ¿¬°á È®ÀÎ
-
                 if (card.Data.price > gameManager.Get_Gold())
                 {
-                    Debug.Log("ÀçÈ­ ºÎÁ·");
+                    Debug.Log("ì¬í™” ë¶€ì¡±");
                     return;
                 }
 
-                if (gameManager.Add_TileItem(card.Data.displayName)) // ¾ø´ø Å¸ÀÏÀÌ¶ó Ãß°¡µÆÀ¸¸é
+                if (gameManager.Add_InteriorItem(card.Data.displayName, 1)) // ì—†ë˜ ì•„ì´í…œì´ë¼ ì¶”ê°€ëìœ¼ë©´
                 {
                     gameManager.Change_Gold(-card.Data.price);
                 }
                 else
                 {
-                    Debug.Log("ÀÌ¹Ì ÀÖ´Â Å¸ÀÏÀÌ¹Ç·Î Ãß°¡ X");
+                    Debug.Log("ì´ë¯¸ ìˆëŠ” ì¸í…Œë¦¬ì–´ì´ë¯€ë¡œ ì¶”ê°€ X");
+                }
+            }
+            else if (shopType == ShopType.BLANKET) // ì´ë¶ˆ ë””ìì¸
+            {
+                if (card.Data.price > gameManager.Get_Moonrock())
+                {
+                    Debug.Log("ì›”ì„ ë¶€ì¡±");
+                    return;
+                }
+
+                if (gameManager.Add_BlanketDesign(card.Data.displayName)) // ì—†ë˜ ë””ìì¸ì´ë¼ ì¶”ê°€ëìœ¼ë©´
+                {
+                    gameManager.Change_Moonrock(-card.Data.price);
+                }
+                else
+                {
+                    Debug.Log("ì´ë¯¸ ìˆëŠ” ë””ìì¸ì´ë¯€ë¡œ ì¶”ê°€ X");
+                }
+            }
+            else if(shopType == ShopType.TILE) // íƒ€ì¼
+            {
+                // TODO: íƒ€ì¼ UI ë§Œë“¤ì–´ì§„ í›„, DB ì—°ê²° í™•ì¸
+
+                if (card.Data.price > gameManager.Get_Gold())
+                {
+                    Debug.Log("ì¬í™” ë¶€ì¡±");
+                    return;
+                }
+
+                if (gameManager.Add_TileItem(card.Data.displayName)) // ì—†ë˜ íƒ€ì¼ì´ë¼ ì¶”ê°€ëìœ¼ë©´
+                {
+                    gameManager.Change_Gold(-card.Data.price);
+                }
+                else
+                {
+                    Debug.Log("ì´ë¯¸ ìˆëŠ” íƒ€ì¼ì´ë¯€ë¡œ ì¶”ê°€ X");
                 }
             }
         }
         else
         {
             int cost = card.Data.price * card.Quantity;
-            Debug.Log($"¾ÆÀÌÅÛ ±¸¸Å : {card.Data.displayName} x{card.Quantity} , ºñ¿ë {cost}");
+            Debug.Log($"ì•„ì´í…œ êµ¬ë§¤ : {card.Data.displayName} x{card.Quantity} , ë¹„ìš© {cost}");
             
-            // ex) ÄÚÀÎ Â÷°¨, ÀÎº¥Åä¸® Ãß°¡ µî
+            // ex) ì½”ì¸ ì°¨ê°, ì¸ë²¤í† ë¦¬ ì¶”ê°€ ë“±
 
-            if(card.Data.isGold) // Å¸ÀÏ Á¦¿Ü ÀÎÅ×¸®¾î (ÀÏ¹İ ÀçÈ­ »ç¿ë)
+            if(card.Data.isGold) // ì‘ì—…ì‹¤ ì¸í…Œë¦¬ì–´ (ì¼ë°˜ ì¬í™” ì‚¬ìš©, ìˆ˜ëŸ‰ O)
             {
                 if (cost > gameManager.Get_Gold())
                 {
-                    Debug.Log("ÀçÈ­ ºÎÁ·");
+                    Debug.Log("ì¬í™” ë¶€ì¡±");
                     return;
                 }
 
                 gameManager.Change_Gold(-cost);
                 gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity);
             }
-            else // ¿ù¼® »ç¿ë °¡°Ô
+            else // ì›”ì„ ì‚¬ìš© ê°€ê²Œ
             {
                 if (cost > gameManager.Get_Moonrock())
                 {
-                    Debug.Log("¿ù¼® ºÎÁ·");
+                    Debug.Log("ì›”ì„ ë¶€ì¡±");
                     return;
                 }
 
                 gameManager.Change_Moonrock(-cost);
 
-                if (shopType == ShopType.WORKER) { // Á÷¿ø
+                if (shopType == ShopType.WORKER) { // ì§ì›
                     gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity);
                 }
-                else // ¸é, ¼Ø, Àå½Ä
+                else // ë©´, ì†œ, ì¥ì‹
                 {
                     gameManager.Add_InventoryItem(card.Data.displayName, card.Quantity);
                 }

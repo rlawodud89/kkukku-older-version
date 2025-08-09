@@ -5,20 +5,20 @@ using UnityEngine.UI;
 
 public class UpgradeShopController1 : MonoBehaviour
 {
-    [Header("¾÷±×·¹ÀÌµå ¹öÆ°µé")]
-    [SerializeField] Button loomButton;        // Á÷Á¶±â ¾÷±×·¹ÀÌµå
-    [SerializeField] Button fillerButton;      // ÃæÁø±â ¾÷±×·¹ÀÌµå
-    [SerializeField] Button decoTableButton;   // Àå½Ä Å×ÀÌºí ¾÷±×·¹ÀÌµå
+    [Header("ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼ë“¤")]
+    [SerializeField] Button loomButton;        // ì§ì¡°ê¸° ì—…ê·¸ë ˆì´ë“œ
+    [SerializeField] Button fillerButton;      // ì¶©ì§„ê¸° ì—…ê·¸ë ˆì´ë“œ
+    [SerializeField] Button decoTableButton;   // ì¥ì‹ í…Œì´ë¸” ì—…ê·¸ë ˆì´ë“œ
 
-    [Header("·¹º§ ÅØ½ºÆ®µé")]
+    [Header("ë ˆë²¨ í…ìŠ¤íŠ¸ë“¤")]
     [SerializeField] TMP_Text loomLevelText;        
     [SerializeField] TMP_Text fillerLevelText;     
     [SerializeField] TMP_Text decoLevelText;   
 
-    [Header("ÆË¾÷")]
+    [Header("íŒì—…")]
     [SerializeField] PurchaseConfirmPopup popup;
 
-    [Header("°¡°İ ¼³Á¤")]
+    [Header("ê°€ê²© ì„¤ì •")]
     [SerializeField] int loomPrice = 3000;
     [SerializeField] int fillerPrice = 5000;
     [SerializeField] int decoTablePrice = 8000;
@@ -34,19 +34,19 @@ public class UpgradeShopController1 : MonoBehaviour
 
         loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel();
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
-        decoLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
+        decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel();
     }
 
     void OnLoomClick()
     {
         if (!CanBuy(loomPrice))
         {
-            Debug.Log("ÀçÈ­ ºÎÁ·");
+            Debug.Log("ì¬í™” ë¶€ì¡±");
             return;
         }
 
         popup.ShowMessage(
-            $"Á÷Á¶±â ¾÷±×·¹ÀÌµå (°¡°İ {loomPrice} G)\nÁøÇàÇÏ½Ã°Ú½À´Ï±î?",
+            $"ì§ì¡°ê¸° ì—…ê·¸ë ˆì´ë“œ (ê°€ê²© {loomPrice} G)\nì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             DoLoomUpgrade);
     }
 
@@ -54,12 +54,12 @@ public class UpgradeShopController1 : MonoBehaviour
     {
         if (!CanBuy(fillerPrice))
         {
-            Debug.Log("ÀçÈ­ ºÎÁ·");
+            Debug.Log("ì¬í™” ë¶€ì¡±");
             return;
         }
 
         popup.ShowMessage(
-            $"ÃæÁø±â ¾÷±×·¹ÀÌµå (°¡°İ {fillerPrice} G)\nÁøÇàÇÏ½Ã°Ú½À´Ï±î?",
+            $"ì¶©ì§„ê¸° ì—…ê·¸ë ˆì´ë“œ (ê°€ê²© {fillerPrice} G)\nì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             DoFillerUpgrade);
     }
 
@@ -67,12 +67,12 @@ public class UpgradeShopController1 : MonoBehaviour
     {
         if (!CanBuy(decoTablePrice))
         {
-            Debug.Log("ÀçÈ­ ºÎÁ·");
+            Debug.Log("ì¬í™” ë¶€ì¡±");
             return;
         }
 
         popup.ShowMessage(
-            $"Àå½Ä Å×ÀÌºí ¾÷±×·¹ÀÌµå (°¡°İ {decoTablePrice} G)\nÁøÇàÇÏ½Ã°Ú½À´Ï±î?",
+            $"ì¥ì‹ í…Œì´ë¸” ì—…ê·¸ë ˆì´ë“œ (ê°€ê²© {decoTablePrice} G)\nì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             DoDecoTableUpgrade);
     }
 
@@ -81,7 +81,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-loomPrice);
         gameManager.Change_LoomLevel(1);
         loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel().ToString();
-        Debug.Log("Á÷Á¶±â ¾÷±×·¹ÀÌµå ¿Ï·á!");
+        Debug.Log("ì§ì¡°ê¸° ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ!");
     }
 
     void DoFillerUpgrade()
@@ -89,7 +89,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-fillerPrice);
         gameManager.Change_FillerLevel(1);
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel().ToString();
-        Debug.Log("ÃæÁø±â ¾÷±×·¹ÀÌµå ¿Ï·á!");
+        Debug.Log("ì¶©ì§„ê¸° ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ!");
     }
 
     void DoDecoTableUpgrade()
@@ -97,7 +97,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-decoTablePrice);
         gameManager.Change_DecoLevel(1);
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel().ToString();
-        Debug.Log("Àå½Ä Å×ÀÌºí ¾÷±×·¹ÀÌµå ¿Ï·á!");
+        Debug.Log("ì¥ì‹ í…Œì´ë¸” ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ!");
     }
 
     private bool CanBuy(int value)
