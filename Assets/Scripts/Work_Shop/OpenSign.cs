@@ -6,37 +6,42 @@ public class OpenSign : MonoBehaviour
 {
     public Sprite openSprite;
     public Sprite closeSprite;
-    private bool open;
-
     private SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
+    private GameManager gameManager;
+
     void Start()
     {
-        open = false;
+        gameManager = GameManager.getInstance();
+        gameManager.OnOpenChanged += UpdateSign;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
+
+        if (gameManager.Get_IsOpen())
+        {
+            spriteRenderer.sprite = openSprite;
+        }
+        else
         {
             spriteRenderer.sprite = closeSprite;
         }
+
     }
 
-    void OnMouseDown()
+    void OnDisable()
     {
-        Debug.Log("Sign click");
+        gameManager.OnOpenChanged -= UpdateSign;
+    }
 
-        if(spriteRenderer != null)
+    void UpdateSign(bool isOpen)
+    {
+        if (isOpen)
         {
-            if (open)
-            {
-                open = false;
-                spriteRenderer.sprite = closeSprite;
-            }
-            else
-            {
-                open = true;
-                spriteRenderer.sprite = openSprite;
-            }
+            spriteRenderer.sprite = openSprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = closeSprite;
         }
     }
 

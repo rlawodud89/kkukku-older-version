@@ -95,12 +95,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - material
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cf1860182bef45f4a8915917be6bc4de
-    m_Address: "Assets/ScriptableObject/Items/Snacks/\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - snack
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a8e9d1959291935409f2de75a48905ef
     m_Address: "Assets/ScriptableObject/Items/Snacks/\uC878\uB9B0\uBCA0\uB9AC.asset"
     m_ReadOnly: 0
@@ -118,6 +112,54 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c93f46e1c4ee3934eb7de4e98864baa3
+    m_Address: Assets/ScriptableObject/Items/Snacks/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3151aa72febf0ea4b8be3e71c273aa01
+    m_Address: Assets/ScriptableObject/Items/Snacks/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31e093fafd521bd4d9923f92ccf8129c
+    m_Address: Assets/ScriptableObject/Items/Snacks/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f1d1bdb0921635478fd5324bbb34636
+    m_Address: "Assets/ScriptableObject/Items/Snacks/\uC0AC\uD0D5\uADE4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bc365724f801de45ae538ea0234e25e
+    m_Address: Assets/ScriptableObject/Items/Snacks/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2106f3d73971c054891f7aea851a3bda
+    m_Address: "Assets/ScriptableObject/Items/Snacks/\uC824\uB9AC\uBB34\uD654\uACFC.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - snack
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec5cef518072c5e44a6c58d0306326d7
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uC6B0\uC8FC\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f84fda0c94aa7b429801e39435851ea
+    m_Address: Assets/ScriptableObject/Items/Cottons/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
