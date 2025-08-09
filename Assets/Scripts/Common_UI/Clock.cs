@@ -12,6 +12,8 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Transform clockHandTransform;
     private GameObject timeTextObject;
 
+    public GameObject DayEndPanel;
+
     private GameManager gameManager;
 
     // Start is called before the first frame update
@@ -31,7 +33,14 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     // Update is called once per frame
     void Update()
     {
-
+        if(gameManager.Get_Hours() == 24 && gameManager.Get_Minutes() == 0)
+        {
+            // 하루가 끝났을 때, DayEndPanel을 활성화
+            if (DayEndPanel != null)
+            {
+                DayEndPanel.SetActive(true);
+            }
+        }
     }
 
     void AddOneMinute()
