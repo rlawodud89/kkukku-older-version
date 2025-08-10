@@ -161,6 +161,36 @@ MonoBehaviour:
     m_SerializedLabels:
     - yarn
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce89a9082ccd49f4b9d208cddf464ee8
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uD759\uD0C0\uC77C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e9af97f522cef44a9181980f3753e71
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB098\uBB34\uD0C0\uC77C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: adb9fd3e783795a4783a331d3eec6e00
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uD770\uB098\uBB34\uD0C0\uC77C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 411d58b8d83befd4da67c1b43ab4175b
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB3CC\uBCBD.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5ca3e44558eb2a4382345b1a569dcb2
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB098\uBB34\uBCBD.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

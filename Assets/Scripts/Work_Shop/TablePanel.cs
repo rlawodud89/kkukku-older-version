@@ -47,7 +47,7 @@ public class TablePanel : MonoBehaviour
         string Selected_itemName = SelectedBtn.blanketScript.itemName;
         int Selected_BlanketCount = SelectedBtn.BlanketCount;
 
-        if (gameManager.Use_Table_Blanket(tableID, Selected_itemName, Selected_BlanketCount, false))
+        if (gameManager.Use_Table_Blanket(tableID, Selected_itemName, Selected_BlanketCount))
         {
             gameManager.Add_InventoryItem(Selected_itemName, Selected_BlanketCount);
         }

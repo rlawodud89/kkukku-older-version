@@ -57,6 +57,7 @@ public class DBManager
     public void Update_User(int energy, int gold, int moonrock, float playTime)
     {
         User user = conn.Find<User>(userName);
+
         user.energy = energy;
         user.gold = gold;
         user.moonrock = moonrock;

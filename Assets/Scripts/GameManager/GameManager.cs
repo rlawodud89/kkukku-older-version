@@ -72,39 +72,32 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            dbManager = DBManager.getInstance();
-            //dbManager.InitDB();
-
-            User user = dbManager.Get_User();
-            energy = user.energy;
-            gold = user.gold;
-            moonrock = user.moonrock;
-            designshopLevel = user.designshopLevel;
-            itemshopLevel = user.itemshopLevel;
-            loomLevel = user.loomLevel;
-            fillerLevel = user.fillerLevel;
-            decoLevel = user.decoLevel;
-            playTime = user.playTime;
-            endScene = user.endScene;
-            isOpen = user.isOpen;
-
-            LoadAllScriptableObjects();
-
-        }
-        else
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return; // 기존 인스턴스 유지, 새 객체는 바로 리턴
         }
-    }
 
-    void Start()
-    {
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
         dbManager = DBManager.getInstance();
+        //dbManager.InitDB();
+
+        User user = dbManager.Get_User();
+        energy = user.energy;
+        gold = user.gold;
+        moonrock = user.moonrock;
+        designshopLevel = user.designshopLevel;
+        itemshopLevel = user.itemshopLevel;
+        loomLevel = user.loomLevel;
+        fillerLevel = user.fillerLevel;
+        decoLevel = user.decoLevel;
+        playTime = user.playTime;
+        endScene = user.endScene;
+        isOpen = user.isOpen;
+
+        LoadAllScriptableObjects();
     }
 
     void Update()
@@ -159,9 +152,10 @@ public class GameManager : MonoBehaviour
         Workers = Addressables.LoadAssetsAsync<InteriorScript>("worker", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.interiorName);
-        /*Tiles = Addressables.LoadAssetsAsync<InteriorScript>("tile", null)
+        Tiles = Addressables.LoadAssetsAsync<InteriorScript>("tile", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.interiorName);
+        /*
         Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.customerName);
@@ -170,7 +164,8 @@ public class GameManager : MonoBehaviour
                 .ToDictionary(i => i.questName);
         Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.letterName);*/
+                .ToDictionary(i => i.letterName);
+        */
 
         foreach (var blanket in Blankets)
         {
@@ -431,10 +426,28 @@ public class GameManager : MonoBehaviour
             if (itemScript != null) dbManager.Insert_InventoryItem(itemName, itemScript.itemType, count);
         }
 
-        if(Get_InventoryItem(itemName).itemType == ItemType.BLANKET) 
+        if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
         {
             OnBlanketInvenChanged?.Invoke(itemName, count); // 가게에 인벤토리 이불량 늘었다고 알림
         }
+    }
+
+    public bool Use_InventoryItem(string itemName, int count)
+    {
+        if (count <= 0) return false;
+
+        if (!dbManager.Have_Inventory(itemName)) return false;
+
+        if (dbManager.Change_InventoryItem_Count(itemName, -count))
+        {
+            if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
+            {
+                OnBlanketInvenChanged?.Invoke(itemName, -count); // 가게에 이불 사용해서 재고 줄었다고 변경되었다고 알림
+            }
+
+            return true;
+        }
+        else return false;
     }
 
     public bool Add_BlanketDesign(string blanketName)
@@ -553,23 +566,6 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
-    public bool Use_InventoryItem(string itemName, int count)
-    {
-        if (count <= 0) return false;
-
-        if (!dbManager.Have_Inventory(itemName)) return false;
-
-        if (dbManager.Change_InventoryItem_Count(itemName, -count)) {
-            if (Get_InventoryItem(itemName).itemType == ItemType.BLANKET)
-            {
-                OnBlanketInvenChanged?.Invoke(itemName, -count); // 가게에 이불 사용해서 재고 줄었다고 변경되었다고 알림
-            }
-
-            return true;
-        } 
-        else return false;
-    }
-
     public void Add_Table_Blanket(int tableID, string blanketName, int count)
     {
         if (count <= 0) return;
@@ -585,11 +581,10 @@ public class GameManager : MonoBehaviour
             if (itemScript != null) dbManager.Insert_TableBlanket(tableID, blanketName, count);
         }
 
-        //OnBlanketInvenChanged?.Invoke(blanketName, -count); // 가게에서, 이불장에 이불 넣어 인벤토리 이불량 줄어들었다고 알림
         OnTableBlanketChanged?.Invoke(tableID, blanketName, count); // 이불장엔 이불량 늘었다고 알림 
     }
 
-    public bool Use_Table_Blanket(int tableID, string blanketName, int count, bool isCustomer)
+    public bool Use_Table_Blanket(int tableID, string blanketName, int count)
     {
         if (count <= 0) return false;
 
@@ -598,11 +593,6 @@ public class GameManager : MonoBehaviour
         if (dbManager.Change_TableBlanket_Count(tableID, blanketName, -count))
         {
             OnTableBlanketChanged?.Invoke(tableID, blanketName, -count); // 이불장에 이불 줄었다고 알림
-            if (!isCustomer)
-            {
-                //OnBlanketInvenChanged?.Invoke(blanketName, count);
-            }
-            // 손님이 사간 게 아니라 사용자가 삭제한 거라면, 인벤토리 이불량 늘었다고 알림
 
             return true;
         }
@@ -638,8 +628,8 @@ public class GameManager : MonoBehaviour
         ItemScript blanketScript = Get_Blanket(randomBlanket.blanketName);
 
         // 한 개 테이블에서 가져간 거 DB에 저장
-        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1, true))
-        { 
+        if (Use_Table_Blanket(tableID, blanketScript.itemName, 1))
+        {
             return blanketScript.value;
         }
 
