@@ -44,6 +44,8 @@ public class TablePanel : MonoBehaviour
 
     public void ClickDeleteBtn()
     {
+        if (SelectedBtn == null) return;
+
         string Selected_itemName = SelectedBtn.blanketScript.itemName;
         int Selected_BlanketCount = SelectedBtn.BlanketCount;
 

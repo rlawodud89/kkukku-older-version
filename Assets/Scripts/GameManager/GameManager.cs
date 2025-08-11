@@ -289,9 +289,17 @@ public class GameManager : MonoBehaviour
     public ItemScript Get_Material(string materialName) { return Materials[materialName]; }
     public ItemScript Get_Random_Material()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Materials.Count);
-        var randomMaterial = Materials.ElementAt(randomIdx);
-        return randomMaterial.Value;
+        int randomlevel = Get_RandomLevel();
+
+        int randomIdx;
+        KeyValuePair<string, ItemScript> randomSnank;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Snacks.Count);
+            randomSnank = Snacks.ElementAt(randomIdx);
+        } while (randomSnank.Value.level != randomlevel);
+
+        return randomSnank.Value;
     }
 
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
