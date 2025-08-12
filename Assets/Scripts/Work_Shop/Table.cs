@@ -27,6 +27,8 @@ public class Table : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (gameManager.isDayEndPanel) return;
+
         // 마우스가 UI 위에 있을 경우 → 클릭 무시
         if (IsPointerOverUI())
         {

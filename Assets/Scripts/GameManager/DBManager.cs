@@ -36,6 +36,9 @@ public class DBManager
         user.energy = 0;
         user.gold = 1000;
         user.moonrock = 1000;
+        user.todayEnergy = 0;
+        user.todayGold = 0;
+        user.todayMoonrock = 0;
         user.playTime = 0;
         user.designshopLevel = 1;
         user.itemshopLevel = 1;
@@ -62,6 +65,13 @@ public class DBManager
         conn.Update(user);
     }
 
+    public void Update_Energy(int energy)
+    {
+        User user = conn.Find<User>(userName);
+        user.energy = energy;
+        conn.Update(user);
+    }
+
     public void Update_Gold(int gold)
     {
         User user = conn.Find<User>(userName);
@@ -76,13 +86,29 @@ public class DBManager
         conn.Update(user);
     }
 
-    public void Update_Energy(int energy)
+    public void Update_TodayEnergy(int todayEnergy)
     {
         User user = conn.Find<User>(userName);
-        user.energy = energy;
+        user.todayEnergy = todayEnergy;
         conn.Update(user);
     }
 
+
+    public void Update_TodayGold(int todayGold)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayGold = todayGold;
+        conn.Update(user);
+    }
+
+    public void Update_TodayMoonrock(int todayMoonrock)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayMoonrock = todayMoonrock;
+        conn.Update(user);
+    }
+
+    
     public void Update_DesginShopLevel(int level)
     {
         User user = conn.Find<User>(userName);
