@@ -96,5 +96,12 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
        //Debug.Log("마우스가 시계를 벗어났습니다.");
     }
 
+    public void DayEndPanelClose()
+    {
+        if (DayEndPanel != null)
+        {
+            DayEndPanel.SetActive(false);
+        }
+    }
 
 }

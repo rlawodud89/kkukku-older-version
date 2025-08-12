@@ -6,13 +6,14 @@ public class InteriorScript : ScriptableObject
     public string interiorName;
     public InteriorType interiorType;
     public Sprite image;
+    public GameObject prefab; // ìƒì„±í•  í”„ë¦¬íŒ¹
 
-    [Header("±¸¸Å °¡°İ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public int value;
 
-    [Header("ÀÌºÒÀå Ã¡À» ¶§ »çÁø")]
+    [Header("ï¿½Ìºï¿½ï¿½ï¿½ Ã¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public Sprite fullImage;
 
-    [Header("Á÷¿ø ÀÏ ´Ü°è, Á÷¿ø ¾Æ´Ñ °æ¿ì NONE")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ NONE")]
     public WorkType workType;
 }
