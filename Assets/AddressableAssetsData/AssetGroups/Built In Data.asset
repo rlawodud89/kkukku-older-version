@@ -191,6 +191,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fe07f58dfac0cb4c89b33258bad5081
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/\uC9D9\uC740\uB098\uBB34\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

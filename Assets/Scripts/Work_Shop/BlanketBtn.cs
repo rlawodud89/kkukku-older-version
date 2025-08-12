@@ -43,12 +43,12 @@ public class BlanketBtn : ScrollBtn
         {
             TablePanel.Delete_In_BlanketBtnDic(blanketScript.itemName);
             Destroy(this.gameObject);
+            return true;
         }
         else
         {
             CountText.text = BlanketCount.ToString();
+            return true;
         }
-
-        return true;
     }
 }
