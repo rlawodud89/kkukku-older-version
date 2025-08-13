@@ -25,6 +25,7 @@ public class InteriorManager : MonoBehaviour
     // 테스트용
     public InteriorScript furnitureItem;
     public InteriorScript workerItem;
+    public InteriorScript tileItem;
 
 
     private Transform itemParent;
@@ -40,6 +41,7 @@ public class InteriorManager : MonoBehaviour
         // 테스트
         interiorItems.Add((furnitureItem, 1));
         interiorItems.Add((workerItem, 1));
+        interiorItems.Add((tileItem, 1));
 
         itemParent = GameObject.Find("Pixels")?.transform;
     }
@@ -101,7 +103,7 @@ public class InteriorManager : MonoBehaviour
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-               // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickTileItem(item));
             }
         }
     }
@@ -135,11 +137,20 @@ public class InteriorManager : MonoBehaviour
     public void ClickInteriorItem(InteriorScript item)
     {
        PanelClose();
+       
        // 작업실위에 생성
        GameObject itemObject=Instantiate(item.prefab,spawnPos, item.prefab.transform.rotation, itemParent);
         var click = itemObject.GetComponent<ClickInteriorItem>();
        click.Select();
 
+    }
+
+    // 타일 클릭 시
+    public void ClickTileItem(InteriorScript item)
+    {
+        PanelClose();
+
+        // 타일 디자인 바꾸기
     }
 
     public void PanelOpen()
