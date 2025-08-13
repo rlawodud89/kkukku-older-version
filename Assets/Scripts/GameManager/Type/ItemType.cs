@@ -1,6 +1,6 @@
 public enum ItemType
 {
-    YARN,
+    YARN = 0,
     COTTON,
     DECO,
     MATERIAL,

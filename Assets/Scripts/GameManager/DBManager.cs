@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
+using Unity.VisualScripting;
 
 
 public class DBManager
@@ -54,14 +55,31 @@ public class DBManager
         return conn.Find<User>(userName); //지정한 이름(기본키)으로 찾기
     }
 
-    public void Update_User(int energy, int gold, int moonrock, float playTime)
+    public void Update_PlayTime(float playTime)
+    {
+        User user = conn.Find<User>(userName);
+        user.playTime = playTime;
+        conn.Update(user);
+    }
+
+    public void Update_Gold(int gold)
+    {
+        User user = conn.Find<User>(userName);
+        user.gold = gold;
+        conn.Update(user);
+    }
+
+    public void Update_Moonrock(int moonrock)
+    {
+        User user = conn.Find<User>(userName);
+        user.moonrock = moonrock;
+        conn.Update(user);
+    }
+
+    public void Update_Energy(int energy)
     {
         User user = conn.Find<User>(userName);
         user.energy = energy;
-        user.gold = gold;
-        user.moonrock = moonrock;
-        user.playTime = playTime;
-
         conn.Update(user);
     }
 
@@ -174,7 +192,7 @@ public class DBManager
         }
     }
 
-    public void Insert_Tile(string tileName, InteriorType interiorType)
+    public void Insert_New_Tile(string tileName, InteriorType interiorType)
     {
         Interior interior = new Interior();
         interior.interiorName = tileName;
@@ -220,7 +238,7 @@ public class DBManager
                .ToList();
     }
 
-    public List<(string itemName, int count)> Select_RoomInterior()
+    public List<(string itemName, int count)> Select_RoomInterior_Inventory()
     {
         return conn.Table<Interior>()
                 .Where(x => x.isSet == false
@@ -290,7 +308,7 @@ public class DBManager
             Debug.LogError("쿼리 실패 (예상: ShopTable PK 위반)");
             return false;
         }
-        
+
     }
 
     public WorkShop Select_WorkShop(int tableID)
@@ -304,6 +322,45 @@ public class DBManager
             .Any(x => x.tableID == tableID);
     }
 
+    public bool Insert_Worker(string workerName, int x, int y)
+    {
+        try
+        {
+            WorkRoom newWorkRoom = new WorkRoom();
+            newWorkRoom.workerName = workerName;
+            conn.Insert(newWorkRoom);
+
+            Debug.Log("ID" + newWorkRoom.workerID);
+
+            int affectedRows = conn.Execute( "UPDATE Interior SET ID = ? " +
+                "WHERE interiorName = ? AND isSet = 1 AND x = ? AND y = ?",
+                newWorkRoom.workerID, workerName, x, y);
+
+            return affectedRows > 0;
+
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public bool Delete_Worker(int workerId)
+    {
+        try
+        {
+            WorkRoom workRoom = conn.Find<WorkRoom>(workerId);
+            conn.Delete(workRoom);
+            return true;
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
     public bool Set_InteriorItem(string interiorName, int x, int y) // 없던 인테리어 아이템을 좌표에 위치시키는 메서드
     {
         try
@@ -311,7 +368,7 @@ public class DBManager
             // 아직 설치하지 않은 interiorName의 아이템 중 가장 오래된 것 하나를 선택해서 update
             int affectedRows = conn.Execute("UPDATE Interior SET isSet = 1, x = ?, y = ? " +
                "WHERE rowid = (SELECT rowid FROM Interior WHERE interiorName = ? AND isSet = 0 " +
-                               "ORDER BY rowid ASC LIMIT 1",
+                               "ORDER BY rowid ASC LIMIT 1)",
                                x, y, interiorName);
 
             return affectedRows > 0; // update된 행이 있다면 true, 없다면 false
@@ -343,6 +400,15 @@ public class DBManager
     {
         try
         {
+            Interior interior = conn.Table<Interior>()
+                .Where(i => i.isSet == true && i.x == x && i.y == y)
+                .FirstOrDefault();
+
+            if (interior.interiorType == InteriorType.WORKER)
+            {
+                if (!Delete_Worker(interior.ID)) return false;
+            }
+
             int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
                     x, y);
 
@@ -355,6 +421,22 @@ public class DBManager
         }
     }
 
+    public List<Interior> Select_Current_RoomInterior()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.isSet == true && (i.interiorType == InteriorType.ROOM_INTERIROR || i.interiorType == InteriorType.WORKER))
+            .ToList();
+    }
 
+    public Tile Select_Tile(TilePosType tilePosType)
+    {
+        return conn.Find<Tile>(tilePosType);
+    }
 
+    public void Update_Tile(TilePosType tilePosType, string tileName)
+    {
+        Tile tile = conn.Find<Tile>(tilePosType);
+        tile.tileName = tileName;
+        conn.Update(tile);
+    }
 }
