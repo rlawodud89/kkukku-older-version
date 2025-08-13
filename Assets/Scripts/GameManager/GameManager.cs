@@ -110,6 +110,8 @@ public class GameManager : MonoBehaviour
 
         LoadAllScriptableObjects();
         LoadBgTime();
+
+
     }
 
     void Update()
@@ -209,26 +211,22 @@ public class GameManager : MonoBehaviour
 
         if (hours >= endHours && hours < dayHours)
         {
-            Debug.Log(1);
             bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
             OnDayEnded?.Invoke();
         }
         else if (hours >= nightHours)
         {
-            Debug.Log(4);
             bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
         }
         else if (hours >= eveningHours)
         {
-            Debug.Log(3);
             bgTime = BgType.EVENING;
             OnBgTimeChanged?.Invoke(bgTime);
         }
         else if (hours >= dayHours)
         {
-            Debug.Log(2);
             bgTime = BgType.DAY;
             OnBgTimeChanged?.Invoke(bgTime);
         }
@@ -744,7 +742,7 @@ public class GameManager : MonoBehaviour
         else return 0;
     }
 
-    public bool Use_RoomInteriorItem(string interiorName, int x, int y)
+    public bool Use_RoomInteriorItem(string interiorName, float x, float y)
     {
         if (!dbManager.Set_InteriorItem(interiorName, x, y)) return false;
 
@@ -759,20 +757,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool Move_RoomInteriorItem(int beforeX, int beforeY, int afterX, int afterY)
+    public bool Move_RoomInteriorItem(float beforeX, float beforeY, float afterX, float afterY)
     {
         return dbManager.Change_InteriorItem_Pos(beforeX, beforeY, afterX, afterY);
     }
 
-    public bool Back_RoomInteriorItem(int x, int y)
+    public bool Back_RoomInteriorItem(float x, float y)
     {
         return dbManager.NotSet_InteriorItem(x, y);
     }
 
-    public List<(InteriorScript item, int x, int y)> Get_Current_RoomInterior()
+    public List<(InteriorScript item, float x, float y)> Get_Current_RoomInterior()
     {
         List<Interior> interiors = dbManager.Select_Current_RoomInterior();
-        List<(InteriorScript item, int x, int y)> list = new List<(InteriorScript item, int x, int y)>();
+        List<(InteriorScript item, float x, float y)> list = new List<(InteriorScript item, float x, float y)>();
 
         foreach (Interior i in interiors)
         {
@@ -793,4 +791,16 @@ public class GameManager : MonoBehaviour
     {
         dbManager.Update_Tile(tilePosType, tileName);
     }
+
+    //public List<InteriorScript> Get_WallTile_Inventory()
+    //{
+
+    //}
+
+    //public List<InteriorScript> Get_FloorTile_Inventory()
+    //{
+
+    //}
+
+
 }
