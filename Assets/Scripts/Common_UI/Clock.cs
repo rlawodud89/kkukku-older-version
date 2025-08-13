@@ -13,6 +13,10 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private GameObject timeTextObject;
 
     public GameObject DayEndPanel;
+    public TMP_Text goldText;
+    public TMP_Text moonrockText;
+    public TMP_Text energyText;
+    public GameObject inputBlocker;
 
     private GameManager gameManager;
 
@@ -28,19 +32,13 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //InvokeRepeating("AddOneMinute", 0f, 0.05f); 
 
         gameManager = GameManager.getInstance();
+        gameManager.OnDayEnded += DayEndPanelOpen;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(gameManager.Get_Hours() == 24 && gameManager.Get_Minutes() == 0)
-        {
-            // 하루가 끝났을 때, DayEndPanel을 활성화
-            if (DayEndPanel != null)
-            {
-                DayEndPanel.SetActive(true);
-            }
-        }
+
     }
 
     void AddOneMinute()
@@ -80,7 +78,7 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (timeTextObject != null)
         {
-            timeTextObject.SetActive(true); 
+            timeTextObject.SetActive(true);
         }
 
         //Debug.Log("마우스가 시계 위에 있습니다.");
@@ -93,13 +91,29 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             timeTextObject.SetActive(false);
         }
 
-       //Debug.Log("마우스가 시계를 벗어났습니다.");
+        //Debug.Log("마우스가 시계를 벗어났습니다.");
+    }
+
+    public void DayEndPanelOpen()
+    {
+        // 하루가 끝났을 때, DayEndPanel을 활성화
+        if (DayEndPanel != null)
+        {
+            goldText.text = "+" + gameManager.Get_TodayGold().ToString();
+            moonrockText.text = "+" + gameManager.Get_TodayMoonrock().ToString();
+            energyText.text = "+" + gameManager.Get_TodayEnergy().ToString();
+
+            inputBlocker.SetActive(true);
+            DayEndPanel.SetActive(true);
+        }
     }
 
     public void DayEndPanelClose()
     {
         if (DayEndPanel != null)
         {
+            gameManager.Go_Next_Days();
+            inputBlocker.SetActive(false);
             DayEndPanel.SetActive(false);
         }
     }

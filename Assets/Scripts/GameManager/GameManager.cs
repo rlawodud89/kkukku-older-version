@@ -22,10 +22,15 @@ public class GameManager : MonoBehaviour
     private BgType bgTime;
     private float playTime;
     public event Action<BgType> OnBgTimeChanged;
+    public event Action OnDayEnded;
+    public bool isDayEndPanel;
 
     private int gold;
     private int moonrock;
     private int energy;
+    private int todayGold;
+    private int todayMoonrock;
+    private int todayEnergy;
 
     private int designshopLevel;
     private int itemshopLevel;
@@ -60,7 +65,7 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
-    private static float gameDuration = 5f; // 75초(1.25분)에 1시간 (30분에 24시간)
+    private static float gameDuration = 1f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 22;
@@ -91,6 +96,9 @@ public class GameManager : MonoBehaviour
         energy = user.energy;
         gold = user.gold;
         moonrock = user.moonrock;
+        todayEnergy = user.todayEnergy;
+        todayGold = user.todayGold;
+        todayMoonrock = user.todayMoonrock;
         designshopLevel = user.designshopLevel;
         itemshopLevel = user.itemshopLevel;
         loomLevel = user.loomLevel;
@@ -102,10 +110,14 @@ public class GameManager : MonoBehaviour
 
         LoadAllScriptableObjects();
         LoadBgTime();
+
+
     }
 
     void Update()
     {
+        if (isDayEndPanel) return;
+
         playTime += (Time.deltaTime / gameDuration) * 3600;
         hours = (int)(playTime / 3600) % 24;
         minutes = (int)(playTime % 3600) / 60;
@@ -113,10 +125,8 @@ public class GameManager : MonoBehaviour
 
         if (hours == endHours) // 하루 끝
         {
-            playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
-            Debug.Log("Days:" + days);
-
-            // TODO: 시간 멈추고 하루 정리 뜨게 하기
+            OnDayEnded?.Invoke();
+            isDayEndPanel = true;
         }
         else if (hours == dayHours) // 아침 진입
         {
@@ -199,28 +209,28 @@ public class GameManager : MonoBehaviour
     {
         hours = (int)(playTime / 3600) % 24;
 
-        if (hours == endHours) // 하루 끝
+        if (hours >= endHours && hours < dayHours)
         {
-            playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
-            Debug.Log("Days:" + days);
-
-            // TODO: 시간 멈추고 하루 정리 뜨게 하기
-        }
-        else if (hours >= dayHours) // 아침 진입
-        {
-            bgTime = BgType.DAY;
+            bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
-        }
-        else if (hours >= eveningHours) // 저녁 진입
-        {
-            bgTime = BgType.EVENING;
-            OnBgTimeChanged?.Invoke(bgTime);
+            OnDayEnded?.Invoke();
         }
         else if (hours >= nightHours)
         {
             bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
         }
+        else if (hours >= eveningHours)
+        {
+            bgTime = BgType.EVENING;
+            OnBgTimeChanged?.Invoke(bgTime);
+        }
+        else if (hours >= dayHours)
+        {
+            bgTime = BgType.DAY;
+            OnBgTimeChanged?.Invoke(bgTime);
+        }
+
     }
 
     private int Get_RandomLevel()
@@ -238,44 +248,50 @@ public class GameManager : MonoBehaviour
 
 
 
-    // 사용자 정보 getter, setter
+    // 사용자 정보 관련 메서드
 
     public int Get_Gold() { return gold; }
-    public void Set_Gold(int gold)
-    {
-        this.gold = gold;
-        dbManager.Update_Gold(gold);
-    }
     public void Change_Gold(int delta)
     {
         gold += delta;
         dbManager.Update_Gold(gold);
+
+        if (delta > 0)
+        {
+            todayGold += delta;
+            dbManager.Update_TodayGold(todayGold);
+        }
     }
 
     public int Get_Moonrock() { return moonrock; }
-    public void Set_Moonrock(int moonrock)
-    {
-        this.moonrock = moonrock;
-        dbManager.Update_Moonrock(moonrock);
-    }
     public void Change_Moonrock(int delta)
     {
         moonrock += delta;
         dbManager.Update_Moonrock(moonrock);
+
+        if (delta > 0)
+        {
+            todayMoonrock += delta;
+            dbManager.Update_TodayMoonrock(todayMoonrock);
+        }
+
     }
 
     public int Get_EnergyLevel() { return (int)(energy / oneEnergyLevel); }
     public float Get_EnergyPercent() { return ((energy % oneEnergyLevel) / oneEnergyLevel) * 100; }
-    public void Set_Energy(int energy)
-    {
-        this.energy = energy;
-        dbManager.Update_Energy(energy);
-    }
     public void Change_Energy(int delta)
     {
+        if (delta <= 0) return;
+
         energy += delta;
         dbManager.Update_Energy(energy);
+        todayEnergy += delta;
+        dbManager.Update_TodayEnergy(todayEnergy);
     }
+
+    public int Get_TodayGold() { return todayGold; }
+    public int Get_TodayMoonrock() { return todayMoonrock; }
+    public int Get_TodayEnergy() { return todayEnergy; }
 
     public int Get_Days() { return days; }
     public int Get_Hours() { return hours; }
@@ -348,6 +364,17 @@ public class GameManager : MonoBehaviour
         this.isOpen = isOpen;
         dbManager.Update_IsOpen(this.isOpen);
         OnOpenChanged?.Invoke(isOpen);
+    }
+
+    public void Go_Next_Days()
+    {
+        isDayEndPanel = false;
+        playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        todayGold = 0;
+        todayMoonrock = 0;
+        todayEnergy = 0;
+
+        Debug.Log("Days:" + days);
     }
 
 
@@ -715,7 +742,7 @@ public class GameManager : MonoBehaviour
         else return 0;
     }
 
-    public bool Use_RoomInteriorItem(string interiorName, int x, int y)
+    public bool Use_RoomInteriorItem(string interiorName, float x, float y)
     {
         if (!dbManager.Set_InteriorItem(interiorName, x, y)) return false;
 
@@ -730,20 +757,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool Move_RoomInteriorItem(int beforeX, int beforeY, int afterX, int afterY)
+    public bool Move_RoomInteriorItem(float beforeX, float beforeY, float afterX, float afterY)
     {
         return dbManager.Change_InteriorItem_Pos(beforeX, beforeY, afterX, afterY);
     }
 
-    public bool Back_RoomInteriorItem(int x, int y)
+    public bool Back_RoomInteriorItem(float x, float y)
     {
         return dbManager.NotSet_InteriorItem(x, y);
     }
 
-    public List<(InteriorScript item, int x, int y)> Get_Current_RoomInterior()
+    public List<(InteriorScript item, float x, float y)> Get_Current_RoomInterior()
     {
         List<Interior> interiors = dbManager.Select_Current_RoomInterior();
-        List<(InteriorScript item, int x, int y)> list = new List<(InteriorScript item, int x, int y)>();
+        List<(InteriorScript item, float x, float y)> list = new List<(InteriorScript item, float x, float y)>();
 
         foreach (Interior i in interiors)
         {
@@ -764,4 +791,16 @@ public class GameManager : MonoBehaviour
     {
         dbManager.Update_Tile(tilePosType, tileName);
     }
+
+    //public List<InteriorScript> Get_WallTile_Inventory()
+    //{
+
+    //}
+
+    //public List<InteriorScript> Get_FloorTile_Inventory()
+    //{
+
+    //}
+
+
 }
