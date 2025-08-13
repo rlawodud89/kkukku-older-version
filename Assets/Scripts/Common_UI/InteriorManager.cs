@@ -13,6 +13,7 @@ public class InteriorManager : MonoBehaviour
     public GameObject interiorPanel;
     public GameObject ItemButtonPrefab;
     public GameObject scrollContent;
+    public GameObject tilePanel;
 
     private ClickInteriorItem clickInteriorItem;
 
@@ -25,7 +26,7 @@ public class InteriorManager : MonoBehaviour
     public InteriorScript item;
 
     private Transform itemParent;
-    private Vector3 spawnPos=new Vector3(-1.8f,0.8f,20f);
+    private Vector3 spawnPos = new Vector3(-1.8f, 0.8f, 20f);
 
     // Start is called before the first frame update
     void Start()
@@ -43,11 +44,11 @@ public class InteriorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void CategorySelect(string category)
-    {   
+    {
         switch (category)
         {
             case "가구":
@@ -67,11 +68,13 @@ public class InteriorManager : MonoBehaviour
 
     public void SetFurnitureItem()
     {
-        Clear(); 
-        
+        Clear();
+
         //GameObject ItemButton4 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        foreach (var (item, count) in interiorItems){
-            if(item.interiorType==InteriorType.ROOM_INTERIROR){
+        foreach (var (item, count) in interiorItems)
+        {
+            if (item.interiorType == InteriorType.ROOM_INTERIROR)
+            {
                 GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
                 // ItemButton에 item 정보 설정
 
@@ -86,7 +89,7 @@ public class InteriorManager : MonoBehaviour
 
     public void SetTileItem()
     {
-        Clear(); 
+        Clear();
         GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
         GameObject ItemButton2 = Instantiate(ItemButtonPrefab, scrollContent.transform);
         GameObject ItemButton3 = Instantiate(ItemButtonPrefab, scrollContent.transform);
@@ -94,10 +97,11 @@ public class InteriorManager : MonoBehaviour
 
     public void SetEmployeeItem()
     {
-        Clear(); 
+        Clear();
     }
 
-    public void Clear(){
+    public void Clear()
+    {
         foreach (Transform child in scrollContent.transform)
         {
             Destroy(child.gameObject);
@@ -107,11 +111,11 @@ public class InteriorManager : MonoBehaviour
     // 가구 클릭 시 
     public void ClickInteriorItem(InteriorScript item)
     {
-       PanelClose();
-       // 작업실위에 생성
-       GameObject itemObject=Instantiate(item.prefab,spawnPos, item.prefab.transform.rotation, itemParent);
+        PanelClose();
+        // 작업실위에 생성
+        GameObject itemObject = Instantiate(item.prefab, spawnPos, item.prefab.transform.rotation, itemParent);
         var click = itemObject.GetComponent<ClickInteriorItem>();
-       click.Select();
+        click.Select();
 
     }
 
@@ -132,18 +136,22 @@ public class InteriorManager : MonoBehaviour
         }
     }
 
-    public void ClickInteriorButton(){
+    public void ClickInteriorButton()
+    {
         interiorMode = true;
 
         InteriorInventoryButton.SetActive(true);
         InteriorExitButton.SetActive(true);
+        tilePanel.SetActive(true);
     }
 
-    public void ClickExitInteriorButton(){
+    public void ClickExitInteriorButton()
+    {
         interiorMode = false;
 
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
+        tilePanel.SetActive(false);
         PanelClose();
 
         clickInteriorItem.ClickExitInteriorButton();

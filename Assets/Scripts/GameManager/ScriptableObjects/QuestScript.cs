@@ -7,16 +7,16 @@ public class QuestScript : ScriptableObject
     public string questName;
     public bool special;
 
-    [Header("Äù½ºÆ® ¿Ï·á º¸»ó, ¾ø´Â °ÍÀº ¾È ½áµµ µÊ")]
+    [Header("í€˜ìŠ¤íŠ¸ ì™„ë£Œ ë³´ìƒ, ì—†ëŠ” ê²ƒì€ ì•ˆ ì¨ë„ ë¨")]
     public int rewardGold;
     public int rewardMoonrock;
-    [Header("¿Ï·á º¸»ó ¾ÆÀÌÅÛ ÀÌ¸§, ¼ö·® Ãß°¡")]
+    [Header("ì™„ë£Œ ë³´ìƒ ì•„ì´í…œ ì´ë¦„, ìˆ˜ëŸ‰ ì¶”ê°€")]
     public List<rewardItemEntry> rewardItem;
 
-    [Header("´ÙÀ½ Äù½ºÆ®°¡ ÀÖ´Â °æ¿ì, ´ÙÀ½ Äù½ºÆ®ÀÇ ÀÌ¸§ ÀúÀå")]
+    [Header("ë‹¤ìŒ í€˜ìŠ¤íŠ¸ê°€ ìˆëŠ” ê²½ìš°, ë‹¤ìŒ í€˜ìŠ¤íŠ¸ì˜ ì´ë¦„ ì €ì¥")]
     public string nextQuestName;
 
-    [Header("Æ¯º° Äù½ºÆ®ÀÎ °æ¿ì, ¿Ï·á ÈÄ ¾ò´Â ÆíÁö ÀÌ¸§ ÀúÀå")]
+    [Header("íŠ¹ë³„ í€˜ìŠ¤íŠ¸ì¸ ê²½ìš°, ì™„ë£Œ í›„ ì–»ëŠ” í¸ì§€ ì´ë¦„ ì €ì¥")]
     public string letterName;
 }
 
