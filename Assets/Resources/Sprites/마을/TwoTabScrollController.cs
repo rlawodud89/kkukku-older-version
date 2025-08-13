@@ -4,15 +4,17 @@ using UnityEngine.UI;
 public class TwoTabScrollController : MonoBehaviour
 {
     [Header("Buttons")]
-    [SerializeField] Button shopButton;       // °¡°Ô ¹öÆ°
-    [SerializeField] Button workshopButton;   // ÀÛ¾÷½Ç/µğÀÚÀÎ ¹öÆ°
+    [SerializeField] Button shopButton;       // ê°€ê²Œ ë²„íŠ¼
+    [SerializeField] Button workshopButton;   // ì‘ì—…ì‹¤/ë””ìì¸ ë²„íŠ¼
+    [SerializeField] Button tileButton;       // íƒ€ì¼ ë²„íŠ¼
 
     [Header("ScrollRect & Contents")]
     [SerializeField] ScrollRect scrollRect;
     [SerializeField] GameObject shopContent;
     [SerializeField] GameObject workshopContent;
+    [SerializeField] GameObject tileContent;
 
-    // ¿É¼Ç: ÄÑÁú ¶§ Ç×»ó ShopÀ¸·Î ¸®¼ÂÇÒÁö / ½ºÅ©·Ñ ¸Ç À§·Î º¸³¾Áö
+    // ì˜µì…˜: ì¼œì§ˆ ë•Œ í•­ìƒ Shopìœ¼ë¡œ ë¦¬ì…‹í• ì§€ / ìŠ¤í¬ë¡¤ ë§¨ ìœ„ë¡œ ë³´ë‚¼ì§€
     [SerializeField] bool resetToShopOnEnable = true;
     [SerializeField] bool scrollToTopOnEnable = true;
 
@@ -20,38 +22,51 @@ public class TwoTabScrollController : MonoBehaviour
     {
         shopButton.onClick.AddListener(ShowShop);
         workshopButton.onClick.AddListener(ShowWorkshop);
+        tileButton.onClick.AddListener(ShowTileShop);
     }
 
-    // ºñÈ°¼º¡æÈ°¼º µÉ ¶§¸¶´Ù È£ÃâµÊ
+    // ë¹„í™œì„±â†’í™œì„± ë  ë•Œë§ˆë‹¤ í˜¸ì¶œë¨
     void OnEnable()
     {
         if (resetToShopOnEnable)
-            ShowShop();                 // ¡ç Ç×»ó °¡°Ô ¸ÕÀú
+            ShowShop();                 // â† í•­ìƒ ê°€ê²Œ ë¨¼ì €
 
         if (scrollToTopOnEnable && scrollRect)
             scrollRect.verticalNormalizedPosition = 1f;
     }
 
-    // Start´Â ÀÌÁ¦ ÇÊ¿ä ¾øÀ½(Ã³À½¿¡µµ OnEnableÀÌ È£ÃâµÊ).
-    // ³²°ÜµÎ°í ½Í´Ù¸é ºó ¸Ş¼­µå·Î µÎ¼¼¿ä.
+    // StartëŠ” ì´ì œ í•„ìš” ì—†ìŒ(ì²˜ìŒì—ë„ OnEnableì´ í˜¸ì¶œë¨).
+    // ë‚¨ê²¨ë‘ê³  ì‹¶ë‹¤ë©´ ë¹ˆ ë©”ì„œë“œë¡œ ë‘ì„¸ìš”.
     // void Start() {}
 
     void ShowShop()
     {
-        if (!shopContent || !workshopContent) return;
+        if (!shopContent || !workshopContent || !tileContent) return;
 
         shopContent.SetActive(true);
         workshopContent.SetActive(false);
+        tileContent.SetActive(false);
         SetScrollContent(shopContent);
     }
 
     void ShowWorkshop()
     {
-        if (!shopContent || !workshopContent) return;
+        if (!shopContent || !workshopContent || !tileContent) return;
 
         workshopContent.SetActive(true);
         shopContent.SetActive(false);
+        tileContent.SetActive(false);
         SetScrollContent(workshopContent);
+    }
+
+    void ShowTileShop()
+    {
+        if (!shopContent || !workshopContent || !tileContent) return;
+
+        tileContent.SetActive(true);
+        shopContent.SetActive(false);
+        workshopContent.SetActive(false);
+        SetScrollContent(tileContent);
     }
 
     void SetScrollContent(GameObject go)
@@ -61,7 +76,7 @@ public class TwoTabScrollController : MonoBehaviour
 
         scrollRect.content = rt;
 
-        // ·¹ÀÌ¾Æ¿ô °»½Å ÈÄ ½ºÅ©·Ñ ¸Ç À§·Î
+        // ë ˆì´ì•„ì›ƒ ê°±ì‹  í›„ ìŠ¤í¬ë¡¤ ë§¨ ìœ„ë¡œ
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
         scrollRect.verticalNormalizedPosition = 1f;

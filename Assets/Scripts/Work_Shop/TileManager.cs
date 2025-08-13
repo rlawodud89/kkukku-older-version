@@ -1,39 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+
 
 public class TileManager : MonoBehaviour
 {
-    public Tilemap floorTilemap;
-    public TileBase selectedFloorTile;
-    public Camera mainCam;
+    public Tilemap wallTilemap;
+    public TilePosType posType;
+    private GameManager gameManager;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-       
+        gameManager = GameManager.getInstance();
+        Sprite current_tile = gameManager.Get_Current_Tile(posType);
+        ReplaceAllWallTiles(SpriteToTile(current_tile));
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void ReplaceAllWallTiles(TileBase selectedWallTile)
     {
-        if (Input.GetMouseButtonDown(0) // ¿ŞÂÊ Å¬¸¯
-            && !EventSystem.current.IsPointerOverGameObject()) 
+        foreach (var pos in wallTilemap.cellBounds.allPositionsWithin) //íƒ€ì¼ë§µì— ì¡´ì¬í•˜ëŠ” ëª¨ë“  ì¢Œí‘œ ê²€ìƒ‰
         {
-            //Å¬¸¯ÇÑ °÷ ÁÂÇ¥ ÃßÃâ
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = 10f; // Ä«¸Ş¶ó·ÎºÎÅÍ ÀÏÁ¤ °Å¸® (Ä«¸Ş¶ó°¡ z=-10ÀÌ¸é 10)
-            Vector3 worldPos = mainCam.ScreenToWorldPoint(mousePos);
-            Vector3Int cellPos = floorTilemap.WorldToCell(worldPos);
-
-            if (floorTilemap.HasTile(cellPos)) //¹Ì¸® Å¸ÀÏ ±ò¾ÆµĞ °÷¿¡¸¸ Å¸ÀÏ º¯°æÇÒ ¼ö ÀÖµµ·Ï
+            if (wallTilemap.HasTile(pos)) //ë²½ íƒ€ì¼ ìˆëŠ” ê³³ì— ì „ë¶€ ë³€ê²½
             {
-                floorTilemap.SetTile(cellPos, selectedFloorTile);
+                wallTilemap.SetTile(pos, selectedWallTile);
             }
-
         }
     }
+
+    private TileBase SpriteToTile(Sprite sprite)
+    {
+        UnityEngine.Tilemaps.Tile tile = ScriptableObject.CreateInstance<UnityEngine.Tilemaps.Tile>();
+        tile.sprite = sprite;
+        return tile;
+    }
+
 
 }
