@@ -22,7 +22,10 @@ public class InteriorManager : MonoBehaviour
     // 갖고 있는 인테리어 아이템 목록
     private List<(InteriorScript item, int count)> interiorItems = new List<(InteriorScript, int)>();
 
-    public InteriorScript item;
+    // 테스트용
+    public InteriorScript furnitureItem;
+    public InteriorScript workerItem;
+
 
     private Transform itemParent;
     private Vector3 spawnPos=new Vector3(-1.8f,0.8f,20f);
@@ -35,7 +38,8 @@ public class InteriorManager : MonoBehaviour
 
         //interiorItems = gameManager.Get_RoomInterior_Inventory();
         // 테스트
-        interiorItems.Add((item, 1));
+        interiorItems.Add((furnitureItem, 1));
+        interiorItems.Add((workerItem, 1));
 
         itemParent = GameObject.Find("Pixels")?.transform;
     }
@@ -87,14 +91,37 @@ public class InteriorManager : MonoBehaviour
     public void SetTileItem()
     {
         Clear(); 
-        GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        GameObject ItemButton2 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        GameObject ItemButton3 = Instantiate(ItemButtonPrefab, scrollContent.transform);
+        
+        foreach (var (item, count) in interiorItems){
+            if(item.interiorType==InteriorType.FLOOR_TILE||item.interiorType==InteriorType.WALL_TILE){
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
+                // ItemButton에 item 정보 설정
+
+                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
+                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
+                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
+
+               // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+            }
+        }
     }
 
     public void SetEmployeeItem()
     {
         Clear(); 
+
+        foreach (var (item, count) in interiorItems){
+            if(item.interiorType==InteriorType.WORKER){
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
+                // ItemButton에 item 정보 설정
+
+                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
+                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
+                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
+
+               // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+            }
+        }
     }
 
     public void Clear(){

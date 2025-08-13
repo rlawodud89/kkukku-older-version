@@ -1806,7 +1806,8 @@ MonoBehaviour:
   interiorPanel: {fileID: 1054775154}
   ItemButtonPrefab: {fileID: 8099796417812759165, guid: 7f2b47c912393814fa7a1b2e4e4db337, type: 3}
   scrollContent: {fileID: 1830657735}
-  item: {fileID: 11400000, guid: b7efab96d5c01c24bb7fa859cc9f8b52, type: 2}
+  furnitureItem: {fileID: 11400000, guid: b7efab96d5c01c24bb7fa859cc9f8b52, type: 2}
+  workerItem: {fileID: 11400000, guid: 8357124d8e5878d4aa7f66d90d207a39, type: 2}
 --- !u!4 &252807847
 Transform:
   m_ObjectHideFlags: 0

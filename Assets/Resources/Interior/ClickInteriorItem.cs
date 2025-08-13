@@ -14,6 +14,7 @@ public class ClickInteriorItem : MonoBehaviour
     public LayerMask groundLayer;    // 바닥 레이어
     public LayerMask obstacleLayer;    // 겹침 검사 대상(벽/가구 등)
 
+    [Header("버튼UI")]
     public Canvas targetCanvas;
     public GameObject checkButtonPrefab;
     private GameObject checkButton;
@@ -21,6 +22,10 @@ public class ClickInteriorItem : MonoBehaviour
     public Vector3 worldOffset = new Vector3(0, -1.5f, 0); // 오브젝트 기준 월드 오프셋
     public Vector2 screenOffset = Vector2.zero;            // 화면 픽셀 보정
    // public bool hideWhenOffscreen = true;       
+    public GameObject putInButtonPrefab;   // 보관함에 넣기 버튼
+    private GameObject putInButton;
+    private RectTransform putInButtonRectTransform;
+    public Vector3 putInWorldOffset = new Vector3(-1f, -1.5f, 0); // 오브젝트 기준 월드 오프셋
 
     private Renderer rend;
     Collider2D col;
@@ -71,6 +76,7 @@ public class ClickInteriorItem : MonoBehaviour
         if(!selected){
             rend.material = normalMaterial;
             if (checkButton != null) Destroy(checkButton.gameObject);
+            if (putInButton != null) Destroy(putInButton.gameObject);
         }
 
         if(selected){
@@ -132,10 +138,14 @@ public class ClickInteriorItem : MonoBehaviour
             if (checkButton == null && checkButtonPrefab != null && targetCanvas != null)
             {
                 // Canvas 자식으로 생성하고 RectTransform 캐싱
+                // 체크 버튼 생성
                 checkButton = Instantiate(checkButtonPrefab, targetCanvas.transform);
                 checkButtonRectTransform = checkButton.GetComponent<RectTransform>();
-
                 checkButton.GetComponent<Button>().onClick.AddListener(ClickCheckButton);
+
+                // 보관함에 넣기 버튼 생성
+                putInButton = Instantiate(putInButtonPrefab, targetCanvas.transform);
+                putInButtonRectTransform = putInButton.GetComponent<RectTransform>();
             }
 
             // 생성 직후 한 번 위치 맞추기
@@ -152,11 +162,14 @@ public class ClickInteriorItem : MonoBehaviour
 
         // 1) 월드 기준 위치 계산
         Vector3 worldPos = transform.position + worldOffset;
+        Vector3 putInWorldPos = transform.position + putInWorldOffset;
 
         // 2) 화면 좌표로 변환
         Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
+        Vector3 putInScreenPos = cam.WorldToScreenPoint(putInWorldPos);
 
         checkButtonRectTransform.position = screenPos + (Vector3)screenOffset;
+        putInButtonRectTransform.position = putInScreenPos + (Vector3)screenOffset;
     }
 
     // 체크 버튼 클릭 시
