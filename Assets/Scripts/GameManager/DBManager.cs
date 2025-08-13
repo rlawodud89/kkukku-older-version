@@ -36,6 +36,9 @@ public class DBManager
         user.energy = 0;
         user.gold = 1000;
         user.moonrock = 1000;
+        user.todayEnergy = 0;
+        user.todayGold = 0;
+        user.todayMoonrock = 0;
         user.playTime = 0;
         user.designshopLevel = 1;
         user.itemshopLevel = 1;
@@ -62,6 +65,13 @@ public class DBManager
         conn.Update(user);
     }
 
+    public void Update_Energy(int energy)
+    {
+        User user = conn.Find<User>(userName);
+        user.energy = energy;
+        conn.Update(user);
+    }
+
     public void Update_Gold(int gold)
     {
         User user = conn.Find<User>(userName);
@@ -76,12 +86,28 @@ public class DBManager
         conn.Update(user);
     }
 
-    public void Update_Energy(int energy)
+    public void Update_TodayEnergy(int todayEnergy)
     {
         User user = conn.Find<User>(userName);
-        user.energy = energy;
+        user.todayEnergy = todayEnergy;
         conn.Update(user);
     }
+
+
+    public void Update_TodayGold(int todayGold)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayGold = todayGold;
+        conn.Update(user);
+    }
+
+    public void Update_TodayMoonrock(int todayMoonrock)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayMoonrock = todayMoonrock;
+        conn.Update(user);
+    }
+
 
     public void Update_DesginShopLevel(int level)
     {
@@ -322,7 +348,7 @@ public class DBManager
             .Any(x => x.tableID == tableID);
     }
 
-    public bool Insert_Worker(string workerName, int x, int y)
+    public bool Insert_Worker(string workerName, float x, float y)
     {
         try
         {
@@ -332,7 +358,7 @@ public class DBManager
 
             Debug.Log("ID" + newWorkRoom.workerID);
 
-            int affectedRows = conn.Execute( "UPDATE Interior SET ID = ? " +
+            int affectedRows = conn.Execute("UPDATE Interior SET ID = ? " +
                 "WHERE interiorName = ? AND isSet = 1 AND x = ? AND y = ?",
                 newWorkRoom.workerID, workerName, x, y);
 
@@ -361,7 +387,7 @@ public class DBManager
         }
     }
 
-    public bool Set_InteriorItem(string interiorName, int x, int y) // 없던 인테리어 아이템을 좌표에 위치시키는 메서드
+    public bool Set_InteriorItem(string interiorName, float x, float y) // 없던 인테리어 아이템을 좌표에 위치시키는 메서드
     {
         try
         {
@@ -380,7 +406,7 @@ public class DBManager
         }
     }
 
-    public bool Change_InteriorItem_Pos(int beforeX, int beforeY, int afterX, int afterY) // 인테리어 아이템 위치 변경
+    public bool Change_InteriorItem_Pos(float beforeX, float beforeY, float afterX, float afterY) // 인테리어 아이템 위치 변경
     {
         try
         {
@@ -396,7 +422,7 @@ public class DBManager
         }
     }
 
-    public bool NotSet_InteriorItem(int x, int y) // 좌표에 위치되어 있던 인테리어 아이템 빼는 메서드
+    public bool NotSet_InteriorItem(float x, float y) // 좌표에 위치되어 있던 인테리어 아이템 빼는 메서드
     {
         try
         {
@@ -439,4 +465,14 @@ public class DBManager
         tile.tileName = tileName;
         conn.Update(tile);
     }
+
+    //public List<Interior> Select_WallTile_Inventory()
+    //{
+
+    //}
+
+    //public List<Interior> Select_FloorTile_Inventory()
+    //{
+
+    //}
 }

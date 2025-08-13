@@ -6,17 +6,15 @@ using UnityEngine.UI;
 
 public class WorkShopBg : MonoBehaviour
 {
-    public Sprite daySprite;
-    public Sprite eveningSprite;
-    public Sprite nightSprite;
+    public GameObject dayBg;
+    public GameObject eveningBg;
+    public GameObject nightBg;
     
-    private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
 
     void Start()
     {
         gameManager = GameManager.getInstance();
-        spriteRenderer = GetComponent<SpriteRenderer>();
 
         NowtimeChanged(gameManager.Get_BgTime());
         gameManager.OnBgTimeChanged += NowtimeChanged;
@@ -26,15 +24,21 @@ public class WorkShopBg : MonoBehaviour
     {
         if(nowtime == BgType.DAY)
         {
-            spriteRenderer.sprite = daySprite;
+            dayBg.SetActive(true);
+            eveningBg.SetActive(false);
+            nightBg.SetActive(false);
         }
         else if(nowtime == BgType.EVENING)
         {
-            spriteRenderer.sprite = eveningSprite;
+            dayBg.SetActive(false);
+            eveningBg.SetActive(true);
+            nightBg.SetActive(false);
         }
-        else
+        else // BgType.NIGHT
         {
-            spriteRenderer.sprite = nightSprite;
+            dayBg.SetActive(false);
+            eveningBg.SetActive(false);
+            nightBg.SetActive(true);
         }
     }
 

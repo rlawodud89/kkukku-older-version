@@ -18,6 +18,15 @@ public class User
     public float playTime { get; set; }
 
     [NotNull]
+    public int todayEnergy { get; set; }
+
+    [NotNull]
+    public int todayGold { get; set; }
+
+    [NotNull]
+    public int todayMoonrock { get; set; }
+
+    [NotNull]
     public int designshopLevel { get; set; }
 
     [NotNull]

@@ -3,18 +3,24 @@ using UnityEngine.Tilemaps;
 
 public class DraggableObject : MonoBehaviour
 {
-    public Tilemap tilemap;          // Å¸ÀÏ¸Ê ±âÁØ
+    public Tilemap tilemap;          // Å¸ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     private Vector3 offset;
     private bool dragging = false;
     private Camera cam;
 
+    private InteriorManager interiorManager;
+
     void Start()
     {
         cam = Camera.main;
+        interiorManager = FindObjectOfType<InteriorManager>();
     }
 
     void OnMouseDown()
     {
+        if (!interiorManager.interiorMode)
+            return;
+
         dragging = true;
 
         Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -24,11 +30,18 @@ public class DraggableObject : MonoBehaviour
 
     void OnMouseUp()
     {
+        if (!interiorManager.interiorMode)
+            return;
+
         dragging = false;
     }
 
     void Update()
     {
+        if(tilemap==null){
+            tilemap=GameObject.Find("Tilemap").GetComponent<Tilemap>();
+        }
+        
         if (dragging)
         {
             Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -36,7 +49,7 @@ public class DraggableObject : MonoBehaviour
 
             Vector3 dragPos = mouseWorld + offset;
 
-            // µå·¡±×µÈ À§Ä¡¸¦ Å¸ÀÏ¸ÊÀÇ ¼¿·Î º¯È¯
+            // ï¿½å·¡ï¿½×µï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Å¸ï¿½Ï¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             Vector3Int cellPos = tilemap.WorldToCell(dragPos);
             Vector3 cellCenter = tilemap.GetCellCenterWorld(cellPos);
 
