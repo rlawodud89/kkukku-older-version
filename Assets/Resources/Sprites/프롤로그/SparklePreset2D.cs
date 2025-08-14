@@ -1,30 +1,68 @@
 // SparklePreset2D.cs
-// ºó GameObject¿¡ ºÙÀÌ¸é ÀÚµ¿À¸·Î 2D ½ºÆÄÅ¬ ÆÄÆ¼Å¬À» ±¸¼ºÇÕ´Ï´Ù.
+// 2D ìŠ¤íŒŒí´ ë²„ìŠ¤íŠ¸: íŒŒìŠ¤í…” íŒ”ë ˆíŠ¸(ì…ìë³„ ëœë¤) ì§€ì›
 using UnityEngine;
 
 [ExecuteAlways]
 public class SparklePreset2D : MonoBehaviour
 {
-    [Header("½ºÆÄÅ¬ ±âº»")]
-    public float rateOverTime = 20f;        // Áß¾Ó ¹Ğµµ
-    public float radius = 0.15f;            // »ı¼º ¹İ°æ(ÀÛ°Ô = Áß½É ¹ĞÁı)
-    public float startSpeedMin = 0.5f;
-    public float startSpeedMax = 1.5f;
-    public float startSizeMin = 0.05f;
-    public float startSizeMax = 0.15f;
-    public float lifetimeMin = 0.5f;
-    public float lifetimeMax = 1.0f;
+    public enum ColorTheme { WarmGold, SoftSky, Custom }
 
-    [Header("»ö/¾ËÆÄ")]
-    public Color startColor = Color.white;  // »ìÂ¦ ³ë¶ûÀÌ¸é ´õ ¹İÂ¦ÀÓ
+    [Header("ë²„ìŠ¤íŠ¸ ê¸°ë³¸")]
+    public bool burstMode = true;
+    public Vector2Int burstCountRange = new Vector2Int(28, 40);
+    public float duration = 0.6f;
+    public float radius = 0.08f;
+
+    [Header("ì´ˆê¸° ì†ë„/í¬ê¸°/ìˆ˜ëª…")]
+    public float startSpeedMin = 1.6f;
+    public float startSpeedMax = 2.6f;
+    public float startSizeMin = 0.06f;
+    public float startSizeMax = 0.14f;
+    public float lifetimeMin = 0.22f;
+    public float lifetimeMax = 0.45f;
+
+    [Header("ê°ì†")]
+    public float speedLimit = 1.0f;
+    [Range(0f, 1f)] public float dampen = 0.7f;
+
+    [Header("ìƒ‰ìƒ í…Œë§ˆ(íŒ”ë ˆíŠ¸ ë¯¸ì‚¬ìš© ì‹œ)")]
+    public ColorTheme colorTheme = ColorTheme.WarmGold;
+    public Color startColor = new Color(1f, 0.97f, 0.75f, 1f);
     public Gradient colorOverLife;
 
-    [Header("Á¤·Ä")]
+    [Header("íŠ¸ë ˆì¼/ë…¸ì´ì¦ˆ")]
+    public bool enableTrails = true;
+    public float trailLifetime = 0.12f;
+    [Range(0f, 1f)] public float trailRatio = 0.35f;
+    public bool enableNoise = true;
+    public float noiseStrength = 0.25f;
+    public float noiseFrequency = 0.6f;
+
+    [Header("ì •ë ¬/ë¨¸í‹°ë¦¬ì–¼")]
     public string sortingLayerName = "Default";
     public int sortingOrder = 10;
+    public string materialName = "Sparkle"; // Resources/Sparkle.mat ê¶Œì¥
+
+    [Header("ì—°ì† ëª¨ë“œ ì˜µì…˜")]
+    public float rateOverTime = 0f;
+
+    [Header("ìŠ¤ì¼€ì¼ ì¡°ì ˆ")]
+    [Range(0.2f, 3f)] public float sizeMultiplier = 1.35f;
+    [Range(0.2f, 3f)] public float rangeMultiplier = 1.4f;
+
+    // â˜… íŒŒìŠ¤í…” íŒ”ë ˆíŠ¸ (ì…ìë³„ ëœë¤ ìƒ‰)
+    [Header("íŒŒìŠ¤í…” íŒ”ë ˆíŠ¸(ì—¬ëŸ¬ ìƒ‰ ëœë¤)")]
+    public bool usePastelPalette = true;
+    public Color[] pastelPalette;                  // ë¹„ì›Œë‘ë©´ Resetì—ì„œ ê¸°ë³¸ 5ìƒ‰ ì±„ì›€
+    [Range(0f, 0.2f)] public float pastelHueJitter = 0.06f;
+    [Range(0f, 0.3f)] public float pastelValueJitter = 0.10f;
 
     ParticleSystem ps;
 
+    // ë‚´ë¶€ ìºì‹œ(ë²„ìŠ¤íŠ¸ ì¹´ìš´íŠ¸ ë³´ì •)
+    int cachedMinBurst, cachedMaxBurst;
+
+    // ===== Unity Hooks =====
     void OnEnable()
     {
         if (ps == null) Build();
@@ -33,19 +71,19 @@ public class SparklePreset2D : MonoBehaviour
 
     void Reset()
     {
-        // ±âº» ±×¶óµ¥ÀÌ¼Ç(Ã³À½ ºÒÅõ¸í ¡æ ³¡ Åõ¸í)
-        var grad = new Gradient();
-        grad.SetKeys(
-            new[] {
-                new GradientColorKey(Color.white, 0f),
-                new GradientColorKey(Color.white, 1f)
-            },
-            new[] {
-                new GradientAlphaKey(1f, 0f),
-                new GradientAlphaKey(0f, 1f)
-            }
-        );
-        colorOverLife = grad;
+        colorTheme = ColorTheme.WarmGold;
+        colorOverLife = MakeGoldGradient();
+        startColor = new Color(1f, 0.97f, 0.75f, 1f);
+
+        // ê¸°ë³¸ íŒŒìŠ¤í…” íŒ”ë ˆíŠ¸(ë ˆëª¬, í”¼ì¹˜, ë¼ë²¤ë”, ë¯¼íŠ¸, ìŠ¤ì¹´ì´)
+        pastelPalette = new[]
+        {
+            new Color(1.00f, 0.98f, 0.75f), // lemon
+            new Color(1.00f, 0.85f, 0.80f), // peach
+            new Color(0.90f, 0.86f, 1.00f), // lavender
+            new Color(0.82f, 1.00f, 0.90f), // mint
+            new Color(0.85f, 0.95f, 1.00f), // sky
+        };
     }
 
     void Build()
@@ -53,19 +91,34 @@ public class SparklePreset2D : MonoBehaviour
         ps = GetComponent<ParticleSystem>();
         if (ps == null) ps = gameObject.AddComponent<ParticleSystem>();
 
-        // ÆÄÆ¼Å¬ ·»´õ·¯ ¼¼ÆÃ
         var pr = GetComponent<ParticleSystemRenderer>();
         pr.renderMode = ParticleSystemRenderMode.Billboard;
         pr.sortingLayerName = sortingLayerName;
         pr.sortingOrder = sortingOrder;
 
-        // ¸ÓÆ¼¸®¾ó: Additive°¡ ¹İÂ¦ÀÓ¿¡ À¯¸®. ¾øÀ¸¸é Sprites/Default·Î ´ëÃ¼.
-        var shader = Shader.Find("Particles/Additive");
-        if (shader == null) shader = Shader.Find("Sprites/Default");
-        if (shader != null)
+        // Sparkle ë¨¸í‹°ë¦¬ì–¼ ë¡œë“œ
+        Material src = !string.IsNullOrEmpty(materialName) ? Resources.Load<Material>(materialName) : null;
+        if (src == null)
         {
-            var mat = new Material(shader);
-            pr.material = mat;
+            var shader = Shader.Find("Particles/Additive");
+            if (shader == null) shader = Shader.Find("Sprites/Default");
+            if (shader != null) src = new Material(shader) { name = "Sparkle (Auto)" };
+        }
+
+        if (src != null)
+        {
+            if (Application.isPlaying)
+            {
+                var inst = new Material(src);
+                NormalizeMaterialColor(inst);
+                GetComponent<ParticleSystemRenderer>().material = inst;
+                GetComponent<ParticleSystemRenderer>().trailMaterial = inst;
+            }
+            else
+            {
+                GetComponent<ParticleSystemRenderer>().sharedMaterial = src;
+                GetComponent<ParticleSystemRenderer>().trailMaterial = src;
+            }
         }
     }
 
@@ -73,65 +126,231 @@ public class SparklePreset2D : MonoBehaviour
     {
         if (ps == null) return;
 
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        ps.Clear();
+
+        // ìŠ¤ì¼€ì¼
+        float sMin = startSizeMin * sizeMultiplier;
+        float sMax = startSizeMax * sizeMultiplier;
+        float vMin = startSpeedMin * rangeMultiplier;
+        float vMax = startSpeedMax * rangeMultiplier;
+        float r = radius * rangeMultiplier;
+        float limit = speedLimit * rangeMultiplier;
+
         // Main
         var main = ps.main;
-        main.duration = 1.5f;
-        main.loop = true;
-        main.simulationSpace = ParticleSystemSimulationSpace.World; // ¿ÀºêÁ§Æ®°¡ ¿òÁ÷¿©µµ Èğ¾îÁü À¯Áö
+        main.playOnAwake = false;
+        main.duration = Mathf.Max(0.1f, duration);
+        main.loop = !burstMode;
+        main.stopAction = ParticleSystemStopAction.Disable;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
         main.startLifetime = new ParticleSystem.MinMaxCurve(lifetimeMin, lifetimeMax);
-        main.startSpeed = new ParticleSystem.MinMaxCurve(startSpeedMin, startSpeedMax);
-        main.startSize = new ParticleSystem.MinMaxCurve(startSizeMin, startSizeMax);
-        main.startColor = startColor;
+        main.startSpeed = new ParticleSystem.MinMaxCurve(vMin, vMax);
+        main.startSize = new ParticleSystem.MinMaxCurve(sMin, sMax);
 
-        // Emission: ¹Ğµµ Á¶Àı
+        // íŒ”ë ˆíŠ¸ ì‚¬ìš© ì‹œ, ì‹œì‘ìƒ‰ì€ í°ìƒ‰ìœ¼ë¡œ ë‘ê³ (íŒ”ë ˆíŠ¸ê°€ ì…ìë³„ë¡œ ì¹ í•¨),
+        // ColorOverLifetimeì€ "ì•ŒíŒŒ í˜ì´ë“œ"ë§Œ ìˆ˜í–‰(ìƒ‰ì€ ë³´ì¡´).
+        if (usePastelPalette)
+        {
+            main.startColor = Color.white;
+        }
+        else
+        {
+            main.startColor = (colorTheme == ColorTheme.WarmGold) ? new Color(1f, 0.97f, 0.75f, 1f)
+                           : (colorTheme == ColorTheme.SoftSky) ? new Color(0.85f, 0.95f, 1f, 1f)
+                           : startColor;
+        }
+
+        // Emission
         var emission = ps.emission;
         emission.enabled = true;
-        emission.rateOverTime = rateOverTime;
 
-        // Shape: °ÅÀÇ Á¡¿¡¼­¸¸ »ı¼ºµÇµµ·Ï ÀÛÀº ¹İ°æ
+        float densityScale = Mathf.Lerp(1f, rangeMultiplier, 0.5f);
+        cachedMinBurst = Mathf.Max(1, Mathf.RoundToInt(burstCountRange.x * densityScale));
+        cachedMaxBurst = Mathf.Max(cachedMinBurst, Mathf.RoundToInt(burstCountRange.y * densityScale));
+
+        if (burstMode && !usePastelPalette)
+        {
+            // ê¸°ì¡´(ë‹¨ìƒ‰/í…Œë§ˆ) ë²„ìŠ¤íŠ¸ëŠ” ì—”ì§„ ë²„ìŠ¤íŠ¸ ê¸°ëŠ¥ ì‚¬ìš©
+            emission.rateOverTime = 0f;
+            var burst = new ParticleSystem.Burst(0f, (short)cachedMinBurst, (short)cachedMaxBurst, 1, 0.01f);
+            emission.SetBursts(new[] { burst });
+        }
+        else
+        {
+            // íŒ”ë ˆíŠ¸ ì‚¬ìš© ì‹œ: ì—”ì§„ ë²„ìŠ¤íŠ¸ëŠ” ë¹„í™œì„±, Burst()ì—ì„œ ìˆ˜ë™ Emit
+            emission.rateOverTime = burstMode ? 0f : rateOverTime;
+            emission.SetBursts(System.Array.Empty<ParticleSystem.Burst>());
+        }
+
+        // Shape
         var shape = ps.shape;
         shape.enabled = true;
-        shape.shapeType = ParticleSystemShapeType.Sphere; // 2D¿¡¼± ¿øÃ³·³ µ¿ÀÛ
-        shape.radius = radius;
-        shape.radiusThickness = 0f; // Áß½É¿¡¼­¸¸ »ı¼º
+        shape.shapeType = ParticleSystemShapeType.Sphere;
+        shape.radius = r;
+        shape.radiusThickness = 0f;
 
-        // Velocity over Lifetime: Áß½É¿¡¼­ ¹Ù±ùÀ¸·Î ÆÛÁö°Ô + »ìÂ¦ È¸Àü°¨
+        // Velocity / Limit
         var vel = ps.velocityOverLifetime;
         vel.enabled = true;
         vel.space = ParticleSystemSimulationSpace.Local;
-        vel.radial = new ParticleSystem.MinMaxCurve(0.6f, 1.0f);
-        vel.orbitalX = 0f;
-        vel.orbitalY = 0f;
-        vel.orbitalZ = 0.15f; // ¾à°£ÀÇ °øÀü°¨(¼±ÅÃ)
+        vel.radial = new ParticleSystem.MinMaxCurve(0.2f, 0.6f);
+        vel.orbitalZ = 0.1f;
 
-        // Size over Lifetime: ÆÅ ¹İÂ¦¿´´Ù°¡ ÀÛ¾ÆÁü
+        var lim = ps.limitVelocityOverLifetime;
+        lim.enabled = true;
+        lim.separateAxes = false;
+        lim.limit = limit;
+        lim.dampen = dampen;
+
+        // Size over Lifetime
         var size = ps.sizeOverLifetime;
         size.enabled = true;
-        AnimationCurve sizeCurve = new AnimationCurve(
-            new Keyframe(0f, 1.0f, 0f, -3f),
-            new Keyframe(0.3f, 0.6f),
+        size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+            new Keyframe(0f, 1.25f, 0f, -5f),
+            new Keyframe(0.07f, 1.0f),
+            new Keyframe(0.35f, 0.5f),
             new Keyframe(1f, 0f)
-        );
-        size.size = new ParticleSystem.MinMaxCurve(1f, sizeCurve);
+        ));
 
-        // Color over Lifetime: ¼­¼­È÷ ÆäÀÌµå¾Æ¿ô
+        // Color over Lifetime
         var col = ps.colorOverLifetime;
         col.enabled = true;
-        col.color = new ParticleSystem.MinMaxGradient(colorOverLife);
+        col.color = new ParticleSystem.MinMaxGradient(
+            usePastelPalette ? MakeAlphaFadeGradient()  // ìƒ‰ ìœ ì§€ + ì•ŒíŒŒë§Œ í˜ì´ë“œ
+                             : (colorTheme == ColorTheme.WarmGold ? MakeGoldGradient()
+                               : colorTheme == ColorTheme.SoftSky ? MakeSkyGradient()
+                               : (colorOverLife ?? MakeGoldGradient()))
+        );
 
-        // Renderer Á¤·Ä ÀçÀû¿ë
+        // Trails / Noise
+        var trails = ps.trails; trails.enabled = enableTrails;
+        if (enableTrails) { trails.lifetime = trailLifetime; trails.ratio = trailRatio; trails.dieWithParticles = true; }
+        var noise = ps.noise; noise.enabled = enableNoise;
+        if (enableNoise) { noise.strength = noiseStrength; noise.frequency = noiseFrequency; noise.scrollSpeed = 0f; }
+
+        // ì •ë ¬
         var pr = GetComponent<ParticleSystemRenderer>();
         pr.sortingLayerName = sortingLayerName;
         pr.sortingOrder = sortingOrder;
 
-        // ·çÇÁ ½ÃÀÛ
-        if (!Application.isPlaying) ps.Simulate(0f, true, true);
-        ps.Play();
+        if (!Application.isPlaying) { ps.Simulate(0f, true, true); ps.Play(); }
+        else { ps.Play(); }
     }
 
-    // ·±Å¸ÀÓ¿¡ ÆÄ¶ó¹ÌÅÍ ¹Ù²Ù¸é Áï½Ã ¹İ¿µÇÏ°í ½ÍÀ» ¶§ È£Ãâ
-    public void Refresh()
+    // === ì™¸ë¶€ í˜¸ì¶œ: ë²„ìŠ¤íŠ¸ ===
+    public void Burst()
     {
-        Apply();
+        if (ps == null) return;
+
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        ps.Clear();
+        ps.Play(true);
+
+        if (!burstMode)
+            return;
+
+        if (usePastelPalette)
+        {
+            // ìˆ˜ë™ Emit: íŒŒí‹°í´ë§ˆë‹¤ íŒ”ë ˆíŠ¸ì—ì„œ ìƒ‰ì„ ë½‘ì•„ ì§€ì •
+            int count = Random.Range(cachedMinBurst, cachedMaxBurst + 1);
+            for (int i = 0; i < count; i++)
+            {
+                var emit = new ParticleSystem.EmitParams();
+                emit.startColor = PickPastel();
+                // í¬ê¸°/ì†ë„/ìˆ˜ëª…ì€ Mainì˜ MinMaxCurveì— ë§¡ê¹€
+                ps.Emit(emit, 1);
+            }
+        }
+        // íŒ”ë ˆíŠ¸ ë¯¸ì‚¬ìš©ì´ë©´ Apply()ì—ì„œ ì„¸íŒ…í•œ ì—”ì§„ Burstê°€ ìë™ìœ¼ë¡œ ì²˜ë¦¬ë¨
+    }
+
+    public void Refresh() => Apply();
+
+    // ===== Helpers =====
+    static readonly int ID_Color = Shader.PropertyToID("_Color");
+    static readonly int ID_BaseColor = Shader.PropertyToID("_BaseColor");
+    static readonly int ID_TintColor = Shader.PropertyToID("_TintColor");
+    static readonly int ID_EmissionCol = Shader.PropertyToID("_EmissionColor");
+
+    void NormalizeMaterialColor(Material m)
+    {
+        if (!m) return;
+        if (m.HasProperty(ID_Color)) m.SetColor(ID_Color, Color.white);
+        if (m.HasProperty(ID_BaseColor)) m.SetColor(ID_BaseColor, Color.white);
+        if (m.HasProperty(ID_TintColor)) m.SetColor(ID_TintColor, Color.white);
+        if (m.HasProperty(ID_EmissionCol)) m.SetColor(ID_EmissionCol, Color.black);
+    }
+
+    Gradient MakeGoldGradient()
+    {
+        var g = new Gradient();
+        g.SetKeys(
+            new[] {
+                new GradientColorKey(new Color(1f, 0.96f, 0.70f), 0f),
+                new GradientColorKey(new Color(1f, 0.99f, 0.88f), 0.15f),
+                new GradientColorKey(Color.white, 0.35f),
+                new GradientColorKey(Color.white, 1f)
+            },
+            new[] {
+                new GradientAlphaKey(1f, 0f),
+                new GradientAlphaKey(0.8f, 0.15f),
+                new GradientAlphaKey(0.35f, 0.6f),
+                new GradientAlphaKey(0f, 1f)
+            }
+        );
+        return g;
+    }
+
+    Gradient MakeSkyGradient()
+    {
+        var g = new Gradient();
+        g.SetKeys(
+            new[] {
+                new GradientColorKey(new Color(0.84f, 0.94f, 1f), 0f),
+                new GradientColorKey(new Color(0.90f, 0.97f, 1f), 0.2f),
+                new GradientColorKey(Color.white, 0.4f),
+                new GradientColorKey(Color.white, 1f)
+            },
+            new[] {
+                new GradientAlphaKey(1f, 0f),
+                new GradientAlphaKey(0.75f, 0.2f),
+                new GradientAlphaKey(0.3f, 0.6f),
+                new GradientAlphaKey(0f, 1f)
+            }
+        );
+        return g;
+    }
+
+    // ìƒ‰ì€ ìœ ì§€í•˜ê³ , ì•ŒíŒŒë§Œ í˜ì´ë“œë˜ëŠ” ê·¸ë¼ë°ì´ì…˜(íŒ”ë ˆíŠ¸ ëª¨ë“œì—ì„œ ì‚¬ìš©)
+    Gradient MakeAlphaFadeGradient()
+    {
+        var g = new Gradient();
+        g.SetKeys(
+            new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+            new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(0f, 1f) }
+        );
+        return g;
+    }
+
+    // íŒ”ë ˆíŠ¸ì—ì„œ í•˜ë‚˜ ë½‘ì•„ íŒŒìŠ¤í…” í†¤ìœ¼ë¡œ ì‚´ì§ í”ë“¤ê¸°
+    Color PickPastel()
+    {
+        if (pastelPalette == null || pastelPalette.Length == 0)
+            return Jitter(new Color(0.9f, 0.95f, 1f), pastelHueJitter, pastelValueJitter); // sky ê³„ì—´
+
+        var baseC = pastelPalette[Random.Range(0, pastelPalette.Length)];
+        return Jitter(baseC, pastelHueJitter, pastelValueJitter);
+    }
+
+    Color Jitter(Color c, float hNoise, float vNoise)
+    {
+        Color.RGBToHSV(c, out float h, out float s, out float v);
+        // íŒŒìŠ¤í…” ìœ ì§€: ë‚®ì€ ì±„ë„/ë†’ì€ ëª…ë„ë¡œ í´ë¨í”„
+        h += Random.Range(-hNoise, hNoise);
+        v += Random.Range(-vNoise, vNoise);
+        s = Mathf.Clamp01(s * 0.8f);   // ì±„ë„ ì¡°ê¸ˆ ë‚®ì¶¤
+        v = Mathf.Clamp01(v);          // ëª…ë„ ìœ ì§€
+        return Color.HSVToRGB(Mathf.Repeat(h, 1f), s, v);
     }
 }
