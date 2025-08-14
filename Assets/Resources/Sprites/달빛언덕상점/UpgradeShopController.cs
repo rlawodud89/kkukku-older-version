@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,24 +8,34 @@ public class UpgradeShopController : MonoBehaviour
     [SerializeField] Button designUpgradeButton;    // 디자인 상점 업글
     [SerializeField] PurchaseConfirmPopup popup;
 
+    [Header("레벨 텍스트들")]
+    [SerializeField] TMP_Text itemshoplevelText;
+    [SerializeField] TMP_Text designshoplevelText;
+    
+
     [Header("가격 / 상태")]
     [SerializeField] int materialUpgradePrice = 5000;
     [SerializeField] int designUpgradePrice = 8000;
 
+    private GameManager gameManager;
     bool materialUpgraded = false;
     bool designUpgraded = false;
 
     void Awake()
     {
+        gameManager = GameManager.getInstance();
         materialUpgradeButton.onClick.AddListener(OnMaterialUpgradeClick);
         designUpgradeButton.onClick.AddListener(OnDesignUpgradeClick);
+
+        itemshoplevelText.text = "Lv. " + gameManager.Get_ItemShopLevel();
+        designshoplevelText.text = "Lv. " + gameManager.Get_DesignShopLevel();
     }
 
     void OnMaterialUpgradeClick()
     {
-        if (materialUpgraded)
+        if (!CanBuy(materialUpgradePrice))
         {
-            Debug.Log("이미 재료 상점 업그레이드 완료");
+            Debug.Log("월석 부족");
             return;
         }
 
@@ -35,9 +46,9 @@ public class UpgradeShopController : MonoBehaviour
 
     void OnDesignUpgradeClick()
     {
-        if (designUpgraded)
+        if (!CanBuy(designUpgradePrice))
         {
-            Debug.Log("이미 디자인 상점 업그레이드 완료");
+            Debug.Log("월석 부족");
             return;
         }
 
@@ -48,14 +59,23 @@ public class UpgradeShopController : MonoBehaviour
 
     void DoMaterialUpgrade()
     {
-        // 코인 차감 / 기능 열기 등 실제 로직
+        gameManager.Change_Moonrock(-materialUpgradePrice);
+        gameManager.Change_ItemShopLevel(1);
+        itemshoplevelText.text = "Lv. " + gameManager.Get_ItemShopLevel().ToString();
         Debug.Log("재료 상점 업그레이드 완료!");
-        materialUpgraded = true;
     }
 
     void DoDesignUpgrade()
     {
+        gameManager.Change_Moonrock(-designUpgradePrice);
+        gameManager.Change_DesignShopLevel(1);
+        designshoplevelText.text = "Lv. " + gameManager.Get_DesignShopLevel().ToString();
         Debug.Log("디자인 상점 업그레이드 완료!");
-        designUpgraded = true;
+    }
+
+    private bool CanBuy(int value)
+    {
+        if (value <= gameManager.Get_Moonrock()) return true;
+        else return false;
     }
 }

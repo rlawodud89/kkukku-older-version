@@ -97,7 +97,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 4
+  m_Spacing: 1
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -166,7 +166,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 427.76468, y: -191.00195}
-  m_SizeDelta: {x: 270, y: 140}
+  m_SizeDelta: {x: 260, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2797225413422358337
 CanvasRenderer:
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 270
+  m_PreferredWidth: 260
   m_PreferredHeight: 140
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -268,10 +268,13 @@ MonoBehaviour:
   nameText: {fileID: 2646925494959079287}
   priceText: {fileID: 6012809868924245670}
   buyButton: {fileID: 7490808858792498858}
+  coinImage: {fileID: 3660646331944265156}
   qtyRow: {fileID: 0}
   incButton: {fileID: 0}
   decButton: {fileID: 0}
   qtyText: {fileID: 0}
+  goldSprite: {fileID: 21300000, guid: 03ed8f15a064c684785ef5f714e1d68c, type: 3}
+  moonrockSprite: {fileID: 21300000, guid: f9322c9a37b059e4c88f25d5766ae73a, type: 3}
 --- !u!1 &3445040766978613061
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,8 +367,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17
-  m_fontSizeBase: 17
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 10
@@ -442,8 +445,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 54, y: 0}
-  m_SizeDelta: {x: 130, y: 0}
+  m_AnchoredPosition: {x: 58.704266, y: 0}
+  m_SizeDelta: {x: 104, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3732934863371640096
 CanvasRenderer:
@@ -496,7 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 2
-  m_AspectRatio: 1
+  m_AspectRatio: 0.8
 --- !u!114 &8189490298969969346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,7 +515,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 100
+  m_PreferredWidth: 150
   m_PreferredHeight: -1
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
@@ -638,7 +641,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 110
+  m_PreferredWidth: 125
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
@@ -735,10 +738,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.5
-  m_fontSizeBase: 24
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 10
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -874,8 +877,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 10
@@ -1029,8 +1032,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 10
@@ -1158,7 +1161,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 03ed8f15a064c684785ef5f714e1d68c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f9322c9a37b059e4c88f25d5766ae73a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1240,8 +1243,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 228, y: -70}
-  m_SizeDelta: {x: 44, y: 0}
+  m_AnchoredPosition: {x: 220.51828, y: -70}
+  m_SizeDelta: {x: 38.963413, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2756336421093499582
 CanvasRenderer:
@@ -1340,7 +1343,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 50
+  m_PreferredWidth: 60
   m_PreferredHeight: -1
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
@@ -1358,4 +1361,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 1
-  m_AspectRatio: 2
+  m_AspectRatio: 1.6

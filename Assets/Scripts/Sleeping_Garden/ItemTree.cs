@@ -1,70 +1,62 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemTree : MonoBehaviour
 {
-    public Button item1;
-    public Button item2;
-    public List<Sprite> ItemSprites;
+    [SerializeField] Button item1;
+    [SerializeField] Button item2;
+
+    private ItemScript itemScript1;
+    private ItemScript itemScript2;
 
     private int count1;
     private int count2;
     private static int MAXCOUNT = 5;
 
-    // Start is called before the first frame update
+    private GameManager gameManager;
+
     void Start()
     {
-        //∑£¥˝¿∏∑Œ æ∆¿Ã≈€ πˆ∆∞ «•Ω√
+        gameManager = GameManager.getInstance();
+
+        //ÎûúÎç§ÏúºÎ°ú ÏïÑÏù¥ÌÖú Î≤ÑÌäº ÌëúÏãú
         int random = Random.Range(0, 2);
         item1.gameObject.SetActive(random == 1);
         random = Random.Range(0, 2);
         item2.gameObject.SetActive(random == 1);
 
-        if(item1.gameObject.activeSelf || item2.gameObject.activeSelf)
+        if (item1.gameObject.activeSelf || item2.gameObject.activeSelf)
         {
-            //æ∆¿Ã≈€ ¿ÃπÃ¡ˆ ∏ÆΩ∫∆Æ ∫“∑Øø¿±‚
-            Sprite[] loadedSprites = Resources.LoadAll<Sprite>("Sleeping_Garden/Objects/Items");
-            ItemSprites = new List<Sprite>(loadedSprites);
+            itemScript1 = gameManager.Get_Random_Snack();
+            itemScript2 = gameManager.Get_Random_Snack();
 
-            //∑£¥˝¿∏∑Œ æ∆¿Ã≈€ º±≈√«ÿº≠ πˆ∆∞ø° «•Ω√
-            int randomIndex = Random.Range(0, ItemSprites.Count);
-            Sprite selectedSprite = ItemSprites[randomIndex];
-            item1.GetComponent<Image>().sprite = selectedSprite;
-            randomIndex = Random.Range(0, ItemSprites.Count);
-            selectedSprite = ItemSprites[randomIndex];
-            item2.GetComponent<Image>().sprite = selectedSprite;
+            item1.GetComponent<Image>().sprite = itemScript1.image;
+            item2.GetComponent<Image>().sprite = itemScript2.image;
         }
 
         count1 = 0;
         count2 = 0;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ClickItem1()
     {
         count1++;
-        if(count1 == MAXCOUNT)
+        if (count1 == MAXCOUNT)
         {
             count1 = 0;
             item1.gameObject.SetActive(false);
+            gameManager.Add_InventoryItem(itemScript1.itemName, 1);
         }
     }
 
     public void ClickItem2()
     {
         count2++;
-        if(count2 == MAXCOUNT)
+        if (count2 == MAXCOUNT)
         {
             count2 = 0;
             item2.gameObject.SetActive(false);
+            gameManager.Add_InventoryItem(itemScript2.itemName, 1);
         }
     }
 }

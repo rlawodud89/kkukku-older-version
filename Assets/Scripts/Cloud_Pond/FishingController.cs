@@ -1,15 +1,21 @@
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class FishingController : MonoBehaviour
 {
     private bool fishing_start = false;
     private Coroutine fishingRoutine;
 
-    public Text fishing_txt;
+    public TextMeshProUGUI fishing_txt;
     public Button fishing_closebtn;
     public Button fishing_btn;
+    public MaterialManager materialManager;
+    public MaterialsInventory materialsInventory;
+
+    private MaterialData currentdata;
 
     public float minDelay = 4f;
     public float maxDelay = 7f;
@@ -38,7 +44,7 @@ public class FishingController : MonoBehaviour
                 fishingRoutine = null;
             }
 
-            fishing_txt.text = ""; // ≈ÿΩ∫∆Æ √ ±‚»≠
+            fishing_txt.text = ""; // ÌÖçÏä§Ìä∏ Ï¥àÍ∏∞Ìôî
         }
 
         fishing_closebtn.gameObject.SetActive(false);
@@ -49,16 +55,27 @@ public class FishingController : MonoBehaviour
     {
         while (fishing_start)
         {
-            fishing_txt.text = "≥¨Ω√∏¶ Ω√¿€«’¥œ¥Ÿ.";
-            yield return new WaitForSeconds(2f);
-            fishing_txt.text = "";
+            fishing_txt.text = "ÎÇöÏãú Ï§ë...";
 
             float waitTime = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(waitTime);
 
-            fishing_txt.text = "¿Á∑· »πµÊ!";
+            getMaterial();
+
+            fishing_txt.text = currentdata.MaterialName + " ÌöçÎìù!";
             yield return new WaitForSeconds(2f);
             fishing_txt.text = "";
         }
+    }
+
+    void getMaterial()
+    {
+        int material_count = materialManager.MaterialsList.Count;
+        int itemIndex = Random.Range(0, material_count - 1);
+
+        currentdata = materialManager.MaterialsList[itemIndex];
+        materialsInventory.AddMaterial(currentdata);
+
+
     }
 }

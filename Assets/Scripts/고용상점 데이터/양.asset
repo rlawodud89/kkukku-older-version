@@ -15,7 +15,9 @@ MonoBehaviour:
   displayName: "\uC591"
   icon: {fileID: 21300000, guid: 0c7524b412dd25a4fac988e4628a2e4d, type: 3}
   price: 7000
-  useQuantity: 0
+  isGold: 0
+  isWorker: 1
+  useQuantity: 1
   defaultQty: 1
   minQty: 1
   maxQty: 99

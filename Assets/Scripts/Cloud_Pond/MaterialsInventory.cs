@@ -1,0 +1,55 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class MaterialsInventory : MonoBehaviour
+{
+    public List<MaterialInventoryEntry> ownedMaterials;
+
+    public UnityEvent OnInventoryChanged = new UnityEvent();
+
+    public Dictionary<MaterialData, int> GetAllMaterial()
+    {
+        var dict = new Dictionary<MaterialData, int>();
+        foreach (var entry in ownedMaterials)
+        {
+            if (entry.data != null)
+            {
+                dict[entry.data] = entry.count;
+            }
+        }
+        return dict;
+    }
+
+    public int GetCount(MaterialData data)
+    {
+        var entry = ownedMaterials.Find(e => e.data == data);
+        return entry != null ? entry.count : 0;
+
+    }
+
+    /// <summary>
+    /// 간식을 인벤토리에 추가합니다. 이미 존재하면 수량 증가, 없으면 새로 추가.
+    /// </summary>
+    public void AddMaterial(MaterialData material, int amount = 1)
+    {
+        if (material == null || amount <= 0) return;
+
+        var entry = ownedMaterials.Find(e => e.data == material);
+        if (entry != null)
+        {
+            entry.count += amount;
+        }
+        else
+        {
+            ownedMaterials.Add(new MaterialInventoryEntry
+            {
+                data = material,
+                count = amount
+            });
+        }
+
+        // UI 갱신을 위한 이벤트 호출
+        OnInventoryChanged?.Invoke();
+    }
+}

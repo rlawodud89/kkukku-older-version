@@ -2,10 +2,22 @@ using UnityEngine;
 
 public class ClickSome : MonoBehaviour
 {
-    public GameObject scrollView; // Scroll View ÇÒ´ç
-
+    public GameObject scrollView; // Scroll View ï¿½Ò´ï¿½
+    public GameObject Panel;
     private Vector3 mouseDownPos;
-    private float dragThreshold = 10f; // ÃÖ¼Ò ÀÌµ¿ °Å¸® (ÇÈ¼¿ ´ÜÀ§)
+    private float dragThreshold = 2f; // ï¿½Ö¼ï¿½ ï¿½Ìµï¿½ ï¿½Å¸ï¿½ (ï¿½È¼ï¿½ ï¿½ï¿½ï¿½ï¿½)
+
+    private InteriorManager interiorManager;
+
+    void Start()
+    {
+        interiorManager = FindObjectOfType<InteriorManager>();       
+    }
+
+    void Update()
+    {
+
+    }
 
     void OnMouseDown()
     {
@@ -14,11 +26,15 @@ public class ClickSome : MonoBehaviour
 
     void OnMouseUp()
     {
+        if (interiorManager != null && interiorManager.interiorMode)
+            return;
+        
         float movedDistance = Vector3.Distance(Input.mousePosition, mouseDownPos);
 
         if (movedDistance < dragThreshold)
         {
-            scrollView.SetActive(true); // Å¬¸¯À¸·Î ÆÇ´ÜµÉ ¶§¸¸ ¿­±â
+            scrollView.SetActive(true); // Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´Üµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            Panel.SetActive(true);
         }
     }
 }

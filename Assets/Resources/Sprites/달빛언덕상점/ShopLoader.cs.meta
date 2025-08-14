@@ -3,7 +3,12 @@ guid: f15e0305ade55134a86f420cbbed8249
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - contentRoot: {instanceID: 0}
+  - cardPrefab: {instanceID: 0}
+  - popup: {instanceID: 0}
+  - goldSprite: {fileID: 21300000, guid: 03ed8f15a064c684785ef5f714e1d68c, type: 3}
+  - moonrockSprite: {fileID: 21300000, guid: f9322c9a37b059e4c88f25d5766ae73a, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

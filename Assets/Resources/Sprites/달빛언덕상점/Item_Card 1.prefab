@@ -463,10 +463,13 @@ MonoBehaviour:
   nameText: {fileID: 2646925494959079287}
   priceText: {fileID: 6012809868924245670}
   buyButton: {fileID: 7490808858792498858}
+  coinImage: {fileID: 3660646331944265156}
   qtyRow: {fileID: 6480376739599842996}
   incButton: {fileID: 9092585715131670892}
   decButton: {fileID: 1276498584448032724}
   qtyText: {fileID: 6879851956482049235}
+  goldSprite: {fileID: 21300000, guid: 03ed8f15a064c684785ef5f714e1d68c, type: 3}
+  moonrockSprite: {fileID: 21300000, guid: f9322c9a37b059e4c88f25d5766ae73a, type: 3}
 --- !u!114 &17138770109349035
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,17 +3,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Shop/Item Data")]
 public class ItemData : ScriptableObject
 {
-    [Header("°øÅë")]
+    [Header("ê³µí†µ")]
     public string displayName;
     public Sprite icon;
     public int price;
+    public bool isGold; // ì¼ë°˜ ì¬í™” ì‚¬ìš©í•˜ë©´ true, ì›”ì„ ì‚¬ìš©í•˜ë©´ false
 
-    [Header("¼ö·®ÀÌ ÇÊ¿äÇÑ ÀÏ¹İ ¾ÆÀÌÅÛÀÎ°¡?")]
+    [Header("ìˆ˜ëŸ‰ì´ í•„ìš”í•œ ì¼ë°˜ ì•„ì´í…œì¸ê°€?")]
     public bool useQuantity = true;
     public int defaultQty = 1;
     public int minQty = 1;
     public int maxQty = 99;
 
-    [Header("°í¿ë Ä«µåÀÏ °æ¿ì")]
-    public GameObject recruitPrefab;     // °í¿ëÇÒ À¯´Ö ÇÁ¸®ÆÕ (¾øÀ¸¸é ÀÏ¹İ Ä«µå)
+    [Header("ê³ ìš© ì¹´ë“œì¼ ê²½ìš°")]
+    public GameObject recruitPrefab;     // ê³ ìš©í•  ìœ ë‹› í”„ë¦¬íŒ¹ (ì—†ìœ¼ë©´ ì¼ë°˜ ì¹´ë“œ)
 }
