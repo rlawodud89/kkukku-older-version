@@ -16,13 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 8a6c2451754f9ec46a8a7c76fe19ece3
-  m_SerializeEntries:
-  - m_GUID: cf1860182bef45f4a8915917be6bc4de
-    m_Address: "Assets/ScriptableObject/Materials/\uAD6C\uB984\uC19C\uC0AC\uD0D5\uBC84\uC12F.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - snack
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:
