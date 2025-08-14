@@ -16,7 +16,7 @@ public class SortAgentSprite2D : MonoBehaviour
 
     [Header("Base order from grid")]
     public bool useScreenDownDepth = false;   // ON: -(cx+cy), OFF: -cx
-    [Range(0, 5)] public int leftBias = 0;     // °°Àº ÁÙ¿¡¼­ -cx º¸Á¤
+    [Range(0, 5)] public int leftBias = 0;     // ê°™ì€ ì¤„ì—ì„œ -cx ë³´ì •
     public int stepPerCell = 20;
     public int stepPerFloor = 1000;
     public int localOffset = 0;
@@ -27,19 +27,19 @@ public class SortAgentSprite2D : MonoBehaviour
     public int tierFront = 2_000_000;
 
     [Header("Character flag / Foot pivot")]
-    public bool isCharacter = false;          // Ä³¸¯ÅÍ¸é true
-    public Transform foot;                    // ¹ß/¾Õ-¿Ş ±âÁØ
+    public bool isCharacter = false;          // ìºë¦­í„°ë©´ true
+    public Transform foot;                    // ë°œ/ì•-ì™¼ ê¸°ì¤€
 
-    // ----- Ä³¸¯ÅÍ ·¹Áö½ºÆ®¸®(¹ß ÁÂÇ¥ Á¶È¸¿ë) -----
+    // ----- ìºë¦­í„° ë ˆì§€ìŠ¤íŠ¸ë¦¬(ë°œ ì¢Œí‘œ ì¡°íšŒìš©) -----
     public static readonly HashSet<SortAgentSprite2D> All = new();
 
-    // ----- ³»ºÎ -----
+    // ----- ë‚´ë¶€ -----
     SortingGroup sg; SpriteRenderer sr;
 
-    // ´©Àû ¼öÁ¤ÀÚ(Indoor/BackZone µî ¿©·¯ ¼Ò½º°¡ µ¿½Ã¿¡ ´õÇÔ)
+    // ëˆ„ì  ìˆ˜ì •ì(Indoor/BackZone ë“± ì—¬ëŸ¬ ì†ŒìŠ¤ê°€ ë™ì‹œì— ë”í•¨)
     readonly Dictionary<string, int> _mods = new();
 
-    // Ä³½Ì(À§Ä¡°¡ ¾È º¯ÇØµµ »óÅÂ º¯°æ½Ã Áï½Ã °»½Å)
+    // ìºì‹±(ìœ„ì¹˜ê°€ ì•ˆ ë³€í•´ë„ ìƒíƒœ ë³€ê²½ì‹œ ì¦‰ì‹œ ê°±ì‹ )
     Vector3Int _lastCell = new(int.MinValue, int.MinValue, int.MinValue);
     int _lastAppliedOrder = int.MinValue;
     DepthRole _lastRole = DepthRole.Dynamic;
@@ -62,7 +62,7 @@ public class SortAgentSprite2D : MonoBehaviour
         ApplyOrder(false);
     }
 
-    // ---- ¿ÜºÎ API ----
+    // ---- ì™¸ë¶€ API ----
     public void SetModifier(string key, int value)
     {
         if (value == 0) { if (_mods.Remove(key)) ApplyOrder(true); return; }
@@ -115,7 +115,7 @@ public class SortAgentSprite2D : MonoBehaviour
         else if (sr) { sr.sortingLayerName = sortingLayer; sr.sortingOrder = key; }
     }
 
-    // µğ¹ö±×¿ë foot ¿ùµåÁÂÇ¥
+    // ë””ë²„ê·¸ìš© foot ì›”ë“œì¢Œí‘œ
     public Vector3 FootWorld => foot ? foot.position : transform.position;
 }
 

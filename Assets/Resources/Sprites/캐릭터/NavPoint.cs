@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class NavPoint : MonoBehaviour
 {
-    public enum Face { Auto, LeftDown, RightUp, LeftUp, RightDown } // ¾ÆÀÌ¼Ò 4¹æ
-    [Header("µµÂø½Ã ¹Ù¶óº¼ ¹æÇâ (Auto=ÀÌµ¿ ¹æÇâ À¯Áö)")]
+    public enum Face { Auto, LeftDown, RightUp, LeftUp, RightDown } // ì•„ì´ì†Œ 4ë°©
+    [Header("ë„ì°©ì‹œ ë°”ë¼ë³¼ ë°©í–¥ (Auto=ì´ë™ ë°©í–¥ ìœ ì§€)")]
     public Face face = Face.Auto;
 
-    [Header("°ãÃÄ ¼­µµ µÇ´Â°¡? (Start/¹® Æ÷ÀÎÆ®´Â Ã¼Å©)")]
+    [Header("ê²¹ì³ ì„œë„ ë˜ëŠ”ê°€? (Start/ë¬¸ í¬ì¸íŠ¸ëŠ” ì²´í¬)")]
     public bool allowOverlap = false;
 
-    [Header("Á¢±Ù ¿ÀÇÁ¼Â(¼¿ ±âÁØ). ºñ¿ì¸é ±âº» 4¹æ(-x, -y, +y, +x)")]
+    [Header("ì ‘ê·¼ ì˜¤í”„ì…‹(ì…€ ê¸°ì¤€). ë¹„ìš°ë©´ ê¸°ë³¸ 4ë°©(-x, -y, +y, +x)")]
     public Vector3Int[] approachOffsets;
 
     public Vector3Int[] GetOffsetsOrDefault() =>
         (approachOffsets != null && approachOffsets.Length > 0)
         ? approachOffsets
         : new Vector3Int[] { new(-1, 0, 0), new(0, -1, 0), new(0, 1, 0), new(1, 0, 0) };
+    
+    [Header("Shop Table")]
+    [Tooltip("GameManager.Use_RandomOne_BlanketInTable(tableId)ì— ì „ë‹¬ë  í…Œì´ë¸” ID")]
+    public int tableId = 0;   // 0ì´ë©´ ë¯¸ì‚¬ìš©
 }

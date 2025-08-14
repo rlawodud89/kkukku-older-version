@@ -4,30 +4,60 @@ using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour
 {
-    // ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ 1. ½ºÆù ´ë»ó ÇÁ¸®ÆÕ ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡
-    [Header("¹«ÀÛÀ§·Î »Ì¾Æ ¾µ Ä³¸¯ÅÍ ÇÁ¸®ÆÕµé")]
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 1) ìŠ¤í° ëŒ€ìƒ í”„ë¦¬íŒ¹ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    [Header("ë¬´ì‘ìœ„ë¡œ ë½‘ì•„ ì“¸ ìºë¦­í„° í”„ë¦¬íŒ¹ë“¤")]
     public GameObject[] prefabs;
 
-    [Header("½ºÆù À§Ä¡ (¾øÀ¸¸é ÀÚ±â Transform)")]
+    [Header("ìŠ¤í° ìœ„ì¹˜ (ì—†ìœ¼ë©´ ìê¸° Transform)")]
     public Transform spawnPoint;
 
-    // ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ 2. AStarMover ÁÖÀÔ¿ë ·¹ÆÛ·±½º ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ ¡Ú
-    [Header("AStarMover °æ·Î ÀÇÁ¸¼º(¼±ÅÃ)")]
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 2) AStarMover ê²½ë¡œ ì˜ì¡´ì„± â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    [Header("AStarMover ê²½ë¡œ ì˜ì¡´ì„±(ì„ íƒ)")]
     public Grid grid;                       // Isometric Grid
     public NavPoint startPoint;
     public NavPoint[] doorPoints;
     public NavPoint[] shelfPoints;
     public NavPoint cashierPoint;
 
-    // ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ 3. Æ®¸®°Å¿ë UI ¹öÅÏ ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡
-    [Header("UI Button (¾øÀ¸¸é ÀÚµ¿ ½ÃÀÛ)")]
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 3) AStarMover ì¸ìŠ¤í™í„° ì˜¤ë²„ë¼ì´ë“œ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    [System.Serializable]
+    public class MoverOverrides
+    {
+        [Tooltip("ì²´í¬ ì‹œ ì•„ë˜ ê°’ë“¤ë¡œ í”„ë¦¬íŒ¹ ê¸°ë³¸ê°’ì„ ë®ì–´ì”ë‹ˆë‹¤.")]
+        public bool enabled = true;
+
+        [Header("Move")]
+        public float moveSpeed = 2f;
+        public bool allowDiagonal = false;
+        public float arriveThreshold = 0.05f;
+        public float waitAtShelfSeconds = 1.0f;
+        public float waitAtCashierSeconds = 1.0f;
+
+        [Header("Visits")]
+        public int minShelfVisits = 2;
+        public int maxShelfVisits = 5;
+
+        [Header("Shop / Payment")]
+        [Range(0f, 1f)]
+        public float energyPerGold = 0.02f;
+
+        [Header("Quest Mode")]
+        public bool questMode = false;
+        public bool toggleCanvasObject = true;
+    }
+
+    [Header("AStarMover ì˜µì…˜(í”„ë¦¬íŒ¹ ì˜¤ë²„ë¼ì´ë“œ)")]
+    public MoverOverrides mover = new MoverOverrides();
+
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 4) íŠ¸ë¦¬ê±°ìš© UI ë²„íŠ¼ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    [Header("UI Button (ì—†ìœ¼ë©´ ìë™ ì‹œì‘)")]
     public Button spawnButton;
 
-    // ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ 4. ½ºÆù °£°İ ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡
-    [Header("½ºÆù °£°İ [ÃÊ] (Min~Max)")]
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ 5) ìŠ¤í° ê°„ê²© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    [Header("ìŠ¤í° ê°„ê²© [ì´ˆ] (Min~Max)")]
     public Vector2 intervalRange = new Vector2(0f, 3f);
 
-    Coroutine loop;   // ÀÌ¹Ì µ¹°í ÀÖ´ÂÁö Ã¼Å©
+    Coroutine loop;
 
     void Awake()
     {
@@ -37,11 +67,10 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        if (spawnButton == null)   // ¹öÆ°ÀÌ ¾øÀ¸¸é ÀÚµ¿ ½ÃÀÛ
+        if (spawnButton == null)   // ë²„íŠ¼ì´ ì—†ìœ¼ë©´ ìë™ ì‹œì‘
             StartSpawning();
     }
 
-    /// <summary>½ºÆù ·çÇÁ ½ÃÀÛ(ÀÌ¹Ì µ¹°í ÀÖÀ¸¸é ¹«½Ã)</summary>
     public void StartSpawning()
     {
         if (loop == null)
@@ -53,7 +82,6 @@ public class Spawner : MonoBehaviour
         while (true)
         {
             SpawnOne();
-
             float wait = Random.Range(intervalRange.x, intervalRange.y);
             yield return new WaitForSeconds(wait);
         }
@@ -66,21 +94,33 @@ public class Spawner : MonoBehaviour
         GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
         Transform p = spawnPoint ? spawnPoint : transform;
 
-        // ¨ç ÀÎ½ºÅÏ½º »ı¼º
+        // â‘  ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
         GameObject obj = Instantiate(prefab, p.position, p.rotation);
 
-        // ¨è AStarMover ÄÄÆ÷³ÍÆ®°¡ ÀÖÀ¸¸é Init ÁÖÀÔ ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡ ¡Ú
-        var mover = obj.GetComponent<AStarMover>();
-        if (mover != null)
+        // â‘¡ AStarMover ì£¼ì… ë° ì˜µì…˜ ì˜¤ë²„ë¼ì´ë“œ
+        var moverComp = obj.GetComponent<AStarMover>();
+        if (moverComp != null)
         {
-            // Grid / NavPoint °ªÀÌ ÇÒ´çµÅ ÀÖÁö ¾Ê´Ù¸é
-            // mover ³»ºÎ¿¡¼­ FindObjectOfType À¸·Î fallback ÇÏ¹Ç·Î
-            // ¿©±â¼­´Â nullÀÌ¾îµµ ±×´ë·Î ³Ñ°Üµµ OK
-            mover.Init(grid,              // nullÀÌ¸é Awake¿¡¼­ ÀÚµ¿ Find
-                       startPoint,
-                       doorPoints,
-                       shelfPoints,
-                       cashierPoint);
+            // ê²½ë¡œ ì˜ì¡´ì„± ì£¼ì… (ë¹„ì–´ìˆìœ¼ë©´ AStarMover.Awakeì—ì„œ ìë™ fallback)
+            moverComp.Init(grid, startPoint, doorPoints, shelfPoints, cashierPoint);
+
+            // í”„ë¦¬íŒ¹ ê¸°ë³¸ê°’ ë®ì–´ì“°ê¸°
+            if (mover != null && mover.enabled)
+            {
+                moverComp.moveSpeed = mover.moveSpeed;
+                moverComp.allowDiagonal = mover.allowDiagonal;
+                moverComp.arriveThreshold = mover.arriveThreshold;
+                moverComp.waitAtShelfSeconds = mover.waitAtShelfSeconds;
+                moverComp.waitAtCashierSeconds = mover.waitAtCashierSeconds;
+
+                moverComp.minShelfVisits = mover.minShelfVisits;
+                moverComp.maxShelfVisits = mover.maxShelfVisits;
+
+                moverComp.energyPerGold = mover.energyPerGold;
+
+                moverComp.questMode = mover.questMode;
+                moverComp.toggleCanvasObject = mover.toggleCanvasObject;
+            }
         }
     }
 }
