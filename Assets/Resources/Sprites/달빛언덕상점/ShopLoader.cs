@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ShopLoader : MonoBehaviour
@@ -8,14 +11,37 @@ public class ShopLoader : MonoBehaviour
     [SerializeField] List<ItemData> stock;       // 인스펙터 배열
     [SerializeField] PurchaseConfirmPopup popup;
     [SerializeField] ShopType shopType;
+    public Action<SpeechType> speechTrigger;
 
     private GameManager gameManager;
+    private int designshopLevel;
+    private int itemshopLevel;
+    private int designCount;
+    private HashSet<string> uniqueList = new HashSet<string>();
 
     void Start()
     {
         gameManager = GameManager.getInstance();
-        HashSet<string> uniqueList = new HashSet<string>();
+        designshopLevel = gameManager.Get_DesignShopLevel();
+        itemshopLevel = gameManager.Get_ItemShopLevel();
+        designCount = designshopLevel;
 
+        gameManager.OnItemShopLevelChanged += ChangeItemShopLevel;
+        gameManager.OnDesignShopLevelChanged += ChangeDesignShopLevel;
+        gameManager.OnDayEnded += InitContent;
+
+        uniqueList = new HashSet<string>();
+        InitContent();
+    }
+
+    private void InitContent()
+    {
+        stock.Clear();
+        uniqueList.Clear();
+        foreach (Transform child in contentRoot)
+        {
+            Destroy(child.gameObject);
+        }
 
         if (shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어
         {
@@ -69,7 +95,7 @@ public class ShopLoader : MonoBehaviour
         }
         else if (shopType == ShopType.BLANKET) // 이불 디자인
         {
-            while (stock.Count < 3)
+            while (stock.Count < designCount)
             {
                 ItemScript itemScript = gameManager.Get_Random_Blanket();
                 if (uniqueList.Contains(itemScript.itemName)) continue;
@@ -84,6 +110,102 @@ public class ShopLoader : MonoBehaviour
                 uniqueList.Add(itemData.displayName);
             }
         }
+        else if (shopType == ShopType.YARN)
+        {
+            // 1단계
+            ItemScript itemScript1 = gameManager.Get_Material("꿈실");
+            ItemData itemData1 = ScriptableObject.CreateInstance<ItemData>();
+            itemData1.displayName = itemScript1.itemName;
+            itemData1.icon = itemScript1.image;
+            itemData1.price = itemScript1.value;
+            itemData1.isGold = false;
+            stock.Add(itemData1);
+
+            if (itemshopLevel >= 2)
+            {
+                ItemScript itemScript2 = gameManager.Get_Material("별빛꿈실");
+                ItemData itemData2 = ScriptableObject.CreateInstance<ItemData>();
+                itemData2.displayName = itemScript2.itemName;
+                itemData2.icon = itemScript2.image;
+                itemData2.price = itemScript2.value;
+                itemData2.isGold = false;
+                stock.Add(itemData2);
+            }
+            if (itemshopLevel >= 3)
+            {
+                ItemScript itemScript3 = gameManager.Get_Material("은하꿈실");
+                ItemData itemData3 = ScriptableObject.CreateInstance<ItemData>();
+                itemData3.displayName = itemScript3.itemName;
+                itemData3.icon = itemScript3.image;
+                itemData3.price = itemScript3.value;
+                itemData3.isGold = false;
+                stock.Add(itemData3);
+            }
+        }
+        else if (shopType == ShopType.COTTON)
+        {
+            // 1단계
+            ItemScript itemScript1 = gameManager.Get_Material("운무솜");
+            ItemData itemData1 = ScriptableObject.CreateInstance<ItemData>();
+            itemData1.displayName = itemScript1.itemName;
+            itemData1.icon = itemScript1.image;
+            itemData1.price = itemScript1.value;
+            itemData1.isGold = false;
+            stock.Add(itemData1);
+
+            if (itemshopLevel >= 2)
+            {
+                ItemScript itemScript2 = gameManager.Get_Material("햇빛운무솜");
+                ItemData itemData2 = ScriptableObject.CreateInstance<ItemData>();
+                itemData2.displayName = itemScript2.itemName;
+                itemData2.icon = itemScript2.image;
+                itemData2.price = itemScript2.value;
+                itemData2.isGold = false;
+                stock.Add(itemData2);
+            }
+            if (itemshopLevel >= 3)
+            {
+                ItemScript itemScript3 = gameManager.Get_Material("천공운무솜");
+                ItemData itemData3 = ScriptableObject.CreateInstance<ItemData>();
+                itemData3.displayName = itemScript3.itemName;
+                itemData3.icon = itemScript3.image;
+                itemData3.price = itemScript3.value;
+                itemData3.isGold = false;
+                stock.Add(itemData3);
+            }
+        }
+        else if (shopType == ShopType.DECO)
+        {
+            // 1단계
+            ItemScript itemScript1 = gameManager.Get_Material("달조각");
+            ItemData itemData1 = ScriptableObject.CreateInstance<ItemData>();
+            itemData1.displayName = itemScript1.itemName;
+            itemData1.icon = itemScript1.image;
+            itemData1.price = itemScript1.value;
+            itemData1.isGold = false;
+            stock.Add(itemData1);
+
+            if (itemshopLevel >= 2)
+            {
+                ItemScript itemScript2 = gameManager.Get_Material("은빛달조각");
+                ItemData itemData2 = ScriptableObject.CreateInstance<ItemData>();
+                itemData2.displayName = itemScript2.itemName;
+                itemData2.icon = itemScript2.image;
+                itemData2.price = itemScript2.value;
+                itemData2.isGold = false;
+                stock.Add(itemData2);
+            }
+            if (itemshopLevel >= 3)
+            {
+                ItemScript itemScript3 = gameManager.Get_Material("청야달조각");
+                ItemData itemData3 = ScriptableObject.CreateInstance<ItemData>();
+                itemData3.displayName = itemScript3.itemName;
+                itemData3.icon = itemScript3.image;
+                itemData3.price = itemScript3.value;
+                itemData3.isGold = false;
+                stock.Add(itemData3);
+            }
+        }
         // 직원은 Inspector에서 설정
 
         foreach (var data in stock)
@@ -91,6 +213,124 @@ public class ShopLoader : MonoBehaviour
             var card = Instantiate(cardPrefab, contentRoot);
             card.Init(data, OnBuyRequest);
         }
+    }
+
+    private void ChangeItemShopLevel(int itemshopLevel)
+    {
+        this.itemshopLevel = itemshopLevel;
+        if (shopType == ShopType.YARN)
+        {
+            // 1단계는 이미 Inspector에서 넣어놓음
+
+            if (itemshopLevel == 2)
+            {
+                ItemScript itemScript = gameManager.Get_Material("별빛꿈실");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+            if (itemshopLevel == 3)
+            {
+                ItemScript itemScript = gameManager.Get_Material("은하꿈실");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+
+            var card = Instantiate(cardPrefab, contentRoot);
+            card.Init(stock.Last(), OnBuyRequest);
+        }
+        else if (shopType == ShopType.COTTON)
+        {
+            // 1단계는 이미 Inspector에서 넣어놓음
+
+            if (itemshopLevel == 2)
+            {
+                ItemScript itemScript = gameManager.Get_Material("햇빛운무솜");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+            if (itemshopLevel == 3)
+            {
+                ItemScript itemScript = gameManager.Get_Material("천공운무솜");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+
+            var card = Instantiate(cardPrefab, contentRoot);
+            card.Init(stock.Last(), OnBuyRequest);
+        }
+        else if (shopType == ShopType.DECO)
+        {
+            // 1단계는 이미 Inspector에서 넣어놓음
+
+            if (itemshopLevel == 2)
+            {
+                ItemScript itemScript = gameManager.Get_Material("은빛달조각");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+            if (itemshopLevel == 3)
+            {
+                ItemScript itemScript = gameManager.Get_Material("청야달조각");
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = itemScript.itemName;
+                itemData.icon = itemScript.image;
+                itemData.price = itemScript.value;
+                itemData.isGold = false;
+                stock.Add(itemData);
+            }
+
+            var card = Instantiate(cardPrefab, contentRoot);
+            card.Init(stock.Last(), OnBuyRequest);
+        }
+    }
+
+    private void ChangeDesignShopLevel(int designshopLevel)
+    {
+        if (shopType == ShopType.BLANKET)
+        {
+            this.designshopLevel = designshopLevel;
+            designCount = designshopLevel;
+
+            ItemScript itemScript;
+            while (true)
+            {
+                itemScript = gameManager.Get_Random_Blanket();
+                if (!uniqueList.Contains(itemScript.itemName)) break;
+            }
+
+            ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+            itemData.displayName = itemScript.itemName;
+            itemData.icon = itemScript.image;
+            itemData.price = itemScript.designValue;
+            itemData.useQuantity = false; // 수량 X
+            itemData.isGold = false; // 월석 사용
+            stock.Add(itemData);
+            uniqueList.Add(itemData.displayName);
+
+            var card = Instantiate(cardPrefab, contentRoot);
+            card.Init(stock.Last(), OnBuyRequest);
+        }
+
     }
 
     // 카드가 구매 버튼을 눌렀을 때 호출
@@ -111,16 +351,19 @@ public class ShopLoader : MonoBehaviour
                 if (card.Data.price > gameManager.Get_Gold())
                 {
                     Debug.Log("재화 부족");
+                    speechTrigger?.Invoke(SpeechType.Lack);
                     return;
                 }
 
                 if (gameManager.Add_InteriorItem(card.Data.displayName, 1)) // 없던 아이템이라 추가됐으면
                 {
                     gameManager.Change_Gold(-card.Data.price);
+                    speechTrigger?.Invoke(SpeechType.Trigger);
                 }
                 else
                 {
                     Debug.Log("이미 있는 인테리어이므로 추가 X");
+                    speechTrigger?.Invoke(SpeechType.Have);
                 }
             }
             else if (shopType == ShopType.BLANKET) // 이불 디자인
@@ -128,16 +371,19 @@ public class ShopLoader : MonoBehaviour
                 if (card.Data.price > gameManager.Get_Moonrock())
                 {
                     Debug.Log("월석 부족");
+                    speechTrigger?.Invoke(SpeechType.Lack);
                     return;
                 }
 
                 if (gameManager.Add_BlanketDesign(card.Data.displayName)) // 없던 디자인이라 추가됐으면
                 {
                     gameManager.Change_Moonrock(-card.Data.price);
+                    speechTrigger?.Invoke(SpeechType.Trigger);
                 }
                 else
                 {
                     Debug.Log("이미 있는 디자인이므로 추가 X");
+                    speechTrigger?.Invoke(SpeechType.Have);
                 }
             }
             else if (shopType == ShopType.TILE) // 타일
@@ -145,16 +391,19 @@ public class ShopLoader : MonoBehaviour
                 if (card.Data.price > gameManager.Get_Gold())
                 {
                     Debug.Log("재화 부족");
+                    speechTrigger?.Invoke(SpeechType.Lack);
                     return;
                 }
 
                 if (gameManager.Add_TileItem(card.Data.displayName)) // 없던 타일이라 추가됐으면
                 {
                     gameManager.Change_Gold(-card.Data.price);
+                    speechTrigger?.Invoke(SpeechType.Trigger);
                 }
                 else
                 {
                     Debug.Log("이미 있는 타일이므로 추가 X");
+                    speechTrigger?.Invoke(SpeechType.Have);
                 }
             }
         }
@@ -170,12 +419,14 @@ public class ShopLoader : MonoBehaviour
                 if (cost > gameManager.Get_Gold())
                 {
                     Debug.Log("재화 부족");
+                    speechTrigger?.Invoke(SpeechType.Lack);
                     return;
                 }
 
                 if (gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity))
                 {
                     gameManager.Change_Gold(-card.Data.price);
+                    speechTrigger?.Invoke(SpeechType.Trigger);
                 }
             }
             else // 월석 사용 가게
@@ -183,6 +434,7 @@ public class ShopLoader : MonoBehaviour
                 if (cost > gameManager.Get_Moonrock())
                 {
                     Debug.Log("월석 부족");
+                    speechTrigger?.Invoke(SpeechType.Lack);
                     return;
                 }
 
@@ -196,6 +448,7 @@ public class ShopLoader : MonoBehaviour
                 }
 
                 gameManager.Change_Moonrock(-cost);
+                speechTrigger?.Invoke(SpeechType.Trigger);
             }
 
         }

@@ -383,7 +383,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &107304518
 MonoBehaviour:
@@ -734,9 +734,18 @@ MonoBehaviour:
   triggerButton: {fileID: 558569050}
   greetingText: "\uC548\uB155\uD558\uB0E5"
   triggerButtonText: "\uC88B\uC740 \uC120\uD0DD\uC774\uB0E5"
+  lackButtonText: "\uB3C8\uC774 \uBD80\uC871\uD558\uB2E4\uB0E5"
+  haveButtonText: "\uC774\uBBF8 \uAC16\uACE0 \uC788\uB294 \uAC70\uB2E4\uB0E5"
+  limitButtonText: "\uB808\uBCA8\uC774 \uC774\uBBF8 \uB2E4 \uCC3C\uB2E4\uB0E5"
   idleText: "\uC548 \uC0B4 \uAC70\uBA74 \uBE68\uB9AC \uB098\uAC00\uB77C\uB0E5"
   speechDuration: 3
   idleTimeThreshold: 10
+  shopLoaders:
+  - {fileID: 107304519}
+  - {fileID: 1685907209}
+  - {fileID: 566617510}
+  upgradeShopController: {fileID: 0}
+  upgradeShopController1: {fileID: 0}
 --- !u!1 &203449948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2995,9 +3004,15 @@ MonoBehaviour:
   triggerButton: {fileID: 558569050}
   greetingText: "\uC5B4\uC11C\uC624\uC2DC\uAC1C!"
   triggerButtonText: "\uC88B\uC740 \uC0DD\uAC01\uC774\uB124!"
+  lackButtonText: "\uB3C8\uC774 \uBD80\uC871\uD558\uB2E4\uB124!"
+  haveButtonText: "\uC774\uBBF8 \uAC16\uACE0 \uC788\uB294 \uAC78 \uC65C \uC0AC\uB098!"
+  limitButtonText: "\uC774\uBBF8 \uB808\uBCA8\uC774 \uAF49 \uCC3C\uB2E4\uB124!"
   idleText: "\uADF8\uB807\uAC8C \uC878\uB9AC\uBA74 \uC790\uACE0 \uC624\uC9C0 \uADF8\uB7AC\uB098!"
   speechDuration: 3
   idleTimeThreshold: 10
+  shopLoaders: []
+  upgradeShopController: {fileID: 0}
+  upgradeShopController1: {fileID: 1359484749}
 --- !u!1 &859945418
 GameObject:
   m_ObjectHideFlags: 0
@@ -3873,7 +3888,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1144864229
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5189,7 +5204,7 @@ RectTransform:
   m_Father: {fileID: 1831181170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5267,7 +5282,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1685907208
 MonoBehaviour:
@@ -6465,6 +6480,7 @@ GameObject:
   - component: {fileID: 2050693826}
   - component: {fileID: 2050693828}
   - component: {fileID: 2050693827}
+  - component: {fileID: 2050693829}
   m_Layer: 5
   m_Name: Panel_Background
   m_TagString: Untagged
@@ -6529,6 +6545,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050693825}
   m_CullTransparentMesh: 1
+--- !u!114 &2050693829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050693825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac8a6cdb4b7cab44b4ad2330a9f7e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BgImage: {fileID: 2050693827}
+  daySprite: {fileID: 21300000, guid: bba2867897a83654fb7654cbc3a953f0, type: 3}
+  eveningSprite: {fileID: 21300000, guid: 34bd76dab3ffb69429037b633b2f3934, type: 3}
+  nightSprite: {fileID: 21300000, guid: 141b81a655621a54fbc273e66bf197fe, type: 3}
+  Objects: []
 --- !u!1 &2109311609
 GameObject:
   m_ObjectHideFlags: 0

@@ -107,8 +107,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a93cd87b940b20f4dac8fa42edd63927
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uC758\uC790.asset"
+  - m_GUID: d62cd9e7e37e512489c090ae955b4c7b
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC544\uC774\uBCF4\uB9AC\uC18C\uD30C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
@@ -196,6 +196,78 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc9ef41eddf000c4a8e36288d89504c2
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uAF43\uBCD1\uD14C\uC774\uBE14.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 095d1a5d90849b945850294cba9d3eb2
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/\uC9D9\uC740\uB098\uBB34\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb3a65e1a9a0f434190f87bad7ba044c
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC0B0\uC138\uBCA0\uB9AC\uC544\uD654\uBD84.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 655e025cab91c8b41a06a2ccc45e42c4
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/\uAC15\uC544\uC9C0\uACC4\uC0B0\uC6D0.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7565994bb9998e6488a1a6cfcd88da59
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uAF43\uBB34\uB2AC\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a9d13c393e6d554f81026b6459e6e1a
+    m_Address: Assets/ScriptableObject/Items/Blankets/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8af72dcda6f93e244adfd4159c9f9612
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uBB34\uC9C0\uAC1C\uC6B4\uBB34\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c835ae0a26344204e8ec72c1da5a9790
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uBCC4\uBE5B\uAFC8\uC2E4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e890e7fb0e22f5b428d3539a5d365360
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC740\uBE5B\uB2EC\uC870\uAC01.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33c9d70c893c75c4abecac992fb44c62
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC740\uD558\uAFC8\uC2E4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68af3c4b57a16db4a814310b5ff98fb6
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uCC3D\uACF5\uB2EC\uC870\uAC01.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64c10bcb4472afe46990b517a15d1344
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uCC9C\uACF5\uC6B4\uBB34\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

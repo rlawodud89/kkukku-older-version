@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
-  m_Name: "\uAFC8\uC2E4"
+  m_Name: "\uC740\uBE5B\uB2EC\uC870\uAC01"
   m_EditorClassIdentifier: 
-  itemName: "\uAFC8\uC2E4"
-  image: {fileID: 21300000, guid: ccbb7caa4ebc36f4f92909fe9385813c, type: 3}
+  itemName: "\uC740\uBE5B\uB2EC\uC870\uAC01"
+  image: {fileID: 21300000, guid: 528a9cf2b4949c74abc12cfd909eda74, type: 3}
   itemType: 3
-  level: 1
-  value: 300
+  level: 2
+  value: 400
   recipe: []
   designValue: 0
   yarnName: 

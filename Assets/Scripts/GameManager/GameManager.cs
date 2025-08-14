@@ -86,6 +86,10 @@ public class GameManager : MonoBehaviour
     // 타일 변경 시 적용되도록 하는 이벤트
     public event Action<TilePosType, InteriorScript> OnTileChanged;
 
+    // 상점 레벨 변경 시 적용되도록 하는 이벤트
+    public event Action<int> OnItemShopLevelChanged;
+    public event Action<int> OnDesignShopLevelChanged;
+
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
     private GameManager() { }
@@ -311,27 +315,19 @@ public class GameManager : MonoBehaviour
     public BgType Get_BgTime() { return bgTime; }
 
     public int Get_DesignShopLevel() { return designshopLevel; }
-    public void Set_DesignShopLevel(int level)
-    {
-        designshopLevel = level;
-        dbManager.Update_DesginShopLevel(designshopLevel);
-    }
     public void Change_DesignShopLevel(int delta)
     {
         designshopLevel += delta;
         dbManager.Update_DesginShopLevel(designshopLevel);
+        OnDesignShopLevelChanged?.Invoke(designshopLevel);
     }
 
     public int Get_ItemShopLevel() { return itemshopLevel; }
-    public void Set_ItemShopLevel(int level)
-    {
-        itemshopLevel = level;
-        dbManager.Update_ItemShopLevel(itemshopLevel);
-    }
     public void Change_ItemShopLevel(int delta)
     {
         itemshopLevel += delta;
         dbManager.Update_ItemShopLevel(itemshopLevel);
+        OnItemShopLevelChanged?.Invoke(itemshopLevel);
     }
 
     public int Get_LoomLevel() { return loomLevel; }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
-  m_Name: "\uAFC8\uC2E4"
+  m_Name: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
   m_EditorClassIdentifier: 
-  itemName: "\uAFC8\uC2E4"
-  image: {fileID: 21300000, guid: ccbb7caa4ebc36f4f92909fe9385813c, type: 3}
+  itemName: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
+  image: {fileID: 21300000, guid: c490caae0c8e85f40a73a9805550d702, type: 3}
   itemType: 3
-  level: 1
+  level: 2
   value: 300
   recipe: []
   designValue: 0
