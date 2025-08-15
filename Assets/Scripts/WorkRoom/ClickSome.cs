@@ -11,12 +11,30 @@ public class ClickSome : MonoBehaviour
 
     void Start()
     {
-        interiorManager = FindObjectOfType<InteriorManager>();       
+        interiorManager = FindObjectOfType<InteriorManager>();  
+    }
+
+    void SetPanel(GameObject gameObject){
+        Debug.Log($"Setting panel for {gameObject.name}");
+        if(gameObject.name=="blanket_storage(Clone)"){
+            Panel=GameObject.Find("BlanketStorage_Panel");
+            Debug.Log($"Found Panel: {Panel.name}");
+            scrollView=GameObject.Find("BlanketStorage_ScrollView");
+            Debug.Log($"Found ScrollView: {scrollView.name}");
+        }else if(gameObject.name=="material_storage(Clone)"){
+            Panel=GameObject.Find("MaterialStorage_Panel");
+            scrollView=GameObject.Find("MaterialStorage_ScrollView");
+        }
     }
 
     void Update()
     {
-
+        if (Panel == null || scrollView == null)
+        {
+            SetPanel(this.gameObject);
+        }else{
+            Debug.Log($"Panel and ScrollView are already set for {this.gameObject.name}");
+        }
     }
 
     void OnMouseDown()

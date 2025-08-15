@@ -3,37 +3,74 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class FishingController : MonoBehaviour
 {
-    private bool fishing_start = false;
+    public bool fishing_start = false;
     private Coroutine fishingRoutine;
 
     public TextMeshProUGUI fishing_txt;
     public Button fishing_closebtn;
     public Button fishing_btn;
-    public MaterialManager materialManager;
+    public GameObject checkpanel;
+        
     public MaterialsInventory materialsInventory;
+    public FishingMiniGame fishingminigame;
 
-    private MaterialData currentdata;
+    private ItemScript currentdata;
+    private GameManager gameManager;
+
+
 
     public float minDelay = 4f;
     public float maxDelay = 7f;
 
-    public void click_fishingbtn()
+    private void Start()
     {
-        if (!fishing_start)
+
+        if (gameManager == null)
         {
-            fishing_start = true;
-            fishingRoutine = StartCoroutine(SpawnItemLoop());
+            gameManager = GameManager.getInstance();
         }
 
-        fishing_btn.gameObject.SetActive(false);
-        fishing_closebtn.gameObject.SetActive(true);
+    }
+    public void click_fishingbtn()
+    {
+        if (gameManager==null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        if (gameManager.Get_EnergyLevel() >= 2)
+        {
+            if (!fishing_start)
+            {
+                fishing_start = true;
+
+                fishingRoutine = StartCoroutine(SpawnItemLoop());
+            }
+
+            fishing_btn.gameObject.SetActive(false);
+            fishing_closebtn.gameObject.SetActive(true);
+        }
+        else
+        {
+            checkpanel.SetActive(true);
+        }
     }
 
     public void click_fishingstopbtn()
     {
+        if (fishingminigame==null)
+        {
+            fishingminigame =FindObjectOfType<FishingMiniGame>();
+        }
+
+        if (fishingminigame.miniGameRunning)
+        {
+            fishingminigame.miniGameRunning = false;
+        }
         if (fishing_start)
         {
             fishing_start = false;
@@ -51,6 +88,12 @@ public class FishingController : MonoBehaviour
         fishing_btn.gameObject.SetActive(true);
     }
 
+    public void Click_yesbtn()
+    {
+        checkpanel.SetActive(false);
+    }
+
+
     IEnumerator SpawnItemLoop()
     {
         while (fishing_start)
@@ -60,22 +103,32 @@ public class FishingController : MonoBehaviour
             float waitTime = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(waitTime);
 
-            getMaterial();
 
-            fishing_txt.text = currentdata.MaterialName + " 획득!";
+            if (fishingminigame==null)
+            {
+                fishingminigame = FindObjectOfType<FishingMiniGame>();
+            }
+
+            fishingminigame.GetMaterial();
+            //getMaterial();
+
+
             yield return new WaitForSeconds(2f);
-            fishing_txt.text = "";
         }
     }
 
+
     void getMaterial()
     {
-        int material_count = materialManager.MaterialsList.Count;
-        int itemIndex = Random.Range(0, material_count - 1);
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
 
-        currentdata = materialManager.MaterialsList[itemIndex];
+        currentdata = gameManager.Get_Random_Material();
         materialsInventory.AddMaterial(currentdata);
-
+        gameManager.Add_InventoryItem(currentdata.itemName, 1);
+        Debug.Log(currentdata.itemName+"획득");
 
     }
 }

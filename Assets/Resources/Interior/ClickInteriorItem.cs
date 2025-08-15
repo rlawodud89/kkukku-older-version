@@ -14,6 +14,7 @@ public class ClickInteriorItem : MonoBehaviour
     public LayerMask groundLayer;    // 바닥 레이어
     public LayerMask obstacleLayer;    // 겹침 검사 대상(벽/가구 등)
 
+    [Header("버튼UI")]
     public Canvas targetCanvas;
     public GameObject checkButtonPrefab;
     private GameObject checkButton;
@@ -21,12 +22,20 @@ public class ClickInteriorItem : MonoBehaviour
     public Vector3 worldOffset = new Vector3(0, -1.5f, 0); // 오브젝트 기준 월드 오프셋
     public Vector2 screenOffset = Vector2.zero;            // 화면 픽셀 보정
    // public bool hideWhenOffscreen = true;       
+    public GameObject putInButtonPrefab;   // 보관함에 넣기 버튼
+    private GameObject putInButton;
+    private RectTransform putInButtonRectTransform;
+    public Vector3 putInWorldOffset = new Vector3(-1f, -1.5f, 0); // 오브젝트 기준 월드 오프셋
 
     private Renderer rend;
     Collider2D col;
-    private InteriorManager interiorManager;
+    private InteriorManager interiorManager;   // 인테리어 매니저
     private Camera cam;
 
+    // 게임 메니저
+    private GameManager gameManager;
+    // 위치 저장
+    [HideInInspector] public Vector3 initialPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +48,13 @@ public class ClickInteriorItem : MonoBehaviour
         cam = Camera.main;
 
         col = GetComponent<Collider2D>();
-        
+
+        // 게임 매니저
+        gameManager = GameManager.getInstance();
+
+
+        initialPosition = transform.position;
+        Debug.Log($"Initial Position: {initialPosition}");
     }
     
 
@@ -63,6 +78,7 @@ public class ClickInteriorItem : MonoBehaviour
                 if (!hit2D.transform.IsChildOf(transform))
                 {
                     selected = false;
+                    this.transform.position = initialPosition; // 원래 위치로 되돌리기
                     Debug.Log($"{gameObject.name} 선택 해제 (다른 오브젝트 2D)");
                 }
             }
@@ -71,6 +87,7 @@ public class ClickInteriorItem : MonoBehaviour
         if(!selected){
             rend.material = normalMaterial;
             if (checkButton != null) Destroy(checkButton.gameObject);
+            if (putInButton != null) Destroy(putInButton.gameObject);
         }
 
         if(selected){
@@ -132,10 +149,15 @@ public class ClickInteriorItem : MonoBehaviour
             if (checkButton == null && checkButtonPrefab != null && targetCanvas != null)
             {
                 // Canvas 자식으로 생성하고 RectTransform 캐싱
+                // 체크 버튼 생성
                 checkButton = Instantiate(checkButtonPrefab, targetCanvas.transform);
                 checkButtonRectTransform = checkButton.GetComponent<RectTransform>();
-
                 checkButton.GetComponent<Button>().onClick.AddListener(ClickCheckButton);
+
+                // 보관함에 넣기 버튼 생성
+                putInButton = Instantiate(putInButtonPrefab, targetCanvas.transform);
+                putInButtonRectTransform = putInButton.GetComponent<RectTransform>();
+                putInButton.GetComponent<Button>().onClick.AddListener(ClickPutInButton);
             }
 
             // 생성 직후 한 번 위치 맞추기
@@ -152,18 +174,62 @@ public class ClickInteriorItem : MonoBehaviour
 
         // 1) 월드 기준 위치 계산
         Vector3 worldPos = transform.position + worldOffset;
+        Vector3 putInWorldPos = transform.position + putInWorldOffset;
 
         // 2) 화면 좌표로 변환
         Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
+        Vector3 putInScreenPos = cam.WorldToScreenPoint(putInWorldPos);
 
         checkButtonRectTransform.position = screenPos + (Vector3)screenOffset;
+        putInButtonRectTransform.position = putInScreenPos + (Vector3)screenOffset;
     }
 
     // 체크 버튼 클릭 시
-    void ClickCheckButton(){
+    public void ClickCheckButton(){
+
+        Debug.Log($"Clicked Check Button for {gameObject.name}");
+        // 선택 해제
         selected=false;
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
+
+        // 바뀐 위치 저장
+        bool isPositionChanged=gameManager.Move_RoomInteriorItem(initialPosition.x, initialPosition.y, transform.position.x, transform.position.y);
+        
+        Debug.Log($"Initial Position: ({initialPosition.x}, {initialPosition.y})");
+        Debug.Log($"Change Position: ({transform.position.x}, {transform.position.y})");
+
+        if(isPositionChanged)
+        {
+            Debug.Log($"Moved Interior Item: {gameObject.name} to ({transform.position.x}, {transform.position.y})");
+        } else {
+            Debug.LogWarning($"Failed to move Interior Item: {gameObject.name}");
+        }
+
+        initialPosition = transform.position;
+
+    }
+
+    // 보관함에 넣기 버튼 클릭 시
+    public void ClickPutInButton()
+    {
+        Destroy(gameObject); // 오브젝트 삭제
+        if (checkButton != null) Destroy(checkButton.gameObject);
+        if (putInButton != null) Destroy(putInButton.gameObject);
+
+        bool isMoved = gameManager.Back_RoomInteriorItem(initialPosition.x, initialPosition.y);
+
+        if (isMoved)
+        {
+            Debug.Log($"Moved Interior Item: {gameObject.name} back to inventory");
+        }
+        else
+        {
+            Debug.LogWarning($"Failed to move Interior Item: {gameObject.name} back to inventory");
+        }
+
+        interiorManager.interiorItems=gameManager.Get_RoomInterior_Inventory();
+
     }
 
     // 나가기 버튼 클릭 시 
@@ -171,6 +237,8 @@ public class ClickInteriorItem : MonoBehaviour
         selected=false;
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
+        if (putInButton != null) Destroy(putInButton.gameObject);
+        this.transform.position = initialPosition; // 원래 위치로 되돌리기
     }
 
     // 바닥에 닿았는지 검사

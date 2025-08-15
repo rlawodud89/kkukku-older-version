@@ -1,6 +1,6 @@
 [System.Serializable]
 public class MaterialInventoryEntry
 {
-    public MaterialData data;
+    public ItemScript data;
     public int count;
 }

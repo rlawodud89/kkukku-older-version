@@ -26,6 +26,7 @@ public class DraggableObject : MonoBehaviour
         Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
         mouseWorld.z = 0f;
         offset = transform.position - mouseWorld;
+
     }
 
     void OnMouseUp()

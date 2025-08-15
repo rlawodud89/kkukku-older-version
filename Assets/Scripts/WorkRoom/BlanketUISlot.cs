@@ -3,12 +3,11 @@ using UnityEngine.UI;
 
 public class BlanketSlotUI : MonoBehaviour
 {
-    public SlotType slotType; // ÇÁ¸®ÆÕ¿¡¼­ ¼³Á¤
     public Button button;
     public Text countText;
     public GameObject checkPanel;
 
-    private BlanketData currentData;
+    private ItemScript currentData;
     private int count = 0;
 
     private void Awake()
@@ -19,17 +18,17 @@ public class BlanketSlotUI : MonoBehaviour
         }
     }
 
-    public bool HasData(BlanketData data) => currentData == data;
+    public bool HasData(ItemScript data) => currentData == data;
     public bool HasAnyData() => currentData != null;
 
-    public void SetData(BlanketData data)
+    public void SetData(ItemScript data)
     {
         if (data == null) return;
 
         if (currentData == data)
         {
             count += 1;
-            Debug.Log($"{data.BlanketName} count Áõ°¡: {count}");
+            Debug.Log($"{data.itemName} count ì¦ê°€: {count}");
         }
         else
         {
@@ -38,10 +37,23 @@ public class BlanketSlotUI : MonoBehaviour
 
             if (button != null)
             {
-                button.image.sprite = slotType == SlotType.Cotton ? currentData.Fabric : currentData.Cotton;
+                button.image.sprite = currentData.image;
             }
+        }
 
-            Debug.Log($"[{slotType}] ½½·Ô¿¡ »õ µ¥ÀÌÅÍ ¼¼ÆÃ: {currentData.BlanketName}");
+        UpdateCountText();
+    }
+
+    public void SetData(ItemScript data, int count)
+    {
+        if (data == null) return;
+
+        currentData = data;
+        this.count = count;
+
+        if (button != null)
+        {
+            button.image.sprite = currentData.image;
         }
 
         UpdateCountText();
@@ -74,7 +86,7 @@ public class BlanketSlotUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("CheckPanelÀÌ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("CheckPanelì´ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
         }
     }
 
@@ -84,17 +96,26 @@ public class BlanketSlotUI : MonoBehaviour
 
         checkPanel.SetActive(false);
 
-        Debug.Log($"[{slotType}] ½½·Ô¿¡¼­ Make Å¬¸¯: {currentData.BlanketName}");
-
-        if (slotType == SlotType.Cotton)
+        if (currentData.itemType == ItemType.YARN)
         {
             Make_Cotton.Instance?.HandleMakeClicked(currentData);
+            Debug.Log("yarn");
         }
-        else if (slotType == SlotType.Sewing)
+        else if (currentData.itemType == ItemType.COTTON)
         {
             Make_Sewing.Instance?.HandleMakeClicked(currentData);
+            Debug.Log("cotton");
         }
 
-        ClearSlot();
+        if (count > 1)
+        {
+            count -= 1;
+            UpdateCountText();
+        }
+        else
+        {
+            ClearSlot();
+        }
     }
+
 }

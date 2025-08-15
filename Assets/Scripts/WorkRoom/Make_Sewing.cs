@@ -15,31 +15,46 @@ public class Make_Sewing : MonoBehaviour
 
     public GameObject BallonPanel;
     public GameObject CompletePanel;
+
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
+    
+    private GameManager gameManager;
+    private ItemScript currentBlanket;
 
+    private void Start()
+    {
+        gameManager = GameManager.getInstance(); 
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);  // Áßº¹ ¹æÁö
+            Destroy(gameObject);  // ì¤‘ë³µ ë°©ì§€
             return;
         }
 
         Instance = this;
     }
 
-    public void HandleMakeClicked(BlanketData currentBlanket)
+    public void HandleMakeClicked(ItemScript currentSewing)
     {
-        Debug.Log("Make_Sewing¿¡¼­ Make ¹öÆ° Å¬¸¯µÊ °¨Áö!");
 
+
+        currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
+        Debug.Log("Make_Sewingì—ì„œ Make ë²„íŠ¼ í´ë¦­ë¨ ê°ì§€!");
+        gameManager.Add_InventoryItem(currentBlanket.cottonName, -1);
+
+        gameManager = GameManager.getInstance();
         sewingPanel.SetActive(false);
         Employee3.Working();
 
+
         progresscircle.OnComplete = () =>
         {
-            Debug.Log("complete");
+            gameManager.Add_InventoryItem(currentBlanket.itemName, 1);
+            Debug.Log("ì™„ì„±");
             showsewing(currentBlanket);
         };
 
@@ -48,15 +63,14 @@ public class Make_Sewing : MonoBehaviour
 
     }
 
-    void showsewing(BlanketData currentBlanket)
+    void showsewing(ItemScript currentBlanket)
     {
-        if (currentBlanket != null)
+        if (currentBlanket  != null)
         {
-            Debug.Log(currentBlanket.BlanketName + "¸¶¹«¸® ¸ğ½À");
 
             BallonPanel.SetActive(true);
             SewingButton.gameObject.SetActive(true);
-            SewingButton.image.sprite = currentBlanket.BlanketSprite;
+            SewingButton.image.sprite = currentBlanket.image;
 
             SewingButton.onClick.RemoveAllListeners();
             SewingButton.onClick.AddListener(() =>
@@ -67,8 +81,8 @@ public class Make_Sewing : MonoBehaviour
                 progresscircle.ProgressInit();
 
                 CompletePanel.SetActive(true);
-                CompleteImage.sprite = currentBlanket.BlanketSprite;
-                CompleteText.text = currentBlanket.BlanketName+"ÀÌ ¿Ï¼ºµÇ¾ú½À´Ï´Ù!";
+                CompleteImage.sprite = currentBlanket.image;
+                CompleteText.text = currentBlanket.itemName +"ì´ ì™„ì„±ë˜ì—ˆìŠµë‹ˆë‹¤!";
 
             });
 

@@ -8,32 +8,50 @@ public class FabricDetailPanelController : MonoBehaviour
     public TextMeshProUGUI BlanketNameText;
     public Image BlanketImage;
 
-    public List<Image> materialImageSlots; // ÀÎ½ºÆåÅÍ¿¡¼­ ¼ø¼­´ë·Î ¿¬°á
+    public List<Image> materialImageSlots; // ì¸ìŠ¤í™í„°ì—ì„œ ìˆœì„œëŒ€ë¡œ ì—°ê²°
     public List<Text> materialQuantitySlots;
+    public List<TextMeshProUGUI> inv_materialSlots;
 
-    public Sprite defaultMaterialSprite; // ±âº» ÀÌ¹ÌÁö (ÀÎ½ºÆåÅÍ¿¡¼­ ¿¬°á)
+    public Sprite defaultMaterialSprite; // ê¸°ë³¸ ì´ë¯¸ì§€ (ì¸ìŠ¤í™í„°ì—ì„œ ì—°ê²°)
+    public GameManager gameManager;
 
-    public void OpenPanel(BlanketData blanket)
+    private void Start()
     {
+        gameManager = GameManager.getInstance();
+    }
 
+    
+    public void OpenPanel(ItemScript blanket)
+    {
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
         gameObject.SetActive(true);
 
-        BlanketNameText.text = blanket.BlanketName;
-        BlanketImage.sprite = blanket.BlanketSprite;
+        BlanketNameText.text = blanket.itemName;
+        BlanketImage.sprite = blanket.image;
 
-        // ½½·Ô ÃÊ±âÈ­
+        // ìŠ¬ë¡¯ ì´ˆê¸°í™”
         for (int i = 0; i < materialImageSlots.Count; i++)
         {
-            if (i < blanket.requiredMaterials.Length && blanket.requiredMaterials[i] != null)
+            if (i < blanket.recipe.Count && blanket.recipe[i] != null)
             {
-                materialImageSlots[i].sprite = blanket.requiredMaterials[i].data.MaterialSprite;
+                materialImageSlots[i].sprite = gameManager.GetMaterialImage(blanket.recipe[i]);
                 materialImageSlots[i].gameObject.SetActive(true);
-                materialQuantitySlots[i].text = blanket.requiredMaterials[i].count.ToString();
+                materialQuantitySlots[i].text = blanket.recipe[i].count.ToString();
                 materialQuantitySlots[i].gameObject.SetActive(true);
+
+                var inv = gameManager.Get_Material_Inventory(); // ì „ì²´ ì¸ë²¤í† ë¦¬
+                var invItem = inv.Find(x => x.item.itemName == blanket.recipe[i].itemName); // ë ˆì‹œí”¼ ì¬ë£Œ ì´ë¦„ ë§¤ì¹­
+
+                int haveCount = invItem.item != null ? invItem.count : 0; // ì—†ìœ¼ë©´ 0ê°œ
+                inv_materialSlots[i].text = haveCount.ToString();
+
             }
             else
             {
-                // ½½·ÔÀº ±×´ë·Î È°¼ºÈ­ÇÏ°í ±âº» ÀÌ¹ÌÁö·Î Ç¥½Ã
+                // ìŠ¬ë¡¯ì€ ê·¸ëŒ€ë¡œ í™œì„±í™”í•˜ê³  ê¸°ë³¸ ì´ë¯¸ì§€ë¡œ í‘œì‹œ
                 materialImageSlots[i].sprite = defaultMaterialSprite;
                 materialImageSlots[i].gameObject.SetActive(true);
                 materialQuantitySlots[i].text = "0";
