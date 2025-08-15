@@ -9,7 +9,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     private GameManager gameManager;
 
     // 현재 작업실에 설치된 인테리어 정보
-    private List<(InteriorScript item, int x, int y)> installedInteriors=new List<(InteriorScript, int, int)>();
+    private List<(InteriorScript item, float x, float y)> installedInteriors=new List<(InteriorScript, float, float)>();
 
     // 아이템 생성되는 곳
     private Transform itemParent;
@@ -33,8 +33,8 @@ public class ArrangementWorkRoom : MonoBehaviour
         itemParent = GameObject.Find("Pixels")?.transform;
 
         //installedInteriors=gameManager.Get_Current_RoomInterior();
-        installedInteriors = gameManager?.Get_Current_RoomInterior() 
-                         ?? new List<(InteriorScript item, int x, int y)>();
+        installedInteriors = gameManager?.Get_Current_RoomInterior()
+                         ?? new List<(InteriorScript item, float x, float y)>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -80,7 +80,8 @@ public class ArrangementWorkRoom : MonoBehaviour
 
             foreach (var (item, x, y) in installedInteriors)
             {
-                Instantiate(item.prefab, new Vector3(x, y, 20), item.prefab.transform.rotation, itemParent);
+                var go = Instantiate(item.prefab, new Vector3(x, y, 20), item.prefab.transform.rotation);
+                //go.transform.SetParent(itemParent,true);
                 Debug.Log($"Installed Interior: {item.name} at ({x}, {y})");
             }
         }

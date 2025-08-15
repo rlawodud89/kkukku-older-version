@@ -164,16 +164,16 @@ MonoBehaviour:
   selected: 0
   groundLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 132
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
   targetCanvas: {fileID: 0}
   checkButtonPrefab: {fileID: 7550910589061424665, guid: d40f2bbaff358ad468f4ed82d81a3a34, type: 3}
-  worldOffset: {x: 0, y: -1.5, z: 0}
+  worldOffset: {x: 0.8, y: -1.2, z: 0}
   screenOffset: {x: 0, y: 0}
   putInButtonPrefab: {fileID: 6697205569058715593, guid: dca4781dda8dc8d4b9782d3031a159eb, type: 3}
-  putInWorldOffset: {x: 0, y: 0, z: 0}
+  putInWorldOffset: {x: 0, y: -1.5, z: 0}
 --- !u!114 &6620479043137388597
 MonoBehaviour:
   m_ObjectHideFlags: 0

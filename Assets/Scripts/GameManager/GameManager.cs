@@ -11,6 +11,7 @@ public enum BgType
     NIGHT
 }
 
+[DefaultExecutionOrder(-200)]
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
