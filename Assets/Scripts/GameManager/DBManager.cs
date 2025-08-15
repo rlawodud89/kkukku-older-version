@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
+using Unity.VisualScripting;
 
 
 public class DBManager
@@ -10,8 +11,7 @@ public class DBManager
     private static DBManager instance = new DBManager();
     private static string dbPath = "Assets/StreamingAssets/comforter_shop.db";
     private static string testdbPath = "Assets/StreamingAssets/comforter_shop_test.db";
-    private static SQLiteConnection conn = new SQLiteConnection(dbPath);
-    private static SQLiteConnection testconn = new SQLiteConnection(testdbPath);
+    private static SQLiteConnection conn = new SQLiteConnection(testdbPath);
     private static string userName = "user";
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
@@ -20,22 +20,25 @@ public class DBManager
 
     public void InitDB()
     {
-        testconn.CreateTable<User>();
-        testconn.CreateTable<Inventory>();
-        testconn.CreateTable<Design>();
-        testconn.CreateTable<WorkShop>();
-        testconn.CreateTable<ShopTable>();
-        testconn.CreateTable<WorkRoom>();
-        testconn.CreateTable<Interior>();
-        testconn.CreateTable<Tile>();
-        testconn.CreateTable<QuestBox>();
-        testconn.CreateTable<LetterBox>();
+        conn.CreateTable<User>();
+        conn.CreateTable<Inventory>();
+        conn.CreateTable<Design>();
+        conn.CreateTable<WorkShop>();
+        conn.CreateTable<ShopTable>();
+        conn.CreateTable<WorkRoom>();
+        conn.CreateTable<Interior>();
+        conn.CreateTable<Tile>();
+        conn.CreateTable<QuestBox>();
+        conn.CreateTable<LetterBox>();
 
         User user = new User();
         user.name = "user";
         user.energy = 0;
         user.gold = 1000;
         user.moonrock = 1000;
+        user.todayEnergy = 0;
+        user.todayGold = 0;
+        user.todayMoonrock = 0;
         user.playTime = 0;
         user.designshopLevel = 1;
         user.itemshopLevel = 1;
@@ -45,72 +48,112 @@ public class DBManager
         user.endScene = "Work_Shop";
         user.isOpen = false;
 
-        testconn.Insert(user);
+        conn.Insert(user);
 
         // TODO: 처음에 기본으로 주는 아이템 저장
     }
 
     public User Get_User()
     {
-        return testconn.Find<User>(userName); //지정한 이름(기본키)으로 찾기
+        return conn.Find<User>(userName); //지정한 이름(기본키)으로 찾기
     }
 
-    public void Update_User(int energy, int gold, int moonrock, float playTime)
+    public void Update_PlayTime(float playTime)
     {
-        User user = testconn.Find<User>(userName);
-        user.energy = energy;
-        user.gold = gold;
-        user.moonrock = moonrock;
+        User user = conn.Find<User>(userName);
         user.playTime = playTime;
-
-        testconn.Update(user);
+        conn.Update(user);
     }
+
+    public void Update_Energy(int energy)
+    {
+        User user = conn.Find<User>(userName);
+        user.energy = energy;
+        conn.Update(user);
+    }
+
+    public void Update_Gold(int gold)
+    {
+        User user = conn.Find<User>(userName);
+        user.gold = gold;
+        conn.Update(user);
+    }
+
+    public void Update_Moonrock(int moonrock)
+    {
+        User user = conn.Find<User>(userName);
+        user.moonrock = moonrock;
+        conn.Update(user);
+    }
+
+    public void Update_TodayEnergy(int todayEnergy)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayEnergy = todayEnergy;
+        conn.Update(user);
+    }
+
+
+    public void Update_TodayGold(int todayGold)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayGold = todayGold;
+        conn.Update(user);
+    }
+
+    public void Update_TodayMoonrock(int todayMoonrock)
+    {
+        User user = conn.Find<User>(userName);
+        user.todayMoonrock = todayMoonrock;
+        conn.Update(user);
+    }
+
 
     public void Update_DesginShopLevel(int level)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.designshopLevel = level;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public void Update_ItemShopLevel(int level)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.itemshopLevel = level;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public void Update_LoomLevel(int level)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.loomLevel = level;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public void Update_FillerLevel(int level)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.fillerLevel = level;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public void Update_DecoLevel(int level)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.decoLevel = level;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public void Update_IsOpen(bool isOpen)
     {
-        User user = testconn.Find<User>(userName);
+        User user = conn.Find<User>(userName);
         user.isOpen = isOpen;
-        testconn.Update(user);
+        conn.Update(user);
     }
 
     public bool Have_Inventory(string itemName)
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
             .Any(x => x.itemName == itemName);
     }
 
@@ -121,30 +164,30 @@ public class DBManager
         inven.itemType = itemType;
         inven.count = count;
 
-        testconn.Insert(inven);
+        conn.Insert(inven);
     }
 
     public bool Change_InventoryItem_Count(string itemName, int delta)
     {
-        Inventory inven = testconn.Find<Inventory>(itemName);
+        Inventory inven = conn.Find<Inventory>(itemName);
 
         if (inven.count + delta < 0) return false;
 
         else if (inven.count + delta == 0)
         {
-            testconn.Delete(inven);
+            conn.Delete(inven);
         }
         else
         {
             inven.count += delta;
-            testconn.Update(inven);
+            conn.Update(inven);
         }
         return true;
     }
 
     public bool Have_Design(string blanketName)
     {
-        return testconn.Table<Design>()
+        return conn.Table<Design>()
             .Any(x => x.blanketName == blanketName);
     }
 
@@ -153,16 +196,16 @@ public class DBManager
         Design design = new Design();
         design.blanketName = blanketName;
 
-        testconn.Insert(design);
+        conn.Insert(design);
     }
 
     public bool Have_InteriorItem(string interirorName)
     {
-        return testconn.Table<Interior>()
+        return conn.Table<Interior>()
             .Any(x => x.interiorName == interirorName);
     }
 
-    public void Insert_InteriorItem(string interiorName, InteriorType interiorType, int count)
+    public void Insert_InteriorItem(string interiorName, InteriorType interiorType, int count) // 완전 새로운 인테리어 아이템 추가
     {
         for (int i = 0; i < count; i++)
         {
@@ -171,47 +214,30 @@ public class DBManager
             interior.interiorType = interiorType;
             interior.isSet = false;
 
-            testconn.Insert(interior);
+            conn.Insert(interior);
         }
     }
 
-    public bool Set_InteriorItem(string interiorName, int x, int y)
-    {
-        Interior inte = testconn.Table<Interior>()
-                 .Where(x => x.interiorName == interiorName && x.isSet == false)
-                 .FirstOrDefault();
-
-        if (inte == null) return false;
-        else
-        {
-            inte.isSet = true;
-            inte.x = x;
-            inte.y = y;
-            testconn.Update(inte);
-            return true;
-        }
-    }
-
-    public void Insert_Tile(string tileName, InteriorType interiorType)
+    public void Insert_New_Tile(string tileName, InteriorType interiorType)
     {
         Interior interior = new Interior();
         interior.interiorName = tileName;
         interior.interiorType = interiorType;
         interior.isSet = false;
 
-        testconn.Insert(interior);
+        conn.Insert(interior);
     }
 
     public List<Inventory> Select_Yarn()
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.YARN)
                .ToList();
     }
 
     public List<Inventory> Select_Cotton()
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.COTTON)
                .ToList();
     }
@@ -219,29 +245,30 @@ public class DBManager
 
     public List<Inventory> Select_Material()
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.MATERIAL)
                .ToList();
     }
 
     public List<Inventory> Select_Blanket()
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.BLANKET)
                .ToList();
     }
 
     public List<Inventory> Select_Snack()
     {
-        return testconn.Table<Inventory>()
+        return conn.Table<Inventory>()
                .Where(x => x.itemType == ItemType.SNACK)
                .ToList();
     }
 
-    public List<(string itemName, int count)> Select_RoomInterior()
+    public List<(string itemName, int count)> Select_RoomInterior_Inventory()
     {
-        return testconn.Table<Interior>()
-                .Where(x => x.isSet == false)
+        return conn.Table<Interior>()
+                .Where(x => x.isSet == false
+                && (x.interiorType == InteriorType.ROOM_INTERIROR || x.interiorType == InteriorType.WORKER))
                 .GroupBy(x => x.interiorName)
                 .Select(g => (g.Key, g.Count())) // Key: GroupBy에서 사용한 키 (interiorName), Count(): 해당하는 키 그룹의 튜플 개수
                 .ToList();
@@ -249,58 +276,203 @@ public class DBManager
 
     public List<ShopTable> Select_Table_Blanket(int tableID)
     {
-        return testconn.Table<ShopTable>()
+        return conn.Table<ShopTable>()
             .Where(x => x.tableID == tableID)
             .ToList();
     }
 
     public bool Have_Table_Blanket(int tableID, string blanketName)
     {
-        return testconn.Table<ShopTable>()
+        return conn.Table<ShopTable>()
             .Any(x => x.tableID == tableID && x.blanketName == blanketName);
     }
 
     public void Insert_TableBlanket(int tableID, string blanketName, int count)
     {
-        ShopTable sh = new ShopTable();
-        sh.tableID = tableID;
-        sh.blanketName = blanketName;
-        sh.count = count;
+        try
+        {
+            ShopTable sh = new ShopTable();
+            sh.tableID = tableID;
+            sh.blanketName = blanketName;
+            sh.count = count;
 
-        testconn.Insert(sh);
+            conn.Insert(sh);
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: ShopTable PK 위반)");
+        }
+
     }
 
     public bool Change_TableBlanket_Count(int tableID, string blanketName, int delta)
     {
-        List<ShopTable> sh = testconn.Table<ShopTable>()
-            .Where(x => x.tableID == tableID && x.blanketName == blanketName)
-            .ToList();
-        int current_count = sh[0].count;
-
-        if (current_count + delta < 0) return false;
-
-        else if (current_count + delta == 0)
+        try
         {
-            testconn.Execute("DELETE FROM ShopTable WHERE tableID = ? AND blanketName = ?",
-                tableID, blanketName);
+            ShopTable sh = conn.Table<ShopTable>()
+             .Where(x => x.tableID == tableID && x.blanketName == blanketName)
+             .FirstOrDefault();
+            int current_count = sh.count;
+
+            if (current_count + delta < 0) return false;
+
+            else if (current_count + delta == 0)
+            {
+                conn.Execute("DELETE FROM ShopTable WHERE tableID = ? AND blanketName = ?",
+                    tableID, blanketName);
+            }
+            else
+            {
+                current_count += delta;
+                conn.Execute("UPDATE ShopTable SET count = ? WHERE tableID = ? AND blanketName = ?",
+                    current_count, tableID, blanketName);
+            }
+            return true;
         }
-        else
+        catch (SQLiteException)
         {
-            current_count += delta;
-            testconn.Execute("UPDATE ShopTable SET count = ? WHERE tableID = ? AND blanketName = ?",
-                current_count, tableID, blanketName);
+            Debug.LogError("쿼리 실패 (예상: ShopTable PK 위반)");
+            return false;
         }
-        return true;
+
     }
 
     public WorkShop Select_WorkShop(int tableID)
     {
-        return testconn.Find<WorkShop>(tableID);
+        return conn.Find<WorkShop>(tableID);
     }
 
     public bool Any_Table_Blanket(int tableID)
     {
-        return testconn.Table<ShopTable>()
+        return conn.Table<ShopTable>()
             .Any(x => x.tableID == tableID);
     }
+
+    public bool Insert_Worker(string workerName, float x, float y)
+    {
+        try
+        {
+            WorkRoom newWorkRoom = new WorkRoom();
+            newWorkRoom.workerName = workerName;
+            conn.Insert(newWorkRoom);
+
+            Debug.Log("ID" + newWorkRoom.workerID);
+
+            int affectedRows = conn.Execute("UPDATE Interior SET ID = ? " +
+                "WHERE interiorName = ? AND isSet = 1 AND x = ? AND y = ?",
+                newWorkRoom.workerID, workerName, x, y);
+
+            return affectedRows > 0;
+
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public bool Delete_Worker(int workerId)
+    {
+        try
+        {
+            WorkRoom workRoom = conn.Find<WorkRoom>(workerId);
+            conn.Delete(workRoom);
+            return true;
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public bool Set_InteriorItem(string interiorName, float x, float y) // 없던 인테리어 아이템을 좌표에 위치시키는 메서드
+    {
+        try
+        {
+            // 아직 설치하지 않은 interiorName의 아이템 중 가장 오래된 것 하나를 선택해서 update
+            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 1, x = ?, y = ? " +
+               "WHERE rowid = (SELECT rowid FROM Interior WHERE interiorName = ? AND isSet = 0 " +
+                               "ORDER BY rowid ASC LIMIT 1)",
+                               x, y, interiorName);
+
+            return affectedRows > 0; // update된 행이 있다면 true, 없다면 false
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public bool Change_InteriorItem_Pos(float beforeX, float beforeY, float afterX, float afterY) // 인테리어 아이템 위치 변경
+    {
+        try
+        {
+            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? WHERE isSet = 1 AND x = ? AND y = ?",
+            afterX, afterY, beforeX, beforeY);
+
+            return affectedRows > 0;
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public bool NotSet_InteriorItem(float x, float y) // 좌표에 위치되어 있던 인테리어 아이템 빼는 메서드
+    {
+        try
+        {
+            Interior interior = conn.Table<Interior>()
+                .Where(i => i.isSet == true && i.x == x && i.y == y)
+                .FirstOrDefault();
+
+            if (interior.interiorType == InteriorType.WORKER)
+            {
+                if (!Delete_Worker(interior.ID)) return false;
+            }
+
+            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
+                    x, y);
+
+            return affectedRows > 0;
+        }
+        catch (SQLiteException)
+        {
+            Debug.LogError("쿼리 실패 (예상: Interior 제약 위반)");
+            return false;
+        }
+    }
+
+    public List<Interior> Select_Current_RoomInterior()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.isSet == true && (i.interiorType == InteriorType.ROOM_INTERIROR || i.interiorType == InteriorType.WORKER))
+            .ToList();
+    }
+
+    public Tile Select_Tile(TilePosType tilePosType)
+    {
+        return conn.Find<Tile>(tilePosType);
+    }
+
+    public void Update_Tile(TilePosType tilePosType, string tileName)
+    {
+        Tile tile = conn.Find<Tile>(tilePosType);
+        tile.tileName = tileName;
+        conn.Update(tile);
+    }
+
+    //public List<Interior> Select_WallTile_Inventory()
+    //{
+
+    //}
+
+    //public List<Interior> Select_FloorTile_Inventory()
+    //{
+
+    //}
 }

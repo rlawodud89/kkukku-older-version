@@ -16,69 +16,70 @@ public class ShopLoader : MonoBehaviour
         gameManager = GameManager.getInstance();
         HashSet<string> uniqueList = new HashSet<string>();
 
-        if (shopType == ShopType.ROOM_INTERIROR)
-        {
-            while(stock.Count < 3)
-            {
-                InteriorScript interiorScript = gameManager.Get_Random_RoomInterior();
-                if (uniqueList.Contains(interiorScript.interiorName)) continue;
 
-                ItemData itemData = new ItemData();
-                itemData.displayName = interiorScript.interiorName;
-                itemData.icon = interiorScript.image;
-                itemData.price = interiorScript.value;
-                itemData.isGold = true;
-                stock.Add(itemData);
-                uniqueList.Add(itemData.displayName);
-            }
-        }
-        else if(shopType == ShopType.SHOP_INTERIOR)
+        if (shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어
         {
             while (stock.Count < 3)
             {
                 InteriorScript interiorScript = gameManager.Get_Random_ShopInterior();
                 if (uniqueList.Contains(interiorScript.interiorName)) continue;
 
-                ItemData itemData = new ItemData();
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
                 itemData.price = interiorScript.value;
-                itemData.useQuantity = false;
-                itemData.isGold = true;
+                itemData.useQuantity = false; // 수량 X
+                itemData.isGold = true; // 일반 재화 사용
                 stock.Add(itemData);
                 uniqueList.Add(itemData.displayName);
             }
         }
-        else if (shopType == ShopType.TILE)
+        else if (shopType == ShopType.ROOM_INTERIROR)
+        {
+            while (stock.Count < 3)
+            {
+                InteriorScript interiorScript = gameManager.Get_Random_RoomInterior();
+                if (uniqueList.Contains(interiorScript.interiorName)) continue;
+
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
+                itemData.displayName = interiorScript.interiorName;
+                itemData.icon = interiorScript.image;
+                itemData.price = interiorScript.value;
+                itemData.isGold = true; // 일반 재화 사용
+                stock.Add(itemData);
+                uniqueList.Add(itemData.displayName);
+            }
+        }
+        else if (shopType == ShopType.TILE) // 타일
         {
             while (stock.Count < 3)
             {
                 InteriorScript interiorScript = gameManager.Get_Random_Tile();
                 if (uniqueList.Contains(interiorScript.interiorName)) continue;
 
-                ItemData itemData = new ItemData();
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
                 itemData.price = interiorScript.value;
-                itemData.useQuantity = false;
-                itemData.isGold = true;
+                itemData.useQuantity = false; // 수량 X
+                itemData.isGold = true; // 일반 재화 사용
                 stock.Add(itemData);
                 uniqueList.Add(itemData.displayName);
             }
         }
-        else if(shopType == ShopType.BLANKET)
+        else if (shopType == ShopType.BLANKET) // 이불 디자인
         {
             while (stock.Count < 3)
             {
                 ItemScript itemScript = gameManager.Get_Random_Blanket();
                 if (uniqueList.Contains(itemScript.itemName)) continue;
 
-                ItemData itemData = new ItemData();
+                ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = itemScript.itemName;
                 itemData.icon = itemScript.image;
                 itemData.price = itemScript.designValue;
-                itemData.useQuantity = false;
-                itemData.isGold = false;
+                itemData.useQuantity = false; // 수량 X
+                itemData.isGold = false; // 월석 사용
                 stock.Add(itemData);
                 uniqueList.Add(itemData.displayName);
             }
@@ -105,7 +106,7 @@ public class ShopLoader : MonoBehaviour
         {
             Debug.Log($"디자인 ! : {card.Data.displayName}");
 
-            if(shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어 (수량 필요없이 겉만 바뀜)
+            if (shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어 (수량 필요없이 겉만 바뀜)
             {
                 if (card.Data.price > gameManager.Get_Gold())
                 {
@@ -139,10 +140,8 @@ public class ShopLoader : MonoBehaviour
                     Debug.Log("이미 있는 디자인이므로 추가 X");
                 }
             }
-            else if(shopType == ShopType.TILE) // 타일
+            else if (shopType == ShopType.TILE) // 타일
             {
-                // TODO: 타일 UI 만들어진 후, DB 연결 확인
-
                 if (card.Data.price > gameManager.Get_Gold())
                 {
                     Debug.Log("재화 부족");
@@ -163,10 +162,10 @@ public class ShopLoader : MonoBehaviour
         {
             int cost = card.Data.price * card.Quantity;
             Debug.Log($"아이템 구매 : {card.Data.displayName} x{card.Quantity} , 비용 {cost}");
-            
+
             // ex) 코인 차감, 인벤토리 추가 등
 
-            if(card.Data.isGold) // 작업실 인테리어 (일반 재화 사용, 수량 O)
+            if (card.Data.isGold) // 작업실 인테리어 (일반 재화 사용, 수량 O)
             {
                 if (cost > gameManager.Get_Gold())
                 {
@@ -174,8 +173,10 @@ public class ShopLoader : MonoBehaviour
                     return;
                 }
 
-                gameManager.Change_Gold(-cost);
-                gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity);
+                if (gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity))
+                {
+                    gameManager.Change_Gold(-card.Data.price);
+                }
             }
             else // 월석 사용 가게
             {
@@ -185,17 +186,18 @@ public class ShopLoader : MonoBehaviour
                     return;
                 }
 
-                gameManager.Change_Moonrock(-cost);
-
-                if (shopType == ShopType.WORKER) { // 직원
+                if (shopType == ShopType.WORKER) // 직원
+                {
                     gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity);
                 }
                 else // 면, 솜, 장식
                 {
                     gameManager.Add_InventoryItem(card.Data.displayName, card.Quantity);
                 }
+
+                gameManager.Change_Moonrock(-cost);
             }
-            
+
         }
     }
 }

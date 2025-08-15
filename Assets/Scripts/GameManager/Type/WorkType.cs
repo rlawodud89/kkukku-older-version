@@ -1,7 +1,7 @@
 public enum WorkType
 {
-    LOOM, // Á÷Á¶
-    FILLER, // ¼Ø ÁÖÀÔ
-    DECO, // Àå½Ä, ÀÚ¼ö
+    LOOM = 0, // ì§ì¡°
+    FILLER, // ì†œ ì£¼ìž…
+    DECO, // ìž¥ì‹, ìžìˆ˜
     NONE
 }

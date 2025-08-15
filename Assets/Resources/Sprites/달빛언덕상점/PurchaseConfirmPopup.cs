@@ -17,18 +17,18 @@ public class PurchaseConfirmPopup : MonoBehaviour
         noBtn.onClick.AddListener(Hide);
     }
 
-    // ±âÁ¸: ItemCard ¿ë
+    // ê¸°ì¡´: ItemCard ìš©
     public void Show(ItemCard card, Action yesCallback)
     {
         onYes = yesCallback;
         string msg = card.IsRecruit
-            ? $"{card.Data.displayName}\n°í¿ëÇÏ½Ã°Ú½À´Ï±î?"
-            : $"{card.Data.displayName} x{card.Quantity}\n±¸¸ÅÇÏ½Ã°Ú½À´Ï±î?";
+            ? $"{card.Data.displayName}\nêµ¬ë§¤í•˜ì‹œê² ìŠµë‹ˆê¹Œ?"
+            : $"{card.Data.displayName} x{card.Quantity}\nêµ¬ë§¤í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
         messageText.text = msg;
         ShowInternal();
     }
 
-    // »õ·Î Ãß°¡: ÀÚÀ¯ ¸Þ½ÃÁö
+    // ìƒˆë¡œ ì¶”ê°€: ìžìœ  ë©”ì‹œì§€
     public void ShowMessage(string message, Action yesCallback)
     {
         onYes = yesCallback;
@@ -39,7 +39,7 @@ public class PurchaseConfirmPopup : MonoBehaviour
     void ShowInternal()
     {
         if (!gameObject.activeSelf) gameObject.SetActive(true);
-        transform.SetAsLastSibling();             // Ç×»ó ¸Ç À§
+        transform.SetAsLastSibling();             // í•­ìƒ ë§¨ ìœ„
     }
 
     void Hide() => gameObject.SetActive(false);

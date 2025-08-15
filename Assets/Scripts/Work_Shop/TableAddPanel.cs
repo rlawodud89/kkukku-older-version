@@ -26,6 +26,7 @@ public class TableAddPanel : MonoBehaviour
         InitScroll();
     }
 
+
     public void ClickAddXBtn()
     {
         gameObject.SetActive(false);
@@ -41,11 +42,8 @@ public class TableAddPanel : MonoBehaviour
         {
             string Selected_itemName = SelectedBtn.blanketScript.itemName;
 
-            /*if (SelectedBtn.Change_BlanketCount(-input_count) 
-                && gameManager.Use_InventoryItem(Selected_itemName, input_count))*/
             if (gameManager.Use_InventoryItem(Selected_itemName, input_count))
             {
-                TablePanel.Add_BlanketBtn(Selected_itemName, input_count);
                 gameManager.Add_Table_Blanket(TablePanel.tableID, Selected_itemName, input_count);
             }
         }

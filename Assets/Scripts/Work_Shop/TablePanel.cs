@@ -17,13 +17,15 @@ public class TablePanel : MonoBehaviour
     private Dictionary<string, BlanketBtn> BlanketBtnDic;
     private GameManager gameManager;
 
-
-    void Start()
+    void Awake()
     {
         BlanketBtnDic = new Dictionary<string, BlanketBtn>();
         gameManager = GameManager.getInstance();
         gameManager.OnTableBlanketChanged += TableBlanketChanged;
+    }
 
+    void Start()
+    {
         AddPanel.gameObject.SetActive(false);
 
         InitScroll();
@@ -42,14 +44,16 @@ public class TablePanel : MonoBehaviour
 
     public void ClickDeleteBtn()
     {
+        if (SelectedBtn == null) return;
+
         string Selected_itemName = SelectedBtn.blanketScript.itemName;
         int Selected_BlanketCount = SelectedBtn.BlanketCount;
 
-        gameManager.Add_InventoryItem(Selected_itemName, Selected_BlanketCount); // 이불장에서 뺀 만큼 다시 인벤토리로 이동
-        //AddPanel.Add_BlanketAddBtn(Selected_itemName, Selected_BlanketCount);
+        if (gameManager.Use_Table_Blanket(tableID, Selected_itemName, Selected_BlanketCount))
+        {
+            gameManager.Add_InventoryItem(Selected_itemName, Selected_BlanketCount);
+        }
 
-        Delete_In_BlanketBtnDic(Selected_itemName); // 이불장에서 삭제
-        Destroy(SelectedBtn.gameObject);
         SelectedBtn = null;
     }
 
@@ -89,7 +93,7 @@ public class TablePanel : MonoBehaviour
         SelectedBtn.Set_Selected();
     }
 
-    
+
     public void Add_BlanketBtn(string blanketName, int count)
     {
         if (count <= 0) return;
@@ -108,21 +112,28 @@ public class TablePanel : MonoBehaviour
             newBlanketBtn.Set_BlanketCount(count);
 
             BlanketBtnDic.Add(blanketName, newBlanketBtn);
-            if (BlanketBtnDic.Count == 1) OnFullChanged?.Invoke(true); 
+            if (BlanketBtnDic.Count == 1) OnFullChanged?.Invoke(true);
         }
     }
 
     public void Delete_In_BlanketBtnDic(string blanketName)
     {
         BlanketBtnDic.Remove(blanketName);
-        if(BlanketBtnDic.Count == 0) OnFullChanged?.Invoke(false);
+        if (BlanketBtnDic.Count == 0) OnFullChanged?.Invoke(false);
     }
 
     private void TableBlanketChanged(int tableID, string blanketName, int delta)
     {
-        if (this.tableID != tableID) return;
+        if (this.tableID != tableID || delta == 0) return;
 
-        BlanketBtnDic[blanketName].Change_BlanketCount(delta);
+        if (delta > 0) // 이불 추가됐다면
+        {
+            Add_BlanketBtn(blanketName, delta);
+        }
+        else // 이불 삭제되었다면
+        {
+            BlanketBtnDic[blanketName].Change_BlanketCount(delta);
+        }
     }
 
 }
