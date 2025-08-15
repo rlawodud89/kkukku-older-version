@@ -19,14 +19,29 @@ public class Make_Fabric : MonoBehaviour
 
     public ItemScript currentBlanket;
     public CottonPanel cottonPanel;
+    public FabricDetailPanelController detailPanelController;
 
     private GameManager gameManager;
-    private bool can_make = true;
+    private bool can_make = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.getInstance();
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        if (detailPanelController == null)
+        {
+            detailPanelController = FindObjectOfType<FabricDetailPanelController>();
+        }
+
+
+        //디버깅용
+        gameManager.Add_InventoryItem("운무솜", 3);
+        gameManager.Add_InventoryItem("꿈실", 3);
+        gameManager.Add_InventoryItem("달조각", 3);
     }
 
     // Update is called once per frame
@@ -37,10 +52,24 @@ public class Make_Fabric : MonoBehaviour
 
     public void ClickMakebtn()
     {
+        can_make = Check_Recipe(currentBlanket);
+        Debug.Log(can_make);
+
         if (can_make)
         {
+            for (int i = 0; i < currentBlanket.recipe.Count; i++)
+            {
+                gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
+                Debug.Log(currentBlanket.recipe[i].itemName+ currentBlanket.recipe[i].count+"만큼 감소");
+            }
 
-       
+            if (detailPanelController == null)
+            {
+                detailPanelController = FindObjectOfType<FabricDetailPanelController>();
+            }
+            detailPanelController.OpenPanel(currentBlanket);
+
+
             Panel.SetActive(false);
             Panel2.SetActive(false);
             Scroll_View.SetActive(false);
@@ -50,46 +79,53 @@ public class Make_Fabric : MonoBehaviour
 
             progresscircle.OnComplete = () =>
             {
-                Debug.Log("complete");
+                gameManager.Add_InventoryItem(currentBlanket.yarnName,1); //원단 추가
+                Debug.Log(currentBlanket.yarnName + "만듦");
                 showfabric(); 
             };
 
             progresscircle.CompleteCircle();
+            can_make = false;
+        }
+        else
+        {
+            Debug.Log("제작할 수 없습니다!");
         }
 
     }
 
-    public Sprite GetMaterialImage(RecipeEntry entry)
+    private bool Check_Recipe(ItemScript currentBlanket)
     {
-        try
+        List<(ItemScript data, int count)> inv = gameManager.Get_Material_Inventory();
+
+        // recipe에 있는 재료 하나씩 확인
+        foreach (var recipeItem in currentBlanket.recipe)
         {
-            ItemScript material = gameManager.Get_Material(entry.itemName);
-            return material.image;
+            var invItem = inv.Find(x => x.data.itemName == recipeItem.itemName);
+
+            // 없거나 개수가 부족하면 false
+            if (invItem.data == null || invItem.count < recipeItem.count)
+            {
+                return false;
+            }
         }
-        catch (KeyNotFoundException)
-        {
-            Debug.LogWarning($"재료 '{entry.itemName}'이 Materials 딕셔너리에 없습니다.");
-            return null;
-        }
+
+        return true; // 모든 재료 충분
     }
+
 
     void showfabric()
     {
         if (currentBlanket != null)
         {
-            Debug.Log(currentBlanket.itemName + "의 원단");
-
             BallonPanel.SetActive(true);
             FabricButton.gameObject.SetActive(true);
-            //FabricButton.image.sprite =;
+            FabricButton.image.sprite = gameManager.Blanket_to_Yarn(currentBlanket.itemName).image;
 
             FabricButton.onClick.RemoveAllListeners();
             FabricButton.onClick.AddListener(() =>
-            {
-                //currentBlanket.FabricCount += 1;
-                //Debug.Log($"{currentBlanket.BlanketName} 원단 수량: {currentBlanket.FabricCount}");
+            { 
 
-          
                 cottonPanel?.SetSelectedBlanket(currentBlanket);
 
 

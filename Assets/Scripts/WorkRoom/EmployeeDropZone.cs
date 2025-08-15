@@ -1,22 +1,23 @@
-using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class EmployeeDropZone : MonoBehaviour
+public class EmployeeDropZone : MonoBehaviour, IDropHandler
 {
     public Employee employee;
 
-    public void OnDropFromDrag(ItemDrag draggedItem)
+    public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Á÷¿ø¿¡°Ô Á÷Á¢ µå·Ó Ã³¸®µÊ");
-        if (draggedItem != null)
-        {
-            employee.GiveItem(draggedItem.itemData);
-            draggedItem.MarkAsDropped();
+        Debug.Log("ì§ì›ì—ê²Œ ì§ì ‘ ë“œë¡­ ì²˜ë¦¬ë¨");
 
-            // µå·¡±× ¼º°øÇÑ °æ¿ì¿¡¸¸ Á¦°Å
-            Destroy(draggedItem.gameObject);
+        ItemDrag draggedItem = eventData.pointerDrag?.GetComponent<ItemDrag>();
+
+        if (draggedItem != null && draggedItem.itemData != null)
+        {
+            // ì•„ì´í…œ ì§€ê¸‰
+            employee.GiveItem(draggedItem.itemData);
+
+            // ë“œë¡­ ì„±ê³µ í‘œì‹œ (dragClone ì‚­ì œëŠ” ItemDragê°€ ì•Œì•„ì„œ í•¨)
+            draggedItem.MarkAsDropped();
         }
     }
-
-
 }

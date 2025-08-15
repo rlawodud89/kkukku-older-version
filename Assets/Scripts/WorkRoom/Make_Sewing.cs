@@ -15,10 +15,18 @@ public class Make_Sewing : MonoBehaviour
 
     public GameObject BallonPanel;
     public GameObject CompletePanel;
+
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
+    
+    private GameManager gameManager;
+    private ItemScript currentBlanket;
 
+    private void Start()
+    {
+        gameManager = GameManager.getInstance(); 
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,16 +38,23 @@ public class Make_Sewing : MonoBehaviour
         Instance = this;
     }
 
-    public void HandleMakeClicked(ItemScript currentBlanket)
+    public void HandleMakeClicked(ItemScript currentSewing)
     {
-        Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
 
+
+        currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
+        Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
+        gameManager.Add_InventoryItem(currentBlanket.cottonName, -1);
+
+        gameManager = GameManager.getInstance();
         sewingPanel.SetActive(false);
         Employee3.Working();
 
+
         progresscircle.OnComplete = () =>
         {
-            Debug.Log("complete");
+            gameManager.Add_InventoryItem(currentBlanket.itemName, 1);
+            Debug.Log("완성");
             showsewing(currentBlanket);
         };
 
@@ -50,9 +65,8 @@ public class Make_Sewing : MonoBehaviour
 
     void showsewing(ItemScript currentBlanket)
     {
-        if (currentBlanket != null)
+        if (currentBlanket  != null)
         {
-            Debug.Log(currentBlanket.itemName + "마무리 모습");
 
             BallonPanel.SetActive(true);
             SewingButton.gameObject.SetActive(true);

@@ -20,13 +20,25 @@ public class SnacksPanel : MonoBehaviour
         if (storagePanel == null)
             storagePanel = FindObjectOfType<StoragePanel>();
 
+        // 이벤트 구독
+        if (snacksInventory != null)
+            snacksInventory.OnInventoryChanged += RefreshUI;
+
         StartCoroutine(WaitForSlotsAndApply());
         storagePanel.InitScroll();
     }
 
     void OnEnable()
     {
+        // 슬롯 준비 후 데이터 적용
         StartCoroutine(WaitForSlotsAndApply());
+    }
+
+    void OnDisable()
+    {
+        // 이벤트 구독 해제
+        if (snacksInventory != null)
+            snacksInventory.OnInventoryChanged -= RefreshUI;
     }
 
     IEnumerator WaitForSlotsAndApply()
@@ -40,7 +52,7 @@ public class SnacksPanel : MonoBehaviour
     void RefreshUI()
     {
         snackDataList = snacksInventory.GetSnackInventory()
-            .Where(e => e.item != null && e.item != null && e.count > 0)
+            .Where(e => e.item != null && e.count > 0)
             .ToList();
 
         ApplyDataToSlots();
@@ -59,20 +71,20 @@ public class SnacksPanel : MonoBehaviour
             if (i < snackDataList.Count)
             {
                 var (item, count) = snackDataList[i];
-                var data = item;
 
-                ui.SetData(data, count);
-
-                if (drag != null)
+                if (count > 0)
                 {
-                    drag.itemData = data;
-                    drag.enabled = true;
+                    ui.SetData(item, count);
+                    if (drag != null)
+                    {
+                        drag.itemData = item;
+                        drag.enabled = true;
+                    }
                 }
             }
             else
             {
-                ui.ClearSlot();
-
+                ui.ClearSlot(); // 완전히 비워야 하는 경우만
                 if (drag != null)
                 {
                     drag.itemData = null;
@@ -81,4 +93,5 @@ public class SnacksPanel : MonoBehaviour
             }
         }
     }
+
 }

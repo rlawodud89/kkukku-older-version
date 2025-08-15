@@ -408,8 +408,6 @@ public class GameManager : MonoBehaviour
         var randomBlanket = Blankets.ElementAt(randomIdx);
         return randomBlanket.Value;
     }
-    
-
 
     public ItemScript Get_Snack(string snackName) { return Snacks[snackName]; }
     public ItemScript Get_Random_Snack()
@@ -804,6 +802,5 @@ public class GameManager : MonoBehaviour
     //{
 
     //}
-
 
 }
