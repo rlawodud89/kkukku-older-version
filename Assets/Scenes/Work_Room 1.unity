@@ -476,7 +476,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &79469854
@@ -635,7 +635,7 @@ MonoBehaviour:
   scrollContent: {fileID: 1618463924}
   storagePanel: {fileID: 481227448}
   BallonPanel: {fileID: 348978210}
-  currentBlanket: {fileID: 0}
+  currentCotton: {fileID: 0}
 --- !u!1 &112390887
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,6 +861,7 @@ MonoBehaviour:
   progresscircle: {fileID: 123331155}
   currentBlanket: {fileID: 0}
   cottonPanel: {fileID: 101457252}
+  detailPanelController: {fileID: 0}
 --- !u!4 &134567891
 Transform:
   m_ObjectHideFlags: 0
@@ -5669,7 +5670,7 @@ MonoBehaviour:
   scrollContent: {fileID: 2011368717}
   storagePanel: {fileID: 715886593}
   BallonPanel: {fileID: 1572646669}
-  currentBlanket: {fileID: 0}
+  currentSewing: {fileID: 0}
 --- !u!114 &618415794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6457,7 +6458,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &793507090
@@ -7533,6 +7534,7 @@ MonoBehaviour:
   progresscircle: {fileID: 652082469}
   BallonPanel: {fileID: 348978210}
   CottonButton: {fileID: 1168381744}
+  gameManager: {fileID: 0}
 --- !u!4 &947283327
 Transform:
   m_ObjectHideFlags: 0
@@ -8276,7 +8278,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1180461250
@@ -10095,7 +10097,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1436980357
@@ -10754,7 +10756,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6534c741a49e684392bd526f2980497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemDatas: []
   scrollContent: {fileID: 1355075465}
   snacksInventory: {fileID: 2039721150}
   storagePanel: {fileID: 1419924463}
@@ -15446,7 +15447,9 @@ MonoBehaviour:
   - {fileID: 373464948}
   - {fileID: 817537547}
   - {fileID: 1625574013}
+  inv_materialSlots: []
   defaultMaterialSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  gameManager: {fileID: 0}
 --- !u!1 &1886323538
 GameObject:
   m_ObjectHideFlags: 0
@@ -16506,7 +16509,7 @@ SpriteRenderer:
   m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &2030431298
@@ -16680,12 +16683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7cfbffe9e2147d4181b8b0813863b64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedSnacks:
-  - data: {fileID: 11400000, guid: ec7a28df123af404fb7ffcabc1511961, type: 2}
-    count: 1
-  OnInventoryChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  gameManager: {fileID: 0}
 --- !u!1 &2064382463
 GameObject:
   m_ObjectHideFlags: 0
