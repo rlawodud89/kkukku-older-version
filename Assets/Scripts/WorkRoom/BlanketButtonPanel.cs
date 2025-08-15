@@ -10,9 +10,12 @@ public class BlanketButtonPanel : MonoBehaviour
     public FabricDetailPanelController detailPanel;
     public StoragePanel storagePanel;
     public Make_Fabric makeFabric; 
+    
+    private GameManager gameManager;
+
     void Start()
     {
-
+        gameManager = GameManager.getInstance();
 
         if (storagePanel == null)
         {
@@ -29,7 +32,7 @@ public class BlanketButtonPanel : MonoBehaviour
 
     void InitScroll()
     {
-        List<BlanketData> blanketList = BlanketManager.Instance.GetBlanketList();
+        List<ItemScript> blanketList = BlanketManager.Instance.blanketList;
 
         if (blanketList == null)
         {
@@ -48,7 +51,7 @@ public class BlanketButtonPanel : MonoBehaviour
             }
 
             int index = i;
-            BlanketData data = blanketList[index];
+            ItemScript data = blanketList[index];
 
             Transform slot = storagePanel.ScrollContent.GetChild(index);
 
@@ -59,13 +62,13 @@ public class BlanketButtonPanel : MonoBehaviour
             if (data == null) Debug.LogError($"blanketList[{index}] is null");
 
             if (btnImage != null)
-                btnImage.sprite = data.BlanketSprite;
+                btnImage.sprite = data.image;
 
             if (btn != null)
             {
                 btn.onClick.RemoveAllListeners();
                 int capturedIndex = index;
-                BlanketData capturedData = data;
+                ItemScript capturedData = data;
 
                 btn.onClick.AddListener(() =>
                 {

@@ -17,15 +17,16 @@ public class Make_Fabric : MonoBehaviour
     public Employee Employee1;
     public ProgressCircle progresscircle;
 
-    public BlanketData currentBlanket;
+    public ItemScript currentBlanket;
     public CottonPanel cottonPanel;
 
+    private GameManager gameManager;
     private bool can_make = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameManager.getInstance();
     }
 
     // Update is called once per frame
@@ -58,21 +59,35 @@ public class Make_Fabric : MonoBehaviour
 
     }
 
+    public Sprite GetMaterialImage(RecipeEntry entry)
+    {
+        try
+        {
+            ItemScript material = gameManager.Get_Material(entry.itemName);
+            return material.image;
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogWarning($"ì¬ë£Œ '{entry.itemName}'ì´ Materials ë”•ì…”ë„ˆë¦¬ì— ì—†ìŠµë‹ˆë‹¤.");
+            return null;
+        }
+    }
+
     void showfabric()
     {
         if (currentBlanket != null)
         {
-            Debug.Log(currentBlanket.BlanketName + "ÀÇ ¿ø´Ü");
+            Debug.Log(currentBlanket.itemName + "ì˜ ì›ë‹¨");
 
             BallonPanel.SetActive(true);
             FabricButton.gameObject.SetActive(true);
-            FabricButton.image.sprite = currentBlanket.Fabric;
+            //FabricButton.image.sprite =;
 
             FabricButton.onClick.RemoveAllListeners();
             FabricButton.onClick.AddListener(() =>
             {
-                currentBlanket.FabricCount += 1;
-                Debug.Log($"{currentBlanket.BlanketName} ¿ø´Ü ¼ö·®: {currentBlanket.FabricCount}");
+                //currentBlanket.FabricCount += 1;
+                //Debug.Log($"{currentBlanket.BlanketName} ì›ë‹¨ ìˆ˜ëŸ‰: {currentBlanket.FabricCount}");
 
           
                 cottonPanel?.SetSelectedBlanket(currentBlanket);

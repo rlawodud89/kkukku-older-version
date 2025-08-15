@@ -1959,7 +1959,7 @@ Transform:
   m_GameObject: {fileID: 355377745}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1444933, y: -0.20864668, z: -0.0022699314}
+  m_LocalPosition: {x: -2.086206, y: -0.37415385, z: -0.0022699314}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5498,7 +5498,7 @@ Transform:
   m_GameObject: {fileID: 574950547}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.33828735, y: -0.2144928, z: 0}
+  m_LocalPosition: {x: -0.28, y: -0.38, z: 0}
   m_LocalScale: {x: 0.975, y: 0.9722, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7189,7 +7189,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.4779406
+  orthographic size: 4.7216105
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7993,9 +7993,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blanketList:
-  - {fileID: 11400000, guid: c560475fa4ef51a489f74d4c01f3c6e9, type: 2}
-  - {fileID: 11400000, guid: ff907d0143f2415468ce2decc30b07bb, type: 2}
-  - {fileID: 11400000, guid: 1972520ff9cae384589f5f7450c9cd44, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1165320425
 Transform:
   m_ObjectHideFlags: 0
@@ -14522,7 +14523,7 @@ Transform:
   m_GameObject: {fileID: 1737897558}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1726, y: 0.5437, z: 0}
+  m_LocalPosition: {x: -0.2, y: 0.39, z: 0}
   m_LocalScale: {x: 0.975, y: 0.9722, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

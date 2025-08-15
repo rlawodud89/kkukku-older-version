@@ -17,7 +17,13 @@ MonoBehaviour:
   itemType: 4
   level: 0
   value: 1500
-  recipe: []
+  recipe:
+  - itemName: "\uC6B4\uBB34\uC19C"
+    count: 3
+  - itemName: "\uB2EC\uC870\uAC01"
+    count: 3
+  - itemName: "\uAFC8\uC2E4"
+    count: 3
   designValue: 5000
   yarnName: "\uC6B0\uC8FC\uC6D0\uB2E8"
   cottonName: "\uC6B0\uC8FC\uC19C"

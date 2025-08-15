@@ -8,32 +8,54 @@ public class FabricDetailPanelController : MonoBehaviour
     public TextMeshProUGUI BlanketNameText;
     public Image BlanketImage;
 
-    public List<Image> materialImageSlots; // ÀÎ½ºÆåÅÍ¿¡¼­ ¼ø¼­´ë·Î ¿¬°á
+    public List<Image> materialImageSlots; // ì¸ìŠ¤í™í„°ì—ì„œ ìˆœì„œëŒ€ë¡œ ì—°ê²°
     public List<Text> materialQuantitySlots;
 
-    public Sprite defaultMaterialSprite; // ±âº» ÀÌ¹ÌÁö (ÀÎ½ºÆåÅÍ¿¡¼­ ¿¬°á)
+    public Sprite defaultMaterialSprite; // ê¸°ë³¸ ì´ë¯¸ì§€ (ì¸ìŠ¤í™í„°ì—ì„œ ì—°ê²°)
+    public GameManager gameManager;
 
-    public void OpenPanel(BlanketData blanket)
+    private void Start()
+    {
+        gameManager = GameManager.getInstance();
+    }
+
+    // RecipeEntryì™€ Materialsê°€ ìˆë‹¤ê³  ê°€ì •
+    public Sprite GetMaterialImage(RecipeEntry entry)
+    {
+        try
+        {
+            ItemScript material = gameManager.Get_Material(entry.itemName);
+            return material.image;
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogWarning($"ì¬ë£Œ '{entry.itemName}'ì´ Materials ë”•ì…”ë„ˆë¦¬ì— ì—†ìŠµë‹ˆë‹¤.");
+            return null;
+        }
+    }
+
+
+    public void OpenPanel(ItemScript blanket)
     {
 
         gameObject.SetActive(true);
 
-        BlanketNameText.text = blanket.BlanketName;
-        BlanketImage.sprite = blanket.BlanketSprite;
+        BlanketNameText.text = blanket.itemName;
+        BlanketImage.sprite = blanket.image;
 
-        // ½½·Ô ÃÊ±âÈ­
+        // ìŠ¬ë¡¯ ì´ˆê¸°í™”
         for (int i = 0; i < materialImageSlots.Count; i++)
         {
-            if (i < blanket.requiredMaterials.Length && blanket.requiredMaterials[i] != null)
+            if (i < blanket.recipe.Count && blanket.recipe[i] != null)
             {
-                materialImageSlots[i].sprite = blanket.requiredMaterials[i].data.MaterialSprite;
+                materialImageSlots[i].sprite = GetMaterialImage(blanket.recipe[i]);
                 materialImageSlots[i].gameObject.SetActive(true);
-                materialQuantitySlots[i].text = blanket.requiredMaterials[i].count.ToString();
+                materialQuantitySlots[i].text = blanket.recipe[i].count.ToString();
                 materialQuantitySlots[i].gameObject.SetActive(true);
             }
             else
             {
-                // ½½·ÔÀº ±×´ë·Î È°¼ºÈ­ÇÏ°í ±âº» ÀÌ¹ÌÁö·Î Ç¥½Ã
+                // ìŠ¬ë¡¯ì€ ê·¸ëŒ€ë¡œ í™œì„±í™”í•˜ê³  ê¸°ë³¸ ì´ë¯¸ì§€ë¡œ í‘œì‹œ
                 materialImageSlots[i].sprite = defaultMaterialSprite;
                 materialImageSlots[i].gameObject.SetActive(true);
                 materialQuantitySlots[i].text = "0";
