@@ -16,6 +16,7 @@ public class InteriorManager : MonoBehaviour
     public GameObject ItemButtonPrefab;
     public GameObject roomScrollContent;
     public GameObject shopScrollContent;
+    public GameObject tilePanel;
 
     private ClickInteriorItem clickInteriorItem;
 
@@ -35,7 +36,7 @@ public class InteriorManager : MonoBehaviour
 
 
     private Transform itemParent;
-    private Vector3 spawnPos=new Vector3(-1.8f,0.8f,20f);
+    private Vector3 spawnPos = new Vector3(-1.8f, 0.8f, 20f);
 
     // 이동 버튼
     private GameObject Home_Button;
@@ -77,7 +78,7 @@ public class InteriorManager : MonoBehaviour
     }
 
     public void CategorySelect(string category)
-    {   
+    {
         switch (category)
         {
             case "가구":
@@ -97,11 +98,13 @@ public class InteriorManager : MonoBehaviour
 
     public void SetFurnitureItem()
     {
-        Clear(); 
-        
+        Clear();
+
         //GameObject ItemButton4 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        foreach (var (item, count) in interiorItems){
-            if(item.interiorType==InteriorType.ROOM_INTERIROR){
+        foreach (var (item, count) in interiorItems)
+        {
+            if (item.interiorType == InteriorType.ROOM_INTERIROR)
+            {
                 GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
                 // ItemButton에 item 정보 설정
 
@@ -116,10 +119,12 @@ public class InteriorManager : MonoBehaviour
 
     public void SetTileItem()
     {
-        Clear(); 
-        
-        foreach (var (item, count) in interiorItems){
-            if(item.interiorType==InteriorType.FLOOR_TILE||item.interiorType==InteriorType.WALL_TILE){
+        Clear();
+
+        foreach (var (item, count) in interiorItems)
+        {
+            if (item.interiorType == InteriorType.FLOOR_TILE || item.interiorType == InteriorType.WALL_TILE)
+            {
                 GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
                 // ItemButton에 item 정보 설정
 
@@ -134,10 +139,12 @@ public class InteriorManager : MonoBehaviour
 
     public void SetEmployeeItem()
     {
-        Clear(); 
+        Clear();
 
-        foreach (var (item, count) in interiorItems){
-            if(item.interiorType==InteriorType.WORKER){
+        foreach (var (item, count) in interiorItems)
+        {
+            if (item.interiorType == InteriorType.WORKER)
+            {
                 GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
                 // ItemButton에 item 정보 설정
 
@@ -145,12 +152,13 @@ public class InteriorManager : MonoBehaviour
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-               // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+                // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
             }
         }
     }
 
-    public void Clear(){
+    public void Clear()
+    {
         foreach (Transform child in roomScrollContent.transform)
         {
             Destroy(child.gameObject);
@@ -160,18 +168,18 @@ public class InteriorManager : MonoBehaviour
     // 가구 클릭 시 
     public void ClickInteriorItem(InteriorScript item)
     {
-       PanelClose();
-       
-       // 작업실위에 생성
-       GameObject itemObject=Instantiate(item.prefab,spawnPos, item.prefab.transform.rotation, itemParent);
+        PanelClose();
+
+        // 작업실위에 생성
+        GameObject itemObject = Instantiate(item.prefab, spawnPos, item.prefab.transform.rotation, itemParent);
         var click = itemObject.GetComponent<ClickInteriorItem>();
-       click.Select();
-       click.initialPosition=spawnPos;
+        click.Select();
+        click.initialPosition = spawnPos;
 
-       // 인벤토리 -> 작업실로
-        bool isUsed = gameManager.Use_RoomInteriorItem(item.name,spawnPos.x, spawnPos.y);
+        // 인벤토리 -> 작업실로
+        bool isUsed = gameManager.Use_RoomInteriorItem(item.name, spawnPos.x, spawnPos.y);
 
-        if(isUsed)
+        if (isUsed)
         {
             Debug.Log($"Used Interior Item: {item.name}");
         }
@@ -195,13 +203,16 @@ public class InteriorManager : MonoBehaviour
 
     public void PanelOpen()
     {
-        if(currentSceneName=="Work_Room"){
+        if (currentSceneName == "Work_Room")
+        {
             if (roomInteriorPanel != null)
             {
                 roomInteriorPanel.SetActive(true);
                 SetFurnitureItem();
             }
-        }else if(currentSceneName=="Work_Shop"){
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
             if (shopInteriorPanel != null)
             {
                 shopInteriorPanel.SetActive(true);
@@ -211,12 +222,15 @@ public class InteriorManager : MonoBehaviour
 
     public void PanelClose()
     {
-        if(currentSceneName=="Work_Room"){
+        if (currentSceneName == "Work_Room")
+        {
             if (roomInteriorPanel != null)
             {
                 roomInteriorPanel.SetActive(false);
             }
-        }else if(currentSceneName=="Work_Shop"){
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
             if (shopInteriorPanel != null)
             {
                 shopInteriorPanel.SetActive(false);
@@ -225,34 +239,46 @@ public class InteriorManager : MonoBehaviour
     }
 
     // 인테리어 메뉴 버튼 눌렀을 때
-    public void ClickInteriorButton(){
+    public void ClickInteriorButton()
+    {
         interiorMode = true;
 
         InteriorInventoryButton.SetActive(true);
         InteriorExitButton.SetActive(true);
 
-        if(currentSceneName=="Work_Room"){
+        if (currentSceneName == "Work_Room")
+        {
             Home_Button = GameObject.Find("Home_Button");
             Home_Button.SetActive(false);
 
-        }else if(currentSceneName=="Work_Shop"){
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
             RoomBtn = GameObject.Find("RoomBtn");
             RoomBtn.SetActive(false);
         }
+
+        tilePanel.SetActive(true);
     }
 
     // 나가기 버튼 눌렀을 때
-    public void ClickExitInteriorButton(){
+    public void ClickExitInteriorButton()
+    {
         interiorMode = false;
 
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
         PanelClose();
 
-        if(Home_Button!=null){
+        if (Home_Button != null)
+        {
             Home_Button.SetActive(true);
-        }else if(RoomBtn!=null){
+        }
+        else if (RoomBtn != null)
+        {
             RoomBtn.SetActive(true);
         }
+
+        tilePanel.SetActive(false);
     }
 }
