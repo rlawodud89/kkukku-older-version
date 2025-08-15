@@ -1,36 +1,25 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections;
 
-[RequireComponent(typeof(Image), typeof(CanvasGroup), typeof(RectTransform))]
 public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-
 {
-    public SnacksData itemData; // ¿¬°áµÈ °£½Ä µ¥ÀÌÅÍ
+    public ItemScript itemData; // ì—°ê²°ëœ ê°„ì‹ ë°ì´í„°
+    public Canvas dragCanvas;   // ë“œë˜ê·¸ í‘œì‹œìš© Canvas (UI ìµœìƒìœ„)
 
-    private RectTransform rectTransform;
-    private CanvasGroup canvasGroup;
-    private Vector2 originalPosition;
-    private Transform originalParent;
-
-    public Canvas dragCanvas;  // Inspector¿¡¼­ ÇÒ´çÇÏ°Å³ª Awake¿¡¼­ ÀÚµ¿ Ã£±â
+    private GameObject dragClone;         // ë“œë˜ê·¸ ì¤‘ì¸ ë³µì œ ì•„ì´ì½˜
+    private RectTransform dragCloneRect;  // ë³µì œ ì•„ì´ì½˜ RectTransform
+    private CanvasGroup dragCloneGroup;   // ë³µì œ ì•„ì´ì½˜ CanvasGroup
 
     private bool droppedOnEmployee = false;
 
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
-
         if (dragCanvas == null)
         {
-            // ÃÖ»óÀ§ Canvas Ã£±â (¾øÀ¸¸é ¾À¿¡¼­ Canvas Ã£¾Æ¼­ ÇÒ´ç)
             dragCanvas = GetComponentInParent<Canvas>();
             if (dragCanvas == null)
-            {
                 dragCanvas = FindObjectOfType<Canvas>();
-            }
         }
     }
 
@@ -42,21 +31,29 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             eventData.pointerDrag = null;
             return;
         }
-        originalPosition = rectTransform.anchoredPosition; // ºÎ¸ğ ±âÁØ ÁÂÇ¥ ÀúÀå
-        originalParent = transform.parent;
 
-        // dragCanvas ¾Æ·¡·Î ÀÌµ¿ (µå·¡±× ¾ÆÀÌÅÛÀÌ Ç×»ó ÃÖ»ó´ÜÀ¸·Î ·»´õ¸µ)
-        transform.SetParent(dragCanvas.transform, false);
+        // ìŠ¬ë¡¯ ì›ë³¸ ëŒ€ì‹  ë³µì œë³¸ ìƒì„±
+        dragClone = new GameObject("DragIcon");
+        dragClone.transform.SetParent(dragCanvas.transform, false);
+        dragClone.transform.SetAsLastSibling();
 
-        originalPosition = rectTransform.anchoredPosition;
-        canvasGroup.blocksRaycasts = false;
+        Image cloneImg = dragClone.AddComponent<Image>();
+        cloneImg.sprite = img.sprite;
+        cloneImg.raycastTarget = false; // ë“œë˜ê·¸ ì¤‘ í´ë¦­ ë°©ì§€
+
+        dragCloneRect = dragClone.GetComponent<RectTransform>();
+        dragCloneRect.sizeDelta = img.rectTransform.sizeDelta;
+
+        dragCloneGroup = dragClone.AddComponent<CanvasGroup>();
+        dragCloneGroup.blocksRaycasts = false;
+
         droppedOnEmployee = false;
-
-        transform.SetAsLastSibling(); // ÃÖ»ó´ÜÀ¸·Î À§Ä¡
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (dragCloneRect == null) return;
+
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             dragCanvas.transform as RectTransform,
@@ -64,62 +61,17 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             dragCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : dragCanvas.worldCamera,
             out localPoint);
 
-        rectTransform.anchoredPosition = localPoint;
+        dragCloneRect.anchoredPosition = localPoint;
     }
 
-
-    // µå·¡±× ³¡³¯ ¶§ À§Ä¡ ±âÁØÀ¸·Î Á÷¿ø °¨Áö
-    // µå·¡±× ³¡³¯ ¶§ À§Ä¡ ±âÁØÀ¸·Î Á÷¿ø °¨Áö
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true;
-
-        // µå·¡±× ³¡³­ ÁöÁ¡¿¡¼­ Ray ½î±â
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Collider2D hit = Physics2D.OverlapPoint(worldPos);
-
-        if (hit != null && hit.CompareTag("Employee"))
-        {
-            var dropZone = hit.GetComponent<EmployeeDropZone>();
-            if (dropZone != null)
-            {
-                dropZone.OnDropFromDrag(this);
-                return; // ¿©±â¼­ Destroy´Â DropZone ÂÊ¿¡¼­¸¸ ÇÏµµ·Ï
-            }
-        }
-
-
-        // ½ÇÆĞ: ¿øÀ§Ä¡·Î
-        StartCoroutine(SnapBack());
+        if (dragClone != null)
+            Destroy(dragClone);
     }
-
-
-
-    IEnumerator SnapBack()
-    {
-        transform.SetParent(originalParent, false);
-        yield return null;
-
-        float duration = 0.2f;
-        float time = 0f;
-        Vector3 start = rectTransform.anchoredPosition;
-
-        // anchoredPosition ±âÁØ º¹±Í
-        while (time < duration)
-        {
-            rectTransform.anchoredPosition = Vector3.Lerp(start, originalPosition, time / duration);
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        rectTransform.anchoredPosition = originalPosition;
-    }
-
-
-
 
     public void MarkAsDropped()
     {
         droppedOnEmployee = true;
     }
-}  
+}

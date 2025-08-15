@@ -10,6 +10,7 @@ public class FabricDetailPanelController : MonoBehaviour
 
     public List<Image> materialImageSlots; // 인스펙터에서 순서대로 연결
     public List<Text> materialQuantitySlots;
+    public List<TextMeshProUGUI> inv_materialSlots;
 
     public Sprite defaultMaterialSprite; // 기본 이미지 (인스펙터에서 연결)
     public GameManager gameManager;
@@ -19,25 +20,13 @@ public class FabricDetailPanelController : MonoBehaviour
         gameManager = GameManager.getInstance();
     }
 
-    // RecipeEntry와 Materials가 있다고 가정
-    public Sprite GetMaterialImage(RecipeEntry entry)
-    {
-        try
-        {
-            ItemScript material = gameManager.Get_Material(entry.itemName);
-            return material.image;
-        }
-        catch (KeyNotFoundException)
-        {
-            Debug.LogWarning($"재료 '{entry.itemName}'이 Materials 딕셔너리에 없습니다.");
-            return null;
-        }
-    }
-
-
+    
     public void OpenPanel(ItemScript blanket)
     {
-
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
         gameObject.SetActive(true);
 
         BlanketNameText.text = blanket.itemName;
@@ -48,10 +37,17 @@ public class FabricDetailPanelController : MonoBehaviour
         {
             if (i < blanket.recipe.Count && blanket.recipe[i] != null)
             {
-                materialImageSlots[i].sprite = GetMaterialImage(blanket.recipe[i]);
+                materialImageSlots[i].sprite = gameManager.GetMaterialImage(blanket.recipe[i]);
                 materialImageSlots[i].gameObject.SetActive(true);
                 materialQuantitySlots[i].text = blanket.recipe[i].count.ToString();
                 materialQuantitySlots[i].gameObject.SetActive(true);
+
+                var inv = gameManager.Get_Material_Inventory(); // 전체 인벤토리
+                var invItem = inv.Find(x => x.item.itemName == blanket.recipe[i].itemName); // 레시피 재료 이름 매칭
+
+                int haveCount = invItem.item != null ? invItem.count : 0; // 없으면 0개
+                inv_materialSlots[i].text = haveCount.ToString();
+
             }
             else
             {

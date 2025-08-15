@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class BlanketSlotUI : MonoBehaviour
 {
-    public SlotType slotType; // 프리팹에서 설정
     public Button button;
     public Text countText;
     public GameObject checkPanel;
@@ -38,10 +37,23 @@ public class BlanketSlotUI : MonoBehaviour
 
             if (button != null)
             {
-              //  button.image.sprite = slotType == SlotType.Cotton ? currentData.Fabric : currentData.Cotton;
+                button.image.sprite = currentData.image;
             }
+        }
 
-            Debug.Log($"[{slotType}] 슬롯에 새 데이터 세팅: {currentData.itemName}");
+        UpdateCountText();
+    }
+
+    public void SetData(ItemScript data, int count)
+    {
+        if (data == null) return;
+
+        currentData = data;
+        this.count = count;
+
+        if (button != null)
+        {
+            button.image.sprite = currentData.image;
         }
 
         UpdateCountText();
@@ -84,17 +96,26 @@ public class BlanketSlotUI : MonoBehaviour
 
         checkPanel.SetActive(false);
 
-        Debug.Log($"[{slotType}] 슬롯에서 Make 클릭: {currentData.itemName}");
-
-        if (slotType == SlotType.Cotton)
+        if (currentData.itemType == ItemType.YARN)
         {
             Make_Cotton.Instance?.HandleMakeClicked(currentData);
+            Debug.Log("yarn");
         }
-        else if (slotType == SlotType.Sewing)
+        else if (currentData.itemType == ItemType.COTTON)
         {
             Make_Sewing.Instance?.HandleMakeClicked(currentData);
+            Debug.Log("cotton");
         }
 
-        ClearSlot();
+        if (count > 1)
+        {
+            count -= 1;
+            UpdateCountText();
+        }
+        else
+        {
+            ClearSlot();
+        }
     }
+
 }

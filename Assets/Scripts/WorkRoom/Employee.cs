@@ -14,15 +14,16 @@ public class Employee : MonoBehaviour
 
     public string EmployeeName;
 
-    public void GiveItem(SnacksData item)
+    public void GiveItem(ItemScript item)
     {
         snacksInventory.GiveSnackToEmployee(item);
         Debug.Log("GiveSnackToEmployee 호출됨");
 
+
         Debug.Log("먹이줌");
         
-        staminar.Addstamina(item.extrastamina);
-        ShowFloatingText("+" + item.extrastamina);
+        staminar.Addstamina(item.value);
+        ShowFloatingText("+" + item.value);
         
         //ShowReaction(item.reactionMessage);
     }

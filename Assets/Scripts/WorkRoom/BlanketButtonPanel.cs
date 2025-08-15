@@ -46,7 +46,7 @@ public class BlanketButtonPanel : MonoBehaviour
         {
             if (i >= childCount)
             {
-                Debug.LogWarning($"½½·Ô ºÎÁ·: ÇÊ¿äÇÑ {blanketList.Count}, Á¸ÀçÇÏ´Â {childCount}");
+                Debug.LogWarning($"ìŠ¬ë¡¯ ë¶€ì¡±: í•„ìš”í•œ {blanketList.Count}, ì¡´ì¬í•˜ëŠ” {childCount}");
                 break;
             }
 
@@ -58,7 +58,7 @@ public class BlanketButtonPanel : MonoBehaviour
             Button btn = slot.GetComponentInChildren<Button>();
             Image btnImage = btn?.GetComponent<Image>();
 
-            if (btnImage == null) Debug.LogError($"½½·Ô[{index}]¿¡ ÀÌ¹ÌÁö°¡ ¾ø½À´Ï´Ù.");
+            if (btnImage == null) Debug.LogError($"ìŠ¬ë¡¯[{index}]ì— ì´ë¯¸ì§€ê°€ ì—†ìŠµë‹ˆë‹¤.");
             if (data == null) Debug.LogError($"blanketList[{index}] is null");
 
             if (btnImage != null)
@@ -72,13 +72,12 @@ public class BlanketButtonPanel : MonoBehaviour
 
                 btn.onClick.AddListener(() =>
                 {
-                    Debug.Log($"ÀÌºÒ {capturedIndex + 1} Å¬¸¯µÊ");
                     detailPanel.OpenPanel(capturedData);
 
                     if (makeFabric != null)
                     {
                         makeFabric.currentBlanket = capturedData;
-                        Debug.Log($"makeFabric.currentBlanket ¼³Á¤µÊ: {capturedData.name}");
+                        Debug.Log($"makeFabric.currentBlanket ì„¤ì •ë¨: {capturedData.name}");
                     }
                 });
 

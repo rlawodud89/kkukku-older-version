@@ -501,15 +501,33 @@ public class GameManager : MonoBehaviour
     public List<(ItemScript item, int count)> Get_Material_Inventory()
     {
         List<Inventory> inven = dbManager.Select_Material();
+        Debug.Log($"[GameManager] Material Inventory 불러옴: {inven.Count}개");
+
         List<(ItemScript item, int count)> result = new List<(ItemScript item, int count)>();
 
         foreach (Inventory i in inven)
         {
-            result.Add((Get_Material(i.itemName), i.count));
+            Debug.Log($"[GameManager] DB 아이템: {i.itemName}, 개수: {i.count}");
+
+            var mat = Get_Material(i.itemName);
+            if (mat == null)
+            {
+                Debug.LogWarning($"[GameManager] {i.itemName} → Material 데이터 없음");
+                continue;
+            }
+
+            if (mat.itemType != ItemType.MATERIAL)
+            {
+                Debug.LogWarning($"[GameManager] {i.itemName} → Material 아님, 건너뜀");
+                continue;
+            }
+
+            result.Add((mat, i.count));
         }
 
         return result;
     }
+
 
     public List<(ItemScript item, int count)> Get_Blanket_Inventory()
     {

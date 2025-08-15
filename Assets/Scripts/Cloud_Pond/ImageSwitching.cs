@@ -4,9 +4,11 @@ using System.Collections;
 
 public class ImageSwitching : MonoBehaviour
 {
-    public Image targetImage;        // º¸¿©ÁÙ UI Image
-    public Sprite[] sprites;         // 0: ÀÌ¹ÌÁö1, 1: ÀÌ¹ÌÁö2, 2: ÀÌ¹ÌÁö3
-    public float interval = 0.5f;    // ÀÌ¹ÌÁö ÀüÈ¯ °£°Ý
+    public Image targetImage;        // ë³´ì—¬ì¤„ UI Image
+    
+    
+    public Sprite[] sprites;         // 0: ì´ë¯¸ì§€1, 1: ì´ë¯¸ì§€2, 2: ì´ë¯¸ì§€3
+    public float interval = 0.5f;    // ì´ë¯¸ì§€ ì „í™˜ ê°„ê²©
 
     public Sprite begin_Sprite;
     private int index = 0;
@@ -14,13 +16,29 @@ public class ImageSwitching : MonoBehaviour
 
     private bool fishing = false;
     private Coroutine imageLoopCoroutine = null;
+    private GameManager gameManager;
+
+
+    private void Start()
+    {
+        if (gameManager==null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+    }
 
     public void Clickfishing()
     {
-        if (!fishing)
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+        if (!fishing && gameManager.Get_EnergyLevel()>=2)
         {
             fishing = true;
-            imageLoopCoroutine = StartCoroutine(ImageLoop());
+
+            targetImage.sprite = sprites[0];
+            //imageLoopCoroutine = StartCoroutine(ImageLoop());
         }
     }
 
@@ -29,6 +47,7 @@ public class ImageSwitching : MonoBehaviour
         if (fishing)
         {
             fishing = false;
+
 
             if (imageLoopCoroutine != null)
             {
@@ -46,17 +65,18 @@ public class ImageSwitching : MonoBehaviour
     {
         while (true)
         {
+            /*
             targetImage.sprite = sprites[index];
 
             yield return new WaitForSeconds(interval);
 
             index += direction;
 
-            // ¼ø¼­: 0 ¡æ 1 ¡æ 2 ¡æ 1 ¡æ 0 ¡æ 1 ¡æ 2 ¡æ ...
+            // ìˆœì„œ: 0 â†’ 1 â†’ 2 â†’ 1 â†’ 0 â†’ 1 â†’ 2 â†’ ...
             if (index == sprites.Length - 1 || index == 0)
             {
-                direction *= -1; // ¹æÇâ ¹ÝÀü
-            }
+                direction *= -1; // ë°©í–¥ ë°˜ì „
+            }*/
         }
     }
 }

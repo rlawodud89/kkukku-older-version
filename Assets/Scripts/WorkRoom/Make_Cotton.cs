@@ -13,6 +13,15 @@ public class Make_Cotton : MonoBehaviour
     public GameObject BallonPanel;
     public Button CottonButton;
 
+    private ItemScript currentYarn;
+    private ItemScript currentCotton;
+
+    public GameManager gameManager;
+    private void Start()
+    {
+        gameManager = GameManager.getInstance();
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,17 +33,21 @@ public class Make_Cotton : MonoBehaviour
         Instance = this;
     }
 
-    public void HandleMakeClicked(ItemScript currentBlanket)
+    public void HandleMakeClicked(ItemScript currentYarn)
     {
         Debug.Log("Make_Cotton에서 Make 버튼 클릭됨 감지!");
+        gameManager.Add_InventoryItem(currentYarn.itemName, -1);
+
+        currentCotton = gameManager.Yarn_to_Cotton(currentYarn.itemName);
 
         cottonPanel.SetActive(false);   
         Employee2.Working();
 
         progresscircle.OnComplete = () =>
         {
+            gameManager.Add_InventoryItem(currentCotton.itemName, 1);
             Debug.Log("complete");
-            showcotton(currentBlanket);
+            showcotton();
         };
 
         progresscircle.CompleteCircle();
@@ -42,21 +55,23 @@ public class Make_Cotton : MonoBehaviour
 
     }
 
-    void showcotton(ItemScript currentBlanket)
+    void showcotton()
     {
-        if (currentBlanket != null)
+        if (currentCotton != null)
         {
-            Debug.Log(currentBlanket.itemName + "솜 넣은 모습");
 
             BallonPanel.SetActive(true);
             CottonButton.gameObject.SetActive(true);
-            //CottonButton.image.sprite = currentBlanket.Cotton;
+            CottonButton.image.sprite =currentCotton.image;
 
             CottonButton.onClick.RemoveAllListeners();
             CottonButton.onClick.AddListener(() =>
             {
                 //currentBlanket.CottonCount += 1;
-                //sewingPanel?.SetSelectedBlanket(currentBlanket);
+                
+
+                sewingPanel.currentSewing = currentCotton;
+                sewingPanel?.SetSelectedBlanket();
 
                 BallonPanel.SetActive(false);
                 CottonButton.gameObject.SetActive(false);

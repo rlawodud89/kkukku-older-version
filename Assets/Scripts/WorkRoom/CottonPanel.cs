@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,19 +11,30 @@ public class CottonPanel : MonoBehaviour
     public StoragePanel storagePanel;
     public GameObject BallonPanel;
 
-    public ItemScript currentBlanket;
+    public ItemScript currentCotton;
 
-    private void Start()
+    private GameManager gameManager;
+    void Start()
     {
+
+        gameManager = GameManager.getInstance();
         if (storagePanel == null)
         {
             storagePanel = FindObjectOfType<StoragePanel>();
         }
+
+        RefreshInventoryUI();
     }
 
     public void SetSelectedBlanket(ItemScript blanket)
     {
-        currentBlanket = blanket;
+
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        currentCotton = gameManager.Blanket_to_Yarn(blanket.itemName); // 이불 -> 원단
 
         if (!storagePanel.isInit)
         {
@@ -35,49 +47,47 @@ public class CottonPanel : MonoBehaviour
             scrollContent = storagePanel.ScrollContent;
         }
 
-        RefreshSelectedBlanketUI();
+        RefreshInventoryUI();
     }
 
-    void RefreshSelectedBlanketUI()
+    // UI 새로고침: 담요 인벤토리 데이터 불러와 슬롯에 세팅
+    public void RefreshInventoryUI()
     {
-        bool foundSlot = false;
+        if (gameManager == null)
+            gameManager = GameManager.getInstance();
 
-        // 1. 같은 데이터 가진 슬롯 찾기
+        List<(ItemScript item, int count)> YarnInventory = gameManager.Get_Yarn_Inventory();
+        //    public List<(ItemScript, int count)> Get_Cotton_Inventory()
+
+        if (!storagePanel.isInit)
+        {
+            storagePanel.InitScroll();
+            storagePanel.isInit = true;
+        }
+
+        if (scrollContent == null)
+        {
+            scrollContent = storagePanel.ScrollContent;
+        }
+
         for (int i = 0; i < scrollContent.childCount; i++)
         {
             var slot = scrollContent.GetChild(i);
             var ui = slot.GetComponent<BlanketSlotUI>();
 
-            // Cotton 슬롯만 사용
-            if (ui != null && ui.slotType == SlotType.Cotton && ui.HasData(currentBlanket))
+            if (ui != null)
             {
-                ui.SetData(currentBlanket);
-                foundSlot = true;
-                break;
-            }
-        }
-
-        // 2. 빈 Cotton 슬롯 찾아서 세팅
-        if (!foundSlot)
-        {
-            for (int i = 0; i < scrollContent.childCount; i++)
-            {
-                var slot = scrollContent.GetChild(i);
-                var ui = slot.GetComponent<BlanketSlotUI>();
-
-                if (ui != null && ui.slotType == SlotType.Cotton && !ui.HasAnyData())
+                if (i < YarnInventory.Count)
                 {
-                    ui.SetData(currentBlanket);
-                    foundSlot = true;
-                    break;
+                    var data = YarnInventory[i];
+                    ui.SetData(data.item, data.count);  // 새 메서드 호출
+                }
+                else
+                {
+                    ui.ClearSlot();
                 }
             }
-        }
 
-        // 3. 슬롯 없을 때만 경고
-        if (!foundSlot)
-        {
-            Debug.LogWarning("빈 Cotton 슬롯이 없습니다! 더 이상 추가할 수 없습니다.");
         }
     }
 }

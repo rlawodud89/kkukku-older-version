@@ -8,9 +8,9 @@ public class SnackSlotUI : MonoBehaviour
     public Image icon;
     public TextMeshProUGUI countText;
 
-    public void SetData(SnacksData data, int count)
+    public void SetData(ItemScript data, int count)
     {
-        icon.sprite = data.SnackSprite;
+        icon.sprite = data.image;
         countText.text = count.ToString();
         gameObject.SetActive(true);
     }

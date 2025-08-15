@@ -8,9 +8,9 @@ public class MaterialsInventory : MonoBehaviour
 
     public UnityEvent OnInventoryChanged = new UnityEvent();
 
-    public Dictionary<MaterialData, int> GetAllMaterial()
+    public Dictionary<ItemScript, int> GetAllMaterial()
     {
-        var dict = new Dictionary<MaterialData, int>();
+        var dict = new Dictionary<ItemScript, int>();
         foreach (var entry in ownedMaterials)
         {
             if (entry.data != null)
@@ -21,17 +21,14 @@ public class MaterialsInventory : MonoBehaviour
         return dict;
     }
 
-    public int GetCount(MaterialData data)
+    public int GetCount(ItemScript data)
     {
         var entry = ownedMaterials.Find(e => e.data == data);
         return entry != null ? entry.count : 0;
 
     }
 
-    /// <summary>
-    /// °£½ÄÀ» ÀÎº¥Åä¸®¿¡ Ãß°¡ÇÕ´Ï´Ù. ÀÌ¹Ì Á¸ÀçÇÏ¸é ¼ö·® Áõ°¡, ¾øÀ¸¸é »õ·Î Ãß°¡.
-    /// </summary>
-    public void AddMaterial(MaterialData material, int amount = 1)
+    public void AddMaterial(ItemScript material, int amount = 1)
     {
         if (material == null || amount <= 0) return;
 
@@ -49,7 +46,7 @@ public class MaterialsInventory : MonoBehaviour
             });
         }
 
-        // UI °»½ÅÀ» À§ÇÑ ÀÌº¥Æ® È£Ãâ
+        // UI ê°±ì‹ ì„ ìœ„í•œ ì´ë²¤íŠ¸ í˜¸ì¶œ
         OnInventoryChanged?.Invoke();
     }
 }
