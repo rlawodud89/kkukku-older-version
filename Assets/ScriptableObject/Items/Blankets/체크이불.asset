@@ -16,7 +16,7 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 78c1373efe6a9cf4184aab9cc7e7bcba, type: 3}
   itemType: 4
   level: 0
-  value: 0
+  value: 1800
   recipe: []
   designValue: 4500
   yarnName: 
