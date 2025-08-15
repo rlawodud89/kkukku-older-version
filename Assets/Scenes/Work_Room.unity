@@ -16578,6 +16578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDayEndPanel: 0
 --- !u!4 &2017710163
 Transform:
   m_ObjectHideFlags: 0
