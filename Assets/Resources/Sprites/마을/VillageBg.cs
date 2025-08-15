@@ -12,8 +12,8 @@ public class VillageBg : MonoBehaviour
     public List<Image> Objects;
 
     private GameManager gameManager;
-    private Color dayColor = new Color(2.0f, 2.0f, 2.0f);
-    private Color eveningColor = new Color(1.5f, 0.6f, 0.5f);
+    private Color dayColor = new Color(6.0f, 7.0f, 3.0f);
+    private Color eveningColor = new Color(1.8f, 0.8f, 0.8f);
     private Color nightColor = Color.white;
 
     void Start()

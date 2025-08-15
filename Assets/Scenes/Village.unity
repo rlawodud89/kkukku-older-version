@@ -4903,6 +4903,7 @@ MonoBehaviour:
   loomPrice: 3000
   fillerPrice: 5000
   decoTablePrice: 8000
+  levelLimit: 3
 --- !u!1 &1422193080
 GameObject:
   m_ObjectHideFlags: 0
@@ -6561,7 +6562,25 @@ MonoBehaviour:
   daySprite: {fileID: 21300000, guid: bba2867897a83654fb7654cbc3a953f0, type: 3}
   eveningSprite: {fileID: 21300000, guid: 34bd76dab3ffb69429037b633b2f3934, type: 3}
   nightSprite: {fileID: 21300000, guid: 141b81a655621a54fbc273e66bf197fe, type: 3}
-  Objects: []
+  Objects:
+  - {fileID: 1262676705}
+  - {fileID: 1978896964}
+  - {fileID: 100962999}
+  - {fileID: 161023838}
+  - {fileID: 859945422}
+  - {fileID: 2145488039}
+  - {fileID: 203449950}
+  - {fileID: 20413094}
+  - {fileID: 983486021}
+  - {fileID: 167729588}
+  - {fileID: 1873565386}
+  - {fileID: 1264458119}
+  - {fileID: 58070156}
+  - {fileID: 562624442}
+  - {fileID: 500641832}
+  - {fileID: 747408782}
+  - {fileID: 218495802}
+  - {fileID: 1100988293}
 --- !u!1 &2109311609
 GameObject:
   m_ObjectHideFlags: 0
