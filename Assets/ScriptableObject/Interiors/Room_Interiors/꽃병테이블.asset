@@ -15,7 +15,7 @@ MonoBehaviour:
   interiorName: "\uAF43\uBCD1\uD14C\uC774\uBE14"
   interiorType: 1
   image: {fileID: 21300000, guid: e6cb6c76600f7244495d322dfe54424b, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 46905762285492363, guid: e09f0f3c3d9fb704cac17c76d13c3f6f, type: 3}
   value: 2500
   roominteriorType: 2
   fullImage: {fileID: 0}

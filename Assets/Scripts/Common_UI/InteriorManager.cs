@@ -9,6 +9,7 @@ public class InteriorManager : MonoBehaviour
 {
     public bool interiorMode = false;
 
+    public GameObject tileButton;
     public GameObject InteriorInventoryButton;
     public GameObject InteriorExitButton;
     public GameObject roomInteriorPanel;
@@ -214,6 +215,11 @@ public class InteriorManager : MonoBehaviour
             if (roomInteriorPanel != null)
             {
                 roomInteriorPanel.SetActive(true);
+                // 다른 버튼들 안보이게
+                InteriorInventoryButton.SetActive(false);
+                InteriorExitButton.SetActive(false);
+                tileButton.SetActive(false);
+
                 SetFurnitureItem();
             }
         }
@@ -234,6 +240,11 @@ public class InteriorManager : MonoBehaviour
             if (roomInteriorPanel != null)
             {
                 roomInteriorPanel.SetActive(false);
+
+                // 다른 버튼들 안보이게
+                InteriorInventoryButton.SetActive(true);
+                InteriorExitButton.SetActive(true);
+                tileButton.SetActive(true);
             }
         }
         else if (currentSceneName == "Work_Shop")
@@ -245,11 +256,30 @@ public class InteriorManager : MonoBehaviour
         }
     }
 
+    public void TilePanelOpen(){
+        tilePanel.SetActive(true);
+
+        // 다른 버튼들 안보이게
+        InteriorInventoryButton.SetActive(false);
+        InteriorExitButton.SetActive(false);
+        tileButton.SetActive(false);
+    }
+
+    public void TilePanelClose(){
+        tilePanel.SetActive(false);
+
+        // 다른 버튼들 보이게
+        InteriorInventoryButton.SetActive(true);
+        InteriorExitButton.SetActive(true);
+        tileButton.SetActive(true);
+    }
+
     // 인테리어 메뉴 버튼 눌렀을 때
     public void ClickInteriorButton()
     {
         interiorMode = true;
 
+        tileButton.SetActive(true);
         InteriorInventoryButton.SetActive(true);
         InteriorExitButton.SetActive(true);
 
@@ -265,7 +295,7 @@ public class InteriorManager : MonoBehaviour
             RoomBtn.SetActive(false);
         }
 
-        tilePanel.SetActive(true);
+        //tilePanel.SetActive(true);
     }
 
     // 나가기 버튼 눌렀을 때
@@ -273,8 +303,10 @@ public class InteriorManager : MonoBehaviour
     {
         interiorMode = false;
 
+        tileButton.SetActive(false);
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
+        
         PanelClose();
 
         if (Home_Button != null)
