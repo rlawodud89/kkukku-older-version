@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,8 +23,10 @@ public class UpgradeShopController1 : MonoBehaviour
     [SerializeField] int loomPrice = 3000;
     [SerializeField] int fillerPrice = 5000;
     [SerializeField] int decoTablePrice = 8000;
+    [SerializeField] int levelLimit = 3;
 
     private GameManager gameManager;
+    public Action<SpeechType> speechType;
 
     void Awake()
     {
@@ -42,6 +45,13 @@ public class UpgradeShopController1 : MonoBehaviour
         if (!CanBuy(loomPrice))
         {
             Debug.Log("재화 부족");
+            speechType?.Invoke(SpeechType.Lack);
+            return;
+        }
+
+        if (gameManager.Get_LoomLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
             return;
         }
 
@@ -55,8 +65,16 @@ public class UpgradeShopController1 : MonoBehaviour
         if (!CanBuy(fillerPrice))
         {
             Debug.Log("재화 부족");
+            speechType?.Invoke(SpeechType.Lack);
             return;
         }
+
+        if (gameManager.Get_FillerLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
+            return;
+        }
+
 
         popup.ShowMessage(
             $"충진기 업그레이드 (가격 {fillerPrice} G)\n진행하시겠습니까?",
@@ -68,6 +86,13 @@ public class UpgradeShopController1 : MonoBehaviour
         if (!CanBuy(decoTablePrice))
         {
             Debug.Log("재화 부족");
+            speechType?.Invoke(SpeechType.Lack);
+            return;
+        }
+
+        if (gameManager.Get_DecoLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
             return;
         }
 
@@ -81,7 +106,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-loomPrice);
         gameManager.Change_LoomLevel(1);
         loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel().ToString();
-        Debug.Log("직조기 업그레이드 완료!");
+        speechType?.Invoke(SpeechType.Trigger);
     }
 
     void DoFillerUpgrade()
@@ -89,7 +114,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-fillerPrice);
         gameManager.Change_FillerLevel(1);
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel().ToString();
-        Debug.Log("충진기 업그레이드 완료!");
+        speechType?.Invoke(SpeechType.Trigger);
     }
 
     void DoDecoTableUpgrade()
@@ -97,7 +122,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_Gold(-decoTablePrice);
         gameManager.Change_DecoLevel(1);
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel().ToString();
-        Debug.Log("장식 테이블 업그레이드 완료!");
+        speechType?.Invoke(SpeechType.Trigger);
     }
 
     private bool CanBuy(int value)

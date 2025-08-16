@@ -466,13 +466,18 @@ public class DBManager
         conn.Update(tile);
     }
 
-    //public List<Interior> Select_WallTile_Inventory()
-    //{
+    public List<Interior> Select_FloorTile_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.FLOOR_TILE)
+            .ToList();
+    }
 
-    //}
+    public List<Interior> Select_WallTile_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.WALL_TILE)
+            .ToList();
+    }
 
-    //public List<Interior> Select_FloorTile_Inventory()
-    //{
-
-    //}
 }

@@ -17,14 +17,13 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     private DBManager dbManager;
 
+
+    // 사용자 정보
     private int days;
     private int hours;
     private int minutes;
     private BgType bgTime;
     private float playTime;
-    public event Action<BgType> OnBgTimeChanged;
-    public event Action OnDayEnded;
-    public bool isDayEndPanel;
 
     private int gold;
     private int moonrock;
@@ -42,11 +41,8 @@ public class GameManager : MonoBehaviour
     private string endScene;
     private bool isOpen;
 
-    // 가게에서 게임 매니저 값에 따라 오브젝트 바뀔 수 있도록 하는 이벤트
-    public event Action<bool> OnOpenChanged;
-    public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
-    public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
 
+    // ScriptableObject Dictionary
     private Dictionary<string, ItemScript> Materials = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Blankets = new Dictionary<string, ItemScript>();
     private Dictionary<string, ItemScript> Snacks = new Dictionary<string, ItemScript>();
@@ -65,15 +61,36 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
+
+    // GameManager에서 사용하는 상수
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
-    private static float gameDuration = 1f; // 75초(1.25분)에 1시간 (30분에 24시간)
+    private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 22;
     private static int endHours = 0;
     private static float oneEnergyLevel = 3844;
-    private float dbSaveTimer = 0f;    // DB 저장 주기 타이머
-    private float dbSaveInterval = 1f; // 1초마다 저장 (원하는 값으로 변경 가능)
+    private static float dbSaveTimer = 0f;    // DB 저장 주기 타이머
+    private static float dbSaveInterval = 1f; // 1초마다 저장 (원하는 값으로 변경 가능)
+
+
+    // 시간에 따라 배경 바뀌게 하고, 하루 정리 패널 뜨게 하는 이벤트
+    public event Action<BgType> OnBgTimeChanged;
+    public event Action OnDayEnded;
+    public bool isDayEndPanel;
+
+    // 가게에서 게임 매니저 값에 따라 이불장, 표지판 바뀔 수 있도록 하는 이벤트
+    public event Action<bool> OnOpenChanged;
+    public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
+    public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
+
+    // 타일 변경 시 적용되도록 하는 이벤트
+    public event Action<TilePosType, InteriorScript> OnTileChanged;
+
+    // 상점 레벨 변경 시 적용되도록 하는 이벤트
+    public event Action<int> OnItemShopLevelChanged;
+    public event Action<int> OnDesignShopLevelChanged;
+
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
     private GameManager() { }
@@ -111,7 +128,6 @@ public class GameManager : MonoBehaviour
 
         LoadAllScriptableObjects();
         LoadBgTime();
-
 
     }
 
@@ -300,27 +316,19 @@ public class GameManager : MonoBehaviour
     public BgType Get_BgTime() { return bgTime; }
 
     public int Get_DesignShopLevel() { return designshopLevel; }
-    public void Set_DesignShopLevel(int level)
-    {
-        designshopLevel = level;
-        dbManager.Update_DesginShopLevel(designshopLevel);
-    }
     public void Change_DesignShopLevel(int delta)
     {
         designshopLevel += delta;
         dbManager.Update_DesginShopLevel(designshopLevel);
+        OnDesignShopLevelChanged?.Invoke(designshopLevel);
     }
 
     public int Get_ItemShopLevel() { return itemshopLevel; }
-    public void Set_ItemShopLevel(int level)
-    {
-        itemshopLevel = level;
-        dbManager.Update_ItemShopLevel(itemshopLevel);
-    }
     public void Change_ItemShopLevel(int delta)
     {
         itemshopLevel += delta;
         dbManager.Update_ItemShopLevel(itemshopLevel);
+        OnItemShopLevelChanged?.Invoke(itemshopLevel);
     }
 
     public int Get_LoomLevel() { return loomLevel; }
@@ -483,6 +491,7 @@ public class GameManager : MonoBehaviour
         if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
         else if (Shop_Interiors.ContainsKey(itemName)) return Shop_Interiors[itemName];
         else if (Workers.ContainsKey(itemName)) return Workers[itemName];
+        else if (Tiles.ContainsKey(itemName)) return Tiles[itemName];
         else return null;
     }
 
@@ -791,16 +800,33 @@ public class GameManager : MonoBehaviour
     public void Set_Current_Tile(TilePosType tilePosType, string tileName)
     {
         dbManager.Update_Tile(tilePosType, tileName);
+        OnTileChanged?.Invoke(tilePosType, Get_InteriorItem(tileName));
     }
 
-    //public List<InteriorScript> Get_WallTile_Inventory()
-    //{
+    public List<InteriorScript> Get_FloorTile_Inventory()
+    {
+        List<Interior> floorTile = dbManager.Select_FloorTile_Inventory();
+        List<InteriorScript> list = new List<InteriorScript>();
 
-    //}
+        foreach(Interior i in floorTile)
+        {
+            list.Add(Get_InteriorItem(i.interiorName));
+        }
 
-    //public List<InteriorScript> Get_FloorTile_Inventory()
-    //{
+        return list;
+    }
 
-    //}
+    public List<InteriorScript> Get_WallTile_Inventory()
+    {
+        List<Interior> floorTile = dbManager.Select_WallTile_Inventory();
+        List<InteriorScript> list = new List<InteriorScript>();
+
+        foreach (Interior i in floorTile)
+        {
+            list.Add(Get_InteriorItem(i.interiorName));
+        }
+
+        return list;
+    }
 
 }
