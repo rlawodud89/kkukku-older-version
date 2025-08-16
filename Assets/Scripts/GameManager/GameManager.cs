@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using JetBrains.Annotations;
 
 public enum BgType
 {
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
     public event Action<bool> OnOpenChanged;
     public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
     public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
+    public event Action<int> OnTableInteriorChanged;
 
     // 타일 변경 시 적용되도록 하는 이벤트
     public event Action<TilePosType, InteriorScript> OnTileChanged;
@@ -829,4 +831,38 @@ public class GameManager : MonoBehaviour
         return list;
     }
 
+    public List<InteriorScript> Get_ShopInterior_Inventory()
+    {
+        List<Interior> shopInterior = dbManager.Select_ShopInterior_Inventory();
+        List<InteriorScript> list = new List<InteriorScript>();
+
+        foreach (Interior i in shopInterior)
+        {
+            list.Add(Get_InteriorItem(i.interiorName));
+        }
+
+        return list;
+    }
+
+    public void Set_ShopTableInterior(int tableID, string interiorName)
+    {
+        dbManager.Update_ShopTableInterior(tableID, interiorName);
+        OnTableInteriorChanged?.Invoke(tableID);
+    }
+
+    public (int stamina, ItemScript workingItem, int workingPercent) Get_Worker_Info(float x, float y)
+    {
+
+    }
+
+    public void Change_Worker_Stamina(float x, float y, int delta)
+    {
+
+    }
+    
+    public void Change_Worker_WorkingState(float x, float y, string workingItemName, int workingpercentDelta)
+    {
+
+    }
+    
 }

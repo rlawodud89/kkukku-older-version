@@ -27,7 +27,8 @@ public class InteriorManager : MonoBehaviour
     string currentSceneName;
 
     // 갖고 있는 인테리어 아이템 목록
-    [HideInInspector] public List<(InteriorScript item, int count)> interiorItems = new List<(InteriorScript, int)>();
+    [HideInInspector] public List<(InteriorScript item, int count)> RoomInteriorItems = new List<(InteriorScript, int)>();
+    [HideInInspector] public List<InteriorScript> ShopInteriorItems = new List<InteriorScript>();
 
     // 테스트용
     public InteriorScript furnitureItem;
@@ -62,7 +63,9 @@ public class InteriorManager : MonoBehaviour
         }  */
 
         // 인벤토리 아이템 가져오기 
-        interiorItems = gameManager.Get_RoomInterior_Inventory();
+        RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
+        ShopInteriorItems = gameManager.Get_ShopInterior_Inventory();
+
         // 테스트
         //interiorItems.Add((furnitureItem, 1));
         //interiorItems.Add((workerItem, 1));
@@ -85,10 +88,6 @@ public class InteriorManager : MonoBehaviour
                 //Debug.Log("가구 category selected.");
                 SetFurnitureItem();
                 break;
-            case "타일":
-                //Debug.Log("타일 category selected.");
-                SetTileItem();
-                break;
             case "직원":
                 //Debug.Log("직원 category selected.");
                 SetEmployeeItem();
@@ -98,10 +97,10 @@ public class InteriorManager : MonoBehaviour
 
     public void SetFurnitureItem()
     {
-        Clear();
+        ClearRoomInterior();
 
         //GameObject ItemButton4 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        foreach (var (item, count) in interiorItems)
+        foreach (var (item, count) in RoomInteriorItems)
         {
             if (item.interiorType == InteriorType.ROOM_INTERIROR)
             {
@@ -112,36 +111,16 @@ public class InteriorManager : MonoBehaviour
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
-            }
-        }
-    }
-
-    public void SetTileItem()
-    {
-        Clear();
-
-        foreach (var (item, count) in interiorItems)
-        {
-            if (item.interiorType == InteriorType.FLOOR_TILE || item.interiorType == InteriorType.WALL_TILE)
-            {
-                GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
-                // ItemButton에 item 정보 설정
-
-                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
-                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
-                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
-
-                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickTileItem(item));
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
             }
         }
     }
 
     public void SetEmployeeItem()
     {
-        Clear();
+        ClearRoomInterior();
 
-        foreach (var (item, count) in interiorItems)
+        foreach (var (item, count) in RoomInteriorItems)
         {
             if (item.interiorType == InteriorType.WORKER)
             {
@@ -152,12 +131,32 @@ public class InteriorManager : MonoBehaviour
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-                // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+                // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
             }
         }
     }
 
-    public void Clear()
+    public void SetTableItem()
+    {
+        ClearShopInterior();
+
+        foreach (var item in ShopInteriorItems)
+        {
+            if (item.interiorType == InteriorType.SHOP_INTERIOR)
+            {
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, shopScrollContent.transform);
+                // ItemButton에 item 정보 설정
+
+                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
+                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
+                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "";
+
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickTableItem(item));
+            }
+        }
+    }
+
+    public void ClearRoomInterior()
     {
         foreach (Transform child in roomScrollContent.transform)
         {
@@ -165,8 +164,16 @@ public class InteriorManager : MonoBehaviour
         }
     }
 
+    public void ClearShopInterior()
+    {
+        foreach (Transform child in shopScrollContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     // 가구 클릭 시 
-    public void ClickInteriorItem(InteriorScript item)
+    public void ClickRoomInteriorItem(InteriorScript item)
     {
         PanelClose();
 
@@ -189,16 +196,15 @@ public class InteriorManager : MonoBehaviour
         }
 
         // 인벤토리 아이템 다시 얻어오기 
-        interiorItems = gameManager.Get_RoomInterior_Inventory();
+        RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
 
     }
 
-    // 타일 클릭 시
-    public void ClickTileItem(InteriorScript item)
+    public void ClickTableItem(InteriorScript item)
     {
         PanelClose();
 
-        // 타일 디자인 바꾸기
+        // TODO: 테이블 외형 바꿀 수 있도록 하기
     }
 
     public void PanelOpen()
@@ -216,6 +222,7 @@ public class InteriorManager : MonoBehaviour
             if (shopInteriorPanel != null)
             {
                 shopInteriorPanel.SetActive(true);
+                SetTableItem();
             }
         }
     }

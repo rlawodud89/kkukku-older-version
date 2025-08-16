@@ -351,6 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 2
+  tableType: 1
 --- !u!1 &54134727
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 3
+  tableType: 0
 --- !u!1 &854326171
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 4
+  tableType: 0
 --- !u!1 &1745296019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,6 +1553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 1
+  tableType: 1
 --- !u!61 &1745296022
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -525,8 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 618415791}
+  Panel: {fileID: 715886591}
 --- !u!61 &79469852
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8538,8 +8538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 101457247}
+  Panel: {fileID: 481227446}
 --- !u!61 &1180461248
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16831,8 +16831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 605232758}
+  Panel: {fileID: 1344217060}
 --- !u!61 &2030431299
 BoxCollider2D:
   m_ObjectHideFlags: 0

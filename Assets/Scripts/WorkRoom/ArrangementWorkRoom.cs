@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
- using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class ArrangementWorkRoom : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     private GameManager gameManager;
 
     // 현재 작업실에 설치된 인테리어 정보
-    private List<(InteriorScript item, float x, float y)> installedInteriors=new List<(InteriorScript, float, float)>();
+    private List<(InteriorScript item, float x, float y)> installedInteriors = new List<(InteriorScript, float, float)>();
 
     // 아이템 생성되는 곳
     private Transform itemParent;
@@ -24,7 +24,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     {
         gameManager = GameManager.getInstance();
 
-        if(gameManager == null)
+        if (gameManager == null)
         {
             Debug.LogError("GameManager instance not found!");
             return;
@@ -32,7 +32,7 @@ public class ArrangementWorkRoom : MonoBehaviour
 
         itemParent = GameObject.Find("Pixels")?.transform;
 
-        installedInteriors=gameManager.Get_Current_RoomInterior();
+        installedInteriors = gameManager.Get_Current_RoomInterior();
         //installedInteriors = gameManager?.Get_Current_RoomInterior()?? new List<(InteriorScript item, float x, float y)>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -41,7 +41,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnEnable()
@@ -65,13 +65,13 @@ public class ArrangementWorkRoom : MonoBehaviour
             // 특정 오브젝트 활성화 등 원하는 작업 수행
 
             // 데베에서 가져오기
-            
+
 
             // 테스트용
             //installedInteriors.Add((furnitureItem, -4, 2));
 
-            
-            if(installedInteriors==null)
+
+            if (installedInteriors == null)
             {
                 Debug.Log("No installed interiors found.");
                 return;

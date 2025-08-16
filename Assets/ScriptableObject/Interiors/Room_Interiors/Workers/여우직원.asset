@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eac430eee7e04814b9895346fa7e03b6, type: 3}
-  m_Name: "\uC9D9\uC740\uB098\uBB34\uC9C4\uC5F4\uC7A5"
+  m_Name: "\uC5EC\uC6B0\uC9C1\uC6D0"
   m_EditorClassIdentifier: 
-  interiorName: "\uC9D9\uC740\uB098\uBB34\uC9C4\uC5F4\uC7A5"
-  interiorType: 0
-  image: {fileID: 1331937077, guid: c794f1ff40eb0184eaf5a11fe8bf29b4, type: 3}
-  value: 8000
-  fullImage: {fileID: 1481553881, guid: c794f1ff40eb0184eaf5a11fe8bf29b4, type: 3}
-  workType: 3
+  interiorName: "\uC5EC\uC6B0\uC9C1\uC6D0"
+  interiorType: 2
+  image: {fileID: 21300000, guid: 11d30b73ba2874142845d44653ad8980, type: 3}
+  prefab: {fileID: 0}
+  value: 3000
+  roominteriorType: 2
+  fullImage: {fileID: 0}
+  workType: 0
