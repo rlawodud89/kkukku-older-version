@@ -25,9 +25,10 @@ public class ConditionalQuestSpawner : MonoBehaviour
     public NavPoint questWaitPoint;
     public float questWaitSeconds = 10f;
 
-    // (선택) 프리팹 자식 Canvas를 이름으로 찾고 싶으면 지정
+    // ── 4) 마커 스프라이트 연결 ──────────────────────────────────
     [Header("Optional")]
-    public string questCanvasChildName = "QuestCanvas";
+    [Tooltip("프리팹 자식 중 퀘스트 마커(SpriteRenderer)가 붙은 오브젝트 이름")]
+    public string questMarkerChildName = "QuestMarker";
 
     void Awake()
     {
@@ -65,7 +66,11 @@ public class ConditionalQuestSpawner : MonoBehaviour
 
     void SpawnNow()
     {
-        if (!prefab) { Debug.LogWarning("[ConditionalQuestSpawner] Prefab이 비어있음"); return; }
+        if (!prefab)
+        {
+            Debug.LogWarning("[ConditionalQuestSpawner] Prefab이 비어있음");
+            return;
+        }
 
         var obj = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
 
@@ -81,35 +86,25 @@ public class ConditionalQuestSpawner : MonoBehaviour
         mover.questWaitPoint = questWaitPoint;
         mover.questWaitSeconds = questWaitSeconds;
 
-        // ── 자식 Canvas 자동 연결 ──────────────────────────────
-        if (!mover.questCanvas)
+        // ── 자식 SpriteRenderer 마커 자동 연결 ──────────────────
+        if (!mover.questMarker)
         {
-            Canvas qc = null;
-
-            // 1) 이름으로 우선 탐색
-            if (!string.IsNullOrEmpty(questCanvasChildName))
+            if (!string.IsNullOrEmpty(questMarkerChildName))
             {
-                var t = obj.transform.Find(questCanvasChildName);
-                if (t) qc = t.GetComponent<Canvas>();
+                var t = obj.transform.Find(questMarkerChildName);
+                if (t) mover.questMarker = t.GetComponent<SpriteRenderer>();
             }
-
-            // 2) 실패하면 첫 번째 자식 Canvas 사용
-            if (!qc) qc = obj.GetComponentInChildren<Canvas>(true);
-
-            mover.questCanvas = qc;
         }
 
-        // 스폰 시점엔 항상 꺼두기 (AStarMover가 멈출 때만 켬)
-        if (mover.questCanvas)
+        // 스폰 시점엔 항상 OFF (AStarMover가 멈출 때만 ON)
+        if (mover.questMarker)
         {
-            if (mover.toggleCanvasObject)
-                mover.questCanvas.gameObject.SetActive(false);
-            else
-                mover.questCanvas.enabled = false;
+            if (mover.toggleMarkerObject) mover.questMarker.gameObject.SetActive(false);
+            else mover.questMarker.enabled = false;
         }
         else
         {
-            Debug.LogWarning("[ConditionalQuestSpawner] 자식 Canvas를 찾지 못해 AStarMover.questCanvas를 설정하지 못했습니다.", obj);
+            Debug.LogWarning("[ConditionalQuestSpawner] 자식 마커(SpriteRenderer)를 찾지 못했습니다. 자식 이름을 '" + questMarkerChildName + "'로 두고 SpriteRenderer를 붙이세요.", obj);
         }
     }
 

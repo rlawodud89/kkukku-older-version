@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5793898700648673290}
   - component: {fileID: 2246480804358010056}
   - component: {fileID: 5908935546435517913}
-  - component: {fileID: 4802008277875052081}
   m_Layer: 6
   m_Name: "\uD574\uB2EC"
   m_TagString: Untagged
@@ -124,7 +123,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2125927951
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: -18180
   m_Sprite: {fileID: -681903691, guid: 6f27fa6344a6b24459004de10a9fe0eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -181,10 +180,14 @@ MonoBehaviour:
   arriveThreshold: 0.05
   waitAtShelfSeconds: 1
   waitAtCashierSeconds: 1
+  autoStart: 1
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
   cellProbeRadius: 0.3
+  ignoreTriggers: 1
+  useBoxProbe: 1
+  boxSizeScale: 0.9
   startPoint: {fileID: 0}
   doorPoints:
   - {fileID: 0}
@@ -210,7 +213,14 @@ MonoBehaviour:
   cashierPoint: {fileID: 0}
   minShelfVisits: 2
   maxShelfVisits: 5
-  buyProbability: 0.8
+  energyPerGold: 0.02
+  questMode: 0
+  questWaitPoint: {fileID: 0}
+  questWaitSeconds: 10
+  questLeaveViaDoor: 1
+  questMarker: {fileID: 0}
+  questMarkerChildName: QuestMarker
+  toggleMarkerObject: 1
   faceMap:
     leftDown: {x: -1, y: 0, z: 0}
     rightUp: {x: 1, y: 0, z: 0}
@@ -220,48 +230,3 @@ MonoBehaviour:
     rightUpBlend: {x: 0.707, y: 0.707}
     leftUpBlend: {x: -0.707, y: 0.707}
     rightDownBlend: {x: 0.707, y: -0.707}
---- !u!61 &4802008277875052081
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2327600310463068422}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.615}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 2.52, y: 3.23}
-    newSize: {x: 2.52, y: 3.23}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.52, y: 3.23}
-  m_EdgeRadius: 0

@@ -118,8 +118,7 @@ public class Spawner : MonoBehaviour
 
                 moverComp.energyPerGold = mover.energyPerGold;
 
-                moverComp.questMode = mover.questMode;
-                moverComp.toggleCanvasObject = mover.toggleCanvasObject;
+                
             }
         }
     }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,8 +18,14 @@ public class AStarMover : MonoBehaviour
     public bool autoStart = true;
 
     [Header("Obstacle")]
-    public LayerMask obstacleLayer;  // '발자국'만 포함
+    public LayerMask obstacleLayer;  // 길막 전용 레이어만 포함
     public float cellProbeRadius = 0.3f;
+
+    [Header("Obstacle Probe (New)")]
+    public bool ignoreTriggers = true;        // 트리거는 길막으로 보지 않기
+    public bool useBoxProbe = true;           // 셀 크기 기준 박스 탐지
+    [Range(0.1f, 1.2f)]
+    public float boxSizeScale = 0.9f;         // 그리드 셀 대비 박스 크기 스케일
 
     [Header("Route Points")]
     public NavPoint startPoint;
@@ -36,21 +41,24 @@ public class AStarMover : MonoBehaviour
     [Header("Shop / Payment")]
     [Range(0f, 1f)]
     [Tooltip("결제 금액 대비 에너지 증가 비율(금액 * 계수)")]
-    public float energyPerGold = 0.02f;                // 0.0몇, 인스펙터에서 조정
+    public float energyPerGold = 0.02f;
 
-    int _pendingPayment = 0;    // 담은 이불 가격(결제 대기)
+    int _pendingPayment = 0;
     bool _pickedBlanket = false;
-    int _buyVisitIndex = 0;     // 이번 방문 사이클에서 '담을' 방문 번째(1~visits)
+    int _buyVisitIndex = 0;
 
+    // ───────────── Quest Mode ─────────────
     [Header("Quest Mode")]
     public bool questMode = false;          // 켜면 RunQuest() 사용
     public NavPoint questWaitPoint;         // 기다릴 포인트
     public float questWaitSeconds = 10f;    // 대기 시간
     public bool questLeaveViaDoor = true;   // 나갈 때 문 사용
 
-    [Header("Quest UI (Canvas toggle)")]
-    public Canvas questCanvas;                 // 캐릭터 자식 Canvas 드래그
-    public bool toggleCanvasObject = true;     // true=GameObject SetActive, false=canvas.enabled
+    // ★ Canvas 제거: SpriteRenderer로 마커 토글
+    [Header("Quest Marker (Sprite)")]
+    public SpriteRenderer questMarker;          // 캐릭터 자식 아이콘
+    public string questMarkerChildName = "QuestMarker";
+    public bool toggleMarkerObject = true;      // true: SetActive, false: SpriteRenderer.enabled
 
     // 상태
     bool _questAccepted = false;
@@ -67,8 +75,12 @@ public class AStarMover : MonoBehaviour
         if (!foot) foot = transform;
         anim = GetComponent<Animator>();
 
-        if (!questCanvas)
-            questCanvas = GetComponentInChildren<Canvas>(true); // 자식 캔버스 자동 연결
+        // 스프라이트 마커 자동 연결(이름 우선)
+        if (!questMarker && !string.IsNullOrEmpty(questMarkerChildName))
+        {
+            var t = transform.Find(questMarkerChildName);
+            if (t) questMarker = t.GetComponent<SpriteRenderer>();
+        }
     }
 
     void Start()
@@ -166,7 +178,7 @@ public class AStarMover : MonoBehaviour
             yield return MoveToPoint(FindNearestPoint(doorPoints), reserve: false);
 
         int visits = Random.Range(minShelfVisits, maxShelfVisits + 1);
-        _buyVisitIndex = (visits > 0) ? Random.Range(1, visits + 1) : 0; // 1~visits 중 하나를 구매 방문으로 지정
+        _buyVisitIndex = (visits > 0) ? Random.Range(1, visits + 1) : 0;
 
         for (int i = 1; i <= visits; i++)
         {
@@ -177,12 +189,10 @@ public class AStarMover : MonoBehaviour
             yield return MoveToPoint(p, reserve: !p.allowOverlap);
             yield return new WaitForSeconds(waitAtShelfSeconds);
 
-            // 지정된 무작위 번째 방문에서만 담기(이미 담았으면 스킵)
             if (!_pickedBlanket && _buyVisitIndex > 0 && i == _buyVisitIndex)
                 TryPickBlanketAtPoint(p);
         }
 
-        // 담았을 때만 계산대 루틴
         if (_pendingPayment > 0)
             yield return PayAtCashier();
 
@@ -199,7 +209,6 @@ public class AStarMover : MonoBehaviour
         var gm = GameManager.getInstance();
         if (gm == null) { Debug.LogWarning("GameManager 인스턴스가 없습니다."); return; }
 
-        // 이불 하나 빼고 그 판매가격을 반환(없으면 0)
         int price = gm.Use_RandomOne_BlanketInTable(p.tableId);
         if (price > 0)
         {
@@ -220,44 +229,36 @@ public class AStarMover : MonoBehaviour
         var gm = GameManager.getInstance();
         if (gm != null)
         {
-            gm.Change_Gold(_pendingPayment); // 금액 추가
-            int energyDelta = Mathf.RoundToInt(_pendingPayment * energyPerGold); // 비례
+            gm.Change_Gold(_pendingPayment);
+            int energyDelta = Mathf.RoundToInt(_pendingPayment * energyPerGold);
             if (energyDelta != 0) gm.Change_Energy(energyDelta);
         }
 
         _pendingPayment = 0;
     }
 
-    // ───────────── 마커 표시(토글만) ─────────────
+    // ───────────── 마커 표시(스프라이트) ─────────────
     public void AcceptQuest() { _questAccepted = true; ShowMarker(false); }
     void OnMouseDown() { if (questMode) AcceptQuest(); }
 
     void ShowMarker(bool on)
     {
         if (!questMode) return;
-        if (!questCanvas)
+
+        if (!questMarker)
         {
-            Debug.LogWarning("[AStarMover] questCanvas가 비어있습니다.", this);
+            Debug.LogWarning("[AStarMover] questMarker가 비어있습니다.", this);
             return;
         }
 
-        if (toggleCanvasObject)
+        if (toggleMarkerObject)
         {
-            if (questCanvas.gameObject.activeSelf != on)
-                questCanvas.gameObject.SetActive(on);
+            if (questMarker.gameObject.activeSelf != on)
+                questMarker.gameObject.SetActive(on);
         }
         else
         {
-            questCanvas.enabled = on;
-
-            if (on)
-            {
-                var groups = questCanvas.GetComponentsInChildren<CanvasGroup>(true);
-                foreach (var g in groups)
-                {
-                    if (g.alpha <= 0f) g.alpha = 1f;
-                }
-            }
+            questMarker.enabled = on;
         }
     }
 
@@ -351,11 +352,36 @@ public class AStarMover : MonoBehaviour
         return center + footToRoot;
     }
 
+    // ───────────── ★ 길막 판정 (개선 버전) ─────────────
     bool IsBlocked(Vector3Int cell)
     {
-        Vector3 p = grid.GetCellCenterWorld(cell);
-        var hit = Physics2D.OverlapCircle(p, cellProbeRadius, obstacleLayer);
-        return hit != null;
+        Vector2 p = grid.GetCellCenterWorld(cell);
+
+        if (useBoxProbe)
+        {
+            // 셀 크기 기준 박스 탐지(타일/벽/선반에 안정적)
+            Vector2 size = Vector2.Scale((Vector2)grid.cellSize, new Vector2(boxSizeScale, boxSizeScale));
+            var hits = Physics2D.OverlapBoxAll(p, size, 0f, obstacleLayer);
+            if (hits.Length == 0) return false;
+            if (!ignoreTriggers) return true;
+
+            foreach (var h in hits)
+                if (!h.isTrigger) return true;   // 트리거가 아닌 실제 콜라이더만 길막으로 간주
+            return false;
+        }
+        else
+        {
+            // 원형 프로브(기존 방식) + 트리거 무시 옵션
+            var filter = new ContactFilter2D
+            {
+                useLayerMask = true,
+                layerMask = obstacleLayer,
+                useTriggers = !ignoreTriggers
+            };
+            Collider2D[] results = new Collider2D[8];
+            int n = Physics2D.OverlapCircle(p, cellProbeRadius, filter, results);
+            return n > 0;
+        }
     }
 
     Vector3Int GetNearestReachableCell(Vector3Int goal, int maxRing = 4)
@@ -403,3 +429,4 @@ public class AStarMover : MonoBehaviour
 
     void OnDisable() => CellReservation.ReleaseAll(this);
 }
+
