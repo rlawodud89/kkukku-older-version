@@ -525,8 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 715886591}
+  Panel: {fileID: 715886591}
 --- !u!61 &79469852
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2764,6 +2764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 618415791}
   Panel: {fileID: 715886591}
+  makeFabric: {fileID: 0}
 --- !u!114 &512452005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6399,7 +6400,6 @@ GameObject:
   - component: {fileID: 793507089}
   - component: {fileID: 793507088}
   - component: {fileID: 793507087}
-  - component: {fileID: 793507091}
   m_Layer: 8
   m_Name: snack_box
   m_TagString: Untagged
@@ -6419,8 +6419,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 1419924459}
+  Panel: {fileID: 1419924459}
 --- !u!61 &793507088
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6533,18 +6533,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 355377746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &793507091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 793507086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &795934011
 GameObject:
   m_ObjectHideFlags: 0
@@ -6943,6 +6931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 1551094970}
   Panel: {fileID: 1419924459}
+  makeFabric: {fileID: 0}
 --- !u!114 &850473557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7090,6 +7079,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 1230907757}
   Panel: {fileID: 112390887}
+  makeFabric: {fileID: 0}
 --- !u!114 &864369262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7407,7 +7397,7 @@ Transform:
   m_GameObject: {fileID: 880105066}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.53, y: 1.13, z: -30}
+  m_LocalPosition: {x: 0, y: 0, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7577,6 +7567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 605232758}
   Panel: {fileID: 1344217060}
+  makeFabric: {fileID: 0}
 --- !u!114 &928233734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8081,6 +8072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 101457247}
   Panel: {fileID: 481227446}
+  makeFabric: {fileID: 0}
 --- !u!114 &1059033369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8523,8 +8515,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 481227446}
+  Panel: {fileID: 481227446}
 --- !u!61 &1180461248
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16257,6 +16249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 1971929998}
   Panel: {fileID: 888947836}
+  makeFabric: {fileID: 0}
 --- !u!114 &1933634448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16578,6 +16571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDayEndPanel: 0
 --- !u!4 &2017710163
 Transform:
   m_ObjectHideFlags: 0
@@ -16800,8 +16794,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
+  scrollView: {fileID: 1344217060}
+  Panel: {fileID: 1344217060}
 --- !u!61 &2030431299
 BoxCollider2D:
   m_ObjectHideFlags: 0
