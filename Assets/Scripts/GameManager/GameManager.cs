@@ -401,14 +401,14 @@ public class GameManager : MonoBehaviour
         int randomlevel = Get_RandomLevel();
 
         int randomIdx;
-        KeyValuePair<string, ItemScript> randomSnank;
+        KeyValuePair<string, ItemScript> randomMaterial;
         do
         {
-            randomIdx = UnityEngine.Random.Range(0, Snacks.Count);
-            randomSnank = Snacks.ElementAt(randomIdx);
-        } while (randomSnank.Value.level != randomlevel);
+            randomIdx = UnityEngine.Random.Range(0, Materials.Count);
+            randomMaterial = Materials.ElementAt(randomIdx);
+        } while (randomMaterial.Value.level != randomlevel);
 
-        return randomSnank.Value;
+        return randomMaterial.Value;
     }
 
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
@@ -810,7 +810,7 @@ public class GameManager : MonoBehaviour
         List<Interior> floorTile = dbManager.Select_FloorTile_Inventory();
         List<InteriorScript> list = new List<InteriorScript>();
 
-        foreach(Interior i in floorTile)
+        foreach (Interior i in floorTile)
         {
             list.Add(Get_InteriorItem(i.interiorName));
         }
@@ -850,19 +850,30 @@ public class GameManager : MonoBehaviour
         OnTableInteriorChanged?.Invoke(tableID);
     }
 
-    public (int stamina, ItemScript workingItem, int workingPercent) Get_Worker_Info(float x, float y)
-    {
 
+    public (int stamina, ItemScript workItem, int workingPercent) Get_Worker_Info(float x, float y)
+    {
+        int workerID = dbManager.Select_Worker_ID(x, y);
+        WorkRoom worker = dbManager.Select_Worker_Info(workerID);
+
+        return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    public void Change_Worker_Stamina(float x, float y, int delta)
-    {
+    //public void Change_Worker_Stamina(float x, float y, int delta)
+    //{
 
-    }
-    
-    public void Change_Worker_WorkingState(float x, float y, string workingItemName, int workingpercentDelta)
-    {
+    //}
 
-    }
-    
+    //public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    //{
+
+    //}
+
+    //public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    //{
+
+    //}
+
+    //public
+
 }

@@ -491,4 +491,18 @@ public class DBManager
             .ToList();
     }
 
+    public int Select_Worker_ID(float x, float y)
+    {
+        Interior worker = conn.Table<Interior>()
+            .Where(i => i.isSet == true && i.x == x && i.y == y)
+            .FirstOrDefault();
+
+        return worker.ID;
+    }
+
+    public WorkRoom Select_Worker_Info(int workerID)
+    {
+        return conn.Find<WorkRoom>(workerID);
+    }
+
 }

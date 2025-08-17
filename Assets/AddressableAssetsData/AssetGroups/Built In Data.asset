@@ -36,7 +36,7 @@ MonoBehaviour:
     - blanket
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7efab96d5c01c24bb7fa859cc9f8b52
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uBCF4\uAD00\uD568.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC774\uBD88\uBCF4\uAD00\uD568.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
@@ -96,7 +96,7 @@ MonoBehaviour:
     - snack
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12bb241a8fa1b0a4ebdac7ec029f4c01
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uC120\uBC18.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC7AC\uB8CC\uBCF4\uAD00\uD568.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
