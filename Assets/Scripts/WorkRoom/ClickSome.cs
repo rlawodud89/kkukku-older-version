@@ -11,7 +11,8 @@ public class ClickSome : MonoBehaviour
 
     void Start()
     {
-        interiorManager = FindObjectOfType<InteriorManager>();  
+        interiorManager = FindObjectOfType<InteriorManager>();
+        SetPanel(this.gameObject);
     }
 
     void SetPanel(GameObject gameObject){
