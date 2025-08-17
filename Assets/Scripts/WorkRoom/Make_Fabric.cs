@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Make_Fabric : MonoBehaviour
@@ -10,21 +11,21 @@ public class Make_Fabric : MonoBehaviour
     public GameObject Panel;
     public GameObject Panel2;
     public GameObject Scroll_View;
-
+    public CottonPanel cottonPanel;
     public GameObject BallonPanel;
     public Button FabricButton;
-    
-    public Employee Employee1;
-    public ProgressCircle progresscircle;
 
+    [Header("꼭 연결 안해도됨")]
     public ItemScript currentBlanket;
-    public CottonPanel cottonPanel;
     public FabricDetailPanelController detailPanelController;
 
+
+    private ProgressCircle progresscircle;
+    private Employee Employee1;
     private GameManager gameManager;
     private bool can_make = false;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         if (gameManager == null)
@@ -35,6 +36,23 @@ public class Make_Fabric : MonoBehaviour
         if (detailPanelController == null)
         {
             detailPanelController = FindObjectOfType<FabricDetailPanelController>();
+        }
+
+
+        if (progresscircle == null)
+        {
+            if (Employee1 == null)
+            {
+                GameObject empObj = GameObject.Find("Employee1(Clone)");
+                if (empObj != null)
+                    Employee1 = empObj.GetComponent<Employee>();
+            }
+
+            if (Employee1 != null)
+            {
+                progresscircle = Employee1.GetComponentInChildren<ProgressCircle>();
+            }
+
         }
 
 
@@ -75,8 +93,6 @@ public class Make_Fabric : MonoBehaviour
 
             progresscircle.OnComplete = () =>
             {
-                gameManager.Add_InventoryItem(currentBlanket.yarnName,1); //원단 추가
-                Debug.Log(currentBlanket.yarnName + "만듦");
                 showfabric(); 
             };
 
@@ -114,16 +130,19 @@ public class Make_Fabric : MonoBehaviour
     {
         if (currentBlanket != null)
         {
+
             BallonPanel.SetActive(true);
             FabricButton.gameObject.SetActive(true);
             FabricButton.image.sprite = gameManager.Blanket_to_Yarn(currentBlanket.itemName).image;
 
             FabricButton.onClick.RemoveAllListeners();
             FabricButton.onClick.AddListener(() =>
-            { 
+            {
+                Debug.Log("버튼 눌림!");
+                gameManager.Add_InventoryItem(currentBlanket.yarnName, 1); //원단 추가
+                Debug.Log(currentBlanket.yarnName + "만듦");
 
                 cottonPanel?.SetSelectedBlanket(currentBlanket);
-
 
                 BallonPanel.SetActive(false);
                 FabricButton.gameObject.SetActive(false);

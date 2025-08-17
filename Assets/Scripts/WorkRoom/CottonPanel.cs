@@ -57,7 +57,6 @@ public class CottonPanel : MonoBehaviour
             gameManager = GameManager.getInstance();
 
         List<(ItemScript item, int count)> YarnInventory = gameManager.Get_Yarn_Inventory();
-        //    public List<(ItemScript, int count)> Get_Cotton_Inventory()
 
         if (!storagePanel.isInit)
         {

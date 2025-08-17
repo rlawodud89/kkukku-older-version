@@ -6,20 +6,40 @@ public class Make_Cotton : MonoBehaviour
 
     public GameObject cottonPanel;
     public SewingPanel sewingPanel;
-
-    public Employee Employee2;
-    public ProgressCircle progresscircle;
-
     public GameObject BallonPanel;
     public Button CottonButton;
 
+    [Header("꼭 연결 안해도됨")]
     private ItemScript currentYarn;
     private ItemScript currentCotton;
 
-    public GameManager gameManager;
+
+    private Employee Employee2;
+    private ProgressCircle progresscircle;
+    private GameManager gameManager;
     private void Start()
     {
-        gameManager = GameManager.getInstance();
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        if (progresscircle == null)
+        {
+            if (Employee2 == null)
+            {
+                GameObject empObj = GameObject.Find("Employee2(Clone)");
+                if (empObj != null)
+                    Employee2 = empObj.GetComponent<Employee>();
+            }
+
+            if (Employee2 != null)
+            {   
+                progresscircle = Employee2.GetComponentInChildren<ProgressCircle>();
+            }
+
+        }
+
     }
 
     private void Awake()
@@ -35,18 +55,33 @@ public class Make_Cotton : MonoBehaviour
 
     public void HandleMakeClicked(ItemScript currentYarn)
     {
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        if (Employee2 == null)
+        {
+            GameObject empObj = GameObject.Find("Employee2(Clone)");
+            if (empObj != null)
+                Employee2 = empObj.GetComponent<Employee>();
+        }
+
         Debug.Log("Make_Cotton에서 Make 버튼 클릭됨 감지!");
         gameManager.Add_InventoryItem(currentYarn.itemName, -1);
 
         currentCotton = gameManager.Yarn_to_Cotton(currentYarn.itemName);
 
-        cottonPanel.SetActive(false);   
-        Employee2.Working();
+        cottonPanel.SetActive(false);
+        // Employee2 작업
+        if (Employee2 != null)
+            Employee2.Working();
+        else
+            Debug.LogWarning("Employee2가 null 상태라 Working() 호출 불가");
+
 
         progresscircle.OnComplete = () =>
         {
-            gameManager.Add_InventoryItem(currentCotton.itemName, 1);
-            Debug.Log("complete");
             showcotton();
         };
 
@@ -67,8 +102,9 @@ public class Make_Cotton : MonoBehaviour
             CottonButton.onClick.RemoveAllListeners();
             CottonButton.onClick.AddListener(() =>
             {
-                //currentBlanket.CottonCount += 1;
-                
+
+                gameManager.Add_InventoryItem(currentCotton.itemName, 1);
+                Debug.Log("complete");
 
                 sewingPanel.currentSewing = currentCotton;
                 sewingPanel?.SetSelectedBlanket();

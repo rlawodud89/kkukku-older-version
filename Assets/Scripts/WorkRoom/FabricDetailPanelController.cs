@@ -64,4 +64,31 @@ public class FabricDetailPanelController : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void ResetAllSlots()
+    {
+        BlanketNameText.text = " ";
+        BlanketImage.sprite = defaultMaterialSprite;
+
+        for (int i = 0; i < materialImageSlots.Count; i++)
+        {
+            if (materialImageSlots[i] != null)
+            {
+                materialImageSlots[i].sprite = defaultMaterialSprite;
+                materialImageSlots[i].gameObject.SetActive(true);
+            }
+
+            if (materialQuantitySlots.Count > i && materialQuantitySlots[i] != null)
+            {
+                materialQuantitySlots[i].text = "0";
+                materialQuantitySlots[i].gameObject.SetActive(true);
+            }
+
+            if (inv_materialSlots.Count > i && inv_materialSlots[i] != null)
+            {
+                inv_materialSlots[i].text = "0";
+            }
+        }
+    }
+
 }

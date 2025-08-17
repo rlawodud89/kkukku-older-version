@@ -10,8 +10,6 @@ public class Make_Sewing : MonoBehaviour
     public static Make_Sewing Instance { get; private set; }
 
     public GameObject sewingPanel;
-    public Employee Employee3;
-    public ProgressCircle progresscircle;
 
     public GameObject BallonPanel;
     public GameObject CompletePanel;
@@ -19,13 +17,37 @@ public class Make_Sewing : MonoBehaviour
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
-    
+
+
+    private ProgressCircle progresscircle;
+    private Employee Employee3;
     private GameManager gameManager;
     private ItemScript currentBlanket;
 
     private void Start()
     {
-        gameManager = GameManager.getInstance(); 
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+
+
+        if (progresscircle == null)
+        {
+            if (Employee3 == null)
+            {
+                GameObject empObj = GameObject.Find("Employee3(Clone)");
+                if (empObj != null)
+                    Employee3 = empObj.GetComponent<Employee>();
+            }
+
+            if (Employee3 != null)
+            {
+                progresscircle = Employee3.GetComponentInChildren<ProgressCircle>();
+            }
+
+        }
     }
     private void Awake()
     {
@@ -40,8 +62,26 @@ public class Make_Sewing : MonoBehaviour
 
     public void HandleMakeClicked(ItemScript currentSewing)
     {
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
 
+        if (progresscircle == null)
+        {
+            if (Employee3 == null)
+            {
+                GameObject empObj = GameObject.Find("Employee3(Clone)");
+                if (empObj != null)
+                    Employee3 = empObj.GetComponent<Employee>();
+            }
 
+            if (Employee3 != null)
+            {
+                progresscircle = Employee3.GetComponentInChildren<ProgressCircle>();
+            }
+
+        }
         currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
         Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
         gameManager.Add_InventoryItem(currentBlanket.cottonName, -1);
