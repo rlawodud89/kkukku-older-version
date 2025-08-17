@@ -219,6 +219,7 @@ MonoBehaviour:
   questWaitPoint: {fileID: 0}
   questWaitSeconds: 10
   questLeaveViaDoor: 1
+  offeredQuest: {fileID: 11400000, guid: d6e7b624e3372f24cbe527e2e176df5d, type: 2}
   questMarker: {fileID: 0}
   questMarkerChildName: QuestMarker
   toggleMarkerObject: 1
@@ -242,6 +243,7 @@ GameObject:
   - component: {fileID: 5501071150627051467}
   - component: {fileID: 1123616876407565665}
   - component: {fileID: 5818335519187971148}
+  - component: {fileID: 7387210375316433748}
   m_Layer: 0
   m_Name: questMarker
   m_TagString: Untagged
@@ -361,3 +363,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 10.24, y: 10.24}
   m_EdgeRadius: 0
+--- !u!114 &7387210375316433748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5440826370683632185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ffcfbd055833c04fbafa7b664c98351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 5908935546435517913}
