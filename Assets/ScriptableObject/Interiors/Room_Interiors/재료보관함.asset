@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eac430eee7e04814b9895346fa7e03b6, type: 3}
-  m_Name: "\uC591"
+  m_Name: "\uC7AC\uB8CC\uBCF4\uAD00\uD568"
   m_EditorClassIdentifier: 
-  interiorName: "\uC591"
-  interiorType: 2
-  image: {fileID: 21300000, guid: 0c7524b412dd25a4fac988e4628a2e4d, type: 3}
-  prefab: {fileID: 3809439387546939445, guid: 7a1ff8f72c32e594e9e6d4c8c511b2e4, type: 3}
-  value: 7000
+  interiorName: "\uC7AC\uB8CC\uBCF4\uAD00\uD568"
+  interiorType: 1
+  image: {fileID: 21300000, guid: 8dce99cd3bde84a4980f4632662594e0, type: 3}
+  prefab: {fileID: 253521920105791786, guid: 8dc666bb33cf7764db260d25cf8b1fbd, type: 3}
+  value: 3000
   fullImage: {fileID: 0}
-  workType: 1
+  workType: 3

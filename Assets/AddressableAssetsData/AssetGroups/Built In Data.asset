@@ -401,6 +401,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 332af8eb5e8790842a91b77ccce5fddf
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uAC04\uC2DD\uBC15\uC2A4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:
