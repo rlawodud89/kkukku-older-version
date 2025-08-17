@@ -771,6 +771,9 @@ public class GameManager : MonoBehaviour
 
     public bool Move_RoomInteriorItem(float beforeX, float beforeY, float afterX, float afterY)
     {
+        if (dbManager.Test_Interior_Pos(beforeX, beforeY)) Debug.Log("인테리어 아이템 존재");
+        else Debug.Log("인테리어 아이템 존재 X");
+
         return dbManager.Change_InteriorItem_Pos(beforeX, beforeY, afterX, afterY);
     }
 
@@ -859,21 +862,26 @@ public class GameManager : MonoBehaviour
         return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    //public void Change_Worker_Stamina(float x, float y, int delta)
-    //{
+    /*
+    public void Change_Worker_Stamina(float x, float y, int delta)
+    {
 
-    //}
+    }
 
-    //public void Set_Worker_workingItem(float x, float y, string workingItemName)
-    //{
+    public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    {
 
-    //}
+    }
 
-    //public void Change_Worker_WorkingPercent(float x, float y, int delta)
-    //{
+    public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    {
 
-    //}
+    }
 
-    //public
+    public List<QuestSO> Get_Current_Quest()
+    {
+
+    }
+    */
 
 }

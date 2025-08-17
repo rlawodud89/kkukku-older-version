@@ -891,6 +891,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 4
+  tableType: 0
 --- !u!60 &419739921
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1250,6 +1251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 2
+  tableType: 1
 --- !u!212 &472451680
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1423,6 +1425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 4
+  tableType: 0
 --- !u!212 &550220042
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1696,6 +1699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 1
+  tableType: 1
 --- !u!212 &586601047
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3617,6 +3621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 3
+  tableType: 0
 --- !u!1 &1184489746
 GameObject:
   m_ObjectHideFlags: 0
@@ -3664,6 +3669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 3
+  tableType: 0
 --- !u!60 &1184489749
 PolygonCollider2D:
   m_ObjectHideFlags: 0

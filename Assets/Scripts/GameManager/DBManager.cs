@@ -419,6 +419,13 @@ public class DBManager
         }
     }
 
+    public bool Test_Interior_Pos(float x, float y)
+    {
+        var result = conn.Query<Interior>(
+    "SELECT * FROM Interior WHERE isSet = 1 AND x = ? AND y = ?", x, y);
+        return result.Count > 0;
+    }
+
     public bool NotSet_InteriorItem(float x, float y) // 좌표에 위치되어 있던 인테리어 아이템 빼는 메서드
     {
         try
