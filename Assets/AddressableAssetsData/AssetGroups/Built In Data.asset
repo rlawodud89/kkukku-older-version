@@ -395,6 +395,42 @@ MonoBehaviour:
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d3449d73605036469aa630327d8f031
+    m_Address: Quest/Quest 0
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1198ba20ff406e64c80e79a3d33f8a1c
+    m_Address: Assets/ScriptableObject/Quests/Quest 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d19ac745a8f76a41a8e73712d4f754a
+    m_Address: Assets/ScriptableObject/Quests/Quest 2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d49498dd4eb09ab4a97004492d16e41b
+    m_Address: Assets/ScriptableObject/Quests/Quest_3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d191b8fffcaa040479dc8dba8d809e54
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 0.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f57eb0dad2b03234b9222940b6fb2277
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 1.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

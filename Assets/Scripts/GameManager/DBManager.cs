@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
-using Unity.VisualScripting;
 
 
 public class DBManager
@@ -493,6 +492,45 @@ public class DBManager
             .ToList();
     }
 
+    public List<QuestBox> Select_All_Quest()
+    {
+        return conn.Table<QuestBox>()
+            .ToList();
+    }
+
+    public void Insert_Quest(string questName)
+    {
+        QuestBox quest = new QuestBox();
+        quest.questName = questName;
+        conn.Insert(quest);
+    }
+
+    public void Delete_Quest(string questName)
+    {
+        conn.Delete<QuestBox>(questName);
+    }
+
+    public void Update_Quest_Process(string questName, int process)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.process = process;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_IsCompleted(string questName, bool isCompleted)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.isCompleted = isCompleted;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_GetReward(string questName, bool getReward)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.getReward = getReward;
+        conn.Update(quest);
+    }
+
     public int Select_Worker_ID(float x, float y)
     {
         Interior worker = conn.Table<Interior>()
@@ -506,5 +544,4 @@ public class DBManager
     {
         return conn.Find<WorkRoom>(workerID);
     }
-
 }
