@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class FishingMiniGame : MonoBehaviour
     public RectTransform successZone; // 초록 성공 구간
     public float speed = 200f;        // 포인터 이동 속도(px/s)
     public GameObject gamePanel;
+    public TextMeshProUGUI fishing_text;
 
     private ItemScript currentdata;
     private bool goingRight = true;
@@ -37,6 +39,7 @@ public class FishingMiniGame : MonoBehaviour
             else
             {
                 Debug.Log("❌ 실패! 재료를 놓쳤습니다.");
+                fishing_text.text = " 실패! 재료를 놓쳤습니다. ";
                 FinishMiniGame(false);
             }
         }
@@ -76,6 +79,7 @@ public class FishingMiniGame : MonoBehaviour
             currentdata = gameManager.Get_Random_Material();
             materialsInventory.AddMaterial(currentdata);
             gameManager.Add_InventoryItem(currentdata.itemName, 1);
+            fishing_text.text = currentdata.name + "획득!";
             Debug.Log($"{currentdata.itemName} 획득!");
         }
     }
