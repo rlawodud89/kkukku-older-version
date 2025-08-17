@@ -49,8 +49,8 @@ public class QuestManager : MonoBehaviour
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
 
-        ///아래거는 업데이트에 옮기면 될 듯.
-        StartNewDay(); // 새로운 날 시작 시 퀘스트 초기화
+        ///데베 연결 시 아래거 지우기
+        StartNewDay();
     }
 
     // Update is called once per frame
@@ -99,12 +99,26 @@ public class QuestManager : MonoBehaviour
     public void StartNewDay()
     {
         // 새로운 날 시작 시 퀘스트 초기화
+        DestroyAllQuestButtons(); // 기존 퀘스트 버튼 리스트 초기화
         activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
-        questButtons.Clear(); // 기존 퀘스트 버튼 리스트 초기화
+        ////데베에서 이전 퀘스트 삭제(일반퀘스트만. 현재 퀘스트 중 특퀘 여부 확인 후 아닌 것만 삭제)
         LoadRandomQuests(3); // 새로운 퀘스트 로드
         ////특별퀘스트 로드
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
     }
+    //------------------------시계연결
+
+    private void OnEnable()
+    {
+        StartCoroutine(EnsureSubscribed());
+    }
+    private IEnumerator EnsureSubscribed()
+    {
+        while (GameManager.getInstance() == null) yield return null;
+        GameManager.getInstance().OnDayEnded += StartNewDay;
+    }
+    
+    //---------------------------------
 
     // 퀘스트 랜덤으로 불러오기
     void LoadRandomQuests(int count)
@@ -393,7 +407,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    //// 특퀘 ////
+    ////================= 특퀘 ========================////
     
     private AStarMover _currentQuestNpc;
     
@@ -406,11 +420,10 @@ public class QuestManager : MonoBehaviour
         if (quest && !activeQuests.Contains(quest))
         {
             activeQuests.Add(quest);
-            PlusQuest(activeQuests);   // ★ 특퀘 버튼 생성
+            PlusQuest(quest);   // ★ 특퀘 버튼 생성
         }
             
         // 데베에 추가
-
         PanelOpen();
 
         // 버튼 경유 말고 바로 내용 패널 띄우기
@@ -471,28 +484,23 @@ public class QuestManager : MonoBehaviour
                 buffer.Add(child);
         foreach (var t in buffer) Destroy(t.gameObject);
     }
-    public void PlusQuest(List<QuestSO> quests)
+    public void PlusQuest(QuestSO q)
     {
-        DestroyAllQuestButtons();
-        foreach (QuestSO currentQuest in quests)
+        GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
+        questButtons.Add(questButton);
+        questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = q.questTitle;
+        if (q.isCompleted)
+            questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
+        else
         {
-            // 퀘스트 패널 설정
-            GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
-            questButtons.Add(questButton);
-            questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
-            if (currentQuest.isCompleted)
-                questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
-            else
-            {
-                questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
-            }
-
-            // 버튼 클릭 이벤트
-            questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
-            {
-                OnQuestButtonClicked(questButton, currentQuest);
-            });
+            questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
         }
+
+        // 버튼 클릭 이벤트
+        questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+        {
+            OnQuestButtonClicked(questButton, q);
+        });
 
     }
     private void DestroyAllQuestButtons()
@@ -500,5 +508,9 @@ public class QuestManager : MonoBehaviour
         foreach (var go in questButtons)
             if (go) Destroy(go);
         questButtons.Clear();
+
+        // scrollContent 밑에 혹시 남아있는 자식도 깔끔히 제거
+        foreach (Transform child in scrollContent.transform)
+            Destroy(child.gameObject);
     }
 }
