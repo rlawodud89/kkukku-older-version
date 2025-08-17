@@ -3,81 +3,64 @@ using UnityEngine;
 
 public static class AStarPathfinder
 {
-    public class Node
-    {
-        public Vector2Int pos;
-        public Node parent;
-        public int g, h;
-        public int f => g + h;
-    }
+    public class Node { public Vector3Int cell; public Node parent; public int g, h; public int f => g + h; }
 
-    public static List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, System.Func<Vector2Int, bool> isBlocked)
+    public static List<Vector3Int> FindPath(
+        Vector3Int start, Vector3Int goal,
+        System.Func<Vector3Int, bool> isBlocked,
+        bool allowDiagonal = false,
+        bool preventCornerCut = true)
     {
         var open = new List<Node>();
-        var closed = new HashSet<Vector2Int>();
+        var closed = new HashSet<Vector3Int>();
+        open.Add(new Node { cell = start, g = 0, h = Heu(start, goal) });
 
-        open.Add(new Node { pos = start, g = 0, h = Heuristic(start, end) });
+        Vector3Int[] dirs4 = { new(1, 0, 0), new(-1, 0, 0), new(0, 1, 0), new(0, -1, 0) };
+        Vector3Int[] dirs8 = {
+            new( 1,0,0), new(-1,0,0), new(0, 1,0), new(0,-1,0),
+            new( 1,1,0), new( 1,-1,0), new(-1, 1,0), new(-1,-1,0)
+        };
+        var dirs = allowDiagonal ? dirs8 : dirs4;
 
         while (open.Count > 0)
         {
             open.Sort((a, b) => a.f.CompareTo(b.f));
-            var current = open[0];
-            open.RemoveAt(0);
+            var cur = open[0]; open.RemoveAt(0);
+            if (cur.cell == goal) return Reconstruct(cur);
+            closed.Add(cur.cell);
 
-            if (current.pos == end)
-                return Reconstruct(current);
-
-            closed.Add(current.pos);
-
-            foreach (var dir in Directions)
+            foreach (var d in dirs)
             {
-                Vector2Int next = current.pos + dir;
+                var next = cur.cell + d;
                 if (closed.Contains(next)) continue;
                 if (isBlocked(next)) continue;
 
-                var neighbor = new Node
+                // 대각선 코너 끼기 방지
+                if (allowDiagonal && preventCornerCut && d.x != 0 && d.y != 0)
                 {
-                    pos = next,
-                    parent = current,
-                    g = current.g + 1,
-                    h = Heuristic(next, end)
-                };
+                    if (isBlocked(cur.cell + new Vector3Int(d.x, 0, 0))) continue;
+                    if (isBlocked(cur.cell + new Vector3Int(0, d.y, 0))) continue;
+                }
 
-                var existing = open.Find(n => n.pos == next);
-                if (existing == null)
-                {
-                    open.Add(neighbor);
-                }
-                else if (neighbor.g < existing.g)
-                {
-                    existing.parent = current;
-                    existing.g = neighbor.g;
-                }
+                int step = (d.x != 0 && d.y != 0) ? 14 : 10; // 대각 14, 직선 10
+                int ng = cur.g + step;
+
+                var exist = open.Find(n => n.cell == next);
+                if (exist == null)
+                    open.Add(new Node { cell = next, parent = cur, g = ng, h = Heu(next, goal) });
+                else if (ng < exist.g) { exist.g = ng; exist.parent = cur; }
             }
         }
-
         return null;
     }
 
-    static int Heuristic(Vector2Int a, Vector2Int b)
-    {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y); // Manhattan distance
-    }
+    static int Heu(Vector3Int a, Vector3Int b)
+        => (Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y)) * 10;
 
-    static List<Vector2Int> Reconstruct(Node endNode)
+    static List<Vector3Int> Reconstruct(Node n)
     {
-        var path = new List<Vector2Int>();
-        var current = endNode;
-        while (current != null)
-        {
-            path.Insert(0, current.pos);
-            current = current.parent;
-        }
+        var path = new List<Vector3Int>();
+        for (; n != null; n = n.parent) path.Insert(0, n.cell);
         return path;
     }
-
-    static readonly Vector2Int[] Directions = {
-        new Vector2Int(1, 0), new Vector2Int(-1, 0),
-        new Vector2Int(0, 1), new Vector2Int(0, -1)
-    };
 }

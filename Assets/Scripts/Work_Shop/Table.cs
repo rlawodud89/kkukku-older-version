@@ -14,15 +14,23 @@ public class Table : MonoBehaviour
     private GameManager gameManager;
     private InteriorScript tableScript;
     private SpriteRenderer spriteRenderer;
+    bool hasSelfCollider;
 
 
     void Start()
     {
         gameManager = GameManager.getInstance();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        hasSelfCollider = (GetComponent<Collider2D>() != null) || (GetComponent<Collider>() != null);
 
         gameManager.OnTableInteriorChanged += TableInteriorChanged;
-        TableInteriorChanged(tableID);
+        //TableInteriorChanged(tableID);
+        
+        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
+        tableScript = current_table_data.table;
+
+        if (spriteRenderer && tableScript != null) // 렌더러 있을때만 변경
+            Change_Table_image(current_table_data.isFull);
     }
 
     void OnMouseDown()

@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 5065450714904837136}
   - component: {fileID: 2916321046947053277}
   - component: {fileID: 5793898700648673290}
+  - component: {fileID: 2246480804358010056}
   - component: {fileID: 5908935546435517913}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uD574\uB2EC"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 328.3487, y: 189.75934, z: -3.9495425}
-  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -64,7 +65,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2327600310463068422}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -121,20 +122,45 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2125927951
   m_SortingLayer: 0
-  m_SortingOrder: 5
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: -18180
+  m_Sprite: {fileID: -681903691, guid: 6f27fa6344a6b24459004de10a9fe0eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.52, y: 3.23}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
+--- !u!114 &2246480804358010056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2327600310463068422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adeb1d1577457d94494e3292cf3d9fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 0}
+  sortingLayer: Characters
+  role: 1
+  useScreenDownDepth: 0
+  leftBias: 0
+  stepPerCell: 20
+  stepPerFloor: 1000
+  localOffset: 0
+  tierBack: -2000000
+  tierDynamic: 0
+  tierFront: 2000000
+  isCharacter: 1
+  foot: {fileID: 1205876718551325001}
 --- !u!114 &5908935546435517913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,9 +173,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eed41b9bdff4134cb2fee06158e0bc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 0}
+  foot: {fileID: 0}
   moveSpeed: 2
+  allowDiagonal: 0
+  arriveThreshold: 0.05
+  waitAtShelfSeconds: 1
+  waitAtCashierSeconds: 1
+  autoStart: 1
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
-  roamMin: 1
-  roamMax: 5
+  cellProbeRadius: 0.3
+  ignoreTriggers: 1
+  useBoxProbe: 1
+  boxSizeScale: 0.9
+  startPoint: {fileID: 0}
+  doorPoints:
+  - {fileID: 0}
+  shelfPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cashierPoint: {fileID: 0}
+  minShelfVisits: 2
+  maxShelfVisits: 5
+  energyPerGold: 0.02
+  questMode: 0
+  questWaitPoint: {fileID: 0}
+  questWaitSeconds: 10
+  questLeaveViaDoor: 1
+  questMarker: {fileID: 0}
+  questMarkerChildName: QuestMarker
+  toggleMarkerObject: 1
+  faceMap:
+    leftDown: {x: -1, y: 0, z: 0}
+    rightUp: {x: 1, y: 0, z: 0}
+    leftUp: {x: 0, y: 1, z: 0}
+    rightDown: {x: 0, y: -1, z: 0}
+    leftDownBlend: {x: -0.707, y: -0.707}
+    rightUpBlend: {x: 0.707, y: 0.707}
+    leftUpBlend: {x: -0.707, y: 0.707}
+    rightDownBlend: {x: 0.707, y: -0.707}
