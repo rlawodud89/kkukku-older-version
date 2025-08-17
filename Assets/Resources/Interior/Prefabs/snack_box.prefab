@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4826692625656994060}
   - component: {fileID: 4872174808155088116}
   - component: {fileID: 1084801225419867171}
+  - component: {fileID: 1551416149281672778}
+  - component: {fileID: 1970652214271257915}
   m_Layer: 8
   m_Name: snack_box
   m_TagString: Untagged
@@ -145,3 +147,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 0}
   Panel: {fileID: 0}
+--- !u!114 &1551416149281672778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351477524706888630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcb8aec4fc5d66c4ab2f0e1b8a08890e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  outlineMaterial: {fileID: 2100000, guid: bf6f972961259e045b1588b5a9ad350a, type: 2}
+  errorMaterial: {fileID: 2100000, guid: d29a93430ae626a469c79c91c557dc65, type: 2}
+  selected: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 132
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  targetCanvas: {fileID: 0}
+  checkButtonPrefab: {fileID: 7550910589061424665, guid: d40f2bbaff358ad468f4ed82d81a3a34, type: 3}
+  worldOffset: {x: 0.8, y: -1.2, z: 0}
+  screenOffset: {x: 0, y: 0}
+  putInButtonPrefab: {fileID: 6697205569058715593, guid: dca4781dda8dc8d4b9782d3031a159eb, type: 3}
+  putInWorldOffset: {x: 0, y: -1.5, z: 0}
+  initialPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1970652214271257915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351477524706888630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b20e10eb533c294d8fdc66fb0762f45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 0}

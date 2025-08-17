@@ -306,7 +306,7 @@ public class InteriorManager : MonoBehaviour
         tileButton.SetActive(false);
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
-        
+
         PanelClose();
 
         if (Home_Button != null)
