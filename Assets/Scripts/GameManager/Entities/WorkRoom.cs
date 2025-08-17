@@ -6,9 +6,6 @@ public class WorkRoom
     public int workerID { get; set; }
 
     [NotNull]
-    public string workerName { get; set; }
-
-    [NotNull]
     public int stamina { get; set; }
 
     [NotNull]

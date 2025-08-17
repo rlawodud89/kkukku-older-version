@@ -353,10 +353,7 @@ public class DBManager
         try
         {
             WorkRoom newWorkRoom = new WorkRoom();
-            newWorkRoom.workerName = workerName;
             conn.Insert(newWorkRoom);
-
-            Debug.Log("ID" + newWorkRoom.workerID);
 
             int affectedRows = conn.Execute("UPDATE Interior SET ID = ? " +
                 "WHERE interiorName = ? AND isSet = 1 AND x = ? AND y = ?",
@@ -478,6 +475,34 @@ public class DBManager
         return conn.Table<Interior>()
             .Where(i => i.interiorType == InteriorType.WALL_TILE)
             .ToList();
+    }
+
+    public void Update_ShopTableInterior(int tableID, string interiorName)
+    {
+        WorkShop table = conn.Find<WorkShop>(tableID);
+        table.tableName = interiorName;
+        conn.Update(table);
+    }
+
+    public List<Interior> Select_ShopInterior_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.SHOP_INTERIOR)
+            .ToList();
+    }
+
+    public int Select_Worker_ID(float x, float y)
+    {
+        Interior worker = conn.Table<Interior>()
+            .Where(i => i.isSet == true && i.x == x && i.y == y)
+            .FirstOrDefault();
+
+        return worker.ID;
+    }
+
+    public WorkRoom Select_Worker_Info(int workerID)
+    {
+        return conn.Find<WorkRoom>(workerID);
     }
 
 }
