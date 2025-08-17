@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
-using UnityEngine.UI; 
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ClickInteriorItem : MonoBehaviour
 {
     public Material normalMaterial;  // 기본
     public Material outlineMaterial;  // 선택했을 때 
     public Material errorMaterial;   // 잘못된 위치일 때
-    [HideInInspector] public bool selected=false;
+    [HideInInspector] public bool selected = false;
 
     public LayerMask groundLayer;    // 바닥 레이어
     public LayerMask obstacleLayer;    // 겹침 검사 대상(벽/가구 등)
@@ -21,7 +21,7 @@ public class ClickInteriorItem : MonoBehaviour
     private RectTransform checkButtonRectTransform;
     public Vector3 worldOffset = new Vector3(0, -1.5f, 0); // 오브젝트 기준 월드 오프셋
     public Vector2 screenOffset = Vector2.zero;            // 화면 픽셀 보정
-   // public bool hideWhenOffscreen = true;       
+                                                           // public bool hideWhenOffscreen = true;       
     public GameObject putInButtonPrefab;   // 보관함에 넣기 버튼
     private GameObject putInButton;
     private RectTransform putInButtonRectTransform;
@@ -43,7 +43,7 @@ public class ClickInteriorItem : MonoBehaviour
         rend = GetComponent<Renderer>();
         rend.material = normalMaterial;
 
-        interiorManager = FindObjectOfType<InteriorManager>(); 
+        interiorManager = FindObjectOfType<InteriorManager>();
 
         cam = Camera.main;
 
@@ -56,7 +56,7 @@ public class ClickInteriorItem : MonoBehaviour
         initialPosition = transform.position;
         Debug.Log($"Initial Position: {initialPosition}");
     }
-    
+
 
     // Update is called once per frame
     void Update()
@@ -83,14 +83,16 @@ public class ClickInteriorItem : MonoBehaviour
                 }
             }
         }
-        
-        if(!selected){
+
+        if (!selected)
+        {
             rend.material = normalMaterial;
             if (checkButton != null) Destroy(checkButton.gameObject);
             if (putInButton != null) Destroy(putInButton.gameObject);
         }
 
-        if(selected){
+        if (selected)
+        {
             bool isGrounded = CheckGround();
             bool isOverlap = CheckOverlap();
 
@@ -98,7 +100,8 @@ public class ClickInteriorItem : MonoBehaviour
             {
                 rend.material = errorMaterial; // 문제 있음 → 빨간색
                 checkButton.GetComponent<Button>().interactable = false;
-            }else
+            }
+            else
             {
                 rend.material = outlineMaterial; // 문제 없음 → 파란색
                 checkButton.GetComponent<Button>().interactable = true;
@@ -106,42 +109,43 @@ public class ClickInteriorItem : MonoBehaviour
 
         }
     }
-/*
-    void OnMouseDown()
-    {
-        if (interiorManager != null && interiorManager.interiorMode)
+    /*
+        void OnMouseDown()
         {
-            rend.material = outlineMaterial;
-
-            if (checkButtonPrefab != null && targetCanvas != null)
+            if (interiorManager != null && interiorManager.interiorMode)
             {
-                GameObject btn = Instantiate(checkButtonPrefab, targetCanvas.transform);
+                rend.material = outlineMaterial;
 
-                // UI 위치를 오브젝트 아래쪽에 맞게 변환
-                Vector3 worldPos = transform.position + Vector3.down * 1.5f;
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+                if (checkButtonPrefab != null && targetCanvas != null)
+                {
+                    GameObject btn = Instantiate(checkButtonPrefab, targetCanvas.transform);
 
-                btn.GetComponent<RectTransform>().position = screenPos;
-            }     
-        }
-    }*/
+                    // UI 위치를 오브젝트 아래쪽에 맞게 변환
+                    Vector3 worldPos = transform.position + Vector3.down * 1.5f;
+                    Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+
+                    btn.GetComponent<RectTransform>().position = screenPos;
+                }     
+            }
+        }*/
 
     void OnMouseDown()
     {
         Select();
     }
 
-    public void Select(){
-         // 꾸미기 모드일 때
+    public void Select()
+    {
+        // 꾸미기 모드일 때
         if (interiorManager != null && interiorManager.interiorMode)
         {
-            selected=true;
+            selected = true;
 
             if (outlineMaterial) rend.material = outlineMaterial;  // 외각선 강조
 
             // 체크 버튼 생성
             // 이미 만들어졌다면 새로 만들지 않고 그대로 사용
-            if(targetCanvas == null)
+            if (targetCanvas == null)
             {
                 Transform canvasTf = GameObject.Find("UICanvas")?.transform;
                 targetCanvas = canvasTf?.GetComponent<Canvas>();
@@ -185,24 +189,27 @@ public class ClickInteriorItem : MonoBehaviour
     }
 
     // 체크 버튼 클릭 시
-    public void ClickCheckButton(){
+    public void ClickCheckButton()
+    {
 
         Debug.Log($"Clicked Check Button for {gameObject.name}");
         // 선택 해제
-        selected=false;
+        selected = false;
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
 
         // 바뀐 위치 저장
-        bool isPositionChanged=gameManager.Move_RoomInteriorItem(initialPosition.x, initialPosition.y, transform.position.x, transform.position.y);
-        
+        bool isPositionChanged = gameManager.Move_RoomInteriorItem(initialPosition.x, initialPosition.y, transform.position.x, transform.position.y);
+
         Debug.Log($"Initial Position: ({initialPosition.x}, {initialPosition.y})");
         Debug.Log($"Change Position: ({transform.position.x}, {transform.position.y})");
 
-        if(isPositionChanged)
+        if (isPositionChanged)
         {
             Debug.Log($"Moved Interior Item: {gameObject.name} to ({transform.position.x}, {transform.position.y})");
-        } else {
+        }
+        else
+        {
             Debug.LogWarning($"Failed to move Interior Item: {gameObject.name}");
         }
 
@@ -228,13 +235,14 @@ public class ClickInteriorItem : MonoBehaviour
             Debug.LogWarning($"Failed to move Interior Item: {gameObject.name} back to inventory");
         }
 
-        interiorManager.interiorItems=gameManager.Get_RoomInterior_Inventory();
+        interiorManager.RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
 
     }
 
     // 나가기 버튼 클릭 시 
-    public void ClickExitInteriorButton(){
-        selected=false;
+    public void ClickExitInteriorButton()
+    {
+        selected = false;
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
         if (putInButton != null) Destroy(putInButton.gameObject);
@@ -258,7 +266,8 @@ public class ClickInteriorItem : MonoBehaviour
     }
 
     // 다른 물체와 겹쳤는지
-    bool CheckOverlap(){
+    bool CheckOverlap()
+    {
         var b = col.bounds;
         Vector2 center = b.center;
         Vector2 halfSize = new Vector2(b.extents.x * 0.8f, b.extents.y * 0.98f);

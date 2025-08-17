@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using JetBrains.Annotations;
 
 public enum BgType
 {
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
     public event Action<bool> OnOpenChanged;
     public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
     public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
+    public event Action<int> OnTableInteriorChanged;
 
     // 타일 변경 시 적용되도록 하는 이벤트
     public event Action<TilePosType, InteriorScript> OnTileChanged;
@@ -399,14 +401,14 @@ public class GameManager : MonoBehaviour
         int randomlevel = Get_RandomLevel();
 
         int randomIdx;
-        KeyValuePair<string, ItemScript> randomSnank;
+        KeyValuePair<string, ItemScript> randomMaterial;
         do
         {
-            randomIdx = UnityEngine.Random.Range(0, Snacks.Count);
-            randomSnank = Snacks.ElementAt(randomIdx);
-        } while (randomSnank.Value.level != randomlevel);
+            randomIdx = UnityEngine.Random.Range(0, Materials.Count);
+            randomMaterial = Materials.ElementAt(randomIdx);
+        } while (randomMaterial.Value.level != randomlevel);
 
-        return randomSnank.Value;
+        return randomMaterial.Value;
     }
 
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
@@ -808,7 +810,7 @@ public class GameManager : MonoBehaviour
         List<Interior> floorTile = dbManager.Select_FloorTile_Inventory();
         List<InteriorScript> list = new List<InteriorScript>();
 
-        foreach(Interior i in floorTile)
+        foreach (Interior i in floorTile)
         {
             list.Add(Get_InteriorItem(i.interiorName));
         }
@@ -828,5 +830,50 @@ public class GameManager : MonoBehaviour
 
         return list;
     }
+
+    public List<InteriorScript> Get_ShopInterior_Inventory()
+    {
+        List<Interior> shopInterior = dbManager.Select_ShopInterior_Inventory();
+        List<InteriorScript> list = new List<InteriorScript>();
+
+        foreach (Interior i in shopInterior)
+        {
+            list.Add(Get_InteriorItem(i.interiorName));
+        }
+
+        return list;
+    }
+
+    public void Set_ShopTableInterior(int tableID, string interiorName)
+    {
+        dbManager.Update_ShopTableInterior(tableID, interiorName);
+        OnTableInteriorChanged?.Invoke(tableID);
+    }
+
+
+    public (int stamina, ItemScript workItem, int workingPercent) Get_Worker_Info(float x, float y)
+    {
+        int workerID = dbManager.Select_Worker_ID(x, y);
+        WorkRoom worker = dbManager.Select_Worker_Info(workerID);
+
+        return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
+    }
+
+    //public void Change_Worker_Stamina(float x, float y, int delta)
+    //{
+
+    //}
+
+    //public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    //{
+
+    //}
+
+    //public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    //{
+
+    //}
+
+    //public
 
 }

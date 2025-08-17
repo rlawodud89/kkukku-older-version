@@ -9,6 +9,7 @@ public class Table : MonoBehaviour
     public GameObject popupPrefab;
     private GameObject currentPopup;
     public int tableID;
+    public TableType tableType;
   
     private GameManager gameManager;
     private InteriorScript tableScript;
@@ -20,9 +21,8 @@ public class Table : MonoBehaviour
         gameManager = GameManager.getInstance();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
-        tableScript = current_table_data.table;
-        Change_Table_image(current_table_data.isFull);
+        gameManager.OnTableInteriorChanged += TableInteriorChanged;
+        TableInteriorChanged(tableID);
     }
 
     void OnMouseDown()
@@ -69,16 +69,19 @@ public class Table : MonoBehaviour
     // 실제 UI 위에 있는지 확인하는 정밀 메서드
     private bool IsPointerOverUI()
     {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
 
         List<RaycastResult> results = new List<RaycastResult>();
-        GraphicRaycaster gr = FindObjectOfType<GraphicRaycaster>();
 
-        if (gr != null)
+        // 모든 GraphicRaycaster를 검사
+        foreach (var gr in FindObjectsOfType<GraphicRaycaster>())
         {
             gr.Raycast(eventData, results);
-            return results.Count > 0;
+            if (results.Count > 0) // 하나라도 걸리면
+                return true;
         }
 
         return false;
@@ -88,5 +91,14 @@ public class Table : MonoBehaviour
     {
         if (isFull) spriteRenderer.sprite = tableScript.fullImage;
         else spriteRenderer.sprite = tableScript.image;
+    }
+
+    private void TableInteriorChanged(int tableID)
+    {
+        if (tableID != this.tableID) return;
+
+        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
+        tableScript = current_table_data.table;
+        Change_Table_image(current_table_data.isFull);
     }
 }

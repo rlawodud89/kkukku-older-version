@@ -4,7 +4,6 @@ public enum InteriorType
     ROOM_INTERIROR,
     WORKER,
     TABLE,
-    CASHER,
     FLOOR_TILE,
     WALL_TILE
 }
