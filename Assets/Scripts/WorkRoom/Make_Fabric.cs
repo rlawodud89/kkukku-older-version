@@ -38,10 +38,6 @@ public class Make_Fabric : MonoBehaviour
         }
 
 
-        //디버깅용
-        gameManager.Add_InventoryItem("운무솜", 3);
-        gameManager.Add_InventoryItem("꿈실", 3);
-        gameManager.Add_InventoryItem("달조각", 3);
     }
 
     // Update is called once per frame
