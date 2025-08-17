@@ -12,7 +12,7 @@ public class InteriorScript : ScriptableObject
     public int value;
 
     [Header("테이블인 경우 지정, 아니면 NONE")]
-    public TableType roominteriorType;
+    public TableType tableType;
 
     [Header("이불장 찼을 때 사진")]
     public Sprite fullImage;
