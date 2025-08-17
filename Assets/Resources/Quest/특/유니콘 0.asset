@@ -21,7 +21,7 @@ MonoBehaviour:
     amount: 5
   questProcess: 0
   questComplete: 0
-  isCompleted: 1
+  isCompleted: 0
   getReward: 0
   isSpecial: 1
   nextQuest: {fileID: 11400000, guid: 5289485973738e34a91de5d78748a1fe, type: 2}
