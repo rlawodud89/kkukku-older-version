@@ -407,7 +407,8 @@ public class DBManager
     {
         try
         {
-            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? WHERE isSet = 1 AND x = ? AND y = ?",
+            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? " +
+                "WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
             afterX, afterY, beforeX, beforeY);
 
             return affectedRows > 0;
@@ -419,19 +420,13 @@ public class DBManager
         }
     }
 
-    public bool Test_Interior_Pos(float x, float y)
-    {
-        var result = conn.Query<Interior>(
-    "SELECT * FROM Interior WHERE isSet = 1 AND x = ? AND y = ?", x, y);
-        return result.Count > 0;
-    }
-
     public bool NotSet_InteriorItem(float x, float y) // 좌표에 위치되어 있던 인테리어 아이템 빼는 메서드
     {
         try
         {
-            Interior interior = conn.Table<Interior>()
-                .Where(i => i.isSet == true && i.x == x && i.y == y)
+            Interior interior = conn.Query<Interior>(
+                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                    x, y)
                 .FirstOrDefault();
 
             if (interior.interiorType == InteriorType.WORKER)
@@ -440,7 +435,7 @@ public class DBManager
             }
 
             int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
-                    x, y);
+                    interior.x, interior.y);
 
             return affectedRows > 0;
         }

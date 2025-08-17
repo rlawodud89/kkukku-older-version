@@ -10,6 +10,7 @@ public class Table : MonoBehaviour
     private GameObject currentPopup;
     public int tableID;
     public TableType tableType;
+    public GameObject TableImageObject;
 
     private GameManager gameManager;
     private InteriorScript tableScript;
@@ -20,7 +21,9 @@ public class Table : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.getInstance();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (tableType == TableType.FLOOR_TABLE) spriteRenderer = TableImageObject.GetComponent<SpriteRenderer>();
+        else spriteRenderer = GetComponent<SpriteRenderer>();
+
         hasSelfCollider = (GetComponent<Collider2D>() != null) || (GetComponent<Collider>() != null);
 
         gameManager.OnTableInteriorChanged += TableInteriorChanged;
