@@ -242,7 +242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 745, y: 45.01}
+  m_AnchoredPosition: {x: 745, y: 45.009995}
   m_SizeDelta: {x: 110, y: 90.0191}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &54134729
@@ -892,6 +892,7 @@ MonoBehaviour:
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 4
   tableType: 0
+  TableImageObject: {fileID: 550220037}
 --- !u!60 &419739921
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1252,6 +1253,7 @@ MonoBehaviour:
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 2
   tableType: 1
+  TableImageObject: {fileID: 0}
 --- !u!212 &472451680
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1363,7 +1365,6 @@ GameObject:
   - component: {fileID: 550220039}
   - component: {fileID: 550220042}
   - component: {fileID: 550220038}
-  - component: {fileID: 550220040}
   m_Layer: 0
   m_Name: Table2
   m_TagString: Display
@@ -1411,21 +1412,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 59532053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &550220040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 550220037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63e9b134aa3838b4c9abfda24975e2d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
-  tableID: 4
-  tableType: 0
 --- !u!212 &550220042
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1700,6 +1686,7 @@ MonoBehaviour:
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 1
   tableType: 1
+  TableImageObject: {fileID: 0}
 --- !u!212 &586601047
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3507,7 +3494,6 @@ GameObject:
   - component: {fileID: 1104488771}
   - component: {fileID: 1104488774}
   - component: {fileID: 1104488770}
-  - component: {fileID: 1104488775}
   m_Layer: 0
   m_Name: Table1
   m_TagString: Display
@@ -3607,21 +3593,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &1104488775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1104488769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63e9b134aa3838b4c9abfda24975e2d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
-  tableID: 3
-  tableType: 0
 --- !u!1 &1184489746
 GameObject:
   m_ObjectHideFlags: 0
@@ -3670,6 +3641,7 @@ MonoBehaviour:
   popupPrefab: {fileID: 6697513248740328913, guid: 834443b0676ef584cb1015f64f53a261, type: 3}
   tableID: 3
   tableType: 0
+  TableImageObject: {fileID: 1104488769}
 --- !u!60 &1184489749
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4596,7 +4568,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1590805682
 RectTransform:
