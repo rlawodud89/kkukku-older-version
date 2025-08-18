@@ -6,11 +6,11 @@ public class QuestBox
     public string questName { get; set; }
 
     [NotNull]
-    public bool complete { get; set; }
+    public bool isCompleted { get; set; } = false;
 
     [NotNull]
-    public int progress { get; set; }
+    public int process { get; set; } = 0;
 
     [NotNull]
-    public bool getreward { get; set; }
+    public bool getReward { get; set; } = false;
 }

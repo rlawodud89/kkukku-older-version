@@ -8,6 +8,7 @@ public class OpenSign : MonoBehaviour
     public Sprite closeSprite;
     private SpriteRenderer spriteRenderer;
 
+
     private GameManager gameManager;
 
     void Start()

@@ -4,6 +4,7 @@ using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 public enum BgType
 {
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, InteriorScript> Tiles = new Dictionary<string, InteriorScript>();
 
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
-    private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
+    private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
     private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
 
 
@@ -206,9 +207,11 @@ public class GameManager : MonoBehaviour
         Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.customerName);
-        Quests = Addressables.LoadAssetsAsync<QuestScript>("quest", null)
+        */
+        Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.questName);
+                .ToDictionary(i => i.questTitle);
+        /*
         Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);
@@ -469,8 +472,8 @@ public class GameManager : MonoBehaviour
         return randomCustomer.Value;
     }
 
-    public QuestScript Get_Quest(string questName) { return Quests[questName]; }
-    public QuestScript Get_Random_Quest()
+    public QuestSO Get_Quest(string questName) { return Quests[questName]; }
+    public QuestSO Get_Random_Quest()
     {
         int randomIdx = UnityEngine.Random.Range(0, Quests.Count);
         var randomQuest = Quests.ElementAt(randomIdx);
@@ -850,7 +853,50 @@ public class GameManager : MonoBehaviour
         OnTableInteriorChanged?.Invoke(tableID);
     }
 
+    public List<QuestSO> Get_Current_Quest()
+    {
+        List<QuestBox> quests = dbManager.Select_All_Quest();
+        List<QuestSO> list = new List<QuestSO>();
 
+        foreach(QuestBox q in quests)
+        {
+            QuestSO quest = Get_Quest(q.questName);
+            quest.questProcess = q.process;
+            quest.isCompleted = q.isCompleted;
+            quest.getReward = q.getReward;
+
+            list.Add(quest);
+        }
+
+        return list;
+    }
+
+    public void Add_Quest(string questName)
+    {
+        dbManager.Insert_Quest(questName);
+    }
+
+    public void Remove_Quest(string questName)
+    {
+        dbManager.Delete_Quest(questName);
+    }
+
+    public void Set_Quest_Process(string questName, int process)
+    {
+        dbManager.Update_Quest_Process(questName, process);
+    }
+
+    public void Set_Quest_IsCompleted(string questName, bool isCompleted)
+    {
+        dbManager.Update_Quest_IsCompleted(questName, isCompleted);
+    }
+
+    public void Set_Quest_GetReward(string questName, bool getReward)
+    {
+        dbManager.Update_Quest_GetReward(questName, getReward);
+    }
+
+    /*
     public (int stamina, ItemScript workItem, int workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);
@@ -859,7 +905,6 @@ public class GameManager : MonoBehaviour
         return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    /*
     public void Change_Worker_Stamina(float x, float y, int delta)
     {
 
@@ -875,11 +920,4 @@ public class GameManager : MonoBehaviour
 
     }
     */
-
-/*
-    public List<QuestSO> Get_Current_Quest()
-    {
-
-    }  */
-
 }

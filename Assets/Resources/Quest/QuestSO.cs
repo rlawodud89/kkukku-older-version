@@ -14,4 +14,7 @@ public class QuestSO : ScriptableObject
     public int questComplete;       // 퀘스트 완료 상태  
     public bool isCompleted;         // 퀘스트 완료 여부
     public bool getReward;         // 퀘스트 보상 수령 여부
+
+    public bool isSpecial;           // 특별 퀘스트 여부
+    public QuestSO nextQuest;        // 이어지는 다음 퀘스트 (있다면)
 }

@@ -46,6 +46,10 @@ public class QuestManager : MonoBehaviour
         //StartQuest(quest);  // 퀘스트 시작
 
         //StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
+
+        //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
+
+        ///아래거는 업데이트에 옮기면 될 듯.
         StartNewDay(); // 새로운 날 시작 시 퀘스트 초기화
     }
 
@@ -62,6 +66,8 @@ public class QuestManager : MonoBehaviour
                 {
                     qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
                     //qb.transform.Find("Alert").gameObject.SetActive(true); 
+                    
+                    //// 데이터베이스에서 퀘스트 삭제 + 만약 연계 퀘스트가 있다면 해당 연계 퀘스트 로드 
 
                     if (!quest.getReward)
                     {
@@ -96,6 +102,7 @@ public class QuestManager : MonoBehaviour
         activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
         questButtons.Clear(); // 기존 퀘스트 버튼 리스트 초기화
         LoadRandomQuests(3); // 새로운 퀘스트 로드
+        ////특별퀘스트 로드
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
     }
 
@@ -107,6 +114,8 @@ public class QuestManager : MonoBehaviour
 
         // 중복 없이 랜덤으로 섞고 일부만 선택
         activeQuests = allQuests.OrderBy(q => Random.value).Take(count).ToList();
+
+        ////allQuests 데베에 저장.
 
         // 결과 확인
         foreach (var quest in activeQuests)
@@ -338,6 +347,12 @@ public class QuestManager : MonoBehaviour
     public void PanelClose()
     {
         questPanel.SetActive(false);
+        ////특퀘의 경우
+        if (_currentQuestNpc != null)
+        {
+            _currentQuestNpc.OnQuestPanelClosed();
+            _currentQuestNpc = null;
+        }
     }
 
     public void PanelOpen()
@@ -376,5 +391,114 @@ public class QuestManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
+    }
+
+    //// 특퀘 ////
+    
+    private AStarMover _currentQuestNpc;
+    
+    
+    public void OpenQuestFromNpc(AStarMover npc, QuestSO quest)
+    {
+        _currentQuestNpc = npc;
+
+        // 필요하면 활성 목록에 추가(중복 방지)
+        if (quest && !activeQuests.Contains(quest))
+        {
+            activeQuests.Add(quest);
+            PlusQuest(activeQuests);   // ★ 특퀘 버튼 생성
+        }
+            
+        // 데베에 추가
+
+        PanelOpen();
+
+        // 버튼 경유 말고 바로 내용 패널 띄우기
+        ShowQuestDetail(quest); // ★ 아래 헬퍼 메서드 추가
+    }
+    // QuestManager.cs (내용 패널 그려주는 헬퍼)
+    private void ShowQuestDetail(QuestSO quest)
+    {
+        if (quest == null) return;
+
+        // 이전 생성물 정리(중복 생성 방지)
+        ClearRewardItems(questContentPanel.transform);
+
+        questContentPanel.SetActive(true);
+        questContentPanel.transform.Find("QuestTitle").GetComponent<TextMeshProUGUI>().text = quest.questTitle;
+        questContentPanel.transform.Find("QuestDetail").GetComponent<TextMeshProUGUI>().text = quest.questDescription;
+
+        var progress = questContentPanel.transform.Find("QuestProgress").GetComponent<TextMeshProUGUI>();
+        if (quest.questComplete > 1)
+        {
+            progress.gameObject.SetActive(true);
+            progress.text = $"{quest.questProcess} / {quest.questComplete}";
+        }
+        else progress.gameObject.SetActive(false);
+
+        // 리워드 아이템 생성(컨테이너 밑으로)
+        int rewardCount = quest.rewards.Length;
+        for (int i = 0; i < rewardCount; i++)
+        {
+            GameObject questReward = Instantiate(questRewardPrefab, questContentPanel.transform);
+            questReward.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = quest.rewards[i].amount.ToString();
+
+            var rewardImage = questReward.transform.Find("RewardImage").GetComponent<Image>();
+            switch (quest.rewards[i].rewardType)
+            {
+                case "재화": rewardImage.sprite = CoinImage; break;
+                case "월석": rewardImage.sprite = MoonRockImage; break;
+                case "포근에너지": rewardImage.sprite = CozyEnergyImage; break;
+                default: rewardImage.sprite = null; break;
+            }
+
+            // 배치
+            var rewardRect = questReward.GetComponent<RectTransform>();
+            float spacing = 150f;
+            float totalWidth = spacing * (rewardCount - 1);
+            float startX = -totalWidth / 2f;
+            float positionX = startX + i * spacing;
+            rewardRect.anchoredPosition = new Vector2(positionX, -195);
+        }
+    }
+
+    private void ClearRewardItems(Transform panel)
+    {
+        // 프리팹 이름 의존 없이 RewardImage/AmountText가 있는 애를 지우는 안전한 방식
+        var buffer = new List<Transform>();
+        foreach (Transform child in panel)
+            if (child.Find("RewardImage") && child.Find("AmountText"))
+                buffer.Add(child);
+        foreach (var t in buffer) Destroy(t.gameObject);
+    }
+    public void PlusQuest(List<QuestSO> quests)
+    {
+        DestroyAllQuestButtons();
+        foreach (QuestSO currentQuest in quests)
+        {
+            // 퀘스트 패널 설정
+            GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
+            questButtons.Add(questButton);
+            questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
+            if (currentQuest.isCompleted)
+                questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
+            else
+            {
+                questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
+            }
+
+            // 버튼 클릭 이벤트
+            questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+            {
+                OnQuestButtonClicked(questButton, currentQuest);
+            });
+        }
+
+    }
+    private void DestroyAllQuestButtons()
+    {
+        foreach (var go in questButtons)
+            if (go) Destroy(go);
+        questButtons.Clear();
     }
 }
