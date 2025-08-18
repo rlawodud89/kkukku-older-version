@@ -18,7 +18,7 @@ public class DraggableObject : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!interiorManager.interiorMode)
+        if (!interiorManager.interiorMode||interiorManager.tileMode)
             return;
 
         dragging = true;

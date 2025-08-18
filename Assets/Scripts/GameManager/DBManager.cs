@@ -407,7 +407,8 @@ public class DBManager
     {
         try
         {
-            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? WHERE isSet = 1 AND x = ? AND y = ?",
+            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? " +
+                "WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
             afterX, afterY, beforeX, beforeY);
 
             return affectedRows > 0;
@@ -423,8 +424,9 @@ public class DBManager
     {
         try
         {
-            Interior interior = conn.Table<Interior>()
-                .Where(i => i.isSet == true && i.x == x && i.y == y)
+            Interior interior = conn.Query<Interior>(
+                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                    x, y)
                 .FirstOrDefault();
 
             if (interior.interiorType == InteriorType.WORKER)
@@ -433,7 +435,7 @@ public class DBManager
             }
 
             int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
-                    x, y);
+                    interior.x, interior.y);
 
             return affectedRows > 0;
         }

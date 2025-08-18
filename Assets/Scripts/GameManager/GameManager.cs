@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     public event Action<bool> OnOpenChanged;
     public event Action<string, int> OnBlanketInvenChanged; // string: 변경된 이불 이름, int: 인벤토리에 추가/삭제된 수량
     public event Action<int, string, int> OnTableBlanketChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
-    public event Action<int> OnTableInteriorChanged;
+    public event Action<int> OnTableInteriorChanged; // 테이블 ID, 변경된 이불 이름, 이불장에 추가/삭제된 수량
 
     // 타일 변경 시 적용되도록 하는 이벤트
     public event Action<TilePosType, InteriorScript> OnTileChanged;
@@ -859,21 +859,27 @@ public class GameManager : MonoBehaviour
         return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    //public void Change_Worker_Stamina(float x, float y, int delta)
-    //{
+    /*
+    public void Change_Worker_Stamina(float x, float y, int delta)
+    {
 
-    //}
+    }
 
-    //public void Set_Worker_workingItem(float x, float y, string workingItemName)
-    //{
+    public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    {
 
-    //}
+    }
 
-    //public void Change_Worker_WorkingPercent(float x, float y, int delta)
-    //{
+    public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    {
 
-    //}
+    }
+    */
 
-    //public
+/*
+    public List<QuestSO> Get_Current_Quest()
+    {
+
+    }  */
 
 }

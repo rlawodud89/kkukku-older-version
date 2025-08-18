@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class InteriorManager : MonoBehaviour
 {
     public bool interiorMode = false;
+    public bool tileMode = false;
 
     public GameObject tileButton;
     public GameObject InteriorInventoryButton;
@@ -18,6 +19,10 @@ public class InteriorManager : MonoBehaviour
     public GameObject roomScrollContent;
     public GameObject shopScrollContent;
     public GameObject tilePanel;
+    public GameObject WallTable1Btn;
+    public GameObject WallTable2Btn;
+    public GameObject Table1Btn;
+    public GameObject Table2Btn;
 
     private ClickInteriorItem clickInteriorItem;
 
@@ -43,6 +48,8 @@ public class InteriorManager : MonoBehaviour
     // 이동 버튼
     private GameObject Home_Button;
     private GameObject RoomBtn;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -206,6 +213,27 @@ public class InteriorManager : MonoBehaviour
         PanelClose();
 
         // TODO: 테이블 외형 바꿀 수 있도록 하기
+        if (item.tableType == TableType.WALL_TABLE)
+        {
+            WallTable1Btn.SetActive(true);
+            WallTable2Btn.SetActive(true);
+
+            TableBtn wall1 = WallTable1Btn.GetComponent<TableBtn>();
+            TableBtn wall2 = WallTable2Btn.GetComponent<TableBtn>();
+            wall1.interiorScript = item;
+            wall2.interiorScript = item;
+        }
+        else if (item.tableType == TableType.FLOOR_TABLE)
+        {
+            Table1Btn.SetActive(true);
+            Table2Btn.SetActive(true);
+
+            TableBtn table1 = Table1Btn.GetComponent<TableBtn>();
+            TableBtn table2 = Table2Btn.GetComponent<TableBtn>();
+            table1.interiorScript = item;
+            table2.interiorScript = item;
+        }
+
     }
 
     public void PanelOpen()
@@ -227,6 +255,11 @@ public class InteriorManager : MonoBehaviour
         {
             if (shopInteriorPanel != null)
             {
+                WallTable1Btn.SetActive(false);
+                WallTable2Btn.SetActive(false);
+                Table1Btn.SetActive(false);
+                Table2Btn.SetActive(false);
+
                 shopInteriorPanel.SetActive(true);
                 SetTableItem();
             }
@@ -256,7 +289,9 @@ public class InteriorManager : MonoBehaviour
         }
     }
 
-    public void TilePanelOpen(){
+    public void TilePanelOpen()
+    {
+        tileMode = true;
         tilePanel.SetActive(true);
 
         // 다른 버튼들 안보이게
@@ -265,7 +300,9 @@ public class InteriorManager : MonoBehaviour
         tileButton.SetActive(false);
     }
 
-    public void TilePanelClose(){
+    public void TilePanelClose()
+    {
+        tileMode = false;
         tilePanel.SetActive(false);
 
         // 다른 버튼들 보이게
@@ -307,8 +344,6 @@ public class InteriorManager : MonoBehaviour
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
 
-        PanelClose();
-
         if (Home_Button != null)
         {
             Home_Button.SetActive(true);
@@ -318,6 +353,7 @@ public class InteriorManager : MonoBehaviour
             RoomBtn.SetActive(true);
         }
 
-        tilePanel.SetActive(false);
+        //PanelClose();
+        //tilePanel.SetActive(false);
     }
 }
