@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1534680711319575645}
   - component: {fileID: 3097301636880736340}
   - component: {fileID: 6625900654845509648}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Employee2
   m_TagString: Employee
   m_Icon: {fileID: 0}
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 722332684519994506}
   - component: {fileID: 5331031050048178894}
   - component: {fileID: 244095579491226848}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: staminarbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 5786366310317156464}
   - component: {fileID: 11981107855324486}
   - component: {fileID: 4008230317201787088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 5390642780819160537}
   - component: {fileID: 2375228245938266807}
   - component: {fileID: 7073297672112311912}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fullcirclebar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 5883057626171649199}
   - component: {fileID: 3924067158940894523}
   - component: {fileID: 3219192825123760063}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: completebar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 5484441762481216910}
   - component: {fileID: 4405207469949733184}
   - component: {fileID: 90102363085211860}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: circlebar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 2245746788115538163}
   - component: {fileID: 742866480368719542}
   - component: {fileID: 719692808918973311}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fullbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

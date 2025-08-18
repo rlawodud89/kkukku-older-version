@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class InteriorManager : MonoBehaviour
 {
     public bool interiorMode = false;
+    public bool tileMode = false;
 
     public GameObject tileButton;
     public GameObject InteriorInventoryButton;
@@ -290,6 +291,7 @@ public class InteriorManager : MonoBehaviour
 
     public void TilePanelOpen()
     {
+        tileMode = true;
         tilePanel.SetActive(true);
 
         // 다른 버튼들 안보이게
@@ -300,6 +302,7 @@ public class InteriorManager : MonoBehaviour
 
     public void TilePanelClose()
     {
+        tileMode = false;
         tilePanel.SetActive(false);
 
         // 다른 버튼들 보이게
@@ -341,8 +344,6 @@ public class InteriorManager : MonoBehaviour
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
 
-        PanelClose();
-
         if (Home_Button != null)
         {
             Home_Button.SetActive(true);
@@ -352,6 +353,7 @@ public class InteriorManager : MonoBehaviour
             RoomBtn.SetActive(true);
         }
 
-        tilePanel.SetActive(false);
+        //PanelClose();
+        //tilePanel.SetActive(false);
     }
 }

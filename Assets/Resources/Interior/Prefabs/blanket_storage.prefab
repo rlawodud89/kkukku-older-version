@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 913802551236691475}
   - component: {fileID: 7502561458787341763}
   - component: {fileID: 6816801287950541937}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: blanket_storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

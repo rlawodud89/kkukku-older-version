@@ -26,4 +26,9 @@ public class Setting : MonoBehaviour
     {
         this.gameObject.SetActive(true);
     }
+
+    public void ClickSaveGame()
+    {
+        // 게임 저장 로직
+    }
 }
