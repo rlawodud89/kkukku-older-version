@@ -66,8 +66,9 @@ public class QuestManager : MonoBehaviour
                 {
                     qb.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
                     //qb.transform.Find("Alert").gameObject.SetActive(true); 
+
+                    //// 데이터베이스에서 퀘스트 삭제 + 만약 연계 퀘스트가 있다면 해당 연계 퀘스트 로드
                     
-                    //// 데이터베이스에서 퀘스트 삭제 + 만약 연계 퀘스트가 있다면 해당 연계 퀘스트 로드 
 
                     if (!quest.getReward)
                     {
@@ -102,8 +103,16 @@ public class QuestManager : MonoBehaviour
         DestroyAllQuestButtons(); // 기존 퀘스트 버튼 리스트 초기화
         activeQuests.Clear(); // 기존 퀘스트 리스트 초기화
         ////데베에서 이전 퀘스트 삭제(일반퀘스트만. 현재 퀘스트 중 특퀘 여부 확인 후 아닌 것만 삭제)
-        LoadRandomQuests(3); // 새로운 퀘스트 로드
+        foreach (var quest in activeQuests)
+        {
+            if (!quest.isSpecial)
+            {
+                gameManager.Remove_Quest(quest.questTitle); // 데베에서 퀘스트 삭제
+                Debug.Log($"퀘스트 삭제: {quest.questTitle}");
+            }
+        }
         ////특별퀘스트 로드
+        LoadRandomQuests(3); // 새로운 퀘스트 로드
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
     }
     //------------------------시계연결
@@ -129,11 +138,27 @@ public class QuestManager : MonoBehaviour
         // 중복 없이 랜덤으로 섞고 일부만 선택
         activeQuests = allQuests.OrderBy(q => Random.value).Take(count).ToList();
 
-        ////allQuests 데베에 저장.
+        // 결과 확인
+        foreach (var quest in activeQuests)
+        {
+            gameManager.Add_Quest(quest.questTitle); // 데베에 퀘스트 저장
+            Debug.Log($"선택된 퀘스트: {quest.questTitle}");
+        }
+
+        startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
+    }
+
+    void LoadDBQuests()
+    {
+        // 모든 퀘스트 불러오기
+        QuestSO[] allQuests = gameManager.Get_Current_Quest();
+
+        activeQuests = allQuests.ToList();
 
         // 결과 확인
         foreach (var quest in activeQuests)
         {
+            gameManager.Add_Quest(quest.questTitle); // 데베에 퀘스트 저장
             Debug.Log($"선택된 퀘스트: {quest.questTitle}");
         }
 
