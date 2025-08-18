@@ -48,9 +48,12 @@ public class QuestManager : MonoBehaviour
         //StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
-
-        ///데베 연결 시 아래거 지우기
-        StartNewDay();
+        LoadDBQuests();
+        StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
+        if (activeQuests.Count == 0)
+        {
+            StartNewDay();
+        }
     }
 
     // Update is called once per frame
@@ -68,7 +71,12 @@ public class QuestManager : MonoBehaviour
                     //qb.transform.Find("Alert").gameObject.SetActive(true); 
 
                     //// 데이터베이스에서 퀘스트 삭제 + 만약 연계 퀘스트가 있다면 해당 연계 퀘스트 로드
-                    
+                    gameManager.Remove_Quest(quest.questTitle); // 데베에서 퀘스트 삭제
+                    Debug.Log($"퀘스트 삭제: {quest.questTitle}");
+                    if(quest.nextQuest != null)
+                    {
+                        AddNextQuest(quest.nextQuest);
+                    }
 
                     if (!quest.getReward)
                     {
@@ -112,6 +120,7 @@ public class QuestManager : MonoBehaviour
             }
         }
         ////특별퀘스트 로드
+        LoadDBQuests();
         LoadRandomQuests(3); // 새로운 퀘스트 로드
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
     }
@@ -147,21 +156,15 @@ public class QuestManager : MonoBehaviour
 
         startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
     }
-
+    
     void LoadDBQuests()
     {
-        // 모든 퀘스트 불러오기
-        QuestSO[] allQuests = gameManager.Get_Current_Quest();
-
-        activeQuests = allQuests.ToList();
-
+        activeQuests = gameManager.Get_Current_Quest();
         // 결과 확인
         foreach (var quest in activeQuests)
         {
-            gameManager.Add_Quest(quest.questTitle); // 데베에 퀘스트 저장
-            Debug.Log($"선택된 퀘스트: {quest.questTitle}");
+            Debug.Log($"데베에서 불러온 퀘스트: {quest.questTitle}");
         }
-
         startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
     }
 
@@ -194,6 +197,36 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    void AddNextQuest(QuestSO currentQuest)
+    {
+        activeQuests.Add(currentQuest);
+        gameManager.Add_Quest(currentQuest.questTitle); // 데베에 퀘스트 저장
+        Debug.Log($"추가된 연계 퀘스트: {currentQuest.questTitle}");
+       
+        startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
+
+        // 퀘스트 초기화
+        currentQuest.getReward = false; // 보상 수령 여부 초기화
+        currentQuest.questProcess = 0; // 퀘스트 진행 상태 초기화
+        currentQuest.isCompleted = false; // 퀘스트 완료 여부 초기화
+
+        // 퀘스트 패널 설정
+        GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
+        questButtons.Add(questButton);
+        questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
+        if (currentQuest.isCompleted)
+            questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
+        else
+        {
+            questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "진행 중";
+        }
+
+        // 버튼 클릭 이벤트
+        questButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+        {
+            OnQuestButtonClicked(questButton, currentQuest);
+        });
+    }
     void OnQuestButtonClicked(GameObject questButton, QuestSO quest)
     {
         // 퀘스트 완료 시
