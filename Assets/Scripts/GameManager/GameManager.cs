@@ -876,9 +876,10 @@ public class GameManager : MonoBehaviour
     }
     */
 
+/*
     public List<QuestSO> Get_Current_Quest()
     {
 
-    }
+    }  */
 
 }

@@ -61,6 +61,11 @@ public class ClickInteriorItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!interiorManager.interiorMode){
+            selected=false;
+            this.transform.position = initialPosition; 
+        }
+
         if (checkButton != null && targetCanvas != null)
             UpdateButtonPosition();
 
@@ -131,6 +136,9 @@ public class ClickInteriorItem : MonoBehaviour
 
     void OnMouseDown()
     {
+        if(interiorManager.tileMode){
+            return;
+        }
         Select();
     }
 
@@ -214,7 +222,6 @@ public class ClickInteriorItem : MonoBehaviour
         }
 
         initialPosition = transform.position;
-
     }
 
     // 보관함에 넣기 버튼 클릭 시
@@ -242,11 +249,12 @@ public class ClickInteriorItem : MonoBehaviour
     // 나가기 버튼 클릭 시 
     public void ClickExitInteriorButton()
     {
+        this.transform.position = initialPosition; // 원래 위치로 되돌리기
         selected = false;
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
         if (putInButton != null) Destroy(putInButton.gameObject);
-        this.transform.position = initialPosition; // 원래 위치로 되돌리기
+        
     }
 
     // 바닥에 닿았는지 검사
