@@ -1,25 +1,28 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeShopController : MonoBehaviour
 {
-    [SerializeField] Button materialUpgradeButton;  // Àç·á »óÁ¡ ¾÷±Û
-    [SerializeField] Button designUpgradeButton;    // µğÀÚÀÎ »óÁ¡ ¾÷±Û
+    [SerializeField] Button materialUpgradeButton;  // ì¬ë£Œ ìƒì  ì—…ê¸€
+    [SerializeField] Button designUpgradeButton;    // ë””ìì¸ ìƒì  ì—…ê¸€
     [SerializeField] PurchaseConfirmPopup popup;
 
-    [Header("·¹º§ ÅØ½ºÆ®µé")]
+    [Header("ë ˆë²¨ í…ìŠ¤íŠ¸ë“¤")]
     [SerializeField] TMP_Text itemshoplevelText;
     [SerializeField] TMP_Text designshoplevelText;
     
 
-    [Header("°¡°İ / »óÅÂ")]
+    [Header("ê°€ê²© / ìƒíƒœ")]
     [SerializeField] int materialUpgradePrice = 5000;
     [SerializeField] int designUpgradePrice = 8000;
+    [SerializeField] int levelLimit = 3;
 
     private GameManager gameManager;
     bool materialUpgraded = false;
     bool designUpgraded = false;
+    public Action<SpeechType> speechType;
 
     void Awake()
     {
@@ -29,18 +32,33 @@ public class UpgradeShopController : MonoBehaviour
 
         itemshoplevelText.text = "Lv. " + gameManager.Get_ItemShopLevel();
         designshoplevelText.text = "Lv. " + gameManager.Get_DesignShopLevel();
+
+        Init_UpgradePrice();
+    }
+
+    private void Init_UpgradePrice()
+    {
+        if (gameManager.Get_ItemShopLevel() == 2) materialUpgradePrice += 3000;
+        if (gameManager.Get_DesignShopLevel() == 2) designUpgradePrice += 3000;
     }
 
     void OnMaterialUpgradeClick()
     {
         if (!CanBuy(materialUpgradePrice))
         {
-            Debug.Log("¿ù¼® ºÎÁ·");
+            Debug.Log("ì›”ì„ ë¶€ì¡±");
+            speechType?.Invoke(SpeechType.Lack);
+            return;
+        }
+
+        if (gameManager.Get_ItemShopLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
             return;
         }
 
         popup.ShowMessage(
-            $"Àç·á »óÁ¡ ¾÷±×·¹ÀÌµå (°¡°İ {materialUpgradePrice} G)\n±¸¸ÅÇÏ½Ã°Ú½À´Ï±î?",
+            $"ì¬ë£Œ ìƒì  ì—…ê·¸ë ˆì´ë“œ (ê°€ê²© {materialUpgradePrice} G)\nêµ¬ë§¤í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             () => DoMaterialUpgrade());
     }
 
@@ -48,12 +66,19 @@ public class UpgradeShopController : MonoBehaviour
     {
         if (!CanBuy(designUpgradePrice))
         {
-            Debug.Log("¿ù¼® ºÎÁ·");
+            Debug.Log("ì›”ì„ ë¶€ì¡±");
+            speechType?.Invoke(SpeechType.Lack);
+            return;
+        }
+
+        if (gameManager.Get_DesignShopLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
             return;
         }
 
         popup.ShowMessage(
-            $"µğÀÚÀÎ »óÁ¡ ¾÷±×·¹ÀÌµå (°¡°İ {designUpgradePrice} G)\n±¸¸ÅÇÏ½Ã°Ú½À´Ï±î?",
+            $"ë””ìì¸ ìƒì  ì—…ê·¸ë ˆì´ë“œ (ê°€ê²© {designUpgradePrice} G)\nêµ¬ë§¤í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             () => DoDesignUpgrade());
     }
 
@@ -62,7 +87,8 @@ public class UpgradeShopController : MonoBehaviour
         gameManager.Change_Moonrock(-materialUpgradePrice);
         gameManager.Change_ItemShopLevel(1);
         itemshoplevelText.text = "Lv. " + gameManager.Get_ItemShopLevel().ToString();
-        Debug.Log("Àç·á »óÁ¡ ¾÷±×·¹ÀÌµå ¿Ï·á!");
+        speechType?.Invoke(SpeechType.Trigger);
+        Init_UpgradePrice();
     }
 
     void DoDesignUpgrade()
@@ -70,7 +96,8 @@ public class UpgradeShopController : MonoBehaviour
         gameManager.Change_Moonrock(-designUpgradePrice);
         gameManager.Change_DesignShopLevel(1);
         designshoplevelText.text = "Lv. " + gameManager.Get_DesignShopLevel().ToString();
-        Debug.Log("µğÀÚÀÎ »óÁ¡ ¾÷±×·¹ÀÌµå ¿Ï·á!");
+        speechType?.Invoke(SpeechType.Trigger);
+        Init_UpgradePrice();
     }
 
     private bool CanBuy(int value)

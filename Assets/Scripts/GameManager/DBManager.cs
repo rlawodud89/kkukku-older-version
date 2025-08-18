@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
-using Unity.VisualScripting;
 
 
 public class DBManager
@@ -353,10 +352,7 @@ public class DBManager
         try
         {
             WorkRoom newWorkRoom = new WorkRoom();
-            newWorkRoom.workerName = workerName;
             conn.Insert(newWorkRoom);
-
-            Debug.Log("ID" + newWorkRoom.workerID);
 
             int affectedRows = conn.Execute("UPDATE Interior SET ID = ? " +
                 "WHERE interiorName = ? AND isSet = 1 AND x = ? AND y = ?",
@@ -410,7 +406,8 @@ public class DBManager
     {
         try
         {
-            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? WHERE isSet = 1 AND x = ? AND y = ?",
+            int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? " +
+                "WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
             afterX, afterY, beforeX, beforeY);
 
             return affectedRows > 0;
@@ -426,8 +423,9 @@ public class DBManager
     {
         try
         {
-            Interior interior = conn.Table<Interior>()
-                .Where(i => i.isSet == true && i.x == x && i.y == y)
+            Interior interior = conn.Query<Interior>(
+                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                    x, y)
                 .FirstOrDefault();
 
             if (interior.interiorType == InteriorType.WORKER)
@@ -436,7 +434,7 @@ public class DBManager
             }
 
             int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
-                    x, y);
+                    interior.x, interior.y);
 
             return affectedRows > 0;
         }
@@ -466,13 +464,84 @@ public class DBManager
         conn.Update(tile);
     }
 
-    //public List<Interior> Select_WallTile_Inventory()
-    //{
+    public List<Interior> Select_FloorTile_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.FLOOR_TILE)
+            .ToList();
+    }
 
-    //}
+    public List<Interior> Select_WallTile_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.WALL_TILE)
+            .ToList();
+    }
 
-    //public List<Interior> Select_FloorTile_Inventory()
-    //{
+    public void Update_ShopTableInterior(int tableID, string interiorName)
+    {
+        WorkShop table = conn.Find<WorkShop>(tableID);
+        table.tableName = interiorName;
+        conn.Update(table);
+    }
 
-    //}
+    public List<Interior> Select_ShopInterior_Inventory()
+    {
+        return conn.Table<Interior>()
+            .Where(i => i.interiorType == InteriorType.SHOP_INTERIOR)
+            .ToList();
+    }
+
+    public List<QuestBox> Select_All_Quest()
+    {
+        return conn.Table<QuestBox>()
+            .ToList();
+    }
+
+    public void Insert_Quest(string questName)
+    {
+        QuestBox quest = new QuestBox();
+        quest.questName = questName;
+        conn.Insert(quest);
+    }
+
+    public void Delete_Quest(string questName)
+    {
+        conn.Delete<QuestBox>(questName);
+    }
+
+    public void Update_Quest_Process(string questName, int process)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.process = process;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_IsCompleted(string questName, bool isCompleted)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.isCompleted = isCompleted;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_GetReward(string questName, bool getReward)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.getReward = getReward;
+        conn.Update(quest);
+    }
+
+    public int Select_Worker_ID(float x, float y)
+    {
+        Interior worker = conn.Table<Interior>()
+            .Where(i => i.isSet == true && i.x == x && i.y == y)
+            .FirstOrDefault();
+
+        return worker.ID;
+    }
+
+    public WorkRoom Select_Worker_Info(int workerID)
+    {
+        return conn.Find<WorkRoom>(workerID);
+    }
 }

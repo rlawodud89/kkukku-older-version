@@ -36,7 +36,7 @@ MonoBehaviour:
     - blanket
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7efab96d5c01c24bb7fa859cc9f8b52
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uBCF4\uAD00\uD568.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC774\uBD88\uBCF4\uAD00\uD568.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
@@ -71,12 +71,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - shop_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f393124d187400146ad3df07c752dcc1
-    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/\uD1A0\uB07C\uACC4\uC0B0\uC6D0.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - shop_interior
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 518c23d56845b8b41b3092ad97d7251b
     m_Address: "Assets/ScriptableObject/Items/Materials/\uAFC8\uC2E4.asset"
     m_ReadOnly: 0
@@ -102,13 +96,13 @@ MonoBehaviour:
     - snack
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12bb241a8fa1b0a4ebdac7ec029f4c01
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uC120\uBC18.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC7AC\uB8CC\uBCF4\uAD00\uD568.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a93cd87b940b20f4dac8fa42edd63927
-    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uC758\uC790.asset"
+  - m_GUID: d62cd9e7e37e512489c090ae955b4c7b
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC544\uC774\uBCF4\uB9AC\uC18C\uD30C.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - room_interior
@@ -155,8 +149,134 @@ MonoBehaviour:
     m_SerializedLabels:
     - cotton
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f84fda0c94aa7b429801e39435851ea
-    m_Address: Assets/ScriptableObject/Items/Cottons/NewItem.asset
+  - m_GUID: 5033993f7b94c294f95f846a1ced76e9
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uB9AC\uBCF8\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfa12169db0a8d84184d01045d3d180c
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uB9AC\uBCF8\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8412f2ec8bbd974bba7cfb4820c7d7c
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uB9AC\uBCF8\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d960f532dd4e16459fe08e3c7b1ebea
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uC6B0\uC8FC\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d3e10f3f4f4bbe4b8487250382fc3dd
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uBABD\uC2E4\uBC84\uBE14\uC9C4\uC8FC.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99c658607d6c00f42aa9bfdc16f54fa7
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uAFC8\uC2E4\uD06C\uC5D0\uBC8C\uB808.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9f0da4c8fa7f3c44aa7c8ffb8651a61
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC0C8\uBCBD\uC218\uC815\uAD6C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 684a456b46674ca4b8c2db04c193d910
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uB2EC\uBE5B\uC218\uC815.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b244843809bce95449b6b8481b222e8d
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC624\uB85C\uB77C\uBE5B\uBE44\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10986f2225bc96444adcf68d3935649f
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC740\uD558\uC218\uACB0\uC815.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 960bf55d4674ac04c8d487a41439d08e
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uB808\uC774\uC2A4\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6db61dcb5d3dd064b9b38582950ceb66
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uBABD\uD658\uAF43\uC78E\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 365593b8f53a58942880316161d59fac
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uC624\uB85C\uB77C\uBE5B\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bc54dd904c4af647aff82a694b2f431
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uC624\uB85C\uB77C\uBE5B\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d3d8d5b9b9e98c43b1212da36d43653
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uBABD\uD658\uAF43\uC78E\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73567a2d6631c0849a281e856326072a
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uBABD\uD658\uAF43\uC78E\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f64bcfbf56e52e348ad45de1b0ff1c5d
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uC624\uB85C\uB77C\uBE5B\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acb9b5eee86033947ba0f5f96a48df36
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uB808\uC774\uC2A4\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 318650837494b724fa1b815959dbc366
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uB808\uC774\uC2A4\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53203149cd4e37541921f200b5c389a5
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uBABD\uC2E4\uC9C4\uC8FC\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec342cc6f52e96b4eb46d664b25ab12c
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uBABD\uC2E4\uC9C4\uC8FC\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 931747a140468da469fb9e1ec71bc904
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uBABD\uC2E4\uC9C4\uC8FC\uC6D0\uB2E8.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - yarn
@@ -196,6 +316,120 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc9ef41eddf000c4a8e36288d89504c2
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uAF43\uBCD1\uD14C\uC774\uBE14.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 095d1a5d90849b945850294cba9d3eb2
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/\uC9D9\uC740\uB098\uBB34\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb3a65e1a9a0f434190f87bad7ba044c
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uC0B0\uC138\uBCA0\uB9AC\uC544\uD654\uBD84.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7565994bb9998e6488a1a6cfcd88da59
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uAF43\uBB34\uB2AC\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a9d13c393e6d554f81026b6459e6e1a
+    m_Address: Assets/ScriptableObject/Items/Blankets/NewItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8af72dcda6f93e244adfd4159c9f9612
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uBB34\uC9C0\uAC1C\uC6B4\uBB34\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c835ae0a26344204e8ec72c1da5a9790
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uBCC4\uBE5B\uAFC8\uC2E4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e890e7fb0e22f5b428d3539a5d365360
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC740\uBE5B\uB2EC\uC870\uAC01.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33c9d70c893c75c4abecac992fb44c62
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uC740\uD558\uAFC8\uC2E4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68af3c4b57a16db4a814310b5ff98fb6
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uCC3D\uACF5\uB2EC\uC870\uAC01.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64c10bcb4472afe46990b517a15d1344
+    m_Address: "Assets/ScriptableObject/Items/Materials/\uCC9C\uACF5\uC6B4\uBB34\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - material
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2980db3e743c61d428379017de8d4cf6
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uB098\uBB34\uC758\uC790.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 332af8eb5e8790842a91b77ccce5fddf
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uAC04\uC2DD\uBC15\uC2A4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d3449d73605036469aa630327d8f031
+    m_Address: Quest/Quest 0
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1198ba20ff406e64c80e79a3d33f8a1c
+    m_Address: Assets/ScriptableObject/Quests/Quest 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d19ac745a8f76a41a8e73712d4f754a
+    m_Address: Assets/ScriptableObject/Quests/Quest 2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d49498dd4eb09ab4a97004492d16e41b
+    m_Address: Assets/ScriptableObject/Quests/Quest_3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d191b8fffcaa040479dc8dba8d809e54
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 0.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f57eb0dad2b03234b9222940b6fb2277
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 1.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

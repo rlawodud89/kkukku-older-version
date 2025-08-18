@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,19 +11,30 @@ public class CottonPanel : MonoBehaviour
     public StoragePanel storagePanel;
     public GameObject BallonPanel;
 
-    public BlanketData currentBlanket;
+    public ItemScript currentCotton;
 
-    private void Start()
+    private GameManager gameManager;
+    void Start()
     {
+
+        gameManager = GameManager.getInstance();
         if (storagePanel == null)
         {
             storagePanel = FindObjectOfType<StoragePanel>();
         }
+
+        RefreshInventoryUI();
     }
 
-    public void SetSelectedBlanket(BlanketData blanket)
+    public void SetSelectedBlanket(ItemScript blanket)
     {
-        currentBlanket = blanket;
+
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
+
+        currentCotton = gameManager.Blanket_to_Yarn(blanket.itemName); // Ïù¥Î∂à -> ÏõêÎã®
 
         if (!storagePanel.isInit)
         {
@@ -35,49 +47,47 @@ public class CottonPanel : MonoBehaviour
             scrollContent = storagePanel.ScrollContent;
         }
 
-        RefreshSelectedBlanketUI();
+        RefreshInventoryUI();
     }
 
-    void RefreshSelectedBlanketUI()
+    // UI ÏÉàÎ°úÍ≥†Ïπ®: Îã¥Ïöî Ïù∏Î≤§ÌÜ†Î¶¨ Îç∞Ïù¥ÌÑ∞ Î∂àÎü¨ÏôÄ Ïä¨Î°ØÏóê ÏÑ∏ÌåÖ
+    public void RefreshInventoryUI()
     {
-        bool foundSlot = false;
+        if (gameManager == null)
+            gameManager = GameManager.getInstance();
 
-        // 1. ∞∞¿∫ µ•¿Ã≈Õ ∞°¡¯ ΩΩ∑‘ √£±‚
+        List<(ItemScript item, int count)> YarnInventory = gameManager.Get_Yarn_Inventory();
+        //    public List<(ItemScript, int count)> Get_Cotton_Inventory()
+
+        if (!storagePanel.isInit)
+        {
+            storagePanel.InitScroll();
+            storagePanel.isInit = true;
+        }
+
+        if (scrollContent == null)
+        {
+            scrollContent = storagePanel.ScrollContent;
+        }
+
         for (int i = 0; i < scrollContent.childCount; i++)
         {
             var slot = scrollContent.GetChild(i);
             var ui = slot.GetComponent<BlanketSlotUI>();
 
-            // Cotton ΩΩ∑‘∏∏ ªÁøÎ
-            if (ui != null && ui.slotType == SlotType.Cotton && ui.HasData(currentBlanket))
+            if (ui != null)
             {
-                ui.SetData(currentBlanket);
-                foundSlot = true;
-                break;
-            }
-        }
-
-        // 2. ∫Û Cotton ΩΩ∑‘ √£æ∆º≠ ºº∆√
-        if (!foundSlot)
-        {
-            for (int i = 0; i < scrollContent.childCount; i++)
-            {
-                var slot = scrollContent.GetChild(i);
-                var ui = slot.GetComponent<BlanketSlotUI>();
-
-                if (ui != null && ui.slotType == SlotType.Cotton && !ui.HasAnyData())
+                if (i < YarnInventory.Count)
                 {
-                    ui.SetData(currentBlanket);
-                    foundSlot = true;
-                    break;
+                    var data = YarnInventory[i];
+                    ui.SetData(data.item, data.count);  // ÏÉà Î©îÏÑúÎìú Ìò∏Ï∂ú
+                }
+                else
+                {
+                    ui.ClearSlot();
                 }
             }
-        }
 
-        // 3. ΩΩ∑‘ æ¯¿ª ∂ß∏∏ ∞Ê∞Ì
-        if (!foundSlot)
-        {
-            Debug.LogWarning("∫Û Cotton ΩΩ∑‘¿Ã æ¯Ω¿¥œ¥Ÿ! ¥ı ¿ÃªÛ √ﬂ∞°«“ ºˆ æ¯Ω¿¥œ¥Ÿ.");
         }
     }
 }

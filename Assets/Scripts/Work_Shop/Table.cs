@@ -9,6 +9,8 @@ public class Table : MonoBehaviour
     public GameObject popupPrefab;
     private GameObject currentPopup;
     public int tableID;
+    public TableType tableType;
+    public GameObject TableImageObject;
 
     private GameManager gameManager;
     private InteriorScript tableScript;
@@ -19,14 +21,13 @@ public class Table : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.getInstance();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (tableType == TableType.FLOOR_TABLE) spriteRenderer = TableImageObject.GetComponent<SpriteRenderer>();
+        else spriteRenderer = GetComponent<SpriteRenderer>();
+
         hasSelfCollider = (GetComponent<Collider2D>() != null) || (GetComponent<Collider>() != null);
 
-        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
-        tableScript = current_table_data.table;
-
-        if (spriteRenderer && tableScript != null) // 렌더러 있을때만 변경
-            Change_Table_image(current_table_data.isFull);
+        gameManager.OnTableInteriorChanged += TableInteriorChanged;
+        TableInteriorChanged(tableID);
     }
 
     void OnMouseDown()
@@ -73,16 +74,19 @@ public class Table : MonoBehaviour
     // 실제 UI 위에 있는지 확인하는 정밀 메서드
     private bool IsPointerOverUI()
     {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
 
         List<RaycastResult> results = new List<RaycastResult>();
-        GraphicRaycaster gr = FindObjectOfType<GraphicRaycaster>();
 
-        if (gr != null)
+        // 모든 GraphicRaycaster를 검사
+        foreach (var gr in FindObjectsOfType<GraphicRaycaster>())
         {
             gr.Raycast(eventData, results);
-            return results.Count > 0;
+            if (results.Count > 0) // 하나라도 걸리면
+                return true;
         }
 
         return false;
@@ -92,5 +96,16 @@ public class Table : MonoBehaviour
     {
         if (isFull) spriteRenderer.sprite = tableScript.fullImage;
         else spriteRenderer.sprite = tableScript.image;
+    }
+
+    private void TableInteriorChanged(int tableID)
+    {
+        if (tableID != this.tableID) return;
+
+        (InteriorScript table, bool isFull) current_table_data = gameManager.Get_Current_Table(tableID);
+        tableScript = current_table_data.table;
+
+        if (spriteRenderer && tableScript != null) // 렌더러 있을때만 변경
+            Change_Table_image(current_table_data.isFull);
     }
 }

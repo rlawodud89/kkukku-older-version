@@ -10,9 +10,12 @@ public class BlanketButtonPanel : MonoBehaviour
     public FabricDetailPanelController detailPanel;
     public StoragePanel storagePanel;
     public Make_Fabric makeFabric; 
+    
+    private GameManager gameManager;
+
     void Start()
     {
-
+        gameManager = GameManager.getInstance();
 
         if (storagePanel == null)
         {
@@ -29,7 +32,7 @@ public class BlanketButtonPanel : MonoBehaviour
 
     void InitScroll()
     {
-        List<BlanketData> blanketList = BlanketManager.Instance.GetBlanketList();
+        List<ItemScript> blanketList = BlanketManager.Instance.blanketList;
 
         if (blanketList == null)
         {
@@ -43,39 +46,38 @@ public class BlanketButtonPanel : MonoBehaviour
         {
             if (i >= childCount)
             {
-                Debug.LogWarning($"½½·Ô ºÎÁ·: ÇÊ¿äÇÑ {blanketList.Count}, Á¸ÀçÇÏ´Â {childCount}");
+                Debug.LogWarning($"ìŠ¬ë¡¯ ë¶€ì¡±: í•„ìš”í•œ {blanketList.Count}, ì¡´ì¬í•˜ëŠ” {childCount}");
                 break;
             }
 
             int index = i;
-            BlanketData data = blanketList[index];
+            ItemScript data = blanketList[index];
 
             Transform slot = storagePanel.ScrollContent.GetChild(index);
 
             Button btn = slot.GetComponentInChildren<Button>();
             Image btnImage = btn?.GetComponent<Image>();
 
-            if (btnImage == null) Debug.LogError($"½½·Ô[{index}]¿¡ ÀÌ¹ÌÁö°¡ ¾ø½À´Ï´Ù.");
+            if (btnImage == null) Debug.LogError($"ìŠ¬ë¡¯[{index}]ì— ì´ë¯¸ì§€ê°€ ì—†ìŠµë‹ˆë‹¤.");
             if (data == null) Debug.LogError($"blanketList[{index}] is null");
 
             if (btnImage != null)
-                btnImage.sprite = data.BlanketSprite;
+                btnImage.sprite = data.image;
 
             if (btn != null)
             {
                 btn.onClick.RemoveAllListeners();
                 int capturedIndex = index;
-                BlanketData capturedData = data;
+                ItemScript capturedData = data;
 
                 btn.onClick.AddListener(() =>
                 {
-                    Debug.Log($"ÀÌºÒ {capturedIndex + 1} Å¬¸¯µÊ");
                     detailPanel.OpenPanel(capturedData);
 
                     if (makeFabric != null)
                     {
                         makeFabric.currentBlanket = capturedData;
-                        Debug.Log($"makeFabric.currentBlanket ¼³Á¤µÊ: {capturedData.name}");
+                        Debug.Log($"makeFabric.currentBlanket ì„¤ì •ë¨: {capturedData.name}");
                     }
                 });
 

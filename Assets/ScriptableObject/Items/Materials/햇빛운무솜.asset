@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
+  m_Name: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
+  m_EditorClassIdentifier: 
+  itemName: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
+  image: {fileID: 21300000, guid: c490caae0c8e85f40a73a9805550d702, type: 3}
+  itemType: 3
+  level: 2
+  value: 300
+  recipe: []
+  designValue: 0
+  yarnName: 
+  cottonName: 
+  fullImage: {fileID: 0}

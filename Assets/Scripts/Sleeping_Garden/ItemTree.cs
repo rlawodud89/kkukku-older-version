@@ -25,14 +25,18 @@ public class ItemTree : MonoBehaviour
         random = Random.Range(0, 2);
         item2.gameObject.SetActive(random == 1);
 
-        if (item1.gameObject.activeSelf || item2.gameObject.activeSelf)
+        if (item1.gameObject.activeSelf)
         {
             itemScript1 = gameManager.Get_Random_Snack();
-            itemScript2 = gameManager.Get_Random_Snack();
-
             item1.GetComponent<Image>().sprite = itemScript1.image;
+        }
+
+        if (item2.gameObject.activeSelf)
+        {
+            itemScript2 = gameManager.Get_Random_Snack();
             item2.GetComponent<Image>().sprite = itemScript2.image;
         }
+
 
         count1 = 0;
         count2 = 0;
@@ -46,6 +50,7 @@ public class ItemTree : MonoBehaviour
             count1 = 0;
             item1.gameObject.SetActive(false);
             gameManager.Add_InventoryItem(itemScript1.itemName, 1);
+            Debug.Log(itemScript1.itemName + "채집");
         }
     }
 
@@ -57,6 +62,7 @@ public class ItemTree : MonoBehaviour
             count2 = 0;
             item2.gameObject.SetActive(false);
             gameManager.Add_InventoryItem(itemScript2.itemName, 1);
+            Debug.Log(itemScript2.itemName + "채집");
         }
     }
 }

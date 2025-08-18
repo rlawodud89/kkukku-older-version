@@ -14,15 +14,16 @@ public class Employee : MonoBehaviour
 
     public string EmployeeName;
 
-    public void GiveItem(SnacksData item)
+    public void GiveItem(ItemScript item)
     {
         snacksInventory.GiveSnackToEmployee(item);
-        Debug.Log("GiveSnackToEmployee È£ÃâµÊ");
+        Debug.Log("GiveSnackToEmployee í˜¸ì¶œë¨");
 
-        Debug.Log("¸ÔÀÌÁÜ");
+
+        Debug.Log("ë¨¹ì´ì¤Œ");
         
-        staminar.Addstamina(item.extrastamina);
-        ShowFloatingText("+" + item.extrastamina);
+        staminar.Addstamina(item.value);
+        ShowFloatingText("+" + item.value);
         
         //ShowReaction(item.reactionMessage);
     }
@@ -31,7 +32,7 @@ public class Employee : MonoBehaviour
     {
         staminar.Addstamina(-5);
 
-        ShowFloatingText("¿­½ÉÈ÷ ¸¸µé¾îº¼°Ô!");
+        ShowFloatingText("ì—´ì‹¬íˆ ë§Œë“¤ì–´ë³¼ê²Œ!");
     }
 
     public void ShowFloatingText(string text)
@@ -39,12 +40,12 @@ public class Employee : MonoBehaviour
 
         floatingText.text = text;
         floatingText.gameObject.SetActive(true);
-        // °£´ÜÇÑ fade out ¾Ö´Ï¸ŞÀÌ¼Ç Ãß°¡ °¡´É
+        // ê°„ë‹¨í•œ fade out ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€ ê°€ëŠ¥
         ballonPanel.SetActive(true);
         Invoke(nameof(HideFloatingText), 1.5f);
     }
 
-    public void ShowFloatingFabric(BlanketData blanket)
+    public void ShowFloatingFabric(ItemScript blanket)
     {
 
     }

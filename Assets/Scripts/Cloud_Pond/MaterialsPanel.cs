@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class MaterialsPanel : MonoBehaviour
 {
     [Header("Material Data")]
-    public MaterialData[] itemDatas;           // °£½Ä µ¥ÀÌÅÍ (¿ÜºÎ¿¡¼­ ÁÖÀÔ)
+    public ItemScript[] itemDatas;           // ê°„ì‹ ë°ì´í„° (ì™¸ë¶€ì—ì„œ ì£¼ì…)
 
     [Header("Slot References")]
-    public Transform scrollContent;          // StoragePanelÀÌ ¸¸µç ½½·Ôµé
-                                             // (20°³ °íÁ¤ ½½·ÔÀÌ ¹Ì¸® Á¸ÀçÇØ¾ß ÇÔ)
+    public Transform scrollContent;          // StoragePanelì´ ë§Œë“  ìŠ¬ë¡¯ë“¤
+                                             // (20ê°œ ê³ ì • ìŠ¬ë¡¯ì´ ë¯¸ë¦¬ ì¡´ì¬í•´ì•¼ í•¨)
     public MaterialsPanel materialsPanel;
     public MaterialsInventory materialsInventory;
 
@@ -20,16 +20,14 @@ public class MaterialsPanel : MonoBehaviour
         if (materialsInventory == null)
         {
             materialsInventory = FindObjectOfType<MaterialsInventory>();
-
-            Debug.Log("SnacksInventory Ã£À½: " + (materialsInventory != null));
         }
 
-        // ÀÌº¥Æ® ¸®½º³Ê µî·Ï
+        // ì´ë²¤íŠ¸ ë¦¬ìŠ¤ë„ˆ ë“±ë¡
         materialsInventory.OnInventoryChanged.AddListener(RefreshUI);
 
         storagePanel.InitScroll();
 
-        // itemDatas ¼³Á¤
+        // itemDatas ì„¤ì •
         itemDatas = materialsInventory.ownedMaterials
             .Where(e => e != null && e.data != null)
             .Select(e => e.data)
@@ -41,7 +39,7 @@ public class MaterialsPanel : MonoBehaviour
     
     void RefreshUI()
     {
-        // ÃÖ½Å µ¥ÀÌÅÍ ¹İ¿µ
+        // ìµœì‹  ë°ì´í„° ë°˜ì˜
         itemDatas = materialsInventory.ownedMaterials
             .Where(e => e != null && e.data != null && e.count > 0)
             .Select(e => e.data)
@@ -60,7 +58,7 @@ public class MaterialsPanel : MonoBehaviour
         for (int i = 0; i < slotCount; i++)
         {
             Transform slot = scrollContent.GetChild(i);
-            MaterialUISlot ui = slot.GetComponent<MaterialUISlot>();
+            fishingUISlot ui = slot.GetComponent<fishingUISlot>();
 
             if (i < itemDatas.Length && itemDatas[i] != null)
             {
@@ -73,13 +71,13 @@ public class MaterialsPanel : MonoBehaviour
                 }
                 else
                 {
-                    // count 0 ÀÌ¸é ½½·Ô ºñ¿ì±â
+                    // count 0 ì´ë©´ ìŠ¬ë¡¯ ë¹„ìš°ê¸°
                     ui.ClearSlot();
                 }
             }
             else
             {
-                // ½½·Ô ÀÎµ¦½º ÃÊ°úÇÏ°Å³ª µ¥ÀÌÅÍ ¾øÀ¸¸é ºñ¿ì±â
+                // ìŠ¬ë¡¯ ì¸ë±ìŠ¤ ì´ˆê³¼í•˜ê±°ë‚˜ ë°ì´í„° ì—†ìœ¼ë©´ ë¹„ìš°ê¸°
                 ui.ClearSlot(); 
             }
         }

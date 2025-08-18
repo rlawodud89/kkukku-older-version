@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SnacksManager : MonoBehaviour
 {
-    public List<SnacksData> SnacksList;
+    public List<ItemScript> SnacksList;
 
     public static SnacksManager Instance { get; private set; }
 
@@ -13,7 +13,7 @@ public class SnacksManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // ¾À ÀüÈ¯ ½Ã ÆÄ±«µÇÁö ¾ÊÀ½
+            DontDestroyOnLoad(gameObject); // ì”¬ ì „í™˜ ì‹œ íŒŒê´´ë˜ì§€ ì•ŠìŒ
         }
         else
         {
@@ -22,7 +22,7 @@ public class SnacksManager : MonoBehaviour
     }
 
 
-    public List<SnacksData> GetSnacksList()
+    public List<ItemScript> GetSnacksList()
     {
         return SnacksList;
     }

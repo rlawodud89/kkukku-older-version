@@ -3,29 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class InteriorManager : MonoBehaviour
 {
     public bool interiorMode = false;
 
+    public GameObject tileButton;
     public GameObject InteriorInventoryButton;
     public GameObject InteriorExitButton;
-    public GameObject interiorPanel;
+    public GameObject roomInteriorPanel;
+    public GameObject shopInteriorPanel;
     public GameObject ItemButtonPrefab;
-    public GameObject scrollContent;
+    public GameObject roomScrollContent;
+    public GameObject shopScrollContent;
+    public GameObject tilePanel;
+    public GameObject WallTable1Btn;
+    public GameObject WallTable2Btn;
+    public GameObject Table1Btn;
+    public GameObject Table2Btn;
 
     private ClickInteriorItem clickInteriorItem;
 
     // 게임 메니저
     private GameManager gameManager;
 
-    // 갖고 있는 인테리어 아이템 목록
-    private List<(InteriorScript item, int count)> interiorItems = new List<(InteriorScript, int)>();
+    // 현재 활성화된 씬
+    string currentSceneName;
 
-    public InteriorScript item;
+    // 갖고 있는 인테리어 아이템 목록
+    [HideInInspector] public List<(InteriorScript item, int count)> RoomInteriorItems = new List<(InteriorScript, int)>();
+    [HideInInspector] public List<InteriorScript> ShopInteriorItems = new List<InteriorScript>();
+
+    // 테스트용
+    public InteriorScript furnitureItem;
+    public InteriorScript workerItem;
+    public InteriorScript tileItem;
+
 
     private Transform itemParent;
-    private Vector3 spawnPos=new Vector3(-1.8f,0.8f,20f);
+    private Vector3 spawnPos = new Vector3(-1.8f, 0.8f, 20f);
+
+    // 이동 버튼
+    private GameObject Home_Button;
+    private GameObject RoomBtn;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +56,27 @@ public class InteriorManager : MonoBehaviour
         clickInteriorItem = FindObjectOfType<ClickInteriorItem>();
         gameManager = GameManager.getInstance();
 
-        //interiorItems = gameManager.Get_RoomInterior_Inventory();
+        // 테스트로 인벤토리에 아이템 직접 추가 
+        /*
+        bool isAdded=gameManager.Add_InteriorItem("나무보관함",1);
+
+        if(isAdded)
+        {
+            Debug.Log("Interior item added successfully.");
+        }
+        else
+        {
+            Debug.LogWarning("Failed to add interior item.");
+        }  */
+
+        // 인벤토리 아이템 가져오기 
+        RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
+        ShopInteriorItems = gameManager.Get_ShopInterior_Inventory();
+
         // 테스트
-        interiorItems.Add((item, 1));
+        //interiorItems.Add((furnitureItem, 1));
+        //interiorItems.Add((workerItem, 1));
+        //interiorItems.Add((tileItem, 1));
 
         itemParent = GameObject.Find("Pixels")?.transform;
     }
@@ -43,20 +84,16 @@ public class InteriorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     public void CategorySelect(string category)
-    {   
+    {
         switch (category)
         {
             case "가구":
                 //Debug.Log("가구 category selected.");
                 SetFurnitureItem();
-                break;
-            case "타일":
-                //Debug.Log("타일 category selected.");
-                SetTileItem();
                 break;
             case "직원":
                 //Debug.Log("직원 category selected.");
@@ -67,85 +104,254 @@ public class InteriorManager : MonoBehaviour
 
     public void SetFurnitureItem()
     {
-        Clear(); 
-        
+        ClearRoomInterior();
+
         //GameObject ItemButton4 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        foreach (var (item, count) in interiorItems){
-            if(item.interiorType==InteriorType.ROOM_INTERIROR){
-                GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
+        foreach (var (item, count) in RoomInteriorItems)
+        {
+            if (item.interiorType == InteriorType.ROOM_INTERIROR)
+            {
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
                 // ItemButton에 item 정보 설정
 
                 ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickInteriorItem(item));
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
             }
         }
     }
 
-    public void SetTileItem()
-    {
-        Clear(); 
-        GameObject ItemButton = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        GameObject ItemButton2 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-        GameObject ItemButton3 = Instantiate(ItemButtonPrefab, scrollContent.transform);
-    }
-
     public void SetEmployeeItem()
     {
-        Clear(); 
+        ClearRoomInterior();
+
+        foreach (var (item, count) in RoomInteriorItems)
+        {
+            if (item.interiorType == InteriorType.WORKER)
+            {
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, roomScrollContent.transform);
+                // ItemButton에 item 정보 설정
+
+                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
+                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
+                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
+
+                // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
+            }
+        }
     }
 
-    public void Clear(){
-        foreach (Transform child in scrollContent.transform)
+    public void SetTableItem()
+    {
+        ClearShopInterior();
+
+        foreach (var item in ShopInteriorItems)
+        {
+            if (item.interiorType == InteriorType.SHOP_INTERIOR)
+            {
+                GameObject ItemButton = Instantiate(ItemButtonPrefab, shopScrollContent.transform);
+                // ItemButton에 item 정보 설정
+
+                ItemButton.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = item.interiorName;  // 이름 설정
+                ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
+                ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "";
+
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickTableItem(item));
+            }
+        }
+    }
+
+    public void ClearRoomInterior()
+    {
+        foreach (Transform child in roomScrollContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void ClearShopInterior()
+    {
+        foreach (Transform child in shopScrollContent.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
     // 가구 클릭 시 
-    public void ClickInteriorItem(InteriorScript item)
+    public void ClickRoomInteriorItem(InteriorScript item)
     {
-       PanelClose();
-       // 작업실위에 생성
-       GameObject itemObject=Instantiate(item.prefab,spawnPos, item.prefab.transform.rotation, itemParent);
+        PanelClose();
+
+        // 작업실위에 생성
+        GameObject itemObject = Instantiate(item.prefab, spawnPos, item.prefab.transform.rotation, itemParent);
         var click = itemObject.GetComponent<ClickInteriorItem>();
-       click.Select();
+        click.Select();
+        click.initialPosition = spawnPos;
+
+        // 인벤토리 -> 작업실로
+        bool isUsed = gameManager.Use_RoomInteriorItem(item.name, spawnPos.x, spawnPos.y);
+
+        if (isUsed)
+        {
+            Debug.Log($"Used Interior Item: {item.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"Failed to use Interior Item: {item.name}");
+        }
+
+        // 인벤토리 아이템 다시 얻어오기 
+        RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
+
+    }
+
+    public void ClickTableItem(InteriorScript item)
+    {
+        PanelClose();
+
+        // TODO: 테이블 외형 바꿀 수 있도록 하기
+        if (item.tableType == TableType.WALL_TABLE)
+        {
+            WallTable1Btn.SetActive(true);
+            WallTable2Btn.SetActive(true);
+
+            TableBtn wall1 = WallTable1Btn.GetComponent<TableBtn>();
+            TableBtn wall2 = WallTable2Btn.GetComponent<TableBtn>();
+            wall1.interiorScript = item;
+            wall2.interiorScript = item;
+        }
+        else if (item.tableType == TableType.FLOOR_TABLE)
+        {
+            Table1Btn.SetActive(true);
+            Table2Btn.SetActive(true);
+
+            TableBtn table1 = Table1Btn.GetComponent<TableBtn>();
+            TableBtn table2 = Table2Btn.GetComponent<TableBtn>();
+            table1.interiorScript = item;
+            table2.interiorScript = item;
+        }
 
     }
 
     public void PanelOpen()
     {
-        if (interiorPanel != null)
+        if (currentSceneName == "Work_Room")
         {
-            interiorPanel.SetActive(true);
-            SetFurnitureItem();
+            if (roomInteriorPanel != null)
+            {
+                roomInteriorPanel.SetActive(true);
+                // 다른 버튼들 안보이게
+                InteriorInventoryButton.SetActive(false);
+                InteriorExitButton.SetActive(false);
+                tileButton.SetActive(false);
+
+                SetFurnitureItem();
+            }
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
+            if (shopInteriorPanel != null)
+            {
+                WallTable1Btn.SetActive(false);
+                WallTable2Btn.SetActive(false);
+                Table1Btn.SetActive(false);
+                Table2Btn.SetActive(false);
+
+                shopInteriorPanel.SetActive(true);
+                SetTableItem();
+            }
         }
     }
 
     public void PanelClose()
     {
-        if (interiorPanel != null)
+        if (currentSceneName == "Work_Room")
         {
-            interiorPanel.SetActive(false);
+            if (roomInteriorPanel != null)
+            {
+                roomInteriorPanel.SetActive(false);
+
+                // 다른 버튼들 안보이게
+                InteriorInventoryButton.SetActive(true);
+                InteriorExitButton.SetActive(true);
+                tileButton.SetActive(true);
+            }
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
+            if (shopInteriorPanel != null)
+            {
+                shopInteriorPanel.SetActive(false);
+            }
         }
     }
 
-    public void ClickInteriorButton(){
-        interiorMode = true;
+    public void TilePanelOpen()
+    {
+        tilePanel.SetActive(true);
 
-        InteriorInventoryButton.SetActive(true);
-        InteriorExitButton.SetActive(true);
-    }
-
-    public void ClickExitInteriorButton(){
-        interiorMode = false;
-
+        // 다른 버튼들 안보이게
         InteriorInventoryButton.SetActive(false);
         InteriorExitButton.SetActive(false);
+        tileButton.SetActive(false);
+    }
+
+    public void TilePanelClose()
+    {
+        tilePanel.SetActive(false);
+
+        // 다른 버튼들 보이게
+        InteriorInventoryButton.SetActive(true);
+        InteriorExitButton.SetActive(true);
+        tileButton.SetActive(true);
+    }
+
+    // 인테리어 메뉴 버튼 눌렀을 때
+    public void ClickInteriorButton()
+    {
+        interiorMode = true;
+
+        tileButton.SetActive(true);
+        InteriorInventoryButton.SetActive(true);
+        InteriorExitButton.SetActive(true);
+
+        if (currentSceneName == "Work_Room")
+        {
+            Home_Button = GameObject.Find("Home_Button");
+            Home_Button.SetActive(false);
+
+        }
+        else if (currentSceneName == "Work_Shop")
+        {
+            RoomBtn = GameObject.Find("RoomBtn");
+            RoomBtn.SetActive(false);
+        }
+
+        //tilePanel.SetActive(true);
+    }
+
+    // 나가기 버튼 눌렀을 때
+    public void ClickExitInteriorButton()
+    {
+        interiorMode = false;
+
+        tileButton.SetActive(false);
+        InteriorInventoryButton.SetActive(false);
+        InteriorExitButton.SetActive(false);
+
         PanelClose();
 
-        clickInteriorItem.ClickExitInteriorButton();
+        if (Home_Button != null)
+        {
+            Home_Button.SetActive(true);
+        }
+        else if (RoomBtn != null)
+        {
+            RoomBtn.SetActive(true);
+        }
+
+        tilePanel.SetActive(false);
     }
 }

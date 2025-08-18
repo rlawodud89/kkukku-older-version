@@ -1,75 +1,43 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SnacksInventory : MonoBehaviour
 {
-    public List<SnackInventoryEntry> ownedSnacks;
+    public GameManager gameManager;
+    public event Action OnInventoryChanged;
 
-    public UnityEvent OnInventoryChanged = new UnityEvent();
-
-
-    public void GiveSnackToEmployee(SnacksData snack)
-    {    
-        var entry = ownedSnacks.Find(e => e.data == snack);
-         
-        if (entry != null && entry.count > 0)
-        {
-            entry.count--;
-            Debug.Log(entry.count);
-
-            if (entry.count <= 0)
-            {
-                ownedSnacks.Remove(entry);
-            }
-
-            // ÀÎº¥Åä¸® °»½Å ÀÌº¥Æ® È£Ãâ
-            OnInventoryChanged?.Invoke();
-        }
+    private void Start()
+    {
+        gameManager = GameManager.getInstance();
     }
-          
-    public Dictionary<SnacksData, int> GetAllSnacks()
+    public List<(ItemScript item, int count)> GetSnackInventory()
     {
-        var dict = new Dictionary<SnacksData, int>();
-        foreach (var entry in ownedSnacks)
-        {
-            if (entry.data != null)
-            {
-                dict[entry.data] = entry.count;
-            }
-        }
-        return dict;
-    }    
-
-    public int GetCount(SnacksData data)
-    {
-        var entry = ownedSnacks.Find(e => e.data == data);
-        return entry != null ? entry.count : 0;
-
+        return gameManager.Get_Snack_Inventory();
     }
 
-    /// <summary>
-    /// °£½ÄÀ» ÀÎº¥Åä¸®¿¡ Ãß°¡ÇÕ´Ï´Ù. ÀÌ¹Ì Á¸ÀçÇÏ¸é ¼ö·® Áõ°¡, ¾øÀ¸¸é »õ·Î Ãß°¡.
-    /// </summary>
-    public void AddSnack(SnacksData snack, int amount = 1)
+    public int GetCount(ItemScript data)
     {
-        if (snack == null || amount <= 0) return;
+        var list = GetSnackInventory();
+        var match = list.Find(e => e.item == data);
+        return match != default ? match.count : 0;
+    }
 
-        var entry = ownedSnacks.Find(e => e.data == snack);
-        if (entry != null)
+    public void GiveSnackToEmployee(ItemScript item)
+    {
+        // ê°œìˆ˜ ì°¨ê° ì‹œë„
+        bool success = GameManager.getInstance().Use_InventoryItem(item.itemName, 1);
+
+        if (success)
         {
-            entry.count += amount;
+            Debug.Log($"ê°„ì‹ ì§€ê¸‰ ì™„ë£Œ: {item.itemName}");
+            OnInventoryChanged?.Invoke(); // UI ê°±ì‹ 
         }
         else
         {
-            ownedSnacks.Add(new SnackInventoryEntry
-            {
-                data = snack,
-                count = amount
-            });
+            Debug.LogWarning($"ê°„ì‹ ì§€ê¸‰ ì‹¤íŒ¨: {item.itemName} (ì¬ê³  ë¶€ì¡±)");
         }
-
-        // UI °»½ÅÀ» À§ÇÑ ÀÌº¥Æ® È£Ãâ
-        OnInventoryChanged?.Invoke();
     }
+
+
 }

@@ -28,8 +28,8 @@ public class MenuController : MonoBehaviour
     private bool isRotating = false;
 
 
-    public GameObject mapPanel; 
-    
+    public GameObject mapPanel;
+
     public GameObject energy;
     public GameObject energyLevel;
     public TMP_Text energyLevelText;
@@ -57,12 +57,13 @@ public class MenuController : MonoBehaviour
         int hours = gameManager.Get_Hours();
         int minutes = gameManager.Get_Minutes();
 
-        if(hours==8 && minutes==0)
-            storeSign.SetActive(true); 
+        if (hours == 8 && minutes == 0)
+            storeSign.SetActive(true);
 
         string currentSceneName = SceneManager.GetActiveScene().name;  // 현재 씬
-        if(currentSceneName=="Work_Shop"||currentSceneName=="Work_Room"){
-            if(!menuButtons.Contains(interiorButton))
+        if (currentSceneName == "Work_Shop" || currentSceneName == "Work_Room")
+        {
+            if (!menuButtons.Contains(interiorButton))
             {
                 interiorButton.SetActive(true);
                 RectTransform baseRT = menuButton.GetComponent<RectTransform>();
@@ -71,21 +72,23 @@ public class MenuController : MonoBehaviour
                 interiorButton.GetComponent<CanvasGroup>().alpha = 0;
                 menuButtons.Add(interiorButton);
             }
-        }else{
+        }
+        else
+        {
             if (menuButtons.Contains(interiorButton))
             {
                 menuButtons.Remove(interiorButton);
             }
         }
 
-        if(currentSceneName=="Moonlight_Hill")
+        if (currentSceneName == "Moonlight_Hill")
         {
             energy.SetActive(false);
             energyLevel.SetActive(false);
         }
         else
         {
-            if(energyLevel.activeSelf)
+            if (energyLevel.activeSelf)
             {
                 energy.SetActive(false);
             }
@@ -119,7 +122,7 @@ public class MenuController : MonoBehaviour
         menuAlertIcon.SetActive(shouldShow);
         Debug.Log($"🔔 menuAlertIcon.SetActive({shouldShow})");
     }
-    
+
 
     public void ToggleMenuItems()
     {
@@ -238,7 +241,7 @@ public class MenuController : MonoBehaviour
             if (confirmText != null)
             {
                 confirmText.text = $"가게를 닫으시겠습니까?";
-                
+
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
                 yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); gameManager.Set_IsOpen(false); });
 
@@ -318,7 +321,7 @@ public class MenuController : MonoBehaviour
 
     }
 
-    
+
 
     public void SeeEnergyLevel()
     {
@@ -334,12 +337,13 @@ public class MenuController : MonoBehaviour
 
             energyLevelText.text = "Lv " + gameManager.Get_EnergyLevel().ToString();
             energyPercentText.text = gameManager.Get_EnergyPercent().ToString() + "%";
-        }   
+        }
     }
 
     public GameObject confirmPopup;
 
-    public void OnPlaceClicked(GameObject clickedObject){
+    public void OnPlaceClicked(GameObject clickedObject)
+    {
         string placeName = clickedObject.name;
         string currentSceneName = SceneManager.GetActiveScene().name;
 
@@ -382,19 +386,20 @@ public class MenuController : MonoBehaviour
                     Debug.LogError($"Unknown place name: {placeName}");
                     break;
             }
-            
-        }else
+
+        }
+        else
         {
             Debug.LogError("Text 컴포넌트가 confirmPopup 안에 없습니다.");
         }
-        
+
 
         // Yes 버튼 클릭 시 이동
         Button yesButton = confirmPopup.transform.Find("YesButton").GetComponent<Button>();
         yesButton.onClick.AddListener(() => { OnConfirm(placeName); });
 
-         // No 버튼 클릭 시 팝업 닫기
-         Button noButton = confirmPopup.transform.Find("NoButton").GetComponent<Button>();
+        // No 버튼 클릭 시 팝업 닫기
+        Button noButton = confirmPopup.transform.Find("NoButton").GetComponent<Button>();
         noButton.onClick.AddListener(() => { confirmPopup.SetActive(false); });
 
 
