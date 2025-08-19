@@ -139,7 +139,7 @@ public class InteriorManager : MonoBehaviour
                 ItemButton.transform.Find("InteriorItemImage").GetComponent<Image>().sprite = item.image;  // 아이콘 설정
                 ItemButton.transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = "×" + count.ToString();  // 개수 설정
 
-                // ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
+                ItemButton.GetComponent<Button>().onClick.AddListener(() => ClickRoomInteriorItem(item));
             }
         }
     }
@@ -212,7 +212,6 @@ public class InteriorManager : MonoBehaviour
     {
         PanelClose();
 
-        // TODO: 테이블 외형 바꿀 수 있도록 하기
         if (item.tableType == TableType.WALL_TABLE)
         {
             WallTable1Btn.SetActive(true);

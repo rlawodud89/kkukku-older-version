@@ -77,6 +77,7 @@ public class ArrangementWorkRoom : MonoBehaviour
                 return;
             }
 
+            // TODO: 직원인 경우 Empolyee에 저장된 내용 넣기
             foreach (var (item, x, y) in installedInteriors)
             {
                 var go = Instantiate(item.prefab, new Vector3(x, y, 20), item.prefab.transform.rotation);

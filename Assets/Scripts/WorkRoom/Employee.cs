@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class Employee : MonoBehaviour
-{   
+{
     public TextMeshProUGUI floatingText;
     public TextMeshProUGUI reactionText;
     public GameObject ballonPanel;
@@ -21,10 +21,10 @@ public class Employee : MonoBehaviour
 
 
         Debug.Log("먹이줌");
-        
+
         staminar.Addstamina(item.value);
         ShowFloatingText("+" + item.value);
-        
+
         //ShowReaction(item.reactionMessage);
     }
 
@@ -37,7 +37,6 @@ public class Employee : MonoBehaviour
 
     public void ShowFloatingText(string text)
     {
-
         floatingText.text = text;
         floatingText.gameObject.SetActive(true);
         // 간단한 fade out 애니메이션 추가 가능

@@ -433,8 +433,8 @@ public class DBManager
                 if (!Delete_Worker(interior.ID)) return false;
             }
 
-            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
-                    interior.x, interior.y);
+            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                    x, y);
 
             return affectedRows > 0;
         }
@@ -543,5 +543,45 @@ public class DBManager
     public WorkRoom Select_Worker_Info(int workerID)
     {
         return conn.Find<WorkRoom>(workerID);
+    }
+
+    public void Change_Worker_Stamina(int workerID, int delta)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.stamina += delta;
+        conn.Update(worker);
+    }
+
+    public void Update_Worker_workingItem(int workerID, string workingItem)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.workItem = workingItem;
+        conn.Update(worker);
+    }
+
+    public void Change_Worker_WorkingPercent(int workerID, int delta)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.workingPercent += delta;
+        conn.Update(worker);
+    }
+
+    public List<LetterBox> Select_Current_Letter()
+    {
+        return conn.Table<LetterBox>()
+            .ToList();
+    }
+
+    public void Insert_Letter(string letterName)
+    {
+        LetterBox letter = new LetterBox();
+        letter.letterName = letterName;
+        conn.Insert(letter);
+    }
+
+    public void Delete_Letter(string letterName)
+    {
+        LetterBox letter = conn.Find<LetterBox>(letterName);
+        conn.Delete(letter);
     }
 }
