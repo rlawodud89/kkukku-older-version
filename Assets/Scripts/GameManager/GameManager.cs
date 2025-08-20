@@ -13,7 +13,7 @@ public enum BgType
     NIGHT
 }
 
-[DefaultExecutionOrder(-200)]
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
 
     private string endScene;
     private bool isOpen;
+    private float bgSound;
+    private float effectSound;
 
 
     // ScriptableObject Dictionary
@@ -128,6 +130,8 @@ public class GameManager : MonoBehaviour
         playTime = user.playTime;
         endScene = user.endScene;
         isOpen = user.isOpen;
+        bgSound = user.bgSound;
+        effectSound = user.effectSound;
 
         LoadAllScriptableObjects();
         LoadBgTime();
@@ -365,6 +369,20 @@ public class GameManager : MonoBehaviour
         OnOpenChanged?.Invoke(isOpen);
     }
 
+    public float Get_BgSound() { return bgSound; }
+    public void Set_BgSound(float bgSound)
+    {
+        this.bgSound = bgSound;
+        dbManager.Update_BgSound(this.bgSound);
+    }
+
+    public float Get_EffectSound() { return effectSound; }
+    public void Set_EffectSound(float effectSound)
+    {
+        this.effectSound = effectSound;
+        dbManager.Update_EffectSound(this.effectSound);
+    }
+
     public void Go_Next_Days()
     {
         isDayEndPanel = false;
@@ -472,6 +490,8 @@ public class GameManager : MonoBehaviour
 
     public ItemScript Get_InventoryItem(string itemName)
     {
+        if (itemName == null || itemName == "") return null;
+
         if (Materials.ContainsKey(itemName)) return Materials[itemName];
         else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
@@ -482,6 +502,8 @@ public class GameManager : MonoBehaviour
 
     public InteriorScript Get_InteriorItem(string itemName)
     {
+        if (itemName == null || itemName == "") return null;
+
         if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
         else if (Shop_Interiors.ContainsKey(itemName)) return Shop_Interiors[itemName];
         else if (Workers.ContainsKey(itemName)) return Workers[itemName];
@@ -886,30 +908,27 @@ public class GameManager : MonoBehaviour
     }
 
     
-    public (int stamina, ItemScript workItem, int workingPercent) Get_Worker_Info(float x, float y)
+    public (int workerID, int stamina, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);
         WorkRoom worker = dbManager.Select_Worker_Info(workerID);
 
-        return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
+        return (workerID, worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    public void Change_Worker_Stamina(float x, float y, int delta)
+    public void Change_Worker_Stamina(int workerID, int delta)
     {
-        int workerID = dbManager.Select_Worker_ID(x, y);
         dbManager.Change_Worker_Stamina(workerID, delta);
     }
 
-    public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    public void Set_Worker_workingItem(int workerID, string workingItemName)
     {
-        int workerID = dbManager.Select_Worker_ID(x, y);
         dbManager.Update_Worker_workingItem(workerID, workingItemName);
     }
 
-    public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    public void Set_Worker_WorkingPercent(int workerID, float workingPercent)
     {
-        int workerID = dbManager.Select_Worker_ID(x, y);
-        dbManager.Change_Worker_WorkingPercent(workerID, delta);
+        dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
 
     public List<LetterScript> Get_Current_Letter()
@@ -934,5 +953,4 @@ public class GameManager : MonoBehaviour
     {
         dbManager.Delete_Letter(letterName);
     }
-    
 }
