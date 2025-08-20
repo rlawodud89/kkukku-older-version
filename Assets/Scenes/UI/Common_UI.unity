@@ -3683,6 +3683,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238d347da545396418e0e775171f35f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useAddressables: 1
+  nextQuestDelay: 0.4
+  nextQuestInAnim: 0.6
+  normalButtonBg: {fileID: 21300000, guid: 4700ee5186a9e3946b2aa2ace9fdc3c3, type: 3}
+  specialButtonBg: {fileID: 21300000, guid: 7cbaac281624ed94183f42bff43268c9, type: 3}
+  specialTitleColor: {r: 1, g: 0.94, b: 0.6, a: 1}
   activeQuests: []
   questPanel: {fileID: 1084821495}
   scrollContent: {fileID: 2089431613}

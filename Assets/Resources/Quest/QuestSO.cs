@@ -17,4 +17,6 @@ public class QuestSO : ScriptableObject
 
     public bool isSpecial;           // 특별 퀘스트 여부
     public QuestSO nextQuest;        // 이어지는 다음 퀘스트 (있다면)
+    [TextArea(5, 10)]
+    public string content;       // 편지 본문
 }
