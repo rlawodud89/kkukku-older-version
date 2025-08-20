@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 
 public enum BgType
 {

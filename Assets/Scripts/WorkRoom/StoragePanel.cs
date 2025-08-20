@@ -7,13 +7,13 @@ using UnityEngine.UI;
 public class StoragePanel : MonoBehaviour
 {
     public Transform ScrollContent;     // ScrollView > Viewport > Content
-    public GameObject ItemPrefab;  // ±×³É Image + ÀÚ½Ä Image ÇÁ¸®ÆÕ
+    public GameObject ItemPrefab;  // ê·¸ëƒ¥ Image + ìì‹ Image í”„ë¦¬íŒ¹
 
 
 
     public int itemCount = 20;
 
-    public bool isInit=false;
+    public bool isInit = false;
 
     void Start()
     {

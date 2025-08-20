@@ -26,7 +26,7 @@ public class CottonPanel : MonoBehaviour
         RefreshInventoryUI();
     }
 
-    public void SetSelectedBlanket(ItemScript blanket)
+    public void SetSelectedBlanket(ItemScript yarn)
     {
 
         if (gameManager == null)
@@ -34,7 +34,7 @@ public class CottonPanel : MonoBehaviour
             gameManager = GameManager.getInstance();
         }
 
-        currentCotton = gameManager.Blanket_to_Yarn(blanket.itemName); // 이불 -> 원단
+        currentCotton = yarn; // 이불 -> 원단
 
         if (!storagePanel.isInit)
         {

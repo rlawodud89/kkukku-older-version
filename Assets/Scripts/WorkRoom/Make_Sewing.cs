@@ -6,12 +6,12 @@ using TMPro;
 
 public class Make_Sewing : MonoBehaviour
 {
-
     public static Make_Sewing Instance { get; private set; }
 
     public GameObject sewingPanel;
-    public Employee Employee3;
-    public ProgressCircle progresscircle;
+
+    private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
+    private int CurrentID;
 
     public GameObject BallonPanel;
     public GameObject CompletePanel;
@@ -19,14 +19,11 @@ public class Make_Sewing : MonoBehaviour
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
-    
+
     private GameManager gameManager;
     private ItemScript currentBlanket;
 
-    private void Start()
-    {
-        gameManager = GameManager.getInstance(); 
-    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,53 +33,93 @@ public class Make_Sewing : MonoBehaviour
         }
 
         Instance = this;
+
+        Employees = new Dictionary<int, (Employee employee, ProgressCircle progressCircle)>();
     }
+
+    private void Start()
+    {
+        gameManager = GameManager.getInstance();
+
+        foreach (var e in Employees)
+        {
+            Employee employee = e.Value.employee;
+            ProgressCircle progressCircle = e.Value.progressCircle;
+            CurrentID = employee.EmployeeID;
+
+            if (employee.workingPercent != 0f)
+            {
+                progressCircle.OnComplete = () =>
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0f);
+                    showsewing();
+                };
+
+                progressCircle.CompleteCircle(employee.EmployeeID, employee.workingPercent);
+            }
+            else if (employee.workItem != null)
+            {
+                showsewing();
+            }
+        }
+    }
+
+  
 
     public void HandleMakeClicked(ItemScript currentSewing)
     {
-
+        Employee current_employee = Employees[CurrentID].employee;
+        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
 
         currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
+        current_employee.workItem = currentBlanket;
+        gameManager.Set_Worker_workingItem(current_employee.EmployeeID, currentBlanket.itemName);
+
         Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
-        gameManager.Add_InventoryItem(currentBlanket.cottonName, -1);
+        gameManager.Use_InventoryItem(currentBlanket.cottonName, 1);
 
-        gameManager = GameManager.getInstance();
         sewingPanel.SetActive(false);
-        Employee3.Working();
+        current_employee.Working();
 
-
-        progresscircle.OnComplete = () =>
+        progress_circle.OnComplete = () =>
         {
-            gameManager.Add_InventoryItem(currentBlanket.itemName, 1);
+            gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
             Debug.Log("완성");
-            showsewing(currentBlanket);
+            showsewing();
         };
 
-        progresscircle.CompleteCircle();
-
+        progress_circle.CompleteCircle(current_employee.EmployeeID);
 
     }
 
-    void showsewing(ItemScript currentBlanket)
+
+    void showsewing()
     {
-        if (currentBlanket  != null)
+        Employee current_employee = Employees[CurrentID].employee;
+        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
+        GameObject ballon_Panel = current_employee.ballonPanel;
+        Button sewing_button = current_employee.ItemButton;
+
+        if (current_employee.workItem != null)
         {
+            ballon_Panel.SetActive(true);
+            sewing_button.gameObject.SetActive(true);
+            sewing_button.image.sprite = current_employee.workItem.image;
 
-            BallonPanel.SetActive(true);
-            SewingButton.gameObject.SetActive(true);
-            SewingButton.image.sprite = currentBlanket.image;
-
-            SewingButton.onClick.RemoveAllListeners();
-            SewingButton.onClick.AddListener(() =>
+            sewing_button.onClick.RemoveAllListeners();
+            sewing_button.onClick.AddListener(() =>
             {
 
-                BallonPanel.SetActive(false);
-                SewingButton.gameObject.SetActive(false);
-                progresscircle.ProgressInit();
+                ballon_Panel.SetActive(false);
+                sewing_button.gameObject.SetActive(false);
+                progress_circle.ProgressInit();
 
                 CompletePanel.SetActive(true);
-                CompleteImage.sprite = currentBlanket.image;
-                CompleteText.text = currentBlanket.itemName +"이 완성되었습니다!";
+                CompleteImage.sprite = current_employee.workItem.image;
+                CompleteText.text = current_employee.workItem.itemName + "이 완성되었습니다!";
+
+                gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
+                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
 
             });
 
@@ -98,4 +135,18 @@ public class Make_Sewing : MonoBehaviour
         CompletePanel.SetActive(false);
     }
 
+    public void Add_Employee(Employee employee, ProgressCircle progressCircle)
+    {
+        Employees.Add(employee.EmployeeID, (employee, progressCircle));
+    }
+
+    public void Remove_Employee(int employeeID)
+    {
+        Employees.Remove(employeeID);
+    }
+
+    public void Set_CurrentEmployee(int employeeID)
+    {
+        CurrentID = employeeID;
+    }
 }

@@ -187,7 +187,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5da9af1ba4338b478ae6e38886e7ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  furnitureItem: {fileID: 11400000, guid: b7efab96d5c01c24bb7fa859cc9f8b52, type: 2}
+  make_Fabric: {fileID: 134567890}
+  make_Cotton: {fileID: 947283326}
+  make_Sewing: {fileID: 1738070359}
+  snackInventory: {fileID: 2039721150}
 --- !u!4 &19552498
 Transform:
   m_ObjectHideFlags: 0
@@ -389,17 +392,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5702953306184455848, guid: 881c932b283ab704d8731c5825fd61fa, type: 3}
   m_PrefabInstance: {fileID: 1920070751104480094}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &79469854 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1516786107655328985, guid: 881c932b283ab704d8731c5825fd61fa, type: 3}
-  m_PrefabInstance: {fileID: 1920070751104480094}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 902b1f127d538b549b239741f61b4c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &101457247
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,17 +612,6 @@ MonoBehaviour:
   ItemPrefab: {fileID: 4224036263940179287, guid: f5963451c018e054b9ce9c15e8e64841, type: 3}
   itemCount: 20
   isInit: 0
---- !u!114 &123331155 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5222719666945288384, guid: b8193b00f650de34e916a2abdb0c7a45, type: 3}
-  m_PrefabInstance: {fileID: 2716603782328780729}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89e8f415fafa4074fa7223e721120d16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &134567889
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,11 +644,8 @@ MonoBehaviour:
   Panel: {fileID: 1344217060}
   Panel2: {fileID: 1826824759}
   Scroll_View: {fileID: 605232758}
-  BallonPanel: {fileID: 1342659773}
-  FabricButton: {fileID: 1780587652}
-  Employee1: {fileID: 2030431300}
-  progresscircle: {fileID: 123331155}
   currentBlanket: {fileID: 0}
+  currentYarn: {fileID: 0}
   cottonPanel: {fileID: 101457252}
   detailPanelController: {fileID: 0}
 --- !u!4 &134567891
@@ -1320,17 +1298,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233394771}
   m_CullTransparentMesh: 1
---- !u!114 &290208045 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8057596032214113007, guid: 881c932b283ab704d8731c5825fd61fa, type: 3}
-  m_PrefabInstance: {fileID: 1920070751104480094}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89e8f415fafa4074fa7223e721120d16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &309856867
 GameObject:
   m_ObjectHideFlags: 0
@@ -5123,17 +5090,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!114 &652082469 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7073297672112311912, guid: 861cbfcc63539c249a87dba0ad05fea6, type: 3}
-  m_PrefabInstance: {fileID: 926826158552918079}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89e8f415fafa4074fa7223e721120d16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &653163237
 GameObject:
   m_ObjectHideFlags: 0
@@ -6187,7 +6143,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6673,11 +6629,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cottonPanel: {fileID: 481227446}
   sewingPanel: {fileID: 618415793}
-  Employee2: {fileID: 1180461250}
-  progresscircle: {fileID: 652082469}
   BallonPanel: {fileID: 348978210}
   CottonButton: {fileID: 1168381744}
-  gameManager: {fileID: 0}
 --- !u!4 &947283327
 Transform:
   m_ObjectHideFlags: 0
@@ -6895,7 +6848,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -7492,17 +7445,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6441516959968219464, guid: 861cbfcc63539c249a87dba0ad05fea6, type: 3}
   m_PrefabInstance: {fileID: 926826158552918079}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1180461250 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7301909816914147668, guid: 861cbfcc63539c249a87dba0ad05fea6, type: 3}
-  m_PrefabInstance: {fileID: 926826158552918079}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 902b1f127d538b549b239741f61b4c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1181903877
 GameObject:
   m_ObjectHideFlags: 0
@@ -10573,7 +10515,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -10709,7 +10651,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -13224,8 +13166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sewingPanel: {fileID: 715886591}
-  Employee3: {fileID: 79469854}
-  progresscircle: {fileID: 290208045}
   BallonPanel: {fileID: 1572646669}
   CompletePanel: {fileID: 1501528578}
   SewingButton: {fileID: 1195235741}
@@ -14107,6 +14047,51 @@ MonoBehaviour:
   - {fileID: 1705497191}
   defaultMaterialSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   gameManager: {fileID: 0}
+--- !u!1 &1873553950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1873553952}
+  - component: {fileID: 1873553951}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1873553951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873553950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDayEndPanel: 0
+--- !u!4 &1873553952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873553950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 128.62473, y: 8.578747, z: -1.8231889}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886323538
 GameObject:
   m_ObjectHideFlags: 0
@@ -15014,67 +14999,11 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!1 &2017710161
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2017710163}
-  - component: {fileID: 2017710162}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2017710162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2017710161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDayEndPanel: 0
---- !u!4 &2017710163
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2017710161}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.417181, y: 1.2534219, z: 398.76593}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2030431296 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1867548810798079092, guid: b8193b00f650de34e916a2abdb0c7a45, type: 3}
   m_PrefabInstance: {fileID: 2716603782328780729}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2030431300 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4840742540608868119, guid: b8193b00f650de34e916a2abdb0c7a45, type: 3}
-  m_PrefabInstance: {fileID: 2716603782328780729}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 902b1f127d538b549b239741f61b4c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2036416487
 GameObject:
   m_ObjectHideFlags: 0
@@ -15907,11 +15836,11 @@ SceneRoots:
   - {fileID: 355377746}
   - {fileID: 324436292}
   - {fileID: 653163239}
-  - {fileID: 134567891}
   - {fileID: 795934013}
+  - {fileID: 134567891}
   - {fileID: 947283327}
-  - {fileID: 1165320425}
   - {fileID: 1738070358}
+  - {fileID: 1165320425}
   - {fileID: 2039721149}
   - {fileID: 19552498}
-  - {fileID: 2017710163}
+  - {fileID: 1873553952}

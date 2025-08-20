@@ -6,25 +6,37 @@ using UnityEngine.UI;
 
 public class Make_Fabric : MonoBehaviour
 {
+    public static Make_Fabric Instance { get; private set; }
 
     public GameObject Panel;
     public GameObject Panel2;
     public GameObject Scroll_View;
 
-    public GameObject BallonPanel;
-    public Button FabricButton;
-    
-    public Employee Employee1;
-    public ProgressCircle progresscircle;
+    private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
+    private int CurrentID;
 
     public ItemScript currentBlanket;
+    public ItemScript currentYarn;
     public CottonPanel cottonPanel;
     public FabricDetailPanelController detailPanelController;
 
     private GameManager gameManager;
     private bool can_make = false;
 
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);  // 중복 방지
+            return;
+        }
+
+        Instance = this;
+
+        Employees = new Dictionary<int, (Employee employee, ProgressCircle progressCircle)>();
+    }
+
     void Start()
     {
         if (gameManager == null)
@@ -37,31 +49,45 @@ public class Make_Fabric : MonoBehaviour
             detailPanelController = FindObjectOfType<FabricDetailPanelController>();
         }
 
+        foreach (var e in Employees)
+        {
+            Employee employee = e.Value.employee;
+            ProgressCircle progressCircle = e.Value.progressCircle;
+            CurrentID = employee.EmployeeID;
 
-        //디버깅용
-        gameManager.Add_InventoryItem("운무솜", 3);
-        gameManager.Add_InventoryItem("꿈실", 3);
-        gameManager.Add_InventoryItem("달조각", 3);
-    }
+            if (employee.workingPercent != 0f) // 작업 중일 때
+            { 
+                progressCircle.OnComplete = () =>
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0f);
+                    showfabric();
+                };
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                progressCircle.CompleteCircle(employee.EmployeeID, employee.workingPercent);
+            }
+            else if (employee.workItem != null) // 작업 다 끝나고 수령하지 않았을 때
+            {
+                showfabric();
+            }
+        }
     }
 
     public void ClickMakebtn()
     {
+        Employee current_employee = Employees[CurrentID].employee;
+        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
         can_make = Check_Recipe(currentBlanket);
-        Debug.Log(can_make);
 
         if (can_make)
         {
             for (int i = 0; i < currentBlanket.recipe.Count; i++)
             {
                 gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
-                Debug.Log(currentBlanket.recipe[i].itemName+ currentBlanket.recipe[i].count+"만큼 감소");
+                Debug.Log(currentBlanket.recipe[i].itemName + currentBlanket.recipe[i].count + "만큼 감소");
             }
+            currentYarn = gameManager.Blanket_to_Yarn(currentBlanket.itemName);
+            current_employee.workItem = currentYarn;
+            gameManager.Set_Worker_workingItem(current_employee.EmployeeID, currentYarn.itemName);
 
             if (detailPanelController == null)
             {
@@ -74,17 +100,16 @@ public class Make_Fabric : MonoBehaviour
             Panel2.SetActive(false);
             Scroll_View.SetActive(false);
 
+            current_employee.Working();
 
-            Employee1.Working();
-
-            progresscircle.OnComplete = () =>
+            progress_circle.OnComplete = () =>
             {
-                gameManager.Add_InventoryItem(currentBlanket.yarnName,1); //원단 추가
+                gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
                 Debug.Log(currentBlanket.yarnName + "만듦");
-                showfabric(); 
+                showfabric();
             };
 
-            progresscircle.CompleteCircle();
+            progress_circle.CompleteCircle(current_employee.EmployeeID);
             can_make = false;
         }
         else
@@ -116,22 +141,29 @@ public class Make_Fabric : MonoBehaviour
 
     void showfabric()
     {
-        if (currentBlanket != null)
+        Employee current_employee = Employees[CurrentID].employee;
+        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
+        GameObject ballon_Panel = current_employee.ballonPanel;
+        Button fabric_button = current_employee.ItemButton;
+
+        if (current_employee.workItem != null)
         {
-            BallonPanel.SetActive(true);
-            FabricButton.gameObject.SetActive(true);
-            FabricButton.image.sprite = gameManager.Blanket_to_Yarn(currentBlanket.itemName).image;
+            ballon_Panel.SetActive(true);
+            fabric_button.gameObject.SetActive(true);
+            fabric_button.image.sprite = current_employee.workItem.image;
 
-            FabricButton.onClick.RemoveAllListeners();
-            FabricButton.onClick.AddListener(() =>
-            { 
+            fabric_button.onClick.RemoveAllListeners();
+            fabric_button.onClick.AddListener(() =>
+            {
 
-                cottonPanel?.SetSelectedBlanket(currentBlanket);
+                cottonPanel?.SetSelectedBlanket(current_employee.workItem);
 
+                ballon_Panel.SetActive(false);
+                fabric_button.gameObject.SetActive(false);
+                progress_circle.ProgressInit();
 
-                BallonPanel.SetActive(false);
-                FabricButton.gameObject.SetActive(false);
-                progresscircle.ProgressInit();
+                gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
+                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
 
             });
 
@@ -140,6 +172,21 @@ public class Make_Fabric : MonoBehaviour
         {
             Debug.Log("null");
         }
+    }
+
+    public void Add_Employee(Employee employee, ProgressCircle progressCircle)
+    {
+        Employees.Add(employee.EmployeeID, (employee, progressCircle));
+    }
+
+    public void Remove_Employee(int employeeID)
+    {
+        Employees.Remove(employeeID);
+    }
+
+    public void Set_CurrentEmployee(int employeeID)
+    {
+        CurrentID = employeeID;
     }
 
 }
