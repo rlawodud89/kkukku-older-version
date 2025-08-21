@@ -58,6 +58,12 @@ public class ClickSome : MonoBehaviour
             Panel = canvasTransform.Find("Sewing_Panel").gameObject;
             scrollView = Panel.transform.Find("Sewing_Scroll View").gameObject;
         }
+        /*
+        else if (gameObject.name== "Special_crafting(Clone)")
+        {
+            Panel = canvasTransform.Find("Special_Panel").gameObject;
+        }
+        */
     }
 
     void Update()
@@ -95,7 +101,10 @@ public class ClickSome : MonoBehaviour
 
         if (movedDistance < dragThreshold)
         {
-            scrollView.SetActive(true);
+            if (scrollView != null)
+            {
+                scrollView.SetActive(true);
+            }
             Panel.SetActive(true);
 
             if (gameObject.name == "Employee1(Clone)") // 원단 직원

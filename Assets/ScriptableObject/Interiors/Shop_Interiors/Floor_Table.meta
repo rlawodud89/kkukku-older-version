@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Resources/Interior/blanket_storage 1.prefab.meta
+guid: 9e1cda2e020399742b3234d37ac90743
+PrefabImporter:
+========
 guid: 0dacc8c5706953643853533c10023918
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> 김재영:Assets/ScriptableObject/Interiors/Shop_Interiors/Floor_Table.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
