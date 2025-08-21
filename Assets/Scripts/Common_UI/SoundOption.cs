@@ -21,14 +21,19 @@ public class SoundOption : MonoBehaviour
     public Sprite soundOnSprite;
     public Sprite soundOffSprite;
 
+    private GameManager gameManager;
+
     void Start()
     {
+        // 게임메니저
+        gameManager= GameManager.getInstance();
+
         // db에서 값 받아와서 설정하기
-        BGMSlider.value=0.5f;
+        BGMSlider.value=gameManager.Get_BgSound();
         audioMixer.SetFloat("BGM", Mathf.Log10(BGMSlider.value) * 20);
         //BGMSoundButton.GetComponent<Button>().onClick.AddListener(() => ClickSoundButton(BGMSoundButton));
 
-        SFXSlider.value = 0.5f;
+        SFXSlider.value = gameManager.Get_EffectSound();
         audioMixer.SetFloat("SFX", Mathf.Log10(SFXSlider.value) * 20);
         //SFXSoundButton.GetComponent<Button>().onClick.AddListener(() => ClickSoundButton(SFXSoundButton));
     }
@@ -56,10 +61,13 @@ public class SoundOption : MonoBehaviour
     // 볼륨 조절
     public void SetBgmVolume(){
         audioMixer.SetFloat("BGM", Mathf.Log10(BGMSlider.value) * 20);
+        gameManager.Set_BgSound(BGMSlider.value);
+
     }
 
     public void SetSfxVolume(){
         audioMixer.SetFloat("SFX", Mathf.Log10(SFXSlider.value) * 20);
+        gameManager.Set_EffectSound(SFXSlider.value);
     }
 
     // 사운드 버튼 클릭시 
@@ -72,11 +80,13 @@ public class SoundOption : MonoBehaviour
             {
                 audioMixer.SetFloat("BGM", -80f); // BGM 음소거
                 BGMSlider.value = 0.001f;
+                gameManager.Set_BgSound(0.001f); // DB에 저장
             }
             else if(soundButton.name == "SFXSoundButton")
             {
                 audioMixer.SetFloat("SFX", -80f); // SFX 음소거
                 SFXSlider.value = 0.001f;
+                gameManager.Set_EffectSound(0.001f); // DB에 저장
             }
         }
         else
@@ -86,11 +96,13 @@ public class SoundOption : MonoBehaviour
             {
                 audioMixer.SetFloat("BGM", 0f); // BGM 재생
                 BGMSlider.value = 1f;
+                gameManager.Set_BgSound(1f); // DB에 저장
             }
             else if(soundButton.name == "SFXSoundButton")
             {
                 audioMixer.SetFloat("SFX", 0f); // SFX 재생
                 SFXSlider.value = 1f;
+                gameManager.Set_EffectSound(1f); // DB에 저장
             }
         }
 

@@ -81,7 +81,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (currentSceneName == "Moonlight_Hill"||currentSceneName == "Cloud_Pond")
+        if (currentSceneName == "Moonlight_Hill"||currentSceneName == "Cloud_Pond"||currentSceneName == "Village")
         {
             energy.SetActive(false);
             energyLevel.SetActive(false);

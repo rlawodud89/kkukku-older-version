@@ -579,7 +579,7 @@ public class DBManager
     public void Update_Worker_WorkingPercent(int workerID, float workingPercent)
     {
         WorkRoom worker = conn.Find<WorkRoom>(workerID);
-        worker.workingPercent = workingPercent;
+        //worker.workingPercent = workingPercent;
         conn.Update(worker);
     }
 
