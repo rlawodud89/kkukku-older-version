@@ -53,8 +53,9 @@ public class AStarMover : MonoBehaviour
     public NavPoint questWaitPoint;         // 기다릴 포인트
     public float questWaitSeconds = 10f;    // 대기 시간
     public bool questLeaveViaDoor = true;   // 나갈 때 문 사용
+    public QuestSO offeredQuest;
 
-    // ★ Canvas 제거: SpriteRenderer로 마커 토글
+    // SpriteRenderer로 마커 토글
     [Header("Quest Marker (Sprite)")]
     public SpriteRenderer questMarker;          // 캐릭터 자식 아이콘
     public string questMarkerChildName = "QuestMarker";
@@ -62,6 +63,9 @@ public class AStarMover : MonoBehaviour
 
     // 상태
     bool _questAccepted = false;
+    bool _waitPanelClose = false;   // ★ 패널 닫힘을 기다릴지 여부
+
+
 
     // ───────────── Init 주입 ─────────────
     public void Init(Grid g, NavPoint start, NavPoint[] doors, NavPoint[] shelves, NavPoint cashier)
@@ -152,6 +156,24 @@ public class AStarMover : MonoBehaviour
     }
 
     // ───────────── 퀘스트 루틴 ─────────────
+    // 수락 처리: 수락만 하고, 떠나지는 않음 (패널 닫힘까지 대기)
+    public void AcceptQuest()
+    {
+        if (_questAccepted) return;
+        _questAccepted = true;
+        ShowMarker(false);
+
+        _waitPanelClose = true; // ★ 패널 닫힘 신호 올 때까지 기다림
+        QuestManager.Instance?.OpenQuestFromNpc(this, offeredQuest); // ★ 퀘스트 전달
+    }
+  
+
+    // 퀘스트 패널이 닫혔을 때 QuestManager가 불러줄 메서드
+    public void OnQuestPanelClosed()
+    {
+        _waitPanelClose = false; // 이제 떠나도 됨
+    }
+
     IEnumerator RunQuest()
     {
         if (startPoint) yield return MoveToPoint(startPoint, reserve: false);
@@ -160,10 +182,20 @@ public class AStarMover : MonoBehaviour
         if (questWaitPoint) yield return MoveToPoint(questWaitPoint, reserve: !questWaitPoint.allowOverlap);
 
         ShowMarker(true);
+
+        // ★ 수락되거나 시간초과까지 대기
         float t = 0f;
         while (t < questWaitSeconds && !_questAccepted) { t += Time.deltaTime; yield return null; }
         ShowMarker(false);
 
+        // ★ 수락된 경우: 패널이 닫힐 때까지 추가 대기
+        if (_questAccepted)
+        {
+            // 안전장치로 무한대기 방지하고 싶다면 타임아웃도 가능
+            while (_waitPanelClose) yield return null;
+        }
+
+        // 이후 퇴장
         if (doorPoints != null && doorPoints.Length > 0)
             yield return MoveToPoint(FindNearestPoint(doorPoints), reserve: false);
         if (startPoint) yield return MoveToPoint(startPoint, reserve: false);
@@ -238,7 +270,6 @@ public class AStarMover : MonoBehaviour
     }
 
     // ───────────── 마커 표시(스프라이트) ─────────────
-    public void AcceptQuest() { _questAccepted = true; ShowMarker(false); }
     void OnMouseDown() { if (questMode) AcceptQuest(); }
 
     void ShowMarker(bool on)

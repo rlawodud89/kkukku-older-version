@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
 using System.Linq;
-using Unity.VisualScripting;
 
 
 public class DBManager
@@ -21,21 +20,21 @@ public class DBManager
     public void InitDB()
     {
         conn.CreateTable<User>();
-        conn.CreateTable<Inventory>();
-        conn.CreateTable<Design>();
-        conn.CreateTable<WorkShop>();
-        conn.CreateTable<ShopTable>();
-        conn.CreateTable<WorkRoom>();
-        conn.CreateTable<Interior>();
-        conn.CreateTable<Tile>();
-        conn.CreateTable<QuestBox>();
-        conn.CreateTable<LetterBox>();
+        //conn.CreateTable<Inventory>();
+        //conn.CreateTable<Design>();
+        //conn.CreateTable<WorkShop>();
+        //conn.CreateTable<ShopTable>();
+        //conn.CreateTable<WorkRoom>();
+        //conn.CreateTable<Interior>();
+        //conn.CreateTable<Tile>();
+        //conn.CreateTable<QuestBox>();
+        //conn.CreateTable<LetterBox>();
 
         User user = new User();
         user.name = "user";
-        user.energy = 0;
-        user.gold = 1000;
-        user.moonrock = 1000;
+        user.energy = 10000;
+        user.gold = 100000;
+        user.moonrock = 100000;
         user.todayEnergy = 0;
         user.todayGold = 0;
         user.todayMoonrock = 0;
@@ -47,6 +46,8 @@ public class DBManager
         user.decoLevel = 1;
         user.endScene = "Work_Shop";
         user.isOpen = false;
+        user.bgSound = 0f;
+        user.effectSound = 0f;
 
         conn.Insert(user);
 
@@ -151,10 +152,30 @@ public class DBManager
         conn.Update(user);
     }
 
+    public void Update_BgSound(float bgSound)
+    {
+        User user = conn.Find<User>(userName);
+        user.bgSound = bgSound;
+        conn.Update(user);
+    }
+
+    public void Update_EffectSound(float effectSound)
+    {
+        User user = conn.Find<User>(userName);
+        user.effectSound = effectSound;
+        conn.Update(user);
+    }
+
     public bool Have_Inventory(string itemName)
     {
         return conn.Table<Inventory>()
-            .Any(x => x.itemName == itemName);
+            .Any(i => i.itemName == itemName);
+    }
+
+    public int Count_Inventory(string itemName)
+    {
+        return conn.Table<Inventory>()
+            .Count(i => i.itemName == itemName);
     }
 
     public void Insert_InventoryItem(string itemName, ItemType itemType, int count)
@@ -197,6 +218,12 @@ public class DBManager
         design.blanketName = blanketName;
 
         conn.Insert(design);
+    }
+    
+    public List<Design> Select_Design()
+    {
+        return conn.Table<Design>()
+            .ToList();
     }
 
     public bool Have_InteriorItem(string interirorName)
@@ -408,7 +435,7 @@ public class DBManager
         try
         {
             int affectedRows = conn.Execute("UPDATE Interior SET x = ?, y = ? " +
-                "WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                "WHERE isSet = 1 AND ABS(x - ?) < 0.01 AND ABS(y - ?) < 0.01",
             afterX, afterY, beforeX, beforeY);
 
             return affectedRows > 0;
@@ -425,7 +452,7 @@ public class DBManager
         try
         {
             Interior interior = conn.Query<Interior>(
-                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.001 AND ABS(y - ?) < 0.001",
+                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.01 AND ABS(y - ?) < 0.01",
                     x, y)
                 .FirstOrDefault();
 
@@ -434,8 +461,8 @@ public class DBManager
                 if (!Delete_Worker(interior.ID)) return false;
             }
 
-            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND x = ? AND y = ?",
-                    interior.x, interior.y);
+            int affectedRows = conn.Execute("UPDATE Interior SET isSet = 0 WHERE isSet = 1 AND ABS(x - ?) < 0.01 AND ABS(y - ?) < 0.01",
+                    x, y);
 
             return affectedRows > 0;
         }
@@ -493,11 +520,51 @@ public class DBManager
             .ToList();
     }
 
+    public List<QuestBox> Select_All_Quest()
+    {
+        return conn.Table<QuestBox>()
+            .ToList();
+    }
+
+    public void Insert_Quest(string questName)
+    {
+        QuestBox quest = new QuestBox();
+        quest.questName = questName;
+        conn.Insert(quest);
+    }
+
+    public void Delete_Quest(string questName)
+    {
+        conn.Delete<QuestBox>(questName);
+    }
+
+    public void Update_Quest_Process(string questName, int process)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.process = process;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_IsCompleted(string questName, bool isCompleted)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.isCompleted = isCompleted;
+        conn.Update(quest);
+    }
+
+    public void Update_Quest_GetReward(string questName, bool getReward)
+    {
+        QuestBox quest = conn.Find<QuestBox>(questName);
+        quest.getReward = getReward;
+        conn.Update(quest);
+    }
+
     public int Select_Worker_ID(float x, float y)
     {
-        Interior worker = conn.Table<Interior>()
-            .Where(i => i.isSet == true && i.x == x && i.y == y)
-            .FirstOrDefault();
+        Interior worker = conn.Query<Interior>(
+                "SELECT * FROM Interior WHERE isSet = 1 AND ABS(x - ?) < 0.01 AND ABS(y - ?) < 0.01",
+                    x, y)
+                .FirstOrDefault();
 
         return worker.ID;
     }
@@ -507,4 +574,43 @@ public class DBManager
         return conn.Find<WorkRoom>(workerID);
     }
 
+    public void Change_Worker_Stamina(int workerID, int delta)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.stamina += delta;
+        conn.Update(worker);
+    }
+
+    public void Update_Worker_workingItem(int workerID, string workingItem)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.workItem = workingItem;
+        conn.Update(worker);
+    }
+
+    public void Update_Worker_WorkingPercent(int workerID, float workingPercent)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.workingPercent = workingPercent;
+        conn.Update(worker);
+    }
+
+    public List<LetterBox> Select_Current_Letter()
+    {
+        return conn.Table<LetterBox>()
+            .ToList();
+    }
+
+    public void Insert_Letter(string letterName)
+    {
+        LetterBox letter = new LetterBox();
+        letter.letterName = letterName;
+        conn.Insert(letter);
+    }
+
+    public void Delete_Letter(string letterName)
+    {
+        LetterBox letter = conn.Find<LetterBox>(letterName);
+        conn.Delete(letter);
+    }
 }

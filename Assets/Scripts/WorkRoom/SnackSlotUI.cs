@@ -7,6 +7,7 @@ public class SnackSlotUI : MonoBehaviour
 {
     public Image icon;
     public TextMeshProUGUI countText;
+    public Sprite defaultSprite;
 
     public void SetData(ItemScript data, int count)
     {
@@ -18,7 +19,7 @@ public class SnackSlotUI : MonoBehaviour
     public void ClearSlot()
     {
         Debug.Log("clear");
-        icon.sprite = null;
+        icon.sprite = defaultSprite;
         countText.text = "";
     }
 }

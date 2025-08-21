@@ -9,14 +9,11 @@ public class BlanketButtonPanel : MonoBehaviour
     public Button btnPrefab;
     public FabricDetailPanelController detailPanel;
     public StoragePanel storagePanel;
-    public Make_Fabric makeFabric; 
-    
-    private GameManager gameManager;
+    public Make_Fabric makeFabric;
+
 
     void Start()
     {
-        gameManager = GameManager.getInstance();
-
         if (storagePanel == null)
         {
             storagePanel = FindObjectOfType<StoragePanel>();
@@ -26,6 +23,7 @@ public class BlanketButtonPanel : MonoBehaviour
         {
             makeFabric = FindObjectOfType<Make_Fabric>();
         }
+
         storagePanel.InitScroll();
         InitScroll();
     }

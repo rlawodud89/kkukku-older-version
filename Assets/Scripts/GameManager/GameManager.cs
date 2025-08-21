@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using JetBrains.Annotations;
 
 public enum BgType
 {
@@ -12,7 +11,7 @@ public enum BgType
     NIGHT
 }
 
-[DefaultExecutionOrder(-200)]
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
@@ -41,6 +40,8 @@ public class GameManager : MonoBehaviour
 
     private string endScene;
     private bool isOpen;
+    private float bgSound;
+    private float effectSound;
 
 
     // ScriptableObject Dictionary
@@ -59,8 +60,8 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, InteriorScript> Tiles = new Dictionary<string, InteriorScript>();
 
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
-    private Dictionary<string, QuestScript> Quests = new Dictionary<string, QuestScript>();
-    private Dictionary<string, LetterSciprt> Letters = new Dictionary<string, LetterSciprt>();
+    private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
+    private Dictionary<string, LetterScript> Letters = new Dictionary<string, LetterScript>();
 
 
     // GameManager에서 사용하는 상수
@@ -127,6 +128,8 @@ public class GameManager : MonoBehaviour
         playTime = user.playTime;
         endScene = user.endScene;
         isOpen = user.isOpen;
+        bgSound = user.bgSound;
+        effectSound = user.effectSound;
 
         LoadAllScriptableObjects();
         LoadBgTime();
@@ -206,10 +209,12 @@ public class GameManager : MonoBehaviour
         Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.customerName);
-        Quests = Addressables.LoadAssetsAsync<QuestScript>("quest", null)
+        */
+        Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.questName);
-        Letters = Addressables.LoadAssetsAsync<LetterSciprt>("letter", null)
+                .ToDictionary(i => i.questTitle);
+        /*
+        Letters = Addressables.LoadAssetsAsync<LetterScript>("letter", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);
         */
@@ -334,11 +339,6 @@ public class GameManager : MonoBehaviour
     }
 
     public int Get_LoomLevel() { return loomLevel; }
-    public void Set_LoomLevel(int level)
-    {
-        loomLevel += level;
-        dbManager.Update_LoomLevel(loomLevel);
-    }
     public void Change_LoomLevel(int delta)
     {
         loomLevel += delta;
@@ -346,11 +346,6 @@ public class GameManager : MonoBehaviour
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
-    public void Set_FillerLevel(int level)
-    {
-        fillerLevel = level;
-        dbManager.Update_FillerLevel(fillerLevel);
-    }
     public void Change_FillerLevel(int delta)
     {
         fillerLevel += delta;
@@ -358,11 +353,6 @@ public class GameManager : MonoBehaviour
     }
 
     public int Get_DecoLevel() { return decoLevel; }
-    public void Set_DecoLevel(int level)
-    {
-        decoLevel = level;
-        dbManager.Update_DecoLevel(decoLevel);
-    }
     public void Change_DecoLevel(int delta)
     {
         decoLevel += delta;
@@ -375,6 +365,20 @@ public class GameManager : MonoBehaviour
         this.isOpen = isOpen;
         dbManager.Update_IsOpen(this.isOpen);
         OnOpenChanged?.Invoke(isOpen);
+    }
+
+    public float Get_BgSound() { return bgSound; }
+    public void Set_BgSound(float bgSound)
+    {
+        this.bgSound = bgSound;
+        dbManager.Update_BgSound(this.bgSound);
+    }
+
+    public float Get_EffectSound() { return effectSound; }
+    public void Set_EffectSound(float effectSound)
+    {
+        this.effectSound = effectSound;
+        dbManager.Update_EffectSound(this.effectSound);
     }
 
     public void Go_Next_Days()
@@ -469,17 +473,23 @@ public class GameManager : MonoBehaviour
         return randomCustomer.Value;
     }
 
-    public QuestScript Get_Quest(string questName) { return Quests[questName]; }
-    public QuestScript Get_Random_Quest()
+    public QuestSO Get_Quest(string questName) { return Quests[questName]; }
+    public QuestSO Get_Random_Quest()
     {
         int randomIdx = UnityEngine.Random.Range(0, Quests.Count);
         var randomQuest = Quests.ElementAt(randomIdx);
-        return randomQuest.Value;
+        QuestSO quest = randomQuest.Value;
+        quest.questProcess = 0;
+        quest.isCompleted = false;
+        quest.getReward = false;
+        return quest;
     }
-    public LetterSciprt Get_Letter(string letterName) { return Letters[letterName]; }
+    public LetterScript Get_Letter(string letterName) { return Letters[letterName]; }
 
     public ItemScript Get_InventoryItem(string itemName)
     {
+        if (itemName == null || itemName == "") return null;
+
         if (Materials.ContainsKey(itemName)) return Materials[itemName];
         else if (Blankets.ContainsKey(itemName)) return Blankets[itemName];
         else if (Snacks.ContainsKey(itemName)) return Snacks[itemName];
@@ -490,6 +500,8 @@ public class GameManager : MonoBehaviour
 
     public InteriorScript Get_InteriorItem(string itemName)
     {
+        if (itemName == null || itemName == "") return null;
+
         if (Room_Interiors.ContainsKey(itemName)) return Room_Interiors[itemName];
         else if (Shop_Interiors.ContainsKey(itemName)) return Shop_Interiors[itemName];
         else if (Workers.ContainsKey(itemName)) return Workers[itemName];
@@ -568,6 +580,11 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
+    public int Count_InventoryItem(string itemName)
+    {
+        return dbManager.Count_Inventory(itemName);
+    }
+
     public bool Add_BlanketDesign(string blanketName)
     {
         if (dbManager.Have_Design(blanketName)) return false;
@@ -576,6 +593,19 @@ public class GameManager : MonoBehaviour
             dbManager.Insert_Design(blanketName);
             return true;
         }
+    }
+
+    public List<ItemScript> Get_Current_BlanketDesign()
+    {
+        List<Design> designs = dbManager.Select_Design();
+        List<ItemScript> list = new List<ItemScript>();
+
+        foreach (Design d in designs)
+        {
+            list.Add(Get_InventoryItem(d.blanketName));
+        }
+
+        return list;
     }
 
     public bool Add_InteriorItem(string interiorName, int count)
@@ -678,7 +708,7 @@ public class GameManager : MonoBehaviour
 
         foreach ((string itemName, int count) i in inven)
         {
-            result.Add((Get_RoomInterior(i.itemName), i.count));
+            result.Add((Get_InteriorItem(i.itemName), i.count));
         }
 
         return result;
@@ -776,7 +806,7 @@ public class GameManager : MonoBehaviour
 
     public bool Back_RoomInteriorItem(float x, float y)
     {
-        return dbManager.NotSet_InteriorItem(x, y);
+        return dbManager.NotSet_InteriorItem(x, y); // 직원인 경우, WorkRoom 데이터 삭제하는 기능도 구현 O
     }
 
     public List<(InteriorScript item, float x, float y)> Get_Current_RoomInterior()
@@ -850,36 +880,93 @@ public class GameManager : MonoBehaviour
         OnTableInteriorChanged?.Invoke(tableID);
     }
 
+    public List<QuestSO> Get_Current_Quest()
+    {
+        List<QuestBox> quests = dbManager.Select_All_Quest();
+        List<QuestSO> list = new List<QuestSO>();
 
-    public (int stamina, ItemScript workItem, int workingPercent) Get_Worker_Info(float x, float y)
+        foreach (QuestBox q in quests)
+        {
+            QuestSO quest = Get_Quest(q.questName);
+            quest.questProcess = q.process;
+            quest.isCompleted = q.isCompleted;
+            quest.getReward = q.getReward;
+
+            list.Add(quest);
+        }
+
+        return list;
+    }
+
+    public void Add_Quest(string questName)
+    {
+        dbManager.Insert_Quest(questName);
+    }
+
+    public void Remove_Quest(string questName)
+    {
+        dbManager.Delete_Quest(questName);
+    }
+
+    public void Set_Quest_Process(string questName, int process)
+    {
+        dbManager.Update_Quest_Process(questName, process);
+    }
+
+    public void Set_Quest_IsCompleted(string questName, bool isCompleted)
+    {
+        dbManager.Update_Quest_IsCompleted(questName, isCompleted);
+    }
+
+    public void Set_Quest_GetReward(string questName, bool getReward)
+    {
+        dbManager.Update_Quest_GetReward(questName, getReward);
+    }
+
+
+    public (int workerID, int stamina, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);
         WorkRoom worker = dbManager.Select_Worker_Info(workerID);
 
-        return (worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
+        return (workerID, worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
-    /*
-    public void Change_Worker_Stamina(float x, float y, int delta)
+    public void Change_Worker_Stamina(int workerID, int delta)
     {
-
+        dbManager.Change_Worker_Stamina(workerID, delta);
     }
 
-    public void Set_Worker_workingItem(float x, float y, string workingItemName)
+    public void Set_Worker_workingItem(int workerID, string workingItemName)
     {
-
+        dbManager.Update_Worker_workingItem(workerID, workingItemName);
     }
 
-    public void Change_Worker_WorkingPercent(float x, float y, int delta)
+    public void Set_Worker_WorkingPercent(int workerID, float workingPercent)
     {
-
+        dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
-    */
 
-/*
-    public List<QuestSO> Get_Current_Quest()
+    public List<LetterScript> Get_Current_Letter()
     {
+        List<LetterBox> letters = dbManager.Select_Current_Letter();
+        List<LetterScript> list = new List<LetterScript>();
 
-    }  */
+        foreach (LetterBox i in letters)
+        {
+            list.Add(Get_Letter(i.letterName));
+        }
 
+        return list;
+    }
+
+    public void Add_Letter(string letterName)
+    {
+        dbManager.Insert_Letter(letterName);
+    }
+
+    public void Remove_Letter(string letterName)
+    {
+        dbManager.Delete_Letter(letterName);
+    }
 }

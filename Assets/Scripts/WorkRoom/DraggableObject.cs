@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class DraggableObject : MonoBehaviour
 {
-    public Tilemap tilemap;          // Ÿ�ϸ� ����
+    public Tilemap tilemap;          
     private Vector3 offset;
     private bool dragging = false;
     private Camera cam;
@@ -18,7 +18,7 @@ public class DraggableObject : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (!interiorManager.interiorMode||interiorManager.tileMode)
+        if (!interiorManager.interiorMode || interiorManager.tileMode)
             return;
 
         dragging = true;
@@ -39,10 +39,11 @@ public class DraggableObject : MonoBehaviour
 
     void Update()
     {
-        if(tilemap==null){
-            tilemap=GameObject.Find("Tilemap").GetComponent<Tilemap>();
+        if (tilemap == null)
+        {
+            tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         }
-        
+
         if (dragging)
         {
             Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -50,7 +51,7 @@ public class DraggableObject : MonoBehaviour
 
             Vector3 dragPos = mouseWorld + offset;
 
-            // �巡�׵� ��ġ�� Ÿ�ϸ��� ���� ��ȯ
+
             Vector3Int cellPos = tilemap.WorldToCell(dragPos);
             Vector3 cellCenter = tilemap.GetCellCenterWorld(cellPos);
 
