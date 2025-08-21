@@ -28,7 +28,6 @@ public class CottonPanel : MonoBehaviour
 
     public void SetSelectedBlanket()
     {
-
         if (gameManager == null)
         {
             gameManager = GameManager.getInstance();

@@ -4734,7 +4734,6 @@ MonoBehaviour:
   scrollContent: {fileID: 2011368717}
   storagePanel: {fileID: 715886593}
   BallonPanel: {fileID: 0}
-  currentSewing: {fileID: 0}
 --- !u!114 &618415794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7178,7 +7177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: -8628383430526681325, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
