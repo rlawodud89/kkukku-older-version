@@ -44,7 +44,15 @@ public class MaterialStorageButton : MonoBehaviour
             gameManager = GameManager.getInstance();
         }
 
+        if (gameManager == null)
+        {
+            Debug.LogError("[MaterialStorage] GameManager 인스턴스를 가져오지 못했습니다!");
+            return;
+        }
+
+
         List<(ItemScript item, int count)> dataList = gameManager.Get_Material_Inventory();
+
         Debug.Log($"[MaterialStorage] 인벤토리에서 가져온 데이터 개수: {dataList.Count}");
 
         for (int i = 0; i < dataList.Count; i++)

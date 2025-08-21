@@ -15,8 +15,9 @@ public class MaterialUISlotBtn : MonoBehaviour
 
     public void SetData((ItemScript item, int count) data)
     {
-        if (data.item == null)
+        if (data.item == null || data.count <= 0)
         {
+            ClearSlots();
             return;
         }
 
@@ -24,7 +25,10 @@ public class MaterialUISlotBtn : MonoBehaviour
         count = data.count;
 
         if (button != null)
-            button.image.sprite = currentData.image; // 버튼의 Image 변경
+        {
+            button.image.sprite = currentData.image; // 버튼 이미지 변경
+            button.gameObject.SetActive(true);       // 보이게
+        }
 
         UpdateCountText();
     }
@@ -35,7 +39,10 @@ public class MaterialUISlotBtn : MonoBehaviour
         count = 0;
 
         if (button != null)
+        {
             button.image.sprite = null;
+            button.gameObject.SetActive(false);      // ❌ 슬롯 안 보이게
+        }
 
         if (countTexts != null)
             countTexts.text = "";

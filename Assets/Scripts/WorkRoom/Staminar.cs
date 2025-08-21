@@ -8,7 +8,43 @@ public class Staminar : MonoBehaviour
     public Image fillImage;
     public float maxStamina = 100f;
     public float currentStamina = 100f;
-    public float time = 5f;
+
+    private int lastLevel = -1;
+    private GameManager gameManager;
+
+    void Update()
+    {
+        if (gameManager == null)
+            gameManager = GameManager.getInstance();
+
+        int level = 1;
+        switch (gameObject.tag)
+        {
+            case "Fox": level = gameManager.Get_LoomLevel(); break;
+            case "Sheep": level = gameManager.Get_FillerLevel(); break;
+            case "Cat": level = gameManager.Get_DecoLevel(); break;
+        }
+
+        // 레벨이 바뀐 경우에만 적용
+        if (level != lastLevel)
+        {
+            lastLevel = level;
+
+            switch (level)
+            {
+                case 1: maxStamina = 100f; break;
+                case 2: maxStamina = 130f; break;
+                case 3: maxStamina = 150f; break;
+                case 4: maxStamina = 170f; break;
+                case 5: maxStamina = 200f; break;
+                default: maxStamina = 100f; break;
+            }
+
+            // 풀 충전 (레벨업 시)
+            currentStamina = maxStamina;
+        }
+    }
+
 
     void Start()
     {
