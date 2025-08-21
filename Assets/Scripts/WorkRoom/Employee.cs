@@ -1,18 +1,31 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.UIElements;
+using static UnityEditor.Progress;
 
 public class Employee : MonoBehaviour
-{   
+{
+    public GameObject ballonPanel;
     public TextMeshProUGUI floatingText;
     public TextMeshProUGUI reactionText;
-    public GameObject ballonPanel;
-    public Image ballonimage;
+    public Button ItemButton;
 
     public Staminar staminar;
     public SnacksInventory snacksInventory;
+    public ProgressCircle progressCircle;
 
     public string EmployeeName;
+    public int EmployeeID;
+    public ItemScript workItem;
+    public float workingPercent;
+
+    private GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = GameManager.getInstance();
+    }
 
     public void GiveItem(ItemScript item)
     {
@@ -21,23 +34,24 @@ public class Employee : MonoBehaviour
 
 
         Debug.Log("먹이줌");
-        
+
         staminar.Addstamina(item.value);
         ShowFloatingText("+" + item.value);
-        
+        gameManager.Change_Worker_Stamina(EmployeeID, item.value);
+
         //ShowReaction(item.reactionMessage);
     }
 
     public void Working()
     {
         staminar.Addstamina(-5);
+        gameManager.Change_Worker_Stamina(EmployeeID, -5);
 
-        ShowFloatingText("열심히 만들어볼게!");
+        //ShowFloatingText("열심히 만들어볼게!");
     }
 
     public void ShowFloatingText(string text)
     {
-
         floatingText.text = text;
         floatingText.gameObject.SetActive(true);
         // 간단한 fade out 애니메이션 추가 가능

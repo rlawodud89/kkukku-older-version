@@ -1,7 +1,7 @@
 public enum WorkType
 {
-    LOOM = 0, // 직조
-    FILLER, // 솜 주입
-    DECO, // 장식, 자수
+    FABRIC = 0, // 직조
+    COTTON, // 솜 주입
+    SEWING, // 장식, 자수
     NONE
 }

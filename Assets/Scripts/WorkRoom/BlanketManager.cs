@@ -10,6 +10,8 @@ public class BlanketManager : MonoBehaviour
     public List<ItemScript> blanketList = new List<ItemScript>();
     public Dictionary<string, ItemScript> blanketDict;
 
+    private GameManager gameManager;
+
     private void Awake()
     {
         if (Instance == null)
@@ -20,19 +22,23 @@ public class BlanketManager : MonoBehaviour
             return;
         }
 
+        gameManager = GameManager.getInstance();
         DontDestroyOnLoad(gameObject);
         LoadBlankets();
     }
 
     private void LoadBlankets()
     {
-        var loadedBlankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
-            .WaitForCompletion();
+        //var loadedBlankets = Addressables.LoadAssetsAsync<ItemScript>("blanket", null)
+        //    .WaitForCompletion();
 
-        blanketDict = loadedBlankets.ToDictionary(i => i.itemName);
-        blanketList = blanketDict.Values.ToList();
+        //blanketDict = loadedBlankets.ToDictionary(i => i.itemName);
+        //blanketList = blanketDict.Values.ToList();
 
-        Debug.Log($"[BlanketManager] {blanketList.Count}개의 이불 로드 완료");
+        //Debug.Log($"[BlanketManager] {blanketList.Count}개의 이불 로드 완료");
+
+        blanketList = gameManager.Get_Current_BlanketDesign();
+        blanketDict = blanketList.ToDictionary(i => i.itemName);
     }
 
 }

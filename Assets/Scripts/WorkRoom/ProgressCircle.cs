@@ -9,19 +9,28 @@ public class ProgressCircle : MonoBehaviour
     public Image completeImage;
 
     public float maxProgress = 30f;
- 
 
     private bool isRunning = false;
-    public System.Action OnComplete;  // ¿ÜºÎ¿¡¼­ ÇÒ´ç °¡´É
+    public System.Action OnComplete;  // ì™¸ë¶€ì—ì„œ í• ë‹¹ ê°€ëŠ¥
 
-    public void CompleteCircle()
+    private GameManager gameManager;
+    private int workerID;
+    private float elapsed = 0f;
+
+    void Awake()
     {
+        gameManager = GameManager.getInstance();
+    }
+
+    public void CompleteCircle(int workerID, float startElapsed = 0f)
+    {
+        this.workerID = workerID;
+        elapsed = startElapsed;
+
         if (!isRunning)
             StartCoroutine(FillOverTime());
         else
-        {
-            Debug.Log("ÇöÀç ½ÇÇà ÁßÀÔ´Ï´Ù. ÀÛ¾÷À» ¿Ï·áÇØÁÖ¼¼¿ä.");
-        }
+            Debug.Log("í˜„ì¬ ì‹¤í–‰ ì¤‘ì…ë‹ˆë‹¤. ì‘ì—…ì„ ì™„ë£Œí•´ì£¼ì„¸ìš”.");
     }
 
     public void ProgressInit()
@@ -37,21 +46,24 @@ public class ProgressCircle : MonoBehaviour
     IEnumerator FillOverTime()
     {
         isRunning = true;
-        float elapsed = 0f;
+        Debug.LogWarning("Start:" + elapsed);
 
         while (elapsed < maxProgress)
         {
             elapsed += Time.deltaTime;
             float progress = Mathf.Clamp01(1 - (elapsed / maxProgress));
             fillImage.fillAmount = progress;
+            gameManager.Set_Worker_WorkingPercent(workerID, elapsed);
 
-            // Ç×»ó Ä«¸Ş¶ó¸¦ ÇâÇÏ°Ô
+            // í•­ìƒ ì¹´ë©”ë¼ë¥¼ í–¥í•˜ê²Œ
             transform.forward = Camera.main.transform.forward;
+
+            Debug.LogWarning(elapsed);
 
             yield return null;
         }
 
-        // ÀÛ¾÷ ¿Ï·á ½Ã Ã³¸®
+        // ì‘ì—… ì™„ë£Œ ì‹œ ì²˜ë¦¬
         fillImage.gameObject.SetActive(false);
         Image.gameObject.SetActive(false);
         completeImage.gameObject.SetActive(true);
