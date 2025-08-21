@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class ClickSome : MonoBehaviour
 {
     private Transform canvasTransform;
-    public GameObject scrollView; // Scroll View �Ҵ�
+    public GameObject scrollView;
     public GameObject Panel;
     private Vector3 mouseDownPos;
-    private float dragThreshold = 2f; // �ּ� �̵� �Ÿ� (�ȼ� ����)
+    private float dragThreshold = 2f;
 
     private InteriorManager interiorManager;
     private GameManager gameManager;
@@ -43,17 +43,17 @@ public class ClickSome : MonoBehaviour
             Panel = canvasTransform.Find("Snacks_Panel").gameObject;
             scrollView = Panel.transform.Find("SnackStorage_Scroll View").gameObject;
         }
-        else if (gameObject.name == "Employee1(Clone)")
+        else if (gameObject.name == "Employee1(Clone)") // 원단 직원
         {
             Panel = canvasTransform.Find("Fabric_Panel").gameObject;
             scrollView = Panel.transform.Find("Fabric_Scroll View").gameObject;
         }
-        else if (gameObject.name == "Employee2(Clone)")
+        else if (gameObject.name == "Employee2(Clone)") // 솜 직원
         {
             Panel = canvasTransform.Find("Cotton_Panel").gameObject;
             scrollView = Panel.transform.Find("Cotton_Scroll View").gameObject;
         }
-        else if (gameObject.name == "Employee3(Clone)")
+        else if (gameObject.name == "Employee3(Clone)") // 데코 직원
         {
             Panel = canvasTransform.Find("Sewing_Panel").gameObject;
             scrollView = Panel.transform.Find("Sewing_Scroll View").gameObject;
@@ -95,8 +95,24 @@ public class ClickSome : MonoBehaviour
 
         if (movedDistance < dragThreshold)
         {
-            scrollView.SetActive(true); // Ŭ������ �Ǵܵ� ���� ����
+            scrollView.SetActive(true);
             Panel.SetActive(true);
+
+            if (gameObject.name == "Employee1(Clone)") // 원단 직원
+            {
+                Employee employee = gameObject.GetComponent<Employee>();
+                Make_Fabric.Instance.Set_CurrentEmployee(employee.EmployeeID);
+            }
+            else if (gameObject.name == "Employee2(Clone)") // 솜 직원
+            {
+                Employee employee = gameObject.GetComponent<Employee>();
+                Make_Cotton.Instance.Set_CurrentEmployee(employee.EmployeeID);
+            }
+            else if (gameObject.name == "Employee3(Clone)") // 데코 직원
+            {
+                Employee employee = gameObject.GetComponent<Employee>();
+                Make_Sewing.Instance.Set_CurrentEmployee(employee.EmployeeID);
+            }
         }
     }
 

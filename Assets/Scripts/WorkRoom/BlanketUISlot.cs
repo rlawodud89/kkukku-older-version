@@ -6,6 +6,7 @@ public class BlanketSlotUI : MonoBehaviour
     public Button button;
     public Text countText;
     public GameObject checkPanel;
+    public Sprite defaultSprite;
 
     private ItemScript currentData;
     private int count = 0;
@@ -65,7 +66,7 @@ public class BlanketSlotUI : MonoBehaviour
         count = 0;
 
         if (button != null)
-            button.image.sprite = null;
+            button.image.sprite = defaultSprite;
 
         if (countText != null)
             countText.text = "";

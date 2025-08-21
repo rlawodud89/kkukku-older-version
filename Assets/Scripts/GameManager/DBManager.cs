@@ -169,7 +169,13 @@ public class DBManager
     public bool Have_Inventory(string itemName)
     {
         return conn.Table<Inventory>()
-            .Any(x => x.itemName == itemName);
+            .Any(i => i.itemName == itemName);
+    }
+
+    public int Count_Inventory(string itemName)
+    {
+        return conn.Table<Inventory>()
+            .Count(i => i.itemName == itemName);
     }
 
     public void Insert_InventoryItem(string itemName, ItemType itemType, int count)
@@ -212,6 +218,12 @@ public class DBManager
         design.blanketName = blanketName;
 
         conn.Insert(design);
+    }
+    
+    public List<Design> Select_Design()
+    {
+        return conn.Table<Design>()
+            .ToList();
     }
 
     public bool Have_InteriorItem(string interirorName)

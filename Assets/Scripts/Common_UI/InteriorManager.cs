@@ -203,6 +203,34 @@ public class InteriorManager : MonoBehaviour
             Debug.LogWarning($"Failed to use Interior Item: {item.name}");
         }
 
+        if(item.interiorType == InteriorType.WORKER)
+        {
+            Employee employee = itemObject.GetComponent<Employee>();
+            (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
+            employee.EmployeeID = workerID;
+            employee.staminar.currentStamina = stamina;
+            employee.workItem = workItem;
+            employee.workingPercent = workingPercent;
+
+            GameObject snackInventory = GameObject.Find("SnacksInventory");
+            SnacksInventory snack_inventory = snackInventory.GetComponent<SnacksInventory>();
+            employee.snacksInventory = snack_inventory;
+
+
+            if (item.workType == WorkType.FABRIC)
+            {
+                Make_Fabric.Instance.Add_Employee(employee, employee.progressCircle);
+            }
+            else if (item.workType == WorkType.COTTON)
+            {
+                Make_Cotton.Instance.Add_Employee(employee, employee.progressCircle);
+            }
+            else if (item.workType == WorkType.SEWING)
+            {
+                Make_Sewing.Instance.Add_Employee(employee, employee.progressCircle);
+            }
+        }
+
         // 인벤토리 아이템 다시 얻어오기 
         RoomInteriorItems = gameManager.Get_RoomInterior_Inventory();
 

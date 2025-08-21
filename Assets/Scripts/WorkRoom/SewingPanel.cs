@@ -11,9 +11,8 @@ public class SewingPanel : MonoBehaviour
     public StoragePanel storagePanel;
     public GameObject BallonPanel;
 
-    public ItemScript currentSewing;
-
     private GameManager gameManager;
+
     private void Start()
     {
         if (storagePanel == null)
@@ -26,13 +25,11 @@ public class SewingPanel : MonoBehaviour
         RefreshInventoryUI();
     }
 
+
     public void SetSelectedBlanket()
     {
-
         gameManager = GameManager.getInstance();
 
-
-        Debug.Log(currentSewing);
         if (!storagePanel.isInit)
         {
             storagePanel.InitScroll();

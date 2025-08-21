@@ -10,27 +10,31 @@ public class Staminar : MonoBehaviour
     public float currentStamina = 100f;
     public float time = 5f;
 
+    void Start()
+    {
+        StaminarUI();
+    }
 
     void StaminarUI()
     {
         fillImage.fillAmount = currentStamina / maxStamina;
 
-        if (currentStamina<50)
+        if (currentStamina < 50)
         {
             fillImage.color = Color.yellow;
         }
-       if(currentStamina < 30)
+        if (currentStamina < 30)
         {
-            fillImage.color = Color.red;  
+            fillImage.color = Color.red;
         }
 
-        // Ç×»ó Ä«¸Þ¶ó¸¦ ÇâÇÏµµ·Ï (¿É¼Ç)
+        // í•­ìƒ ì¹´ë©”ë¼ë¥¼ í–¥í•˜ë„ë¡ (ì˜µì…˜)
         transform.forward = Camera.main.transform.forward;
     }
 
     public void Addstamina(int extrastamina)
     {
-        Debug.Log(extrastamina + "¸¸Å­ ÁÙ¾îµé¾ú½À´Ï´Ù.");
+        Debug.Log(extrastamina + "ë§Œí¼ ì¤„ì–´ë“¤ì—ˆìŠµë‹ˆë‹¤.");
         currentStamina += extrastamina;
         StaminarUI();
     }

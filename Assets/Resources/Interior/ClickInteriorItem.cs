@@ -61,9 +61,10 @@ public class ClickInteriorItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!interiorManager.interiorMode){
-            selected=false;
-            this.transform.position = initialPosition; 
+        if (!interiorManager.interiorMode)
+        {
+            selected = false;
+            this.transform.position = initialPosition;
         }
 
         if (checkButton != null && targetCanvas != null)
@@ -136,7 +137,8 @@ public class ClickInteriorItem : MonoBehaviour
 
     void OnMouseDown()
     {
-        if(interiorManager.tileMode){
+        if (interiorManager.tileMode)
+        {
             return;
         }
         Select();
@@ -227,6 +229,22 @@ public class ClickInteriorItem : MonoBehaviour
     // 보관함에 넣기 버튼 클릭 시
     public void ClickPutInButton()
     {
+        if (gameObject.name == "Employee1(Clone)") // 원단 직원
+        {
+            Employee employee = gameObject.GetComponent<Employee>();
+            Make_Fabric.Instance.Remove_Employee(employee.EmployeeID);
+        }
+        else if (gameObject.name == "Employee2(Clone)") // 솜 직원
+        {
+            Employee employee = gameObject.GetComponent<Employee>();
+            Make_Cotton.Instance.Remove_Employee(employee.EmployeeID);
+        }
+        else if (gameObject.name == "Employee3(Clone)") // 데코 직원
+        {
+            Employee employee = gameObject.GetComponent<Employee>();
+            Make_Sewing.Instance.Remove_Employee(employee.EmployeeID);
+        }
+
         Destroy(gameObject); // 오브젝트 삭제
         if (checkButton != null) Destroy(checkButton.gameObject);
         if (putInButton != null) Destroy(putInButton.gameObject);
@@ -254,7 +272,7 @@ public class ClickInteriorItem : MonoBehaviour
         rend.material = normalMaterial;
         if (checkButton != null) Destroy(checkButton.gameObject);
         if (putInButton != null) Destroy(putInButton.gameObject);
-        
+
     }
 
     // 바닥에 닿았는지 검사

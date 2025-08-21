@@ -9,15 +9,14 @@ public class CottonPanel : MonoBehaviour
     public Transform scrollContent;
 
     public StoragePanel storagePanel;
-    public GameObject BallonPanel;
-
     public ItemScript currentCotton;
 
     private GameManager gameManager;
+
     void Start()
     {
-
         gameManager = GameManager.getInstance();
+
         if (storagePanel == null)
         {
             storagePanel = FindObjectOfType<StoragePanel>();
@@ -26,15 +25,13 @@ public class CottonPanel : MonoBehaviour
         RefreshInventoryUI();
     }
 
-    public void SetSelectedBlanket(ItemScript blanket)
-    {
 
+    public void SetSelectedBlanket()
+    {
         if (gameManager == null)
         {
             gameManager = GameManager.getInstance();
         }
-
-        currentCotton = gameManager.Blanket_to_Yarn(blanket.itemName); // 이불 -> 원단
 
         if (!storagePanel.isInit)
         {
@@ -57,7 +54,6 @@ public class CottonPanel : MonoBehaviour
             gameManager = GameManager.getInstance();
 
         List<(ItemScript item, int count)> YarnInventory = gameManager.Get_Yarn_Inventory();
-        //    public List<(ItemScript, int count)> Get_Cotton_Inventory()
 
         if (!storagePanel.isInit)
         {

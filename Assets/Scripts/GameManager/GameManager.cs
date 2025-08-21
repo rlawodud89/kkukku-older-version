@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 
 public enum BgType
 {
@@ -582,6 +580,11 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
+    public int Count_InventoryItem(string itemName)
+    {
+        return dbManager.Count_Inventory(itemName);
+    }
+
     public bool Add_BlanketDesign(string blanketName)
     {
         if (dbManager.Have_Design(blanketName)) return false;
@@ -590,6 +593,19 @@ public class GameManager : MonoBehaviour
             dbManager.Insert_Design(blanketName);
             return true;
         }
+    }
+
+    public List<ItemScript> Get_Current_BlanketDesign()
+    {
+        List<Design> designs = dbManager.Select_Design();
+        List<ItemScript> list = new List<ItemScript>();
+
+        foreach (Design d in designs)
+        {
+            list.Add(Get_InventoryItem(d.blanketName));
+        }
+
+        return list;
     }
 
     public bool Add_InteriorItem(string interiorName, int count)
@@ -907,7 +923,7 @@ public class GameManager : MonoBehaviour
         dbManager.Update_Quest_GetReward(questName, getReward);
     }
 
-    
+
     public (int workerID, int stamina, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);

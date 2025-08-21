@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class ArrangementWorkRoom : MonoBehaviour
 {
+    public Make_Fabric make_Fabric;
+    public Make_Cotton make_Cotton;
+    public Make_Sewing make_Sewing;
+    public SnacksInventory snackInventory;
+
     // 게임 메니저
     private GameManager gameManager;
 
@@ -14,12 +19,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     // 아이템 생성되는 곳
     private Transform itemParent;
 
-    // 테스트용
-    public InteriorScript furnitureItem;
-    //public InteriorScript workerItem;
-    //public InteriorScript tileItem;
 
-    // Start is called before the first frame update
     void Awake()
     {
         gameManager = GameManager.getInstance();
@@ -31,8 +31,8 @@ public class ArrangementWorkRoom : MonoBehaviour
             GameObject gm = new GameObject("GameManager");
             gameManager = gm.AddComponent<GameManager>();
 #else
-            Debug.LogError("GameManager instance not found!");
-            return;
+        Debug.LogError("GameManager instance not found!");
+        return;
 #endif
         }
 
@@ -40,21 +40,8 @@ public class ArrangementWorkRoom : MonoBehaviour
         itemParent = GameObject.Find("Pixels")?.transform;
 
         installedInteriors = gameManager.Get_Current_RoomInterior();
-        //installedInteriors = gameManager?.Get_Current_RoomInterior()?? new List<(InteriorScript item, float x, float y)>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void OnEnable()
-    {
-        // 씬이 로드될 때 호출될 콜백 함수 등록
-        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
@@ -68,28 +55,44 @@ public class ArrangementWorkRoom : MonoBehaviour
         // 씬이 로드될 때 실행할 코드 작성 (예: 특정 오브젝트 활성화, 데이터 로드 등)
         if (scene.name == "Work_Room") // 특정 씬에서만 동작하도록 조건 추가 가능
         {
-            Debug.Log("Work_Room loaded!");
-            // 특정 오브젝트 활성화 등 원하는 작업 수행
-
-            // 데베에서 가져오기
-
-
-            // 테스트용
-            //installedInteriors.Add((furnitureItem, -4, 2));
-
-
             if (installedInteriors == null)
             {
                 Debug.Log("No installed interiors found.");
                 return;
             }
 
-            // TODO: 직원인 경우 Empolyee에 저장된 내용 넣기
             foreach (var (item, x, y) in installedInteriors)
             {
                 var go = Instantiate(item.prefab, new Vector3(x, y, 20), item.prefab.transform.rotation);
+
+                if (item.interiorType == InteriorType.WORKER)
+                {
+                    Employee employee = go.GetComponent<Employee>();
+                    (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
+                    employee.EmployeeID = workerID;
+                    employee.staminar.currentStamina = stamina;
+                    employee.workItem = workItem;
+                    employee.workingPercent = workingPercent;
+                    employee.snacksInventory = snackInventory;
+
+                    if (item.workType == WorkType.FABRIC)
+                    {
+                        make_Fabric.Add_Employee(employee, employee.progressCircle);
+                    }
+                    else if (item.workType == WorkType.COTTON)
+                    {
+                        make_Cotton.Add_Employee(employee, employee.progressCircle);
+                    }
+                    else if (item.workType == WorkType.SEWING)
+                    {
+                        make_Sewing.Add_Employee(employee, employee.progressCircle);
+                    }
+                }
+
+
+
                 //go.transform.SetParent(itemParent,true);
-                Debug.Log($"Installed Interior: {item.name} at ({x}, {y})");
+                //Debug.Log($"Installed Interior: {item.name} at ({x}, {y})");
             }
         }
     }
