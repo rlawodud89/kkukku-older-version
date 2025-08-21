@@ -4903,7 +4903,7 @@ MonoBehaviour:
   loomPrice: 3000
   fillerPrice: 5000
   decoTablePrice: 8000
-  levelLimit: 3
+  levelLimit: 5
 --- !u!1 &1422193080
 GameObject:
   m_ObjectHideFlags: 0

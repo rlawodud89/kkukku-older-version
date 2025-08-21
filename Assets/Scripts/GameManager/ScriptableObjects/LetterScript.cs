@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewLetter", menuName = "ScriptableObject/LetterScript")]
-public class LetterSciprt : ScriptableObject
+public class LetterScript : ScriptableObject
 {
     public string letterName;
     public Sprite image;

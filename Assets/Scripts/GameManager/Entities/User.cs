@@ -46,4 +46,10 @@ public class User
 
     [NotNull]
     public bool isOpen { get; set; }
+
+    [NotNull]
+    public float bgSound { get; set; }
+
+    [NotNull]
+    public float effectSound { get; set; }
 }
