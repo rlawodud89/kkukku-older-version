@@ -341,6 +341,8 @@ public class InteriorManager : MonoBehaviour
     // 인테리어 메뉴 버튼 눌렀을 때
     public void ClickInteriorButton()
     {
+        if (interiorMode) return;
+        
         interiorMode = true;
 
         tileButton.SetActive(true);

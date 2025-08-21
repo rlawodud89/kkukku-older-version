@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interiorName: "\uD770\uC0C9\uC9C4\uC5F4\uC7A5"
   interiorType: 0
-  image: {fileID: 1993146599, guid: 568a9534f09458a479ba9ebc6f2ede9f, type: 3}
+  image: {fileID: 2070237529, guid: 568a9534f09458a479ba9ebc6f2ede9f, type: 3}
   prefab: {fileID: 0}
   value: 0
   tableType: 0
-  fullImage: {fileID: -202773943, guid: 568a9534f09458a479ba9ebc6f2ede9f, type: 3}
+  fullImage: {fileID: -1815313070, guid: 568a9534f09458a479ba9ebc6f2ede9f, type: 3}
   workType: 3

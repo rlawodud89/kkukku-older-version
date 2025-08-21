@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 220
+  spritePixelsToUnits: 110
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,19 +100,19 @@ TextureImporter:
       name: "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_full"
       rect:
         serializedVersion: 2
-        x: 28
-        y: 135
-        width: 518
-        height: 376
+        x: 15
+        y: 71
+        width: 275
+        height: 201
       alignment: 9
-      pivot: {x: 0.0010588436, y: 0.547019}
+      pivot: {x: -0.002405645, y: 0.55116373}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 875d5e94dfaa51b448be2d0a511df96c
-      internalID: 114290676
+      spriteID: d5eb77efb2c330a4bb2b70dfc778e2df
+      internalID: 553052129
       vertices: []
       indices: 
       edges: []
@@ -121,19 +121,19 @@ TextureImporter:
       name: "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_empty"
       rect:
         serializedVersion: 2
-        x: 686
-        y: 153
-        width: 521
-        height: 381
+        x: 363
+        y: 81
+        width: 279
+        height: 203
       alignment: 9
-      pivot: {x: 0.00231629, y: 0.5486115}
+      pivot: {x: 0.009605162, y: 0.55286217}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e6857fdd1273ce4e95fc05b17eece45
-      internalID: -833310437
+      spriteID: 24b5edccb1f01d543b46b3c0c8cfd242
+      internalID: -1291902486
       vertices: []
       indices: 
       edges: []
@@ -149,8 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_empty": -833310437
-      "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_full": 114290676
+      "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_empty": -1291902486
+      "\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5_full": 553052129
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

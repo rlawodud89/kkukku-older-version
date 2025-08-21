@@ -96,7 +96,7 @@ public class ProgressCircle : MonoBehaviour
             // 항상 카메라를 향하게
             transform.forward = Camera.main.transform.forward;
 
-            Debug.LogWarning(elapsed);
+            //Debug.LogWarning(elapsed);
 
             yield return null;
         }

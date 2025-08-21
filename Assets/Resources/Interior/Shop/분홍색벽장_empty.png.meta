@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 220
+  spritePixelsToUnits: 110
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,19 +100,19 @@ TextureImporter:
       name: "\uBD84\uD64D\uC0C9\uBCBD\uC7A5_empty"
       rect:
         serializedVersion: 2
-        x: 90
-        y: 18
-        width: 523
-        height: 620
+        x: 20
+        y: 11
+        width: 281
+        height: 330
       alignment: 9
-      pivot: {x: 0.80661917, y: 0.0065789684}
+      pivot: {x: 0.80550873, y: 0.0013881654}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fb781f21ba192e48a54d9bdce95bc98
-      internalID: -1403899197
+      spriteID: e8c633bb3cbf2bf48838e5a7a7faa418
+      internalID: 899393503
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\uBD84\uD64D\uC0C9\uBCBD\uC7A5_empty": -1403899197
+      "\uBD84\uD64D\uC0C9\uBCBD\uC7A5_empty": 899393503
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
