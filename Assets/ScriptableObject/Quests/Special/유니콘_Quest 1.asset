@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: "\uC720\uB2C8\uCF58_Quest 1"
   m_EditorClassIdentifier: 
   questTitle: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C\uB85C"
-  questDescription: 
+  questDescription: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C '\uB77C\uC77C\uB77D\uAFC8
+    \uB2F4\uC694'\uB97C \uAC00\uC838\uB2E4 \uC8FC\uC790.\n\uBBF8\uB4DC\uB098\uC787\uC740
+    \uB9C8\uC744\uC5D0 \uC788\uB2E4."
   rewards:
   - rewardType: "\uC7AC\uD654"
     amount: 5
@@ -23,6 +25,3 @@ MonoBehaviour:
   getReward: 0
   isSpecial: 1
   nextQuest: {fileID: 11400000, guid: 66e68def1237ae34ea358c10158f1c30, type: 2}
-  content: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C '\uB77C\uC77C\uB77D\uAFC8 \uB2F4\uC694'\uB97C
-    \uAC00\uC838\uB2E4 \uC8FC\uC790. \uBBF8\uB4DC\uB098\uC787\uC740 \uB9C8\uC744\uC5D0
-    \uC788\uB2E4."

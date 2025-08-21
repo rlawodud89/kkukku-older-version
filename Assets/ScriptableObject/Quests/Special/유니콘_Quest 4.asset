@@ -13,17 +13,15 @@ MonoBehaviour:
   m_Name: "\uC720\uB2C8\uCF58_Quest 4"
   m_EditorClassIdentifier: 
   questTitle: "\uC81C\uB300\uB85C \uB41C \uC774\uBD88 (2)"
-  questDescription: 
+  questDescription: "\uBAA8\uC740 \uC7AC\uB8CC\uB97C \uC0AC\uC6A9\uD574\uC11C \uAC1C\uC778
+    \uC81C\uC791\uB300\uC5D0\uC11C '\uBCC4\uBB34\uB2AC\uACE0\uC694 \uC774\uBD88'\uC744
+    \uB9CC\uB4E4\uC790.\n*\uD544\uC694\uD55C \uC7AC\uB8CC*\n\uC740\uD558\uAFC8\uC2E4x1\n\uD587\uBE5B\uC6B4\uBB34\uC19Cx2\n\uBABD\uD658\uC758\uAF43\uC78Ex2\n\uCCAD\uC57C\uB2EC\uC870\uAC01x1"
   rewards:
   - rewardType: "\uC7AC\uD654"
     amount: 5
   questProcess: 0
   questComplete: 0
-  isCompleted: 0
+  isCompleted: 1
   getReward: 0
   isSpecial: 1
   nextQuest: {fileID: 11400000, guid: 78325b4289ce97143aff9cc4569123b6, type: 2}
-  content: "\uBAA8\uC740 \uC7AC\uB8CC\uB97C \uC0AC\uC6A9\uD574\uC11C \uAC1C\uC778
-    \uC81C\uC791\uB300\uC5D0\uC11C '\uBCC4\uBB34\uB2AC\uACE0\uC694 \uC774\uBD88'\uC744
-    \uB9CC\uB4E4\uC790.\n\uC815\uC801\uC11D x1\n\uB2EC\uC228 \uC774\uC2AC x2\n\uC794\uBE5B\uBE44\uB2E8
-    x2\n\uC18D\uC0AD\uC784 \uC870\uAC01 x1"

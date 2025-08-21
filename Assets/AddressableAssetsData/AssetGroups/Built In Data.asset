@@ -467,6 +467,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - letter
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3e4c173c8ad8084ea3aa0e67d67b713
+    m_Address: "Assets/ScriptableObject/Quests/\uD2B9\uD018\uC0C1\uD0DC/\uBBF8\uB4DC\uB098\uC787.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:
