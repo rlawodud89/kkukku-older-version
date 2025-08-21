@@ -6,7 +6,7 @@ public class WorkRoom
     public int workerID { get; set; }
 
     [NotNull]
-    public int stamina { get; set; } = 100;
+    public int stamina { get; set; } = 50;
 
     [NotNull]
     public bool working { get; set; }

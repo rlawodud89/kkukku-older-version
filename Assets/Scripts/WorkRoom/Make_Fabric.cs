@@ -155,15 +155,14 @@ public class Make_Fabric : MonoBehaviour
             fabric_button.onClick.RemoveAllListeners();
             fabric_button.onClick.AddListener(() =>
             {
-
-                cottonPanel?.SetSelectedBlanket(current_employee.workItem);
-
                 ballon_Panel.SetActive(false);
                 fabric_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
                 gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
                 gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
+
+                cottonPanel?.SetSelectedBlanket();
 
             });
 

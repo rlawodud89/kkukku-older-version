@@ -104,16 +104,14 @@ public class Make_Cotton : MonoBehaviour
             cotton_button.onClick.RemoveAllListeners();
             cotton_button.onClick.AddListener(() =>
             {
-
-                sewingPanel.currentSewing = current_employee.workItem;
-                sewingPanel?.SetSelectedBlanket();
-
                 ballon_Panel.SetActive(false);
                 cotton_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
                 gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
                 gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
+
+                sewingPanel?.SetSelectedBlanket();
 
             });
 
