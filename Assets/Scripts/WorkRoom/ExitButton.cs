@@ -6,7 +6,7 @@ public class ExitButton : MonoBehaviour
 {
     public GameObject scrollView;
     public GameObject Panel;
-    public Make_Fabric makeFabric;
+    private Make_Fabric makeFabric;
 
     private FabricDetailPanelController detailPanelController;
     public void CloseScrollView()
@@ -27,8 +27,14 @@ public class ExitButton : MonoBehaviour
             detailPanelController.ResetAllSlots();
         }
 
-        scrollView.SetActive(false);
-        Panel.SetActive(false);
+        if (scrollView != null)
+        {
+            scrollView.SetActive(false);
+        }
+        if (Panel != null)
+        {
+            Panel.SetActive(false);
+        }
     }
     void Start()
     {

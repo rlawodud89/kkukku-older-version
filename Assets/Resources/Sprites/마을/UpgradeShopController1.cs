@@ -25,6 +25,11 @@ public class UpgradeShopController1 : MonoBehaviour
     [SerializeField] int decoTablePrice = 8000;
     [SerializeField] int levelLimit = 3;
 
+    [Header("ProgressCircle 연결")]
+    [SerializeField] ProgressCircle loomProgress;
+    [SerializeField] ProgressCircle fillerProgress;
+    [SerializeField] ProgressCircle decoProgress;
+
     private GameManager gameManager;
     public Action<SpeechType> speechType;
 
@@ -42,6 +47,26 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnLoomClick()
     {
+        if (gameManager==null)
+        {
+            gameManager= GameManager.getInstance();
+        }
+
+        if (!CanBuy(loomPrice))
+        {
+            Debug.Log("재화 부족");
+            speechType?.Invoke(SpeechType.Lack);
+            return;
+        }
+
+        if (gameManager.Get_LoomLevel() >= levelLimit)
+        {
+            speechType?.Invoke(SpeechType.Limit);
+            return;
+        }
+
+
+
         if (!CanBuy(loomPrice))
         {
             Debug.Log("재화 부족");
@@ -107,6 +132,8 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_LoomLevel(1);
         loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
+
+        loomProgress?.UpdateMaxProgress();
     }
 
     void DoFillerUpgrade()
@@ -115,6 +142,8 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_FillerLevel(1);
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
+
+        fillerProgress?.UpdateMaxProgress();
     }
 
     void DoDecoTableUpgrade()
@@ -123,6 +152,7 @@ public class UpgradeShopController1 : MonoBehaviour
         gameManager.Change_DecoLevel(1);
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
+        decoProgress?.UpdateMaxProgress();
     }
 
     private bool CanBuy(int value)

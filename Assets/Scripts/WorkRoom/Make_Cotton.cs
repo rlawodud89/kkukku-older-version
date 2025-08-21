@@ -9,7 +9,6 @@ public class Make_Cotton : MonoBehaviour
     public GameObject BallonPanel;
     public Button CottonButton;
 
-    [Header("꼭 연결 안해도됨")]
     private ItemScript currentYarn;
     private ItemScript currentCotton;
 
@@ -17,6 +16,8 @@ public class Make_Cotton : MonoBehaviour
     private Employee Employee2;
     private ProgressCircle progresscircle;
     private GameManager gameManager;
+    public bool isMaking = false;
+
     private void Start()
     {
         if (gameManager == null)
@@ -36,6 +37,10 @@ public class Make_Cotton : MonoBehaviour
             if (Employee2 != null)
             {   
                 progresscircle = Employee2.GetComponentInChildren<ProgressCircle>();
+
+
+                if (BallonPanel != null)
+                    Employee2.SetBallonPanel(BallonPanel);
             }
 
         }
@@ -55,6 +60,12 @@ public class Make_Cotton : MonoBehaviour
 
     public void HandleMakeClicked(ItemScript currentYarn)
     {
+        if (isMaking)
+        {
+            Debug.Log("이미 제작 중입니다!");
+            return; // 중복 클릭 방지
+        }
+
         if (gameManager == null)
         {
             gameManager = GameManager.getInstance();
@@ -75,7 +86,10 @@ public class Make_Cotton : MonoBehaviour
         cottonPanel.SetActive(false);
         // Employee2 작업
         if (Employee2 != null)
+        {
             Employee2.Working();
+            isMaking = true;
+        }
         else
             Debug.LogWarning("Employee2가 null 상태라 Working() 호출 불가");
 
@@ -109,6 +123,7 @@ public class Make_Cotton : MonoBehaviour
                 sewingPanel.currentSewing = currentCotton;
                 sewingPanel?.SetSelectedBlanket();
 
+                isMaking = false;
                 BallonPanel.SetActive(false);
                 CottonButton.gameObject.SetActive(false);
                 progresscircle.ProgressInit();

@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class BlanketSlotUI : MonoBehaviour
 {
     public Button button;
-    public Text countText;
+    public TextMeshProUGUI countText;
     public GameObject checkPanel;
 
     private ItemScript currentData;
@@ -82,13 +83,16 @@ public class BlanketSlotUI : MonoBehaviour
 
         if (checkPanel != null)
         {
-            checkPanel.SetActive(true);
+            // 토글 처리: 켜져 있으면 끄고, 꺼져 있으면 켜기
+            bool isActive = checkPanel.activeSelf;
+            checkPanel.SetActive(!isActive);
         }
         else
         {
             Debug.LogWarning("CheckPanel이 연결되지 않았습니다.");
         }
     }
+
 
     public void OnMakeButtonClicked()
     {

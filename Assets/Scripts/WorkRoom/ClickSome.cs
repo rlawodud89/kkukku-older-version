@@ -63,7 +63,8 @@ public class ClickSome : MonoBehaviour
     {
         if (interiorManager != null && interiorManager.interiorMode)
             return;
-        
+
+
         float movedDistance = Vector3.Distance(Input.mousePosition, mouseDownPos);
 
         if (movedDistance < dragThreshold)

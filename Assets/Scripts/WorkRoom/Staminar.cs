@@ -8,8 +8,44 @@ public class Staminar : MonoBehaviour
     public Image fillImage;
     public float maxStamina = 100f;
     public float currentStamina = 100f;
-    public float time = 5f;
 
+    private GameManager gameManager;
+
+
+    private int lastLevel = -1;
+
+    void Update()
+    {
+        if (gameManager == null)
+            gameManager = GameManager.getInstance();
+
+        int level = 1;
+        switch (gameObject.tag)
+        {
+            case "Fox": level = gameManager.Get_LoomLevel(); break;
+            case "Sheep": level = gameManager.Get_FillerLevel(); break;
+            case "Cat": level = gameManager.Get_DecoLevel(); break;
+        }
+
+        // 레벨이 바뀐 경우에만 적용
+        if (level != lastLevel)
+        {
+            lastLevel = level;
+
+            switch (level)
+            {
+                case 1: maxStamina = 110f; break;
+                case 2: maxStamina = 120f; break;
+                case 3: maxStamina = 130f; break;
+                case 4: maxStamina = 140f; break;
+                case 5: maxStamina = 150f; break;
+                default: maxStamina = 100f; break;
+            }
+
+            // 풀 충전 (레벨업 시)
+            currentStamina = maxStamina;
+        }
+    }
 
     void StaminarUI()
     {
@@ -24,13 +60,13 @@ public class Staminar : MonoBehaviour
             fillImage.color = Color.red;  
         }
 
-        // �׻� ī�޶� ���ϵ��� (�ɼ�)
+        // 항상 카메라를 향하도록 (옵션)
         transform.forward = Camera.main.transform.forward;
     }
 
     public void Addstamina(int extrastamina)
     {
-        Debug.Log(extrastamina + "��ŭ �پ������ϴ�.");
+        Debug.Log(extrastamina + "만큼 줄어들었습니다.");
         currentStamina += extrastamina;
         StaminarUI();
     }

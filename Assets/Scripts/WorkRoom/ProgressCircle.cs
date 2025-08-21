@@ -1,5 +1,7 @@
+// ProgressCircle.cs
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 
 public class ProgressCircle : MonoBehaviour
@@ -8,26 +10,66 @@ public class ProgressCircle : MonoBehaviour
     public Image Image;
     public Image completeImage;
 
-    public float maxProgress = 30f;
- 
-
+    private float maxProgress = 30f;
+    private GameManager gameManager;
     private bool isRunning = false;
-    public System.Action OnComplete;  // ¿ÜºÎ¿¡¼­ ÇÒ´ç °¡´É
+    public Action OnComplete;
+
+    private int lastLevel = -1;
+
+    private void Start()
+    {
+        if (gameManager == null)
+            gameManager = GameManager.getInstance();
+
+        // ì‹œì‘ ì‹œ ë ˆë²¨ ì²´í¬
+        UpdateMaxProgress();
+        ProgressInit();
+    }
+
+    // UpgradeShopControllerì—ì„œ í˜¸ì¶œí•  public ë©”ì„œë“œ
+    public void RefreshMaxProgress()
+    {
+        UpdateMaxProgress();
+    }
+
+    public void UpdateMaxProgress()
+    {
+        int level = 1;
+        switch (gameObject.tag)
+        {
+            case "Fox": level = gameManager.Get_LoomLevel(); break;
+            case "Sheep": level = gameManager.Get_FillerLevel(); break;
+            case "Cat": level = gameManager.Get_DecoLevel(); break;
+        }
+
+        if (level == lastLevel) return; // ë³€ê²½ ì—†ìœ¼ë©´ ë¬´ì‹œ
+        lastLevel = level;
+
+        switch (level)
+        {
+            case 1: maxProgress = 30f; break;
+            case 2: maxProgress = 25f; break;
+            case 3: maxProgress = 20f; break;
+            case 4: maxProgress = 15f; break;
+            case 5: maxProgress = 10f; break;
+            default: maxProgress = 30f; break;
+        }
+
+        Debug.Log($"[{gameObject.tag}] level={level}, maxProgress={maxProgress}");
+    }
 
     public void CompleteCircle()
     {
         if (!isRunning)
             StartCoroutine(FillOverTime());
         else
-        {
-            Debug.Log("ÇöÀç ½ÇÇà ÁßÀÔ´Ï´Ù. ÀÛ¾÷À» ¿Ï·áÇØÁÖ¼¼¿ä.");
-        }
+            Debug.Log("í˜„ì¬ ì‹¤í–‰ ì¤‘ì…ë‹ˆë‹¤. ì‘ì—…ì„ ì™„ë£Œí•´ì£¼ì„¸ìš”.");
     }
 
     public void ProgressInit()
     {
         isRunning = false;
-
         fillImage.fillAmount = 1;
         Image.gameObject.SetActive(true);
         fillImage.gameObject.SetActive(true);
@@ -45,24 +87,14 @@ public class ProgressCircle : MonoBehaviour
             float progress = Mathf.Clamp01(1 - (elapsed / maxProgress));
             fillImage.fillAmount = progress;
 
-            // Ç×»ó Ä«¸Ş¶ó¸¦ ÇâÇÏ°Ô
             transform.forward = Camera.main.transform.forward;
-
             yield return null;
         }
 
-        // ÀÛ¾÷ ¿Ï·á ½Ã Ã³¸®
         fillImage.gameObject.SetActive(false);
         Image.gameObject.SetActive(false);
         completeImage.gameObject.SetActive(true);
 
-
-        if (OnComplete != null)
-        {
-            OnComplete.Invoke();
-        }
-
+        OnComplete?.Invoke();
     }
-
-
 }

@@ -18,12 +18,14 @@ public class Make_Fabric : MonoBehaviour
     [Header("꼭 연결 안해도됨")]
     public ItemScript currentBlanket;
     public FabricDetailPanelController detailPanelController;
+    public ItemScript makingBlanket; // 실제 제작 중인 블랭킷
 
 
     private ProgressCircle progresscircle;
     private Employee Employee1;
     private GameManager gameManager;
     private bool can_make = false;
+    public bool isMaking = false;
 
 
     void Start()
@@ -51,60 +53,72 @@ public class Make_Fabric : MonoBehaviour
             if (Employee1 != null)
             {
                 progresscircle = Employee1.GetComponentInChildren<ProgressCircle>();
+
+                if (BallonPanel != null)
+                    Employee1.SetBallonPanel(BallonPanel);
             }
 
         }
 
-
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void ClickMakebtn()
     {
+        if (isMaking)
+        {
+            Debug.Log("이미 제작 중입니다!");
+            return; // 중복 클릭 방지
+        }
+
+        if (currentBlanket == null) return;
+
         can_make = Check_Recipe(currentBlanket);
         Debug.Log(can_make);
 
-        if (can_make)
-        {
-            for (int i = 0; i < currentBlanket.recipe.Count; i++)
-            {
-                gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
-                Debug.Log(currentBlanket.recipe[i].itemName+ currentBlanket.recipe[i].count+"만큼 감소");
-            }
-
-            if (detailPanelController == null)
-            {
-                detailPanelController = FindObjectOfType<FabricDetailPanelController>();
-            }
-            detailPanelController.OpenPanel(currentBlanket);
-
-
-            Panel.SetActive(false);
-            Panel2.SetActive(false);
-            Scroll_View.SetActive(false);
-
-
-            Employee1.Working();
-
-            progresscircle.OnComplete = () =>
-            {
-                showfabric(); 
-            };
-
-            progresscircle.CompleteCircle();
-            can_make = false;
-        }
-        else
+        if (!can_make)
         {
             Debug.Log("제작할 수 없습니다!");
+            return;
         }
 
+        // 제작 시작
+        isMaking = true;
+
+        // 제작용 변수 분리
+        ItemScript makingBlanket = currentBlanket;
+
+        // 재료 차감
+        for (int i = 0; i < makingBlanket.recipe.Count; i++)
+        {
+            gameManager.Use_InventoryItem(makingBlanket.recipe[i].itemName, makingBlanket.recipe[i].count);
+            Debug.Log($"{makingBlanket.recipe[i].itemName} {makingBlanket.recipe[i].count}만큼 감소");
+        }
+
+        // 상세 패널 열기
+        if (detailPanelController == null)
+            detailPanelController = FindObjectOfType<FabricDetailPanelController>();
+
+        detailPanelController.OpenPanel(makingBlanket);
+
+        // UI 숨기기
+        Panel.SetActive(false);
+        Panel2.SetActive(false);
+        Scroll_View.SetActive(false);
+
+        // 직원 제작 시작
+        Employee1.Working();
+
+        // 프로그레스 완료 시 동작
+        progresscircle.OnComplete = () =>
+        {
+            showfabric(makingBlanket);
+        };
+
+        progresscircle.CompleteCircle();
+        can_make = false;
     }
+
 
     private bool Check_Recipe(ItemScript currentBlanket)
     {
@@ -126,35 +140,33 @@ public class Make_Fabric : MonoBehaviour
     }
 
 
-    void showfabric()
+    void showfabric(ItemScript makingBlanket)
     {
-        if (currentBlanket != null)
+        if (makingBlanket == null)
         {
-
-            BallonPanel.SetActive(true);
-            FabricButton.gameObject.SetActive(true);
-            FabricButton.image.sprite = gameManager.Blanket_to_Yarn(currentBlanket.itemName).image;
-
-            FabricButton.onClick.RemoveAllListeners();
-            FabricButton.onClick.AddListener(() =>
-            {
-                Debug.Log("버튼 눌림!");
-                gameManager.Add_InventoryItem(currentBlanket.yarnName, 1); //원단 추가
-                Debug.Log(currentBlanket.yarnName + "만듦");
-
-                cottonPanel?.SetSelectedBlanket(currentBlanket);
-
-                BallonPanel.SetActive(false);
-                FabricButton.gameObject.SetActive(false);
-                progresscircle.ProgressInit();
-
-            });
-
+            Debug.Log("makingBlanket is null");
+            return;
         }
-        else
+
+        BallonPanel.SetActive(true);
+        FabricButton.gameObject.SetActive(true);
+        FabricButton.image.sprite = gameManager.Blanket_to_Yarn(makingBlanket.itemName).image;
+
+        FabricButton.onClick.RemoveAllListeners();
+        FabricButton.onClick.AddListener(() =>
         {
-            Debug.Log("null");
-        }
+            Debug.Log("버튼 눌림!");
+            gameManager.Add_InventoryItem(makingBlanket.yarnName, 1); // 원단 추가
+            cottonPanel?.SetSelectedBlanket(makingBlanket);
+
+
+            isMaking = false;
+            BallonPanel.SetActive(false);
+            FabricButton.gameObject.SetActive(false);
+            progresscircle.ProgressInit();
+        });
     }
+
+
 
 }

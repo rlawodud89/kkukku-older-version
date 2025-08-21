@@ -6,30 +6,16 @@ public class Employee : MonoBehaviour
 {
     public TextMeshProUGUI floatingText;
     public GameObject ballonPanel;
-    public Image ballonimage;
 
     public Staminar staminar;
     private SnacksInventory snacksInventory;
 
     public string EmployeeName;
 
-    void Start()
+    public void SetBallonPanel(GameObject panel)
     {
-        // ballonPanel 자동 연결 (EmployeeName과 같은 태그로 찾기)
-        if (ballonPanel == null && !string.IsNullOrEmpty(EmployeeName))
-        {
-            GameObject panelObj = GameObject.FindWithTag(EmployeeName);
-            if (panelObj != null)
-            {
-                ballonPanel = panelObj;
-                ballonimage = panelObj.GetComponentInChildren<Image>();
-                floatingText = panelObj.GetComponentInChildren<TextMeshProUGUI>();
-            }
-            else
-            {
-                Debug.LogWarning(EmployeeName + " 태그를 가진 BallonPanel을 찾지 못함");
-            }
-        }
+        ballonPanel = panel;
+        floatingText = panel.GetComponentInChildren<TextMeshProUGUI>(true);
     }
 
     public void GiveItem(ItemScript item)
