@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
   m_Name: "\uC720\uB2C8\uCF58_Quest 1"
   m_EditorClassIdentifier: 
-  questTitle: "\uC774\uBD88\uC744 \uB9CC\uB4E4\uC790"
-  questDescription: "\uC88B\uC740 \uC774\uBD88\uB85C.."
+  questTitle: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C\uB85C"
+  questDescription: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C '\uB77C\uC77C\uB77D\uAFC8
+    \uB2F4\uC694'\uB97C \uAC00\uC838\uB2E4 \uC8FC\uC790.\n\uBBF8\uB4DC\uB098\uC787\uC740
+    \uB9C8\uC744\uC5D0 \uC788\uB2E4."
   rewards:
-  - rewardType: "\uC6D4\uC11D"
-    amount: 5
   - rewardType: "\uC7AC\uD654"
     amount: 5
   questProcess: 0
   questComplete: 0
-  isCompleted: 1
+  isCompleted: 0
   getReward: 0
   isSpecial: 1
-  nextQuest: {fileID: 0}
+  nextQuest: {fileID: 11400000, guid: 66e68def1237ae34ea358c10158f1c30, type: 2}
