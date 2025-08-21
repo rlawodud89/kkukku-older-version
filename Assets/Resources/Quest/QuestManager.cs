@@ -8,6 +8,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 
+
 public class QuestManager : MonoBehaviour
 {
     [SerializeField] private bool useAddressables = true; // ← Addressables 쓰려면 true
@@ -730,7 +731,5 @@ public class QuestManager : MonoBehaviour
         
 
     }
-
-   
 
 }

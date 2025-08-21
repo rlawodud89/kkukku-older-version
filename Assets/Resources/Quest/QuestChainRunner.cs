@@ -7,16 +7,41 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-
+using System.Text.RegularExpressions;
 public class QuestChainRunner : MonoBehaviour
 {
-    // ====== 외부 인벤토리 인터페이스(프로젝트 쪽 구현을 여기에 연결) ======
-    public interface IInventory
+    // 호출 위치: OnEnable()나 Start() 초반
+    private void PrepareRuntimeQuests()
     {
-        int GetCount(string itemId);
-        void Add(string itemId, int amount);
-        bool Remove(string itemId, int amount);
+        if (_runtimePrepared) return;
+        _runtimePrepared = true;
+
+        _baseDescriptions.Clear();
+        for (int i = 0; i < steps.Count; i++)
+        {
+            var q = steps[i].quest;
+            if (q == null) { _baseDescriptions.Add(""); continue; }
+
+            // 원본 본문 백업
+            _baseDescriptions.Add(q.questDescription ?? "");
+
+            // 런타임 클론 생성 → steps[i].quest 교체
+            var clone = ScriptableObject.Instantiate(q);
+            clone.name = q.name + "_Runtime";
+#if UNITY_EDITOR
+            clone.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+#else
+        clone.hideFlags = HideFlags.DontSave;
+#endif
+            steps[i].quest = clone;
+        }
     }
+
+
+    private GameManager gameManager;
+    private bool _runtimePrepared = false;
+    private List<string> _baseDescriptions = new(); // 원본 본문 백업(진행도 덧붙일 때 기준)
+
 
     // ====== 단계 정의 ======
     [Serializable]
@@ -65,7 +90,6 @@ public class QuestChainRunner : MonoBehaviour
 
     [Header("외부 시스템 연결")]
     [SerializeField] private MonoBehaviour inventoryProvider; // IInventory 구현체
-    private IInventory Inv => inventoryProvider as IInventory;
 
     [Header("공유 상태 SO (씬 간 연결의 핵심)")]
     public QuestChainStateSO state; // 같은 에셋을 모든 씬에서 참조
@@ -81,23 +105,17 @@ public class QuestChainRunner : MonoBehaviour
     // 제작 성공/특정 산출물 플래그
     private readonly HashSet<string> craftedFlags = new();
 
-    // 보기 좋은 이름 매핑(인게임 표기명 ← itemId)
-    private readonly Dictionary<string, string> _readable = new Dictionary<string, string>()
-    {
-        // 담요
-        { "blanket_lilac_dream", "라일락꿈 담요" },
-        { "blanket_star_quiet", "별무늬고요 이불" },
-
-        // 새 재료들
-        { "thread_galaxy_dream", "은하꿈실" },
-        { "cotton_sunlight_mist", "햇빛운무솜" },
-        { "petal_dreamlike", "몽환의꽃잎" },
-        { "fragment_moon_bluefield", "청야달조각" },
-    };
 
     // ====== Unity ======
+
+    private void Start()
+    {
+        gameManager = GameManager.getInstance();
+    }
     private void OnEnable()
     {
+        PrepareRuntimeQuests();
+
         if (state == null)
             Debug.LogWarning("QuestChainStateSO가 연결되지 않았습니다. 씬 간 동기화를 원하면 반드시 할당하세요.");
 
@@ -169,10 +187,11 @@ public class QuestChainRunner : MonoBehaviour
         var s = steps[currentIndex];
         if (s.requirement.type != ReqType.TurnInItem) return false;
         if (s.requirement.itemId != itemId) return false;
-        if (!InvSafe()) return false;
 
-        if (Inv.GetCount(itemId) < amount) return false;
-        Inv.Remove(itemId, amount);
+
+        //if (Inv.GetCount(itemId) < amount) return false;
+        gameManager.Use_InventoryItem(itemId, amount);
+        
 
         s.quest.isCompleted = true;
         onStepBecameCompleted?.Invoke(currentIndex);
@@ -207,8 +226,8 @@ public class QuestChainRunner : MonoBehaviour
                 return true;
 
             case ReqType.CollectItems:
-                if (!InvSafe()) return false;
 
+                /*
                 // 메인 요구
                 if (Inv.GetCount(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
                     return false;
@@ -216,7 +235,7 @@ public class QuestChainRunner : MonoBehaviour
                 // 추가 수집
                 foreach (var e in s.requirement.extraCollects)
                     if (Inv.GetCount(e.itemId) < e.count)
-                        return false;
+                        return false;*/
 
                 return true;
 
@@ -253,45 +272,78 @@ public class QuestChainRunner : MonoBehaviour
     {
         if (IsChainFinished()) return;
 
-        var s = steps[currentIndex];
+        var idx = currentIndex;
+        var s = steps[idx];
         var q = s.quest;
 
-        // 본문: QuestSO.questDescription 그대로 사용
-        string text = q != null ? (q.questDescription ?? string.Empty) : string.Empty;
+        // 1) 원본(에셋)에서 백업해 둔 베이스 본문
+        string baseText = (idx < _baseDescriptions.Count) ? _baseDescriptions[idx] : (q != null ? (q.questDescription ?? "") : "");
 
-        // 수집 단계면 진행도 줄 추가
-        if (s.requirement.type == ReqType.CollectItems && InvSafe())
-        {
-            var lines = new List<string>();
+        // 2) 진행도 블록 계산(CollectItems일 때만)
+        string progress = BuildProgressBlock(s);
 
-            // 메인 목표
-            lines.Add($"{Readable(s.requirement.itemId)} ({Inv.GetCount(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
+        // 3) 주입(토큰이 있으면 그 구간만, 없으면 아래에 붙임)
+        string composed = InjectProgress(baseText, progress);
 
-            // 추가 목표
-            foreach (var e in s.requirement.extraCollects)
-                lines.Add($"{Readable(e.itemId)} ({Inv.GetCount(e.itemId)}/{e.count})");
+        // 4) 런타임 클론 SO의 description만 갱신(에셋 파일은 건드리지 않음)
+        if (q != null && q.questDescription != composed)
+            q.questDescription = composed;
 
-            if (!string.IsNullOrWhiteSpace(text))
-                text += "\n";
-
-            text += string.Join("\n", lines);
-        }
-
-        onJournalUpdate?.Invoke(currentIndex, text);
+        // 5) 기존 훅도 그대로 호출(원하면 이걸로 UI를 직접 갱신)
+        onJournalUpdate?.Invoke(idx, composed);
     }
 
-    private string Readable(string itemId)
-        => _readable.TryGetValue(itemId, out var pretty) ? pretty : itemId;
 
-    private bool InvSafe()
+    private const string PROG_BEGIN = "<PROGRESS>";
+    private const string PROG_END = "</PROGRESS>";
+
+    private string BuildProgressBlock(Step s)
     {
-        if (Inv == null)
+        // CollectItems일 때만 진행도 표기
+        if (s.requirement.type != ReqType.CollectItems) return null;
+
+        var lines = new System.Text.StringBuilder();
+        // 메인 목표
+        //lines.AppendLine($"{s.requirement.itemId} ({GetCount(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
+
+        // 추가 목표
+        var extras = s.requirement.extraCollects;
+        if (extras != null)
         {
-            Debug.LogWarning("IInventory 구현체가 연결되지 않았습니다.");
-            return false;
+            for (int i = 0; i < extras.Length; i++)
+            {
+                var e = extras[i];
+                //lines.AppendLine($"{e.itemId} ({GetCount(e.itemId)}/{e.count})");
+            }
         }
-        return true;
+
+        return lines.ToString().TrimEnd();
     }
+
+    private string InjectProgress(string baseText, string progressBlock)
+    {
+        if (string.IsNullOrEmpty(progressBlock)) return baseText ?? "";
+
+        if (string.IsNullOrEmpty(baseText))
+            return progressBlock;
+
+        int i0 = baseText.IndexOf(PROG_BEGIN, StringComparison.Ordinal);
+        int i1 = baseText.IndexOf(PROG_END, StringComparison.Ordinal);
+
+        if (i0 != -1 && i1 != -1 && i1 > i0)
+        {
+            // 토큰 사이만 교체
+            var before = baseText.Substring(0, i0 + PROG_BEGIN.Length);
+            var after = baseText.Substring(i1);
+            return $"{before}\n{progressBlock}\n{after}";
+        }
+        // 토큰이 없으면 맨 아래에 덧붙임
+        return $"{baseText.TrimEnd()}\n{progressBlock}";
+    }
+
+
+
+
 
     // ====== 외부에서 참조하기 쉬운 헬퍼 (NPC 등에서 사용) ======
     public int CurrentIndex => currentIndex;
