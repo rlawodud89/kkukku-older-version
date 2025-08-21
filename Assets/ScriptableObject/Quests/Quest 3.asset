@@ -10,20 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
-  m_Name: Quest 0
+  m_Name: Quest 3
   m_EditorClassIdentifier: 
-  questTitle: "\uC778\uD14C\uB9AC\uC5B4 \uBC14\uAFB8\uAE30"
-  questImage: {fileID: 21300000, guid: b8d5a15780a7fe0439e48f0ad0a8644c, type: 3}
-  questDescription: "\uC544\uC774\uD15C\uC758 \uB514\uC790\uC778\uC744 \uBC14\uAFD4
-    \uC774\uBD88\uAC00\uAC8C\uB97C \uB354 \uD3EC\uADFC\uD558\uAC8C \uAFB8\uBA70\uBCF4\uC138\uC694.\r"
+  questTitle: "\uB09A\uC2DC\uD558\uAE30"
+  questImage: {fileID: 21300000, guid: c283a3163ddcdbb48806ebf6ab0b6b7f, type: 3}
+  questDescription: "\uAD6C\uB984\uD638\uC218\uC5D0 \uAC00\uC11C \uB09A\uC2DC\uB97C
+    \uD574\uBD10\uC694."
   rewards:
   - rewardType: "\uC6D4\uC11D"
-    amount: 5
-  - rewardType: "\uC7AC\uD654"
-    amount: 5
-  questProcess: 0
+    amount: 10
+  questProcess: 4
   questComplete: 1
   isCompleted: 0
-  getReward: 1
+  getReward: 0
   isSpecial: 0
   nextQuest: {fileID: 0}

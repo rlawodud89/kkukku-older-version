@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
   m_Name: Quest 1
   m_EditorClassIdentifier: 
-  questTitle: "\uC774\uBD88\uAC00\uAC8C \uB9AC\uBAA8\uB378\uB9C1"
-  questDescription: "\uC190\uB2D8\uB4E4\uC774 \uB354 \uD3B8\uD558\uAC8C \uC1FC\uD551\uD560
-    \uC218 \uC788\uB3C4\uB85D \uAC00\uAC8C\uB97C \uC544\uB291\uD558\uACE0 \uADC0\uC5FD\uAC8C\_\uAFB8\uBA70\uBCF4\uC138\uC694.  
-    \uC774\uBD88\uB9CC\uD07C \uD3EC\uADFC\uD558\uACE0 \uB530\uB73B\uD55C \uACF5\uAC04\uC744
-    \uB9CC\uB4E4\uC5B4 \uC190\uB2D8\uB4E4\uC5D0\uAC8C \uB354 \uB9CE\uC740 \uD589\uBCF5\uC744
-    \uC120\uC0AC\uD574 \uC8FC\uC138\uC694!"
+  questTitle: "\uC778\uD14C\uB9AC\uC5B4 \uC544\uC774\uD15C \uAD6C\uB9E4\uD558\uAE30 "
+  questImage: {fileID: 21300000, guid: b8d5a15780a7fe0439e48f0ad0a8644c, type: 3}
+  questDescription: "\uC0C8\uB85C\uC6B4 \uC778\uD14C\uB9AC\uC5B4 \uC544\uC774\uD15C\uC744
+    \uC0AC\uC11C \uAC00\uAC8C \uBD84\uC704\uAE30\uB97C \uC5C5\uADF8\uB808\uC774\uB4DC\uD574\uC694.\r"
   rewards:
   - rewardType: "\uC6D4\uC11D"
     amount: 50
   - rewardType: "\uD3EC\uADFC\uC5D0\uB108\uC9C0"
     amount: 50
   questProcess: 0
-  questComplete: 0
-  isCompleted: 1
-  getReward: 1
+  questComplete: 1
+  isCompleted: 0
+  getReward: 0
+  isSpecial: 0
+  nextQuest: {fileID: 0}

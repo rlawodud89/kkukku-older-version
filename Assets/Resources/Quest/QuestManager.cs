@@ -212,6 +212,7 @@ public class QuestManager : MonoBehaviour
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
             questButtons.Add(questButton);
             questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
+            questButton.transform.Find("QuestImage").GetComponent<Image>().sprite = currentQuest.questImage;
             if (currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
             else
@@ -733,4 +734,4 @@ public class QuestManager : MonoBehaviour
 
    
 
-}
+}

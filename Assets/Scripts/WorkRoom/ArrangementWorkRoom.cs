@@ -26,9 +26,16 @@ public class ArrangementWorkRoom : MonoBehaviour
 
         if (gameManager == null)
         {
+#if UNITY_EDITOR
+            Debug.LogWarning("GameManager instance not found! Creating temporary one for test scene.");
+            GameObject gm = new GameObject("GameManager");
+            gameManager = gm.AddComponent<GameManager>();
+#else
             Debug.LogError("GameManager instance not found!");
             return;
+#endif
         }
+
 
         itemParent = GameObject.Find("Pixels")?.transform;
 
