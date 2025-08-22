@@ -4,6 +4,7 @@ using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
 using static UnityEditor.MaterialProperty;
+using UnityEngine.SceneManagement;
 
 public enum BgType
 {
@@ -207,11 +208,6 @@ public class GameManager : MonoBehaviour
         Tiles = Addressables.LoadAssetsAsync<InteriorScript>("tile", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.interiorName);
-        /*
-        Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
-                .WaitForCompletion()
-                .ToDictionary(i => i.customerName);
-        */
         Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questTitle);
@@ -220,6 +216,7 @@ public class GameManager : MonoBehaviour
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);
         */
+
 
         foreach (var blanket in Blankets)
         {
@@ -300,7 +297,6 @@ public class GameManager : MonoBehaviour
             todayMoonrock += delta;
             dbManager.Update_TodayMoonrock(todayMoonrock);
         }
-
     }
 
     public int Get_EnergyLevel() { return (int)(energy / oneEnergyLevel); }
@@ -382,6 +378,14 @@ public class GameManager : MonoBehaviour
         this.effectSound = effectSound;
         dbManager.Update_EffectSound(this.effectSound);
     }
+
+    public string Get_EndScene() { return endScene; }
+    public void Set_EndScene(string endScene)
+    {
+        this.endScene = endScene;
+        dbManager.Update_EndScene(this.endScene);
+    }
+
 
     public void Go_Next_Days()
     {
@@ -1055,7 +1059,7 @@ public class GameManager : MonoBehaviour
         uniqueList.Clear();
 
         // 이불 디자인
-        while (uniqueList.Count < designshopLevel)
+        while (uniqueList.Count < designshopLevel + 1)
         {
             ItemScript itemScript = Get_Random_Blanket();
             if (uniqueList.Contains(itemScript.itemName)) continue;
@@ -1064,4 +1068,6 @@ public class GameManager : MonoBehaviour
             uniqueList.Add(itemScript.itemName);
         }
     }
+
+
 }
