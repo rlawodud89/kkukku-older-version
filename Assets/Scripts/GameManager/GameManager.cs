@@ -314,6 +314,10 @@ public class GameManager : MonoBehaviour
     public int Get_TodayGold() { return todayGold; }
     public int Get_TodayMoonrock() { return todayMoonrock; }
     public int Get_TodayEnergy() { return todayEnergy; }
+    public void Reset_User_Todays()
+    {
+        dbManager.Reset_User_Todays();
+    }
 
     public int Get_Days() { return days; }
     public int Get_Hours() { return hours; }
@@ -391,9 +395,18 @@ public class GameManager : MonoBehaviour
     {
         isDayEndPanel = false;
         playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+
         todayGold = 0;
         todayMoonrock = 0;
         todayEnergy = 0;
+        Reset_User_Todays();
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name != "Work_Shop")
+        {
+            Set_EndScene("Work_Shop");
+            SceneManager.LoadScene("Work_Shop");
+        }
 
         Debug.Log("Days:" + days);
     }
