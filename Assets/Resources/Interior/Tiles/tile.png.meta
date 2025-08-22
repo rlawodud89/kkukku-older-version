@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 091b3c4e028696040b8a49699fa42918
+guid: 387571ca494554944bc5bf605de34e3c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 115
+  spritePixelsToUnits: 950
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -95,49 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: "\uCD08\uB85D\uC0C9\uC9C4\uC5F4\uC7A5_full"
-      rect:
-        serializedVersion: 2
-        x: 13
-        y: 73
-        width: 278
-        height: 203
-      alignment: 9
-      pivot: {x: -0.0018091168, y: 0.55286217}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b7906fbe12efc354ebb3515ee20b72c9
-      internalID: -1252979082
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\uCD08\uB85D\uC0C9\uC9C4\uC5F4\uC7A5_empty"
-      rect:
-        serializedVersion: 2
-        x: 359
-        y: 82
-        width: 284
-        height: 207
-      alignment: 9
-      pivot: {x: 0.011941292, y: 0.5432007}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d9ebeacefe6f5b74e9f86cfd96428ed8
-      internalID: -1087664023
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -148,9 +106,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      "\uCD08\uB85D\uC0C9\uC9C4\uC5F4\uC7A5_empty": -1087664023
-      "\uCD08\uB85D\uC0C9\uC9C4\uC5F4\uC7A5_full": -1252979082
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
