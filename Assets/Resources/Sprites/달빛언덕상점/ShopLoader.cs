@@ -30,14 +30,13 @@ public class ShopLoader : MonoBehaviour
 
         gameManager.OnItemShopLevelChanged += ChangeItemShopLevel;
         gameManager.OnDesignShopLevelChanged += ChangeDesignShopLevel;
-        gameManager.OnDayEnded += Reset_Content;
+        gameManager.OnDayEnded += InitContent;
 
         shopInteriors = new List<InteriorScript>();
         roomInteriors = new List<InteriorScript>();
         tiles = new List<InteriorScript>();
         blankets = new List<ItemScript>();
 
-        //gameManager.Reset_Store_ContentItem();
         InitContent();
     }
 
@@ -217,11 +216,6 @@ public class ShopLoader : MonoBehaviour
         }
     }
 
-    private void Reset_Content()
-    {
-        gameManager.Reset_Store_ContentItem();
-        InitContent();
-    }
 
     private void ChangeItemShopLevel(int itemshopLevel)
     {

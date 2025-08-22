@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
 
         if (hours == endHours) // 하루 끝
         {
+            Reset_Store_ContentItem();
             OnDayEnded?.Invoke();
             isDayEndPanel = true;
         }
@@ -583,7 +584,7 @@ public class GameManager : MonoBehaviour
 
     public int Count_InventoryItem(string itemName)
     {
-        return dbManager.Count_Inventory(itemName);
+        return dbManager.Select_InventoryItem(itemName).count;
     }
 
     public bool Add_BlanketDesign(string blanketName)

@@ -173,10 +173,11 @@ public class DBManager
             .Any(i => i.itemName == itemName);
     }
 
-    public int Count_Inventory(string itemName)
+    public Inventory Select_InventoryItem(string itemName)
     {
         return conn.Table<Inventory>()
-            .Count(i => i.itemName == itemName);
+            .Where(i => i.itemName == itemName)
+            .FirstOrDefault();
     }
 
     public void Insert_InventoryItem(string itemName, ItemType itemType, int count)
