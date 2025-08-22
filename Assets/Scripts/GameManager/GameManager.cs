@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
+using static UnityEditor.MaterialProperty;
 
 public enum BgType
 {
@@ -968,5 +969,98 @@ public class GameManager : MonoBehaviour
     public void Remove_Letter(string letterName)
     {
         dbManager.Delete_Letter(letterName);
+    }
+
+    public List<ItemScript> Get_ItemStore_ContentItem(StoreType storeType)
+    {
+        if (storeType == StoreType.SHOP_INTERIOR || storeType == StoreType.ROOM_INTERIROR
+            || storeType == StoreType.TILE || storeType == StoreType.WORKER)
+            return null;
+
+        List<StoreItem> storeItems = dbManager.Select_StoreItem(storeType);
+        List<ItemScript> list = new List<ItemScript>();
+
+        foreach (StoreItem item in storeItems)
+        {
+            list.Add(Get_InventoryItem(item.itemName));
+        }
+
+        return list;
+
+    }
+
+    public List<InteriorScript> Get_InteriorStore_ContentItem(StoreType storeType)
+    {
+        if (storeType == StoreType.YARN || storeType == StoreType.COTTON
+            || storeType == StoreType.DECO || storeType == StoreType.BLANKET)
+            return null;
+
+        List<StoreItem> storeItems = dbManager.Select_StoreItem(storeType);
+        List<InteriorScript> list = new List<InteriorScript>();
+
+        foreach (StoreItem item in storeItems)
+        {
+            list.Add(Get_InteriorItem(item.itemName));
+        }
+
+        return list;
+    }
+
+    public bool Add_Store_ContentItem(StoreType storeType, string itemName)
+    {
+        if (dbManager.Have_StoreItem(itemName)) return false;
+
+        dbManager.Insert_StoreItem(storeType, itemName);
+        return true;
+    }
+
+    public void Reset_Store_ContentItem()
+    {
+        dbManager.Delete_All_StoreItem();
+
+        HashSet<string> uniqueList = new HashSet<string>();
+
+        // 가게 인테리어
+        while (uniqueList.Count < 3)
+        {
+            InteriorScript interiorScript = Get_Random_ShopInterior();
+            if (uniqueList.Contains(interiorScript.interiorName)) continue;
+
+            Add_Store_ContentItem(StoreType.SHOP_INTERIOR, interiorScript.interiorName);
+            uniqueList.Add(interiorScript.interiorName);
+        }
+        uniqueList.Clear();
+
+        // 작업실 인테리어
+        while (uniqueList.Count < 3)
+        {
+            InteriorScript interiorScript = Get_Random_RoomInterior();
+            if (uniqueList.Contains(interiorScript.interiorName)) continue;
+
+            Add_Store_ContentItem(StoreType.ROOM_INTERIROR, interiorScript.interiorName);
+            uniqueList.Add(interiorScript.interiorName);
+        }
+        uniqueList.Clear();
+
+        // 타일
+        while (uniqueList.Count < 3)
+        {
+            InteriorScript interiorScript = Get_Random_Tile();
+            if (uniqueList.Contains(interiorScript.interiorName)) continue;
+
+            Add_Store_ContentItem(StoreType.TILE, interiorScript.interiorName);
+            uniqueList.Add(interiorScript.interiorName);
+        }
+        uniqueList.Clear();
+
+        // 이불 디자인
+        while (uniqueList.Count < designshopLevel)
+        {
+            ItemScript itemScript = Get_Random_Blanket();
+            if (uniqueList.Contains(itemScript.itemName)) continue;
+
+            Add_Store_ContentItem(StoreType.BLANKET, itemScript.itemName);
+            uniqueList.Add(itemScript.itemName);
+        }
     }
 }

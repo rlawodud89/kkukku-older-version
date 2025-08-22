@@ -19,7 +19,7 @@ public class DBManager
 
     public void InitDB()
     {
-        conn.CreateTable<User>();
+        //conn.CreateTable<User>();
         //conn.CreateTable<Inventory>();
         //conn.CreateTable<Design>();
         //conn.CreateTable<WorkShop>();
@@ -29,27 +29,28 @@ public class DBManager
         //conn.CreateTable<Tile>();
         //conn.CreateTable<QuestBox>();
         //conn.CreateTable<LetterBox>();
+        conn.CreateTable<StoreItem>();
 
-        User user = new User();
-        user.name = "user";
-        user.energy = 10000;
-        user.gold = 100000;
-        user.moonrock = 100000;
-        user.todayEnergy = 0;
-        user.todayGold = 0;
-        user.todayMoonrock = 0;
-        user.playTime = 0;
-        user.designshopLevel = 1;
-        user.itemshopLevel = 1;
-        user.loomLevel = 1;
-        user.fillerLevel = 1;
-        user.decoLevel = 1;
-        user.endScene = "Work_Shop";
-        user.isOpen = false;
-        user.bgSound = 0f;
-        user.effectSound = 0f;
+        //User user = new User();
+        //user.name = "user";
+        //user.energy = 10000;
+        //user.gold = 100000;
+        //user.moonrock = 100000;
+        //user.todayEnergy = 0;
+        //user.todayGold = 0;
+        //user.todayMoonrock = 0;
+        //user.playTime = 0;
+        //user.designshopLevel = 1;
+        //user.itemshopLevel = 1;
+        //user.loomLevel = 1;
+        //user.fillerLevel = 1;
+        //user.decoLevel = 1;
+        //user.endScene = "Work_Shop";
+        //user.isOpen = false;
+        //user.bgSound = 0f;
+        //user.effectSound = 0f;
 
-        conn.Insert(user);
+        //conn.Insert(user);
 
         // TODO: 처음에 기본으로 주는 아이템 저장
     }
@@ -219,7 +220,7 @@ public class DBManager
 
         conn.Insert(design);
     }
-    
+
     public List<Design> Select_Design()
     {
         return conn.Table<Design>()
@@ -613,4 +614,32 @@ public class DBManager
         LetterBox letter = conn.Find<LetterBox>(letterName);
         conn.Delete(letter);
     }
+
+    public List<StoreItem> Select_StoreItem(StoreType storeType)
+    {
+        return conn.Table<StoreItem>()
+            .Where(i => i.storeType == storeType)
+            .ToList();
+    }
+
+    public void Insert_StoreItem(StoreType storeType, string itemName)
+    {
+        StoreItem storeItem = new StoreItem();
+        storeItem.storeType = storeType;
+        storeItem.itemName = itemName;
+
+        conn.Insert(storeItem);
+    }
+
+    public void Delete_All_StoreItem()
+    {
+        conn.Execute("DELETE FROM StoreItem");
+    }
+
+    public bool Have_StoreItem(string itemName)
+    {
+        return conn.Table<StoreItem>()
+           .Any(i => i.itemName == itemName);
+    }
+
 }
