@@ -36,15 +36,11 @@ public class QuestManager : MonoBehaviour
 
         foreach (var q in pool.OrderBy(_ => UnityEngine.Random.value).Take(count))
         {
-            // ★ 에셋 원본 말고 런타임 복제본 사용
-            var runtime = ScriptableObject.Instantiate(q);
+            ResetQuest(q);
+            if (!activeQuests.Contains(q))
+                activeQuests.Add(q);
 
-            // ★ 복제본 상태 초기화
-            ResetQuest(runtime);
-
-            // ★ 복제본을 활성 목록/DB에 등록
-            activeQuests.Add(runtime);
-            gameManager.Add_Quest(runtime.questTitle);
+            gameManager.Add_Quest(q.questTitle);
         }
 
         startAlertIcon.SetActive(activeQuests.Count > 0);
@@ -98,6 +94,7 @@ public class QuestManager : MonoBehaviour
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
         
+        /*
         var dbQuests = gameManager.Get_Current_Quest();
         if (dbQuests == null || dbQuests.Count == 0)
         {
@@ -112,7 +109,7 @@ public class QuestManager : MonoBehaviour
                 gameManager.Remove_Quest(quest.questTitle);
                 Debug.Log($"[QuestManager] DB 삭제: {quest.questTitle}");
             }
-        }
+        }*/
 
         if (LoadDBQuests())
         {
@@ -122,6 +119,15 @@ public class QuestManager : MonoBehaviour
         {
             StartNewDay();
         }
+
+        gameManager.Add_InventoryItem("은하꿈실", 1);
+        gameManager.Add_InventoryItem("햇빛운무솜", 1);
+        gameManager.Add_InventoryItem("몽환의꽃잎", 1);
+        gameManager.Add_InventoryItem("햇빛운무솜", 1);
+        gameManager.Add_InventoryItem("몽환의꽃잎", 1);
+        gameManager.Add_InventoryItem("청야달조각", 2);
+        Debug.Log($"[INV] 청야달조각: {gameManager.Count_InventoryItem("청야달조각")}");
+
     }
 
     // Update is called once per frame
@@ -367,15 +373,150 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
+
+    public void SpecialQuestGetReward(QuestSO quest)
+    {
+        // 퀘스트 완료 시
+        if (quest.isCompleted)
+        {
+            questRewardPanel.SetActive(true); // 퀘스트 보상 패널 열기
+            ClearRewardItems(questRewardPanel.transform);
+
+            int rewardCount = quest.rewards.Length;
+
+            // 퀘스트 보상 패널 설정
+            for (int i = 0; i < rewardCount; i++)
+            {
+                GameObject questReward = Instantiate(questRewardPrefab, questRewardPanel.transform);
+                questReward.transform.Find("AmountText").GetComponent<TMPro.TextMeshProUGUI>().text = quest.rewards[i].amount.ToString();
+
+                // 보상 아이콘 업데이트 (보상 종류에 따라 이미지 변경)
+                UnityEngine.UI.Image rewardImage = questReward.transform.Find("RewardImage").GetComponent<Image>();
+
+                switch (quest.rewards[i].rewardType)
+                {
+                    case "재화":
+                        rewardImage.sprite = CoinImage;
+                        break;
+                    case "월석":
+                        rewardImage.sprite = MoonRockImage;
+                        break;
+                    case "포근에너지":
+                        rewardImage.sprite = CozyEnergyImage;
+                        break;
+                    default:
+                        rewardImage.sprite = null; // 알 수 없는 보상은 기본 이미지로 설정
+                        break;
+                }
+
+                RectTransform rewardRect = questReward.GetComponent<RectTransform>();
+
+                float spacing = 150f;  // 보상 간 간격을 고정
+                float totalWidth = spacing * (rewardCount - 1); // 전체 너비 계산
+                float startX = -totalWidth / 2f; // 첫 보상의 시작 위치 (가운데 정렬)
+
+                float positionX = startX + i * spacing; // 보상별 X 위치 계산
+
+
+                rewardRect.anchoredPosition = new Vector2(positionX, 5);
+
+            }
+
+            // ✅ 이미 수령한 경우: 버튼 회색 처리 + 리스너 제거 후 바로 return
+            Button getButton = questRewardPanel.transform.Find("GetButton").GetComponent<Button>();
+            Image getBtnImg = getButton.GetComponent<Image>();
+
+            getButton.onClick.RemoveAllListeners(); // 중복 방지
+
+            bool already = quest.getReward;
+
+            // ★ 인터랙션/색을 함께 제어해야 ‘진짜’ 활성화
+            getButton.interactable = !already;
+            getBtnImg.color = already
+                ? new Color(181f / 255f, 174f / 255f, 174f / 255f)  // 비활성 색
+                : Color.white;
+
+            if (!already)
+            {
+                getButton.onClick.AddListener(() =>
+                {
+                    if (quest.getReward) return;
+                    ProcessReward(quest, getButton);
+                    HandleQuestAfterReward(quest, null); // ★ 버튼 없음
+                });
+            }
+
+        }
+        // 퀘스트 진행 중
+        else
+        {
+            questContentPanel.SetActive(true);
+            ClearRewardItems(questRewardPanel.transform);
+            questContentPanel.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questTitle;
+            questContentPanel.transform.Find("QuestDetail").GetComponent<TMPro.TextMeshProUGUI>().text = quest.questDescription;
+
+            // 퀘스트 진행 상태 표시
+            if (quest.questComplete > 1)
+            {
+                questContentPanel.transform.Find("QuestProgress").GetComponent<TMPro.TextMeshProUGUI>().text = $"{quest.questProcess} / {quest.questComplete}";
+            }
+            else
+            {
+                questContentPanel.transform.Find("QuestProgress").gameObject.SetActive(false); // 진행 상태가 없으면 숨김
+            }
+
+            int rewardCount = quest.rewards.Length;    // 보상의 개수
+
+            // 퀘스트 보상 패널 설정
+            for (int i = 0; i < rewardCount; i++)
+            {
+                GameObject questReward = Instantiate(questRewardPrefab, questContentPanel.transform);
+                questReward.transform.Find("AmountText").GetComponent<TMPro.TextMeshProUGUI>().text = quest.rewards[i].amount.ToString();
+
+                // 보상 아이콘 업데이트 (보상 종류에 따라 이미지 변경)
+                UnityEngine.UI.Image rewardImage = questReward.transform.Find("RewardImage").GetComponent<Image>();
+
+                switch (quest.rewards[i].rewardType)
+                {
+                    case "재화":
+                        rewardImage.sprite = CoinImage;
+                        break;
+                    case "월석":
+                        rewardImage.sprite = MoonRockImage;
+                        break;
+                    case "포근에너지":
+                        rewardImage.sprite = CozyEnergyImage;
+                        break;
+                    default:
+                        rewardImage.sprite = null; // 알 수 없는 보상은 기본 이미지로 설정
+                        break;
+                }
+
+                RectTransform rewardRect = questReward.GetComponent<RectTransform>();
+
+                float spacing = 150f;  // 보상 간 간격을 고정
+                float totalWidth = spacing * (rewardCount - 1); // 전체 너비 계산
+                float startX = -totalWidth / 2f; // 첫 보상의 시작 위치 (가운데 정렬)
+
+                float positionX = startX + i * spacing; // 보상별 X 위치 계산
+
+
+                rewardRect.anchoredPosition = new Vector2(positionX, -195);
+            }
+        }
+    }
     private void HandleQuestAfterReward(QuestSO quest, GameObject questButton)
     {
         // 1) 이전 퀘스트 정리
         gameManager.Remove_Quest(quest.questTitle);
-        if (questButton != null)
+        if (questButton == null)
+            RemoveButtonByTitle(quest.questTitle);
+        else
         {
             questButtons.Remove(questButton);
             Destroy(questButton);
         }
+        
         activeQuests.Remove(quest);
 
         // 2) 보상 패널 닫기
@@ -515,6 +656,35 @@ public class QuestManager : MonoBehaviour
         completeAlertIcon.SetActive(anyAlert);
     }
 
+    // QuestManager.cs 내부
+
+    private GameObject FindButtonByTitleFromList(string title)
+    {
+        if (string.IsNullOrEmpty(title)) return null;
+
+        // null 들어있을 수 있으니 먼저 정리
+        questButtons.RemoveAll(b => b == null);
+
+        foreach (var go in questButtons)
+        {
+            var t = go.transform.Find("QuestTitle");
+            var tmp = t ? t.GetComponent<TMPro.TextMeshProUGUI>() : null;
+            if (tmp != null && tmp.text == title)
+                return go;
+        }
+        return null;
+    }
+
+    private void RemoveButtonByTitle(string title)
+    {
+        var btn = FindButtonByTitleFromList(title);
+        if (btn != null)
+        {
+            questButtons.Remove(btn);
+            Destroy(btn);
+        }
+    }
+
 
     ////================= 특퀘 ========================////
 
@@ -647,7 +817,7 @@ public class QuestManager : MonoBehaviour
     // 연계 퀘스트 생성 + 버튼 바인딩 + 런타임 퀘스트 반환
     private QuestSO AddNextQuestAndReturn(QuestSO nextQuestAsset)
     {
-        var quest = ScriptableObject.Instantiate(nextQuestAsset);
+        var quest = nextQuestAsset;
         ResetQuest(quest);
 
         activeQuests.Add(quest);

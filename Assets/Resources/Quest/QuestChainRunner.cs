@@ -8,39 +8,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Text.RegularExpressions;
+using System.Collections;
+
 public class QuestChainRunner : MonoBehaviour
 {
-    // 호출 위치: OnEnable()나 Start() 초반
-    private void PrepareRuntimeQuests()
-    {
-        if (_runtimePrepared) return;
-        _runtimePrepared = true;
-
-        _baseDescriptions.Clear();
-        for (int i = 0; i < steps.Count; i++)
-        {
-            var q = steps[i].quest;
-            if (q == null) { _baseDescriptions.Add(""); continue; }
-
-            // 원본 본문 백업
-            _baseDescriptions.Add(q.questDescription ?? "");
-
-            // 런타임 클론 생성 → steps[i].quest 교체
-            var clone = ScriptableObject.Instantiate(q);
-            clone.name = q.name + "_Runtime";
-#if UNITY_EDITOR
-            clone.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
-#else
-        clone.hideFlags = HideFlags.DontSave;
-#endif
-            steps[i].quest = clone;
-        }
-    }
-
-
     private GameManager gameManager;
     private bool _runtimePrepared = false;
     private List<string> _baseDescriptions = new(); // 원본 본문 백업(진행도 덧붙일 때 기준)
+
+ 
 
 
     // ====== 단계 정의 ======
@@ -88,8 +64,7 @@ public class QuestChainRunner : MonoBehaviour
     [Header("체인 단계들(순서대로 배치)")]
     public List<Step> steps = new();
 
-    [Header("외부 시스템 연결")]
-    [SerializeField] private MonoBehaviour inventoryProvider; // IInventory 구현체
+
 
     [Header("공유 상태 SO (씬 간 연결의 핵심)")]
     public QuestChainStateSO state; // 같은 에셋을 모든 씬에서 참조
@@ -108,23 +83,24 @@ public class QuestChainRunner : MonoBehaviour
 
     // ====== Unity ======
 
-    private void Start()
+    private IEnumerator Start()
     {
-        gameManager = GameManager.getInstance();
-    }
-    private void OnEnable()
-    {
-        PrepareRuntimeQuests();
+        // GameManager 인스턴스가 유효할 때까지 대기
+        while (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+            yield return null; // 한 프레임 대기
+        }
+
 
         if (state == null)
-            Debug.LogWarning("QuestChainStateSO가 연결되지 않았습니다. 씬 간 동기화를 원하면 반드시 할당하세요.");
+            Debug.LogWarning("QuestChainStateSO가 연결되지 않았습니다.");
 
-        // 러너가 '소스 오브 트루스'로서 현재 인덱스를 상태 SO에 반영
         if (state != null)
         {
             state.SetIndex(currentIndex);
             state.SetChainCompleted(IsChainFinished());
-            state.OnIndexChanged += HandleExternalIndexChange; // 선택: 외부에서 인덱스를 바꾸는 흐름 허용
+            state.OnIndexChanged += HandleExternalIndexChange;
         }
 
         RefreshJournal();
@@ -189,7 +165,7 @@ public class QuestChainRunner : MonoBehaviour
         if (s.requirement.itemId != itemId) return false;
 
 
-        //if (Inv.GetCount(itemId) < amount) return false;
+        if (gameManager.Count_InventoryItem(itemId) < amount) return false;
         gameManager.Use_InventoryItem(itemId, amount);
         
 
@@ -227,15 +203,15 @@ public class QuestChainRunner : MonoBehaviour
 
             case ReqType.CollectItems:
 
-                /*
+                
                 // 메인 요구
-                if (Inv.GetCount(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
+                if (gameManager.Count_InventoryItem(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
                     return false;
 
                 // 추가 수집
                 foreach (var e in s.requirement.extraCollects)
-                    if (Inv.GetCount(e.itemId) < e.count)
-                        return false;*/
+                    if (gameManager.Count_InventoryItem(e.itemId) < e.count)
+                        return false;
 
                 return true;
 
@@ -272,76 +248,86 @@ public class QuestChainRunner : MonoBehaviour
     {
         if (IsChainFinished()) return;
 
-        var idx = currentIndex;
-        var s = steps[idx];
+        var s = steps[currentIndex];
         var q = s.quest;
 
-        // 1) 원본(에셋)에서 백업해 둔 베이스 본문
-        string baseText = (idx < _baseDescriptions.Count) ? _baseDescriptions[idx] : (q != null ? (q.questDescription ?? "") : "");
-
-        // 2) 진행도 블록 계산(CollectItems일 때만)
-        string progress = BuildProgressBlock(s);
-
-        // 3) 주입(토큰이 있으면 그 구간만, 없으면 아래에 붙임)
-        string composed = InjectProgress(baseText, progress);
-
-        // 4) 런타임 클론 SO의 description만 갱신(에셋 파일은 건드리지 않음)
-        if (q != null && q.questDescription != composed)
-            q.questDescription = composed;
-
-        // 5) 기존 훅도 그대로 호출(원하면 이걸로 UI를 직접 갱신)
-        onJournalUpdate?.Invoke(idx, composed);
+        // SO의 questDescription을 직접 수정
+        if (s.requirement.type == ReqType.CollectItems)
+        {
+            UpdateQuestDescriptionProgress(s);
+        }
+        else
+        {
+            // 수집 단계가 아니면 원문 그대로 이벤트로 흘려보냄
+            string text = q != null ? (q.questDescription ?? string.Empty) : string.Empty;
+            onJournalUpdate?.Invoke(currentIndex, text);
+        }
     }
 
-
-    private const string PROG_BEGIN = "<PROGRESS>";
-    private const string PROG_END = "</PROGRESS>";
-
-    private string BuildProgressBlock(Step s)
+    // 진행도 라인 텍스트를 "(현재/필요)"로 바꿔 끼우는 헬퍼
+    private void UpdateQuestDescriptionProgress(Step s)
     {
-        // CollectItems일 때만 진행도 표기
-        if (s.requirement.type != ReqType.CollectItems) return null;
+        if (!Application.isPlaying) return;           // 에디터 편집 중엔 에셋 수정 안 함
+        if (s.quest == null) return;
+        if (s.requirement.type != ReqType.CollectItems) return;
 
-        var lines = new System.Text.StringBuilder();
-        // 메인 목표
-        //lines.AppendLine($"{s.requirement.itemId} ({GetCount(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
+        string text = s.quest.questDescription ?? string.Empty;
+        int replaced = 0;
 
-        // 추가 목표
+        // itemName으로 시작하고 "(숫자/숫자)"가 붙은 라인을 찾아 교체 (멀티라인)
+        void ReplaceLine(ref string t, string itemName, int cur, int req)
+        {
+            var pattern = @"(^|\n)" + Regex.Escape(itemName) + @"\s*\(\s*\d+\s*/\s*\d+\s*\)";
+            var replacement = "$1" + itemName + $" ({cur}/{req})";
+            string newText = Regex.Replace(t, pattern, replacement, RegexOptions.Multiline);
+
+            if (!ReferenceEquals(newText, t))
+            {
+                replaced++;
+                t = newText;
+            }
+        }
+
+        // 메인 + 추가 항목들 진행도 계산
+        ReplaceLine(ref text, s.requirement.itemId, gameManager.Count_InventoryItem(s.requirement.itemId), Mathf.Max(1, s.requirement.requiredCount));
         var extras = s.requirement.extraCollects;
         if (extras != null)
         {
             for (int i = 0; i < extras.Length; i++)
-            {
-                var e = extras[i];
-                //lines.AppendLine($"{e.itemId} ({GetCount(e.itemId)}/{e.count})");
-            }
+                ReplaceLine(ref text, extras[i].itemId, gameManager.Count_InventoryItem(extras[i].itemId), extras[i].count);
         }
 
-        return lines.ToString().TrimEnd();
-    }
-
-    private string InjectProgress(string baseText, string progressBlock)
-    {
-        if (string.IsNullOrEmpty(progressBlock)) return baseText ?? "";
-
-        if (string.IsNullOrEmpty(baseText))
-            return progressBlock;
-
-        int i0 = baseText.IndexOf(PROG_BEGIN, StringComparison.Ordinal);
-        int i1 = baseText.IndexOf(PROG_END, StringComparison.Ordinal);
-
-        if (i0 != -1 && i1 != -1 && i1 > i0)
+        // 교체된 라인이 하나도 없으면 본문 아래에 블록으로 추가
+        if (replaced == 0)
         {
-            // 토큰 사이만 교체
-            var before = baseText.Substring(0, i0 + PROG_BEGIN.Length);
-            var after = baseText.Substring(i1);
-            return $"{before}\n{progressBlock}\n{after}";
+            var sb = new System.Text.StringBuilder(text.TrimEnd());
+            if (sb.Length > 0) sb.Append('\n');
+
+            sb.AppendLine($"{s.requirement.itemId} ({gameManager.Count_InventoryItem(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
+            if (extras != null)
+                for (int i = 0; i < extras.Length; i++)
+                    sb.AppendLine($"{extras[i].itemId} ({gameManager.Count_InventoryItem(extras[i].itemId)}/{extras[i].count})");
+
+            text = sb.ToString().TrimEnd();
         }
-        // 토큰이 없으면 맨 아래에 덧붙임
-        return $"{baseText.TrimEnd()}\n{progressBlock}";
+
+        // SO의 description을 직접 갱신 (Play 중엔 저장되지 않고, 플레이 종료 시 원복됨)
+        if (s.quest.questDescription != text)
+            s.quest.questDescription = text;
+
+        // 기존 이벤트 훅도 갱신 텍스트로 호출
+        onJournalUpdate?.Invoke(currentIndex, text);
     }
 
-
+    // (선택) 특정 토큰 블록만 바꾸고 싶을 때 사용 가능
+    private string ReplaceBetween(string src, string beginTag, string endTag, string newContent)
+    {
+        int i0 = src.IndexOf(beginTag, StringComparison.Ordinal);
+        int i1 = src.IndexOf(endTag, StringComparison.Ordinal);
+        if (i0 >= 0 && i1 > i0)
+            return src.Substring(0, i0 + beginTag.Length) + "\n" + newContent + "\n" + src.Substring(i1);
+        return src;
+    }
 
 
 
