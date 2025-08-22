@@ -18,7 +18,7 @@ public class Make_Cotton : MonoBehaviour
     private ItemScript currentCotton;
 
     private GameManager gameManager;
-
+    public bool isMaking;
 
     private void Awake()
     {
@@ -68,6 +68,8 @@ public class Make_Cotton : MonoBehaviour
         Employee current_employee = Employees[CurrentID].employee;
         ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
 
+
+        isMaking = true;
         Debug.Log("Make_Cotton에서 Make 버튼 클릭됨 감지!");
         gameManager.Use_InventoryItem(currentYarn.itemName, 1);
 
@@ -110,7 +112,7 @@ public class Make_Cotton : MonoBehaviour
 
                 gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
                 gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
-
+                isMaking = false;
                 sewingPanel?.SetSelectedBlanket();
 
             });

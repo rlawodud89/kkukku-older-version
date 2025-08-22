@@ -16,9 +16,7 @@ public class StoragePanel : MonoBehaviour
 
     void Start()
     {
-
         InitScroll();
-
     }
 
     public void InitScroll()

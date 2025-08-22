@@ -22,7 +22,7 @@ public class Make_Fabric : MonoBehaviour
 
     private GameManager gameManager;
     private bool can_make = false;
-
+    public bool isMaking;
 
     private void Awake()
     {
@@ -80,6 +80,7 @@ public class Make_Fabric : MonoBehaviour
 
         if (can_make)
         {
+            isMaking = true;
             for (int i = 0; i < currentBlanket.recipe.Count; i++)
             {
                 gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
@@ -155,6 +156,7 @@ public class Make_Fabric : MonoBehaviour
             fabric_button.onClick.RemoveAllListeners();
             fabric_button.onClick.AddListener(() =>
             {
+                isMaking=false;
                 ballon_Panel.SetActive(false);
                 fabric_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();

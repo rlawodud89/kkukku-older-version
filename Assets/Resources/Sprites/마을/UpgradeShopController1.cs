@@ -57,6 +57,10 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnLoomClick()
     {
+        if (gameManager==null)
+        {
+            gameManager = GameManager.getInstance();
+        }
         if (!CanBuy(loomPrice))
         {
             Debug.Log("재화 부족");
@@ -77,6 +81,10 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnFillerClick()
     {
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
         if (!CanBuy(fillerPrice))
         {
             Debug.Log("재화 부족");
@@ -98,6 +106,10 @@ public class UpgradeShopController1 : MonoBehaviour
 
     void OnDecoTableClick()
     {
+        if (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+        }
         if (!CanBuy(decoTablePrice))
         {
             Debug.Log("재화 부족");

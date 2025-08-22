@@ -287,18 +287,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3e9af97f522cef44a9181980f3753e71
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB098\uBB34\uD0C0\uC77C.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - tile
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: adb9fd3e783795a4783a331d3eec6e00
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uD770\uB098\uBB34\uD0C0\uC77C.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - tile
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 411d58b8d83befd4da67c1b43ab4175b
     m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB3CC\uBCBD.asset"
     m_ReadOnly: 0
@@ -431,46 +419,155 @@ MonoBehaviour:
     m_SerializedLabels:
     - quest
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 66e68def1237ae34ea358c10158f1c30
-    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 2.asset"
+  - m_GUID: 165a4c57558783848acd3b125ba354fc
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uBC1D\uC740\uB098\uBB34\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: af763fccc236d474fa06617c70274987
-    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 3.asset"
+  - m_GUID: cfe9b1cf6485df649b83e2b29b804074
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uB098\uBB34\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 11609d7dc30b1ee4fa3364903ce41f25
-    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 4.asset"
+  - m_GUID: 11d14e46c32a3ce42a60d560235887cd
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uC9D9\uC740\uB098\uBB34\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 78325b4289ce97143aff9cc4569123b6
-    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 5.asset"
+  - m_GUID: 8cf3ced0e14a5b3449fcf9fa2804e6f0
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uD770\uB098\uBB34\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d7447c7c8958bd6439920c66cc486ec0
-    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 6.asset"
+  - m_GUID: c26f911b68c9e1c48a6556d0d7697b5f
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uB098\uBB34\uBC14\uB2E5.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 52b7dcab56eef4c4ab55b684a3286d1a
-    m_Address: Assets/ScriptableObject/Letters/NewLetter.asset
+  - m_GUID: d78c27848c99cd247984f2dc0a4ab002
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uC815\uB3C8\uB41C\uB098\uBB34\uBC14\uB2E5.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - letter
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d3e4c173c8ad8084ea3aa0e67d67b713
-    m_Address: "Assets/ScriptableObject/Quests/\uD2B9\uD018\uC0C1\uD0DC/\uBBF8\uB4DC\uB098\uC787.asset"
+  - m_GUID: ed54037c234cdcd469b9d456aea9c9ad
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uC9D9\uC740\uB098\uBB34\uBC14\uB2E5.asset"
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 011f7fa071ba7a14c9881273cc682105
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uD770\uB098\uBB34\uBC14\uB2E5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e56779824e7b6442b618bde70c5039f
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Floor_Table/\uBBFC\uD2B8\uC0C9\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 117c2b07a90562e4aa403772fec2687a
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Floor_Table/\uBD84\uD64D\uC0C9\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9cdd8bd6c72f2b4c85ca1776e3483d3
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Floor_Table/\uD770\uC0C9\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0854779dc7c1a464b976ebae2423847b
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Wall_Table/\uBBFC\uD2B8\uC0C9\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4708740ccb8a6a4d9ad41b1897cbcf7
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Wall_Table/\uBD84\uD64D\uC0C9\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35c1ad6e4d8f8aa45a7a25c268840c88
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Wall_Table/\uD770\uC0C9\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20f52e2e8fe21904895164faf637af70
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uBE68\uAC15\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45fb46fe2f73e7d47ba455df5f848e36
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uAE30\uBCF8\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de65c2e5ca4a765458fe2024967835ef
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uAE30\uBCF8\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54a71d9afdc3d4d40bfd4becc008b123
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uBE68\uAC15\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 420fd9da9aea62b468b033eae3227811
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Floor_Table/\uCD08\uB85D\uC0C9\uC9C4\uC5F4\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17dc0983d5fca044da1861335f3b1e42
+    m_Address: "Assets/ScriptableObject/Interiors/Shop_Interiors/Wall_Table/\uCD08\uB85D\uC0C9\uBCBD\uC7A5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - shop_interior
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bbaa6b17855b1a46bddddf48e555e73
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uAF43\uBB34\uB2AC\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e4135d5df9a05b459d9f2b99f666ff3
+    m_Address: "Assets/ScriptableObject/Items/Yarns/\uCCB4\uD06C\uC6D0\uB2E8.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - yarn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81df05569bc854e429cd41aeca27b2e5
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uCCB4\uD06C\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6f2e51d29f4a684894d6d1cbf527348
+    m_Address: "Assets/ScriptableObject/Items/Cottons/\uAF43\uBB34\uB2AC\uC19C.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cotton
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 134a578d4105a274ba9267839b85fd5c
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uB3CC\uBC14\uB2E5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - tile
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

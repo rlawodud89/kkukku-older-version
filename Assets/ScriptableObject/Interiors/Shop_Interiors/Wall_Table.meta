@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Resources/Interior/material_storage 1.prefab.meta
+guid: f92ee954dec08b640b4299038a1dd36f
+PrefabImporter:
+========
 guid: 7c7fa3e1b591f6c4c8be3424a34a6245
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> 김재영:Assets/ScriptableObject/Interiors/Shop_Interiors/Wall_Table.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

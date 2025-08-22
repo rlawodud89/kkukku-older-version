@@ -8,7 +8,6 @@ public class Employee : MonoBehaviour
 {
     public GameObject ballonPanel;
     public TextMeshProUGUI floatingText;
-    public TextMeshProUGUI reactionText;
     public Button ItemButton;
 
     public Staminar staminar;
@@ -47,7 +46,7 @@ public class Employee : MonoBehaviour
         staminar.Addstamina(-5);
         gameManager.Change_Worker_Stamina(EmployeeID, -5);
 
-        //ShowFloatingText("열심히 만들어볼게!");
+        ShowFloatingText("열심히 만들어볼게!");
     }
 
     public void ShowFloatingText(string text)
@@ -68,17 +67,5 @@ public class Employee : MonoBehaviour
     {
         floatingText.gameObject.SetActive(false);
         ballonPanel.SetActive(false);
-    }
-
-    void ShowReaction(string message)
-    {
-        reactionText.text = message;
-        reactionText.gameObject.SetActive(true);
-        Invoke(nameof(HideReaction), 2.0f);
-    }
-
-    void HideReaction()
-    {
-        reactionText.gameObject.SetActive(false);
     }
 }

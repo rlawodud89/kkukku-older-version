@@ -8,6 +8,7 @@ public class MaterialUISlot : MonoBehaviour
 {
     public Image image;        // 슬롯에 표시될 이미지
     public TextMeshProUGUI countTexts;
+    public Sprite defaultSprite;
 
     private ItemScript currentData;
     private int count = 0;
@@ -36,7 +37,7 @@ public class MaterialUISlot : MonoBehaviour
         count = 0;
 
         if (image != null)
-            image.sprite = null;
+            image.sprite = defaultSprite;
 
         if (countTexts != null)
             countTexts.text = "";

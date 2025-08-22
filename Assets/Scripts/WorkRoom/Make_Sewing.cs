@@ -22,7 +22,7 @@ public class Make_Sewing : MonoBehaviour
 
     private GameManager gameManager;
     private ItemScript currentBlanket;
-
+    public bool isMaking;
 
     private void Awake()
     {
@@ -78,11 +78,13 @@ public class Make_Sewing : MonoBehaviour
         Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
         gameManager.Use_InventoryItem(currentBlanket.cottonName, 1);
 
+        isMaking = true;
         sewingPanel.SetActive(false);
         current_employee.Working();
 
         progress_circle.OnComplete = () =>
         {
+
             gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
             Debug.Log("완성");
             showsewing();
@@ -117,6 +119,7 @@ public class Make_Sewing : MonoBehaviour
                 CompletePanel.SetActive(true);
                 CompleteImage.sprite = current_employee.workItem.image;
                 CompleteText.text = current_employee.workItem.itemName + "이 완성되었습니다!";
+                isMaking = false;
 
                 gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
                 gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가

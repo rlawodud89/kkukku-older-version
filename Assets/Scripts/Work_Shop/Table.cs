@@ -30,6 +30,11 @@ public class Table : MonoBehaviour
         TableInteriorChanged(tableID);
     }
 
+    private void OnDisable()
+    {
+        gameManager.OnTableInteriorChanged -= TableInteriorChanged;
+    }
+
     void OnMouseDown()
     {
         if (gameManager.isDayEndPanel) return;

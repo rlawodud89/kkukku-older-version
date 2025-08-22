@@ -14,7 +14,7 @@ public class FishingController : MonoBehaviour
     public Button fishing_closebtn;
     public Button fishing_btn;
     public GameObject checkpanel;
-        
+
     public MaterialsInventory materialsInventory;
     public FishingMiniGame fishingminigame;
 
@@ -37,7 +37,7 @@ public class FishingController : MonoBehaviour
     }
     public void click_fishingbtn()
     {
-        if (gameManager==null)
+        if (gameManager == null)
         {
             gameManager = GameManager.getInstance();
         }
@@ -62,9 +62,9 @@ public class FishingController : MonoBehaviour
 
     public void click_fishingstopbtn()
     {
-        if (fishingminigame==null)
+        if (fishingminigame == null)
         {
-            fishingminigame =FindObjectOfType<FishingMiniGame>();
+            fishingminigame = FindObjectOfType<FishingMiniGame>();
         }
 
         if (fishingminigame.miniGameRunning)
@@ -104,7 +104,7 @@ public class FishingController : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
 
 
-            if (fishingminigame==null)
+            if (fishingminigame == null)
             {
                 fishingminigame = FindObjectOfType<FishingMiniGame>();
             }
@@ -128,7 +128,7 @@ public class FishingController : MonoBehaviour
         currentdata = gameManager.Get_Random_Material();
         materialsInventory.AddMaterial(currentdata);
         gameManager.Add_InventoryItem(currentdata.itemName, 1);
-        Debug.Log(currentdata.itemName+"획득");
+        Debug.Log(currentdata.itemName + "획득");
 
     }
 }
