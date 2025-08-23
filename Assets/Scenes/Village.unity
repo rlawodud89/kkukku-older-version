@@ -2725,7 +2725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &522879140
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3273,8 +3273,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: {fileID: 11400000, guid: d3e4c173c8ad8084ea3aa0e67d67b713, type: 2}
   scenarios:
-  - stepIndex: 0
-    stepQuest: {fileID: 11400000, guid: d191b8fffcaa040479dc8dba8d809e54, type: 2}
+  - stepIndex: 1
+    stepQuest: {fileID: 11400000, guid: f57eb0dad2b03234b9222940b6fb2277, type: 2}
     requiredItemName: "\uC624\uB85C\uB77C\uBE5B\uC774\uBD88"
     requiredCount: 1
     autoClaimReward: 0
@@ -3283,7 +3283,7 @@ MonoBehaviour:
     requiredItemName: "\uBCC4\uBB34\uB2AC\uACE0\uC694\uC774\uBD88"
     requiredCount: 1
     autoClaimReward: 0
-  rootToToggle: {fileID: 0}
+  rootToToggle: {fileID: 522879139}
   thanksPanel: {fileID: 1035057457}
   thanksLabel: {fileID: 2010987971}
   thanksText: "\uACE0\uB9C8\uC6CC\uC694!"

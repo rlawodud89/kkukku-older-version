@@ -569,6 +569,36 @@ MonoBehaviour:
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66e68def1237ae34ea358c10158f1c30
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 2.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af763fccc236d474fa06617c70274987
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 3.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11609d7dc30b1ee4fa3364903ce41f25
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 4.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78325b4289ce97143aff9cc4569123b6
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 5.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7447c7c8958bd6439920c66cc486ec0
+    m_Address: "Assets/ScriptableObject/Quests/Special/\uC720\uB2C8\uCF58_Quest 6.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

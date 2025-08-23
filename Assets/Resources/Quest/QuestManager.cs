@@ -98,22 +98,7 @@ public class QuestManager : MonoBehaviour
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
 
-        /*
-        var dbQuests = gameManager.Get_Current_Quest();
-        if (dbQuests == null || dbQuests.Count == 0)
-        {
-            Debug.Log("[QuestManager] DB에 삭제할 퀘스트가 없습니다.");
-        }
-        else
-        {
-
-            foreach (var quest in dbQuests)
-            {
-                ResetQuest(quest);
-                gameManager.Remove_Quest(quest.questTitle);
-                Debug.Log($"[QuestManager] DB 삭제: {quest.questTitle}");
-            }
-        }*/
+        //WipeAllQuestRows();
 
         if (LoadDBQuests())
         {
@@ -134,6 +119,25 @@ public class QuestManager : MonoBehaviour
         Debug.Log($"[INV] 청야달조각: {gameManager.Count_InventoryItem("청야달조각")}");
         Debug.Log($"[INV] 오로라빛이불: {gameManager.Count_InventoryItem("오로라빛이불")}");
 
+    }
+
+    private void WipeAllQuestRows()
+    {
+        var dbQuests = gameManager.Get_Current_Quest();
+        if (dbQuests == null || dbQuests.Count == 0)
+        {
+            Debug.Log("[QuestManager] DB에 삭제할 퀘스트가 없습니다.");
+        }
+        else
+        {
+
+            foreach (var quest in dbQuests)
+            {
+                ResetQuest(quest);
+                gameManager.Remove_Quest(quest.questTitle);
+                Debug.Log($"[QuestManager] DB 삭제: {quest.questTitle}");
+            }
+        }
     }
 
     // Update is called once per frame
