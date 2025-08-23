@@ -621,7 +621,9 @@ public class GameManager : MonoBehaviour
 
     public int Count_InventoryItem(string itemName)
     {
-        return dbManager.Select_InventoryItem(itemName).count;
+        Inventory item = dbManager.Select_InventoryItem(itemName);
+        if (item == null) return 0;
+        else return item.count;
     }
 
     public bool Add_BlanketDesign(string blanketName)
