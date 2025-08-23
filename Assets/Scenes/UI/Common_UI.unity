@@ -3780,7 +3780,7 @@ MonoBehaviour:
     quest: {fileID: 11400000, guid: 78325b4289ce97143aff9cc4569123b6, type: 2}
     requirement:
       type: 2
-      itemId: "\uBCC4\uBB34\uB2AC\uACE0\uC694\uC774\uBD88"
+      itemId: "\uC740\uD558\uAFC8\uC2E4"
       requiredCount: 1
       extraCollects: []
   - stepName: 6
@@ -3790,7 +3790,6 @@ MonoBehaviour:
       itemId: 
       requiredCount: 0
       extraCollects: []
-  inventoryProvider: {fileID: 0}
   state: {fileID: 11400000, guid: d3e4c173c8ad8084ea3aa0e67d67b713, type: 2}
   onJournalUpdate:
     m_PersistentCalls:

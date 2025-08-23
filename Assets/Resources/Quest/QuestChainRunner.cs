@@ -202,21 +202,46 @@ public class QuestChainRunner : MonoBehaviour
                 return true;
 
             case ReqType.CollectItems:
-
-                Debug.Log($"[INV]: {gameManager.Count_InventoryItem(s.requirement.itemId)}");
-                // 메인 요구
-                if (gameManager.Count_InventoryItem(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
-                    return false;
-
-                // 추가 수집
-                foreach (var e in s.requirement.extraCollects)
                 {
-                    Debug.Log($"[INV]: {gameManager.Count_InventoryItem(e.itemId)}");
-                    if (gameManager.Count_InventoryItem(e.itemId) < e.count)
+                    // 메인
+                    string mainIdRaw = s.requirement.itemId;
+                    string mainId = mainIdRaw?.Trim();
+                    if (string.IsNullOrEmpty(mainId))
+                    {
+                        Debug.LogError($"[Runner] Step '{s.stepName}' 메인 itemId가 비어있습니다. (원본='{mainIdRaw}')");
                         return false;
-                }
+                    }
 
-                return true;
+                    int mainHave = gameManager.Count_InventoryItem(mainId);
+                    Debug.Log($"[Collect] Main '{mainId}': {mainHave}/{Mathf.Max(1, s.requirement.requiredCount)}");
+
+                    if (mainHave < Mathf.Max(1, s.requirement.requiredCount)) return false;
+
+                    // 추가
+                    var extras = s.requirement.extraCollects;
+                    if (extras != null && extras.Length > 0)
+                    {
+                        for (int i = 0; i < extras.Length; i++)
+                        {
+                            string raw = extras[i].itemId;
+                            string id = raw?.Trim();
+
+                            if (string.IsNullOrEmpty(id))
+                            {
+                                Debug.LogWarning($"[Collect] Step '{s.stepName}' extraCollects[{i}] 가 비어있습니다. (원본='{raw}') → 이 항목은 건너뜀");
+                                continue; // 또는 return false; 로 강제 실패 처리해도 됨
+                            }
+
+                            int need = Mathf.Max(1, extras[i].count);
+                            int have = gameManager.Count_InventoryItem(id);
+                            Debug.Log($"[Collect] Extra '{id}': {have}/{need}");
+
+                            if (have < need) return false;
+                        }
+                    }
+
+                    return true;
+                }
 
             case ReqType.TurnInItem:
                 // 실제 완료 처리는 TryTurnInCurrent에서 실행
@@ -270,57 +295,67 @@ public class QuestChainRunner : MonoBehaviour
     // 진행도 라인 텍스트를 "(현재/필요)"로 바꿔 끼우는 헬퍼
     private void UpdateQuestDescriptionProgress(Step s)
     {
-        if (!Application.isPlaying) return;           // 에디터 편집 중엔 에셋 수정 안 함
-        if (s.quest == null) return;
-        if (s.requirement.type != ReqType.CollectItems) return;
+        if (!Application.isPlaying || s.quest == null || s.requirement.type != ReqType.CollectItems) return;
 
         string text = s.quest.questDescription ?? string.Empty;
         int replaced = 0;
 
-        // itemName으로 시작하고 "(숫자/숫자)"가 붙은 라인을 찾아 교체 (멀티라인)
-        void ReplaceLine(ref string t, string itemName, int cur, int req)
+        void ReplaceLineSafe(ref string t, string rawId, int cur, int req)
         {
-            var pattern = @"(^|\n)" + Regex.Escape(itemName) + @"\s*\(\s*\d+\s*/\s*\d+\s*\)";
-            var replacement = "$1" + itemName + $" ({cur}/{req})";
-            string newText = Regex.Replace(t, pattern, replacement, RegexOptions.Multiline);
-
-            if (!ReferenceEquals(newText, t))
-            {
-                replaced++;
-                t = newText;
-            }
+            var id = rawId?.Trim();
+            if (string.IsNullOrEmpty(id)) return;
+            var pattern = @"(^|\n)" + Regex.Escape(id) + @"\s*\(\s*\d+\s*/\s*\d+\s*\)";
+            var replacement = "$1" + id + $" ({cur}/{req})";
+            var newText = Regex.Replace(t, pattern, replacement, RegexOptions.Multiline);
+            if (!ReferenceEquals(newText, t)) { replaced++; t = newText; }
         }
 
-        // 메인 + 추가 항목들 진행도 계산
-        ReplaceLine(ref text, s.requirement.itemId, gameManager.Count_InventoryItem(s.requirement.itemId), Mathf.Max(1, s.requirement.requiredCount));
+        // 메인
+        var mainId = s.requirement.itemId?.Trim();
+        int mainNeed = Mathf.Max(1, s.requirement.requiredCount);
+        int mainCur = string.IsNullOrEmpty(mainId) ? 0 : gameManager.Count_InventoryItem(mainId);
+        ReplaceLineSafe(ref text, mainId, mainCur, mainNeed);
+
+        // 추가
         var extras = s.requirement.extraCollects;
         if (extras != null)
         {
             for (int i = 0; i < extras.Length; i++)
-                ReplaceLine(ref text, extras[i].itemId, gameManager.Count_InventoryItem(extras[i].itemId), extras[i].count);
+            {
+                var id = extras[i].itemId?.Trim();
+                if (string.IsNullOrEmpty(id)) continue; // ← 빈 슬롯 무시
+                int cur = gameManager.Count_InventoryItem(id);
+                int need = Mathf.Max(1, extras[i].count);
+                ReplaceLineSafe(ref text, id, cur, need);
+            }
         }
 
-        // 교체된 라인이 하나도 없으면 본문 아래에 블록으로 추가
         if (replaced == 0)
         {
             var sb = new System.Text.StringBuilder(text.TrimEnd());
             if (sb.Length > 0) sb.Append('\n');
+            if (!string.IsNullOrEmpty(mainId))
+                sb.AppendLine($"{mainId} ({mainCur}/{mainNeed})");
 
-            sb.AppendLine($"{s.requirement.itemId} ({gameManager.Count_InventoryItem(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
             if (extras != null)
+            {
                 for (int i = 0; i < extras.Length; i++)
-                    sb.AppendLine($"{extras[i].itemId} ({gameManager.Count_InventoryItem(extras[i].itemId)}/{extras[i].count})");
-
+                {
+                    var id = extras[i].itemId?.Trim();
+                    if (string.IsNullOrEmpty(id)) continue;
+                    int cur = gameManager.Count_InventoryItem(id);
+                    sb.AppendLine($"{id} ({cur}/{extras[i].count})");
+                }
+            }
             text = sb.ToString().TrimEnd();
         }
 
-        // SO의 description을 직접 갱신 (Play 중엔 저장되지 않고, 플레이 종료 시 원복됨)
         if (s.quest.questDescription != text)
             s.quest.questDescription = text;
 
-        // 기존 이벤트 훅도 갱신 텍스트로 호출
         onJournalUpdate?.Invoke(currentIndex, text);
     }
+
 
     // (선택) 특정 토큰 블록만 바꾸고 싶을 때 사용 가능
     private string ReplaceBetween(string src, string beginTag, string endTag, string newContent)
