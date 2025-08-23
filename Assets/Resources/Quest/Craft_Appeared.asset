@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fa175724f259c5468edd877ce1311c7, type: 3}
-  m_Name: "\uBBF8\uB4DC\uB098\uC787"
+  m_Script: {fileID: 11500000, guid: 61dfae2259289fd4ab3038ff186ef9f2, type: 3}
+  m_Name: Craft_Appeared
   m_EditorClassIdentifier: 
-  _currentIndex: 0
-  _chainCompleted: 0

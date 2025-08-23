@@ -3734,6 +3734,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11f32312fc1c1e4aa8d01c9cfa5475d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  craftStepAppearedChannel: {fileID: 11400000, guid: a423964b0e55abe4aa484cc06c0f989c, type: 2}
+  craftStepCompletedChannel: {fileID: 11400000, guid: 1618ae3d27b3e9c48845faf37818d894, type: 2}
   steps:
   - stepName: 0
     quest: {fileID: 11400000, guid: d191b8fffcaa040479dc8dba8d809e54, type: 2}

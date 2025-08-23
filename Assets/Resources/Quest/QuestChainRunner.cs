@@ -16,7 +16,9 @@ public class QuestChainRunner : MonoBehaviour
     private bool _runtimePrepared = false;
     private List<string> _baseDescriptions = new(); // 원본 본문 백업(진행도 덧붙일 때 기준)
 
- 
+    [Header("이벤트 채널(씬 간 브로드캐스트)")]
+    public VoidEventChannelSO craftStepAppearedChannel;
+    public VoidEventChannelSO craftStepCompletedChannel;
 
 
     // ====== 단계 정의 ======
@@ -103,7 +105,9 @@ public class QuestChainRunner : MonoBehaviour
             state.OnIndexChanged += HandleExternalIndexChange;
         }
 
+        MaybeNotifyAppear();
         RefreshJournal();
+
     }
 
     private void OnDisable()
@@ -118,6 +122,7 @@ public class QuestChainRunner : MonoBehaviour
         if (newIndex == currentIndex) return;
         currentIndex = Mathf.Clamp(newIndex, 0, steps.Count);
         RefreshJournal();
+        MaybeNotifyAppear(); // 외부에서 인덱스 바뀐 경우도 체크
     }
 
     private void Update()
@@ -134,8 +139,12 @@ public class QuestChainRunner : MonoBehaviour
             if (CheckRequirementMet(step))
             {
                 q.isCompleted = true;
+
+                MaybeNotifyComplete(step);
+
                 onStepBecameCompleted?.Invoke(currentIndex);
                 RefreshJournal();
+
             }
             else
             {
@@ -150,6 +159,7 @@ public class QuestChainRunner : MonoBehaviour
             if (q.getReward)
             {
                 Advance();
+
             }
         }
     }
@@ -268,6 +278,25 @@ public class QuestChainRunner : MonoBehaviour
         }
 
         RefreshJournal();
+        MaybeNotifyAppear(); // 다음 단계로 넘어왔을 때 등장 이벤트 체크
+    }
+    private void MaybeNotifyAppear()
+    {
+        if (IsChainFinished()) return;
+        var s = steps[currentIndex];
+        if (s.requirement.type == ReqType.CraftRecipeFlag)
+        {
+            Debug.Log($"[Runner] Craft step APPEARED at idx={currentIndex}, channel={craftStepAppearedChannel?.name}");
+            craftStepAppearedChannel?.Raise();
+        }
+    }
+    private void MaybeNotifyComplete(Step s)
+    {
+        if (s.requirement.type == ReqType.CraftRecipeFlag && s.quest.isCompleted)
+        {
+            Debug.Log($"[Runner] Craft step COMPLETED, channel={craftStepCompletedChannel?.name}");
+            craftStepCompletedChannel?.Raise();
+        }
     }
 
     private bool IsChainFinished() => currentIndex >= steps.Count;

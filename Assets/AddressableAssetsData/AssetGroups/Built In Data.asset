@@ -599,6 +599,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - quest
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83ec916feda780b4d8120dad730953de
+    m_Address: "Assets/ScriptableObject/Interiors/Room_Interiors/\uD2B9\uBCC4\uC81C\uC791\uB300.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - room_interior
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questTitle: "\uC81C\uB300\uB85C \uB41C \uC774\uBD88 (1)"
   questDescription: "\uC774\uBD88\uC744 \uB9CC\uB4E4\uAE30 \uC704\uD55C \uC7AC\uB8CC\uB97C
-    \uBAA8\uC73C\uC790.\r\n\uC740\uD558\uAFC8\uC2E4 (0/1)\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
-    (0/2)\r\n\uBABD\uD658\uC758\uAF43\uC78E (0/2)\r\n\uCCAD\uC57C\uB2EC\uC870\uAC01
-    (0/1)"
+    \uBAA8\uC73C\uC790.\r\n\uC740\uD558\uAFC8\uC2E4 (56/1)\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
+    (112/2)\r\n\uBABD\uD658\uC758\uAF43\uC78E (112/2)\r\n\uCCAD\uC57C\uB2EC\uC870\uAC01
+    (112/1)"
   rewards:
   - rewardType: "\uC7AC\uD654"
     amount: 5
