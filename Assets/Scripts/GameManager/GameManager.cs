@@ -395,6 +395,7 @@ public class GameManager : MonoBehaviour
     {
         isDayEndPanel = false;
         playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        dbManager.Update_PlayTime(playTime);
 
         todayGold = 0;
         todayMoonrock = 0;
@@ -407,8 +408,6 @@ public class GameManager : MonoBehaviour
             Set_EndScene("Work_Shop");
             SceneManager.LoadScene("Work_Shop");
         }
-
-        Debug.Log("Days:" + days);
     }
 
 
@@ -437,8 +436,15 @@ public class GameManager : MonoBehaviour
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
     public ItemScript Get_Random_Blanket()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
-        var randomBlanket = Blankets.ElementAt(randomIdx);
+        KeyValuePair<string, ItemScript> randomBlanket;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
+            randomBlanket = Blankets.ElementAt(randomIdx);
+        } while (randomBlanket.Value.itemName == "기본이불");
+
         return randomBlanket.Value;
     }
 
@@ -463,8 +469,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
     public InteriorScript Get_Random_ShopInterior()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
-        var randomInterior = Shop_Interiors.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomInterior;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
+            randomInterior = Shop_Interiors.ElementAt(randomIdx);
+        } while (randomInterior.Value.interiorName == "나무벽장" || randomInterior.Value.interiorName == "나무진열장");
+
         return randomInterior.Value;
     }
 
@@ -479,8 +492,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_Tile(string tileName) { return Tiles[tileName]; }
     public InteriorScript Get_Random_Tile()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
-        var randomTile = Tiles.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomTile;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
+            randomTile = Tiles.ElementAt(randomIdx);
+        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "나무바닥");
+
         return randomTile.Value;
     }
 
