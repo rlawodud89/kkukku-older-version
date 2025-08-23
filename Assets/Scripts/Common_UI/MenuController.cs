@@ -407,6 +407,7 @@ public class MenuController : MonoBehaviour
 
     private void OnConfirm(string placeName)
     {
+        gameManager.Set_EndScene(placeName);
         SceneManager.LoadScene(placeName);
     }
 }

@@ -167,6 +167,22 @@ public class DBManager
         conn.Update(user);
     }
 
+    public void Update_EndScene(string endScene)
+    {
+        User user = conn.Find<User>(userName);
+        user.endScene = endScene;
+        conn.Update(user);
+    }
+
+    public void Reset_User_Todays()
+    {
+        User user = conn.Find<User>(userName);
+        user.todayEnergy = 0;
+        user.todayGold = 0;
+        user.todayMoonrock = 0;
+        conn.Update(user);
+    }
+
     public bool Have_Inventory(string itemName)
     {
         return conn.Table<Inventory>()

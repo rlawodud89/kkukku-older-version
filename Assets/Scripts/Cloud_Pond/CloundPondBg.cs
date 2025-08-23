@@ -23,11 +23,6 @@ public class CloundPondBg : MonoBehaviour
         gameManager.OnBgTimeChanged += ChangeBg;
     }
 
-    private void OnDisable()
-    {
-        gameManager.OnBgTimeChanged -= ChangeBg;
-    }
-
     private void ChangeBg(BgType bgType)
     {
         if (bgType == BgType.DAY)

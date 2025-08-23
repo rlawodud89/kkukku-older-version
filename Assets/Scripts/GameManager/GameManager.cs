@@ -4,6 +4,7 @@ using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
 using static UnityEditor.MaterialProperty;
+using UnityEngine.SceneManagement;
 
 public enum BgType
 {
@@ -207,11 +208,6 @@ public class GameManager : MonoBehaviour
         Tiles = Addressables.LoadAssetsAsync<InteriorScript>("tile", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.interiorName);
-        /*
-        Customers = Addressables.LoadAssetsAsync<CustomerScript>("customer", null)
-                .WaitForCompletion()
-                .ToDictionary(i => i.customerName);
-        */
         Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questTitle);
@@ -220,6 +216,7 @@ public class GameManager : MonoBehaviour
                 .WaitForCompletion()
                 .ToDictionary(i => i.letterName);
         */
+
 
         foreach (var blanket in Blankets)
         {
@@ -300,7 +297,6 @@ public class GameManager : MonoBehaviour
             todayMoonrock += delta;
             dbManager.Update_TodayMoonrock(todayMoonrock);
         }
-
     }
 
     public int Get_EnergyLevel() { return (int)(energy / oneEnergyLevel); }
@@ -318,6 +314,10 @@ public class GameManager : MonoBehaviour
     public int Get_TodayGold() { return todayGold; }
     public int Get_TodayMoonrock() { return todayMoonrock; }
     public int Get_TodayEnergy() { return todayEnergy; }
+    public void Reset_User_Todays()
+    {
+        dbManager.Reset_User_Todays();
+    }
 
     public int Get_Days() { return days; }
     public int Get_Hours() { return hours; }
@@ -383,15 +383,31 @@ public class GameManager : MonoBehaviour
         dbManager.Update_EffectSound(this.effectSound);
     }
 
+    public string Get_EndScene() { return endScene; }
+    public void Set_EndScene(string endScene)
+    {
+        this.endScene = endScene;
+        dbManager.Update_EndScene(this.endScene);
+    }
+
+
     public void Go_Next_Days()
     {
         isDayEndPanel = false;
         playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        dbManager.Update_PlayTime(playTime);
+
         todayGold = 0;
         todayMoonrock = 0;
         todayEnergy = 0;
+        Reset_User_Todays();
 
-        Debug.Log("Days:" + days);
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name != "Work_Shop")
+        {
+            Set_EndScene("Work_Shop");
+            SceneManager.LoadScene("Work_Shop");
+        }
     }
 
 
@@ -420,8 +436,15 @@ public class GameManager : MonoBehaviour
     public ItemScript Get_Blanket(string blanketName) { return Blankets[blanketName]; }
     public ItemScript Get_Random_Blanket()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
-        var randomBlanket = Blankets.ElementAt(randomIdx);
+        KeyValuePair<string, ItemScript> randomBlanket;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
+            randomBlanket = Blankets.ElementAt(randomIdx);
+        } while (randomBlanket.Value.itemName == "기본이불");
+
         return randomBlanket.Value;
     }
 
@@ -446,8 +469,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_ShopInterior(string interiorName) { return Shop_Interiors[interiorName]; }
     public InteriorScript Get_Random_ShopInterior()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
-        var randomInterior = Shop_Interiors.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomInterior;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Shop_Interiors.Count);
+            randomInterior = Shop_Interiors.ElementAt(randomIdx);
+        } while (randomInterior.Value.interiorName == "나무벽장" || randomInterior.Value.interiorName == "나무진열장");
+
         return randomInterior.Value;
     }
 
@@ -462,8 +492,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_Tile(string tileName) { return Tiles[tileName]; }
     public InteriorScript Get_Random_Tile()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
-        var randomTile = Tiles.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomTile;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
+            randomTile = Tiles.ElementAt(randomIdx);
+        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "나무바닥");
+
         return randomTile.Value;
     }
 
@@ -584,7 +621,9 @@ public class GameManager : MonoBehaviour
 
     public int Count_InventoryItem(string itemName)
     {
-        return dbManager.Select_InventoryItem(itemName).count;
+        Inventory item = dbManager.Select_InventoryItem(itemName);
+        if (item == null) return 0;
+        else return item.count;
     }
 
     public bool Add_BlanketDesign(string blanketName)
@@ -1055,7 +1094,7 @@ public class GameManager : MonoBehaviour
         uniqueList.Clear();
 
         // 이불 디자인
-        while (uniqueList.Count < designshopLevel)
+        while (uniqueList.Count < designshopLevel + 1)
         {
             ItemScript itemScript = Get_Random_Blanket();
             if (uniqueList.Contains(itemScript.itemName)) continue;
@@ -1064,4 +1103,6 @@ public class GameManager : MonoBehaviour
             uniqueList.Add(itemScript.itemName);
         }
     }
+
+
 }
