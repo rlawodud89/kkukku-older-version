@@ -203,15 +203,18 @@ public class QuestChainRunner : MonoBehaviour
 
             case ReqType.CollectItems:
 
-                
+                Debug.Log($"[INV]: {gameManager.Count_InventoryItem(s.requirement.itemId)}");
                 // 메인 요구
                 if (gameManager.Count_InventoryItem(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
                     return false;
 
                 // 추가 수집
                 foreach (var e in s.requirement.extraCollects)
+                {
+                    Debug.Log($"[INV]: {gameManager.Count_InventoryItem(e.itemId)}");
                     if (gameManager.Count_InventoryItem(e.itemId) < e.count)
                         return false;
+                }
 
                 return true;
 

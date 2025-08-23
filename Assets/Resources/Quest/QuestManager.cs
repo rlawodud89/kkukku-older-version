@@ -83,9 +83,13 @@ public class QuestManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private IEnumerator Start()
     {
-        gameManager = GameManager.getInstance();
+        while (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+            yield return null; // 한 프레임 대기
+        }
         // 퀘스트 데이터 로드
         //QuestSO quest = Resources.Load<QuestSO>("Quest1"); 
         //StartQuest(quest);  // 퀘스트 시작
@@ -93,7 +97,7 @@ public class QuestManager : MonoBehaviour
         //StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
-        
+
         /*
         var dbQuests = gameManager.Get_Current_Quest();
         if (dbQuests == null || dbQuests.Count == 0)
