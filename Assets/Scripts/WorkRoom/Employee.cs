@@ -31,22 +31,15 @@ public class Employee : MonoBehaviour
         snacksInventory.GiveSnackToEmployee(item);
         Debug.Log("GiveSnackToEmployee 호출됨");
 
-
-        Debug.Log("먹이줌");
-
         staminar.Addstamina(item.value);
         ShowFloatingText("+" + item.value);
         gameManager.Change_Worker_Stamina(EmployeeID, item.value);
-
-        //ShowReaction(item.reactionMessage);
     }
 
     public void Working()
     {
         staminar.Addstamina(-5);
         gameManager.Change_Worker_Stamina(EmployeeID, -5);
-
-        ShowFloatingText("열심히 만들어볼게!");
     }
 
     public void ShowFloatingText(string text)
@@ -57,12 +50,6 @@ public class Employee : MonoBehaviour
         ballonPanel.SetActive(true);
         Invoke(nameof(HideFloatingText), 1.5f);
     }
-
-    public void ShowFloatingFabric(ItemScript blanket)
-    {
-
-    }
-
     public void HideFloatingText()
     {
         floatingText.gameObject.SetActive(false);
