@@ -484,8 +484,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_RoomInterior(string interiorName) { return Room_Interiors[interiorName]; }
     public InteriorScript Get_Random_RoomInterior()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
-        var randomInterior = Room_Interiors.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomInterior;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
+            randomInterior = Room_Interiors.ElementAt(randomIdx);
+        } while (randomInterior.Value.interiorName == "특별제작대");
+
         return randomInterior.Value;
     }
 

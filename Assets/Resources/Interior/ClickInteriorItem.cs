@@ -54,7 +54,7 @@ public class ClickInteriorItem : MonoBehaviour
 
 
         initialPosition = transform.position;
-        Debug.Log($"Initial Position: {initialPosition}");
+        //Debug.Log($"Initial Position: {initialPosition}");
     }
 
 
