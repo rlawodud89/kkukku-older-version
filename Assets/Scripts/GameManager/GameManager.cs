@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
     private static int eveningHours = 15;
     private static int nightHours = 22;
     private static int endHours = 0;
+    private static int shopCloseHours = 18;
     private static float oneEnergyLevel = 3844;
     private static float dbSaveTimer = 0f;    // DB 저장 주기 타이머
     private static float dbSaveInterval = 1f; // 1초마다 저장 (원하는 값으로 변경 가능)
@@ -82,6 +83,7 @@ public class GameManager : MonoBehaviour
     public event Action<BgType> OnBgTimeChanged;
     public event Action OnDayEnded;
     public bool isDayEndPanel;
+    public event Action OnshopCloseHours;
 
     // 가게에서 게임 매니저 값에 따라 이불장, 표지판 바뀔 수 있도록 하는 이벤트
     public event Action<bool> OnOpenChanged;
@@ -168,7 +170,14 @@ public class GameManager : MonoBehaviour
             bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
         }
-
+        else if (hours == shopCloseHours)
+        {
+            if (isOpen)
+            {
+                Set_IsOpen(false);
+                OnshopCloseHours?.Invoke();
+            }
+        }
 
         dbSaveTimer += Time.deltaTime;
         if (dbSaveTimer >= dbSaveInterval)
