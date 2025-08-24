@@ -3664,6 +3664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418289710}
   - component: {fileID: 418289709}
+  - component: {fileID: 418289711}
   m_Layer: 5
   m_Name: QuestManager
   m_TagString: Untagged
@@ -3683,6 +3684,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238d347da545396418e0e775171f35f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useAddressables: 1
+  nextQuestDelay: 0.4
+  nextQuestInAnim: 0.6
+  normalButtonBg: {fileID: 21300000, guid: 4700ee5186a9e3946b2aa2ace9fdc3c3, type: 3}
+  specialButtonBg: {fileID: 21300000, guid: 7cbaac281624ed94183f42bff43268c9, type: 3}
+  specialTitleColor: {r: 1, g: 0.94, b: 0.6, a: 1}
   activeQuests: []
   questPanel: {fileID: 1084821495}
   scrollContent: {fileID: 2089431613}
@@ -3715,6 +3722,87 @@ RectTransform:
   m_AnchoredPosition: {x: 15.000099, y: -38.764503}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &418289711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418289708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11f32312fc1c1e4aa8d01c9cfa5475d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  craftStepAppearedChannel: {fileID: 11400000, guid: a423964b0e55abe4aa484cc06c0f989c, type: 2}
+  craftStepCompletedChannel: {fileID: 11400000, guid: 1618ae3d27b3e9c48845faf37818d894, type: 2}
+  steps:
+  - stepName: 0
+    quest: {fileID: 11400000, guid: d191b8fffcaa040479dc8dba8d809e54, type: 2}
+    requirement:
+      type: 1
+      itemId: "\uC624\uB85C\uB77C\uBE5B\uC774\uBD88"
+      requiredCount: 1
+      extraCollects: []
+  - stepName: 1
+    quest: {fileID: 11400000, guid: f57eb0dad2b03234b9222940b6fb2277, type: 2}
+    requirement:
+      type: 2
+      itemId: "\uC624\uB85C\uB77C\uBE5B\uC774\uBD88"
+      requiredCount: 1
+      extraCollects: []
+  - stepName: 2
+    quest: {fileID: 11400000, guid: 66e68def1237ae34ea358c10158f1c30, type: 2}
+    requirement:
+      type: 0
+      itemId: 
+      requiredCount: 0
+      extraCollects: []
+  - stepName: 3
+    quest: {fileID: 11400000, guid: af763fccc236d474fa06617c70274987, type: 2}
+    requirement:
+      type: 1
+      itemId: "\uC740\uD558\uAFC8\uC2E4"
+      requiredCount: 1
+      extraCollects:
+      - itemId: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
+        count: 2
+      - itemId: "\uBABD\uD658\uC758\uAF43\uC78E"
+        count: 2
+      - itemId: "\uCCAD\uC57C\uB2EC\uC870\uAC01"
+        count: 1
+  - stepName: 4
+    quest: {fileID: 11400000, guid: 11609d7dc30b1ee4fa3364903ce41f25, type: 2}
+    requirement:
+      type: 3
+      itemId: "\uBCC4\uBB34\uB2AC\uACE0\uC694\uC774\uBD88"
+      requiredCount: 1
+      extraCollects: []
+  - stepName: 5
+    quest: {fileID: 11400000, guid: 78325b4289ce97143aff9cc4569123b6, type: 2}
+    requirement:
+      type: 2
+      itemId: "\uC740\uD558\uAFC8\uC2E4"
+      requiredCount: 1
+      extraCollects: []
+  - stepName: 6
+    quest: {fileID: 11400000, guid: d7447c7c8958bd6439920c66cc486ec0, type: 2}
+    requirement:
+      type: 0
+      itemId: 
+      requiredCount: 0
+      extraCollects: []
+  state: {fileID: 11400000, guid: d3e4c173c8ad8084ea3aa0e67d67b713, type: 2}
+  onJournalUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onStepBecameCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onChainCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  currentIndex: 0
 --- !u!1 &418945288
 GameObject:
   m_ObjectHideFlags: 0

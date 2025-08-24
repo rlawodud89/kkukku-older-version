@@ -8,6 +8,7 @@ public class QuestSO : ScriptableObject
 {
     // 퀘스트에 대한 다양한 정보들
     public string questTitle;        // 퀘스트 제목
+    [TextArea(5, 10)]
     public string questDescription;  // 퀘스트 설명
     public Reward[] rewards;          // 퀘스트 보상 종류와 양 (보상 클래스 배열)
     public int questProcess;          // 퀘스트 진행 상태
@@ -17,4 +18,5 @@ public class QuestSO : ScriptableObject
 
     public bool isSpecial;           // 특별 퀘스트 여부
     public QuestSO nextQuest;        // 이어지는 다음 퀘스트 (있다면)
+
 }
