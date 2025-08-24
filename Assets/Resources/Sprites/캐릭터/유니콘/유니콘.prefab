@@ -219,8 +219,8 @@ MonoBehaviour:
   questWaitPoint: {fileID: 0}
   questWaitSeconds: 10
   questLeaveViaDoor: 1
-  offeredQuest: {fileID: 11400000, guid: d6e7b624e3372f24cbe527e2e176df5d, type: 2}
-  questMarker: {fileID: 0}
+  offeredQuest: {fileID: 11400000, guid: d191b8fffcaa040479dc8dba8d809e54, type: 2}
+  questMarker: {fileID: 1123616876407565665}
   questMarkerChildName: QuestMarker
   toggleMarkerObject: 1
   faceMap:

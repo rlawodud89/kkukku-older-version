@@ -6,11 +6,12 @@ using UnityEngine.SceneManagement;
 public class GoWorkShop : MonoBehaviour
 {
     public GameObject confirmPanel;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
-    {
-        
+    { 
+        gameManager = GameManager.getInstance();
     }
 
     // Update is called once per frame
@@ -26,7 +27,8 @@ public class GoWorkShop : MonoBehaviour
 
     public void MoveWorkShop()
     {
-        SceneManager.LoadScene("Work_Shop");
+        gameManager.Set_EndScene("Work_Shop");
+        SceneManager.LoadScene("Work_Shop");     
     }
 
     public void CancelMove()

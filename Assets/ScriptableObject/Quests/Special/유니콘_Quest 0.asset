@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
   m_Name: "\uC720\uB2C8\uCF58_Quest 0"
   m_EditorClassIdentifier: 
-  questTitle: "\uC2AC\uD508 \uC720\uB2C8\uCF58"
-  questDescription: "\uC5C9\uC5C9..\uC5C9.\uC5B4\uC5C9.."
+  questTitle: "\uBCC4\uBE5B\uC774 \uB108\uBB34 \uBC1D\uC740 \uBC24"
+  questDescription: "\u201C\uC694\uC998\uB530\uB77C \uAFC8\uC774 \uB108\uBB34 \uC2DC\uB044\uB7EC\uC6CC\uC11C
+    \uC7A0\uC744 \uBABB \uC790\uC694.\n\uB2EC\uBE5B \uD5A5\uC774 \uC0B4\uC9DD \uC2A4\uBBF8\uB294,
+    \uC870\uC6A9\uD55C \uB2F4\uC694\uB97C \uBE4C\uB824\uC8FC\uC2E4 \uC218 \uC788\uB098\uC694?\u201D\n\uC624\uB85C\uB77C\uBE5B\uC774\uBD88
+    (30/1)"
   rewards:
-  - rewardType: "\uC6D4\uC11D"
-    amount: 5
   - rewardType: "\uC7AC\uD654"
     amount: 5
   questProcess: 0
@@ -24,4 +25,4 @@ MonoBehaviour:
   isCompleted: 1
   getReward: 0
   isSpecial: 1
-  nextQuest: {fileID: 11400000, guid: 5289485973738e34a91de5d78748a1fe, type: 2}
+  nextQuest: {fileID: 11400000, guid: f57eb0dad2b03234b9222940b6fb2277, type: 2}

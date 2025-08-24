@@ -10,46 +10,51 @@ public class ShopLoader : MonoBehaviour
     [SerializeField] ItemCard cardPrefab;
     [SerializeField] List<ItemData> stock;       // 인스펙터 배열
     [SerializeField] PurchaseConfirmPopup popup;
-    [SerializeField] ShopType shopType;
+    [SerializeField] StoreType shopType;
     public Action<SpeechType> speechTrigger;
 
     private GameManager gameManager;
     private int designshopLevel;
     private int itemshopLevel;
-    private int designCount;
-    private HashSet<string> uniqueList = new HashSet<string>();
+
+    private List<InteriorScript> shopInteriors;
+    private List<InteriorScript> roomInteriors;
+    private List<InteriorScript> tiles;
+    private List<ItemScript> blankets;
 
     void Start()
     {
         gameManager = GameManager.getInstance();
         designshopLevel = gameManager.Get_DesignShopLevel();
         itemshopLevel = gameManager.Get_ItemShopLevel();
-        designCount = designshopLevel;
 
         gameManager.OnItemShopLevelChanged += ChangeItemShopLevel;
         gameManager.OnDesignShopLevelChanged += ChangeDesignShopLevel;
         gameManager.OnDayEnded += InitContent;
 
-        uniqueList = new HashSet<string>();
+        shopInteriors = new List<InteriorScript>();
+        roomInteriors = new List<InteriorScript>();
+        tiles = new List<InteriorScript>();
+        blankets = new List<ItemScript>();
+
         InitContent();
     }
 
     private void InitContent()
     {
         stock.Clear();
-        uniqueList.Clear();
         foreach (Transform child in contentRoot)
         {
             Destroy(child.gameObject);
         }
 
-        if (shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어
+        if (shopType == StoreType.SHOP_INTERIOR) // 가게 인테리어
         {
-            while (stock.Count < 3)
-            {
-                InteriorScript interiorScript = gameManager.Get_Random_ShopInterior();
-                if (uniqueList.Contains(interiorScript.interiorName)) continue;
+            shopInteriors.Clear();
+            shopInteriors = gameManager.Get_InteriorStore_ContentItem(shopType);
 
+            foreach (InteriorScript interiorScript in shopInteriors)
+            {
                 ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
@@ -57,32 +62,30 @@ public class ShopLoader : MonoBehaviour
                 itemData.useQuantity = false; // 수량 X
                 itemData.isGold = true; // 일반 재화 사용
                 stock.Add(itemData);
-                uniqueList.Add(itemData.displayName);
             }
         }
-        else if (shopType == ShopType.ROOM_INTERIROR)
+        else if (shopType == StoreType.ROOM_INTERIROR)
         {
-            while (stock.Count < 3)
-            {
-                InteriorScript interiorScript = gameManager.Get_Random_RoomInterior();
-                if (uniqueList.Contains(interiorScript.interiorName)) continue;
+            roomInteriors.Clear();
+            roomInteriors = gameManager.Get_InteriorStore_ContentItem(shopType);
 
+            foreach (InteriorScript interiorScript in roomInteriors)
+            {
                 ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
                 itemData.price = interiorScript.value;
                 itemData.isGold = true; // 일반 재화 사용
                 stock.Add(itemData);
-                uniqueList.Add(itemData.displayName);
             }
         }
-        else if (shopType == ShopType.TILE) // 타일
+        else if (shopType == StoreType.TILE) // 타일
         {
-            while (stock.Count < 3)
-            {
-                InteriorScript interiorScript = gameManager.Get_Random_Tile();
-                if (uniqueList.Contains(interiorScript.interiorName)) continue;
+            tiles.Clear();
+            tiles = gameManager.Get_InteriorStore_ContentItem(shopType);
 
+            foreach (InteriorScript interiorScript in tiles)
+            {
                 ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = interiorScript.interiorName;
                 itemData.icon = interiorScript.image;
@@ -90,16 +93,15 @@ public class ShopLoader : MonoBehaviour
                 itemData.useQuantity = false; // 수량 X
                 itemData.isGold = true; // 일반 재화 사용
                 stock.Add(itemData);
-                uniqueList.Add(itemData.displayName);
             }
         }
-        else if (shopType == ShopType.BLANKET) // 이불 디자인
+        else if (shopType == StoreType.BLANKET) // 이불 디자인
         {
-            while (stock.Count < designCount)
-            {
-                ItemScript itemScript = gameManager.Get_Random_Blanket();
-                if (uniqueList.Contains(itemScript.itemName)) continue;
+            blankets.Clear();
+            blankets = gameManager.Get_ItemStore_ContentItem(shopType);
 
+            foreach (ItemScript itemScript in blankets)
+            {
                 ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
                 itemData.displayName = itemScript.itemName;
                 itemData.icon = itemScript.image;
@@ -107,10 +109,9 @@ public class ShopLoader : MonoBehaviour
                 itemData.useQuantity = false; // 수량 X
                 itemData.isGold = false; // 월석 사용
                 stock.Add(itemData);
-                uniqueList.Add(itemData.displayName);
             }
         }
-        else if (shopType == ShopType.YARN)
+        else if (shopType == StoreType.YARN)
         {
             // 1단계
             ItemScript itemScript1 = gameManager.Get_Material("꿈실");
@@ -142,7 +143,7 @@ public class ShopLoader : MonoBehaviour
                 stock.Add(itemData3);
             }
         }
-        else if (shopType == ShopType.COTTON)
+        else if (shopType == StoreType.COTTON)
         {
             // 1단계
             ItemScript itemScript1 = gameManager.Get_Material("운무솜");
@@ -174,7 +175,7 @@ public class ShopLoader : MonoBehaviour
                 stock.Add(itemData3);
             }
         }
-        else if (shopType == ShopType.DECO)
+        else if (shopType == StoreType.DECO)
         {
             // 1단계
             ItemScript itemScript1 = gameManager.Get_Material("달조각");
@@ -215,10 +216,11 @@ public class ShopLoader : MonoBehaviour
         }
     }
 
+
     private void ChangeItemShopLevel(int itemshopLevel)
     {
         this.itemshopLevel = itemshopLevel;
-        if (shopType == ShopType.YARN)
+        if (shopType == StoreType.YARN)
         {
             // 1단계는 이미 Inspector에서 넣어놓음
 
@@ -246,7 +248,7 @@ public class ShopLoader : MonoBehaviour
             var card = Instantiate(cardPrefab, contentRoot);
             card.Init(stock.Last(), OnBuyRequest);
         }
-        else if (shopType == ShopType.COTTON)
+        else if (shopType == StoreType.COTTON)
         {
             // 1단계는 이미 Inspector에서 넣어놓음
 
@@ -274,7 +276,7 @@ public class ShopLoader : MonoBehaviour
             var card = Instantiate(cardPrefab, contentRoot);
             card.Init(stock.Last(), OnBuyRequest);
         }
-        else if (shopType == ShopType.DECO)
+        else if (shopType == StoreType.DECO)
         {
             // 1단계는 이미 Inspector에서 넣어놓음
 
@@ -306,16 +308,13 @@ public class ShopLoader : MonoBehaviour
 
     private void ChangeDesignShopLevel(int designshopLevel)
     {
-        if (shopType == ShopType.BLANKET)
+        if (shopType == StoreType.BLANKET)
         {
-            this.designshopLevel = designshopLevel;
-            designCount = designshopLevel;
-
             ItemScript itemScript;
             while (true)
             {
                 itemScript = gameManager.Get_Random_Blanket();
-                if (!uniqueList.Contains(itemScript.itemName)) break;
+                if (gameManager.Add_Store_ContentItem(shopType, itemScript.itemName)) break;
             }
 
             ItemData itemData = ScriptableObject.CreateInstance<ItemData>();
@@ -325,13 +324,13 @@ public class ShopLoader : MonoBehaviour
             itemData.useQuantity = false; // 수량 X
             itemData.isGold = false; // 월석 사용
             stock.Add(itemData);
-            uniqueList.Add(itemData.displayName);
 
             var card = Instantiate(cardPrefab, contentRoot);
             card.Init(stock.Last(), OnBuyRequest);
         }
 
     }
+
 
     // 카드가 구매 버튼을 눌렀을 때 호출
     void OnBuyRequest(ItemCard card)
@@ -346,7 +345,7 @@ public class ShopLoader : MonoBehaviour
         {
             Debug.Log($"디자인 ! : {card.Data.displayName}");
 
-            if (shopType == ShopType.SHOP_INTERIOR) // 가게 인테리어 (수량 필요없이 겉만 바뀜)
+            if (shopType == StoreType.SHOP_INTERIOR) // 가게 인테리어 (수량 필요없이 겉만 바뀜)
             {
                 if (card.Data.price > gameManager.Get_Gold())
                 {
@@ -366,7 +365,7 @@ public class ShopLoader : MonoBehaviour
                     speechTrigger?.Invoke(SpeechType.Have);
                 }
             }
-            else if (shopType == ShopType.BLANKET) // 이불 디자인
+            else if (shopType == StoreType.BLANKET) // 이불 디자인
             {
                 if (card.Data.price > gameManager.Get_Moonrock())
                 {
@@ -386,7 +385,7 @@ public class ShopLoader : MonoBehaviour
                     speechTrigger?.Invoke(SpeechType.Have);
                 }
             }
-            else if (shopType == ShopType.TILE) // 타일
+            else if (shopType == StoreType.TILE) // 타일
             {
                 if (card.Data.price > gameManager.Get_Gold())
                 {
@@ -438,7 +437,7 @@ public class ShopLoader : MonoBehaviour
                     return;
                 }
 
-                if (shopType == ShopType.WORKER) // 직원
+                if (shopType == StoreType.WORKER) // 직원
                 {
                     gameManager.Add_InteriorItem(card.Data.displayName, card.Quantity);
                 }
@@ -453,16 +452,4 @@ public class ShopLoader : MonoBehaviour
 
         }
     }
-}
-
-public enum ShopType
-{
-    SHOP_INTERIOR,
-    ROOM_INTERIROR,
-    TILE,
-    YARN,
-    COTTON,
-    DECO,
-    BLANKET,
-    WORKER
 }

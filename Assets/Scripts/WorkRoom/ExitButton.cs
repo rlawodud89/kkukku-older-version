@@ -9,6 +9,7 @@ public class ExitButton : MonoBehaviour
     private Make_Fabric makeFabric;
 
     private FabricDetailPanelController detailPanelController;
+
     public void CloseScrollView()
     {
         if (makeFabric==null)
