@@ -7,6 +7,7 @@ public class ItemScript : ScriptableObject
     public string itemName;
     public Sprite image;
     public ItemType itemType;
+    public bool isSpecial;
 
     [Header("간식, 재료 레벨")]
     public int level;

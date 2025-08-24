@@ -443,7 +443,7 @@ public class GameManager : MonoBehaviour
         {
             randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
             randomBlanket = Blankets.ElementAt(randomIdx);
-        } while (randomBlanket.Value.itemName == "기본이불");
+        } while (randomBlanket.Value.itemName == "기본이불" || randomBlanket.Value.isSpecial);
 
         return randomBlanket.Value;
     }

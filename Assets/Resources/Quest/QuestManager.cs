@@ -12,7 +12,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class QuestManager : MonoBehaviour
 {
     [SerializeField] private bool useAddressables = true; // ← Addressables 쓰려면 true
-    
+
     //보상 후 연계 퀘스트 애니메이션
     [SerializeField, Range(0f, 1.5f)] private float nextQuestDelay = 0.40f; // 보상 후 잠깐 쉬는 시간
     [SerializeField, Range(0f, 1.5f)] private float nextQuestInAnim = 0.60f; // 패널 팝인 시간
@@ -50,7 +50,7 @@ public class QuestManager : MonoBehaviour
         Addressables.Release(handle);
     }
 
-        
+
     public static QuestManager Instance;
 
     public List<QuestSO> activeQuests = new List<QuestSO>();  // 퀘스트 리스트
@@ -251,7 +251,7 @@ public class QuestManager : MonoBehaviour
         quest.questProcess = 0; // 퀘스트 진행 상태 초기화
         quest.isCompleted = false; // 퀘스트 완료 여부 초기화
     }
-    
+
     void OnQuestButtonClicked(GameObject questButton, QuestSO quest)
     {
         // 퀘스트 완료 시
@@ -526,7 +526,7 @@ public class QuestManager : MonoBehaviour
             questButtons.Remove(questButton);
             Destroy(questButton);
         }
-        
+
         activeQuests.Remove(quest);
 
         // 2) 보상 패널 닫기
@@ -542,7 +542,7 @@ public class QuestManager : MonoBehaviour
         RecalculateCompleteAlertIcon();
     }
 
-    
+
     // 퀘스트 진행 상태 업데이트
     public void AddProcessToQuest(QuestSO quest, int amount)
     {
@@ -908,7 +908,7 @@ public class QuestManager : MonoBehaviour
             if (title) title.color = specialTitleColor;
             if (result) result.color = specialTitleColor;
         }
-        
+
 
     }
 
