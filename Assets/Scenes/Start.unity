@@ -570,6 +570,7 @@ GameObject:
   - component: {fileID: 1803696945}
   - component: {fileID: 1803696944}
   - component: {fileID: 1803696943}
+  - component: {fileID: 1803696946}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged

@@ -1,89 +1,148 @@
-// MidnightNpcByState.cs
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class MidnightNpcByState : MonoBehaviour, IPointerClickHandler
+public class MidnightNpcByState : MonoBehaviour
 {
+    private GameManager gameManager;
+
     [Header("공유 상태 SO (필수)")]
     public QuestChainStateSO state;
 
-    [Header("이 NPC가 등장/동작할 체인 단계 인덱스")]
-    public int stepIndex = 1; // 담요 전달 단계
+    [Serializable]
+    public class Scenario
+    {
+        public int stepIndex;                 // 예: 1, 5
+        public QuestSO stepQuest;
 
-    [Header("이 단계의 QuestSO (isCompleted/getReward만 사용)")]
-    public QuestSO stepQuest; // 1단계 SO를 넣어두면 됨
+        [Header("턴인 요구 아이템 (비우면 '대화로 완료')")]
+        public string requiredItemName = "";
+        public int requiredCount = 1;
 
-    [Header("턴인 요구 아이템")]
-    public string requiredItemId = "blanket_lilac_dream";
+        [Header("턴인 직후 자동으로 getReward 처리할지(보상 패널 없이 즉시 다음 단계)")]
+        public bool autoClaimReward = false;  // ★ 보상 패널 쓸 거면 false
+    }
 
-    [Header("보상 자동 수령(=getReward true)")]
-    public bool autoClaimReward = true;
-
-    [Header("인벤토리 연결(IInventory 구현체)")]
-    public MonoBehaviour inventoryProvider; // IInventory
-    private IInventory Inv => inventoryProvider as IInventory;
+    [Header("이 NPC의 모든 시나리오들(1단계, 5단계 등)")]
+    public List<Scenario> scenarios = new();
 
     [Header("활성/비활성 토글 대상 (비우면 자기 자신)")]
     public GameObject rootToToggle;
 
-    private void Awake()
+    // ===== 연출(감사 대사) =====
+    [Header("연출: 감사 대사 패널(선택)")]
+    public GameObject thanksPanel;                       // 초기 비활성
+    public TMPro.TextMeshProUGUI thanksLabel;            // 선택
+    [TextArea] public string thanksText = "고마워요. 덕분에 고요한 꿈을 꿀 수 있을 것 같아요.";
+    public float thanksSeconds = 1.0f;
+    public bool hideNpcAfterThanks = true;
+    private bool _turnInLock;
+
+    private IEnumerator Start()
     {
         if (rootToToggle == null) rootToToggle = gameObject;
-        // 씬 저장 시 비활성 권장. 혹시 켜져 있으면 상태 체크로 통일
-        rootToToggle.SetActive(false);
-    }
+        while (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+            yield return null; // 한 프레임 대기
+        }
 
-    private void OnEnable()
-    {
         if (state != null) state.OnIndexChanged += HandleIndexChanged;
-        // 초기 반영
         HandleIndexChanged(state != null ? state.CurrentIndex : -1);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (state != null) state.OnIndexChanged -= HandleIndexChanged;
     }
 
     private void HandleIndexChanged(int newIndex)
     {
-        bool shouldShow = (newIndex == stepIndex) && !(stepQuest != null && stepQuest.isCompleted);
-        // (선택) 더 엄격히: 전달 단계가 맞는지까지 체크하려면 extra flag/ReqType을 여기로 가져오면 됨
+        var sc = GetActiveScenario(newIndex);
+        bool shouldShow = (sc != null) && sc.stepQuest != null && !sc.stepQuest.isCompleted;
         if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
     }
 
-    public void OnPointerClick(PointerEventData eventData) => TryTurnIn();
-    private void OnMouseDown() => TryTurnIn(); // 3D 클릭용
-
-    private void TryTurnIn()
+    private Scenario GetActiveScenario(int idx)
     {
-        if (state == null || stepQuest == null || Inv == null) return;
-        if (state.CurrentIndex != stepIndex) return;      // 내 차례가 아니면 무시
-        if (stepQuest.isCompleted) return;                // 이미 완료면 무시
+        for (int i = 0; i < scenarios.Count; i++)
+            if (scenarios[i].stepIndex == idx) return scenarios[i];
+        return null;
+    }
 
-        // 인벤토리 체크
-        if (Inv.GetCount(requiredItemId) < 1)
+    public void OnClickButton() { TryInteract(); } // UI Button.onClick에 연결
+
+    private void TryInteract()
+    {
+        if (_turnInLock) return;
+        _turnInLock = true;
+
+        if (state == null) { _turnInLock = false; return; }
+
+        var sc = GetActiveScenario(state.CurrentIndex);
+        if (sc == null || sc.stepQuest == null) { _turnInLock = false; return; }
+        if (sc.stepQuest.isCompleted) { _turnInLock = false; return; }
+
+        // (A) 대화 완료형
+        if (string.IsNullOrWhiteSpace(sc.requiredItemName))
         {
-            // TODO: UI 피드백 “라일락꿈 담요가 필요해요”
+            OnTurnInSucceeded(sc);
             return;
         }
 
-        // 아이템 소모 & 완료 플래그
-        Inv.Remove(requiredItemId, 1);
-        stepQuest.isCompleted = true;
+        // (B) 아이템 턴인
+        int have = (gameManager != null) ? gameManager.Count_InventoryItem(sc.requiredItemName.Trim()) : 0;
+        if (have < sc.requiredCount)
+        {
+            // TODO: 토스트/말풍선 "○○이 필요해요"
+            _turnInLock = false; return;
+        }
 
-        // 보상 자동 수령 → 러너가 감시하다가 다음 단계로 이동
-        if (autoClaimReward) stepQuest.getReward = true;
-
-        // 바로 숨기기(선택)
-        if (rootToToggle.activeSelf) rootToToggle.SetActive(false);
+        gameManager.Use_InventoryItem(sc.requiredItemName.Trim(), sc.requiredCount);
+        OnTurnInSucceeded(sc);
     }
 
-    // 프로젝트 인벤토리 인터페이스
-    public interface IInventory
+    private void OnTurnInSucceeded(Scenario sc)
     {
-        int GetCount(string itemId);
-        void Add(string itemId, int amount);
-        bool Remove(string itemId, int amount);
+        // 1) 단계 완료 표시
+        sc.stepQuest.isCompleted = true;
+
+        // 2) 감사 대사 잠깐
+        if (thanksPanel != null)
+        {
+            if (thanksLabel != null) thanksLabel.text = thanksText;
+            thanksPanel.SetActive(true);
+            Invoke(nameof(HideThanksPanel), Mathf.Max(0.05f, thanksSeconds));
+        }
+
+        // 3) 미드나잇 숨김
+        if (hideNpcAfterThanks && rootToToggle.activeSelf)
+            rootToToggle.SetActive(false);
+
+       
+        // ★ 보상 패널을 QuestManager에서 열게 함
+        float delay = (thanksPanel != null) ? thanksSeconds : 0f;
+        StartCoroutine(OpenRewardAfterDelay(sc.stepQuest, delay));
+        
+    }
+
+    private void HideThanksPanel()
+    {
+        if (thanksPanel != null) thanksPanel.SetActive(false);
+    }
+
+    private System.Collections.IEnumerator OpenRewardAfterDelay(QuestSO quest, float delay)
+    {
+        if (delay > 0f) yield return new WaitForSeconds(delay);
+        if (thanksPanel != null) thanksPanel.SetActive(false);
+
+        var qm = QuestManager.Instance;
+        if (qm != null) qm.SpecialQuestGetReward(quest);
+        else Debug.LogWarning("[MidnightNPC] QuestManager.Instance is null → 보상 패널을 열 수 없습니다.");
+
+        _turnInLock = false;
     }
 }

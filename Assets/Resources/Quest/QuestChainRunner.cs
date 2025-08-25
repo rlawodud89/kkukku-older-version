@@ -7,16 +7,19 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Text.RegularExpressions;
+using System.Collections;
 
 public class QuestChainRunner : MonoBehaviour
 {
-    // ====== 외부 인벤토리 인터페이스(프로젝트 쪽 구현을 여기에 연결) ======
-    public interface IInventory
-    {
-        int GetCount(string itemId);
-        void Add(string itemId, int amount);
-        bool Remove(string itemId, int amount);
-    }
+    private GameManager gameManager;
+    private bool _runtimePrepared = false;
+    private List<string> _baseDescriptions = new(); // 원본 본문 백업(진행도 덧붙일 때 기준)
+
+    [Header("이벤트 채널(씬 간 브로드캐스트)")]
+    public VoidEventChannelSO craftStepAppearedChannel;
+    public VoidEventChannelSO craftStepCompletedChannel;
+
 
     // ====== 단계 정의 ======
     [Serializable]
@@ -63,9 +66,7 @@ public class QuestChainRunner : MonoBehaviour
     [Header("체인 단계들(순서대로 배치)")]
     public List<Step> steps = new();
 
-    [Header("외부 시스템 연결")]
-    [SerializeField] private MonoBehaviour inventoryProvider; // IInventory 구현체
-    private IInventory Inv => inventoryProvider as IInventory;
+
 
     [Header("공유 상태 SO (씬 간 연결의 핵심)")]
     public QuestChainStateSO state; // 같은 에셋을 모든 씬에서 참조
@@ -81,35 +82,32 @@ public class QuestChainRunner : MonoBehaviour
     // 제작 성공/특정 산출물 플래그
     private readonly HashSet<string> craftedFlags = new();
 
-    // 보기 좋은 이름 매핑(인게임 표기명 ← itemId)
-    private readonly Dictionary<string, string> _readable = new Dictionary<string, string>()
-    {
-        // 담요
-        { "blanket_lilac_dream", "라일락꿈 담요" },
-        { "blanket_star_quiet", "별무늬고요 이불" },
-
-        // 새 재료들
-        { "thread_galaxy_dream", "은하꿈실" },
-        { "cotton_sunlight_mist", "햇빛운무솜" },
-        { "petal_dreamlike", "몽환의꽃잎" },
-        { "fragment_moon_bluefield", "청야달조각" },
-    };
 
     // ====== Unity ======
-    private void OnEnable()
-    {
-        if (state == null)
-            Debug.LogWarning("QuestChainStateSO가 연결되지 않았습니다. 씬 간 동기화를 원하면 반드시 할당하세요.");
 
-        // 러너가 '소스 오브 트루스'로서 현재 인덱스를 상태 SO에 반영
+    private IEnumerator Start()
+    {
+        // GameManager 인스턴스가 유효할 때까지 대기
+        while (gameManager == null)
+        {
+            gameManager = GameManager.getInstance();
+            yield return null; // 한 프레임 대기
+        }
+
+
+        if (state == null)
+            Debug.LogWarning("QuestChainStateSO가 연결되지 않았습니다.");
+
         if (state != null)
         {
             state.SetIndex(currentIndex);
             state.SetChainCompleted(IsChainFinished());
-            state.OnIndexChanged += HandleExternalIndexChange; // 선택: 외부에서 인덱스를 바꾸는 흐름 허용
+            state.OnIndexChanged += HandleExternalIndexChange;
         }
 
+        MaybeNotifyAppear();
         RefreshJournal();
+
     }
 
     private void OnDisable()
@@ -124,6 +122,7 @@ public class QuestChainRunner : MonoBehaviour
         if (newIndex == currentIndex) return;
         currentIndex = Mathf.Clamp(newIndex, 0, steps.Count);
         RefreshJournal();
+        MaybeNotifyAppear(); // 외부에서 인덱스 바뀐 경우도 체크
     }
 
     private void Update()
@@ -140,8 +139,12 @@ public class QuestChainRunner : MonoBehaviour
             if (CheckRequirementMet(step))
             {
                 q.isCompleted = true;
+
+                MaybeNotifyComplete(step);
+
                 onStepBecameCompleted?.Invoke(currentIndex);
                 RefreshJournal();
+
             }
             else
             {
@@ -156,6 +159,7 @@ public class QuestChainRunner : MonoBehaviour
             if (q.getReward)
             {
                 Advance();
+
             }
         }
     }
@@ -169,10 +173,11 @@ public class QuestChainRunner : MonoBehaviour
         var s = steps[currentIndex];
         if (s.requirement.type != ReqType.TurnInItem) return false;
         if (s.requirement.itemId != itemId) return false;
-        if (!InvSafe()) return false;
 
-        if (Inv.GetCount(itemId) < amount) return false;
-        Inv.Remove(itemId, amount);
+
+        if (gameManager.Count_InventoryItem(itemId) < amount) return false;
+        gameManager.Use_InventoryItem(itemId, amount);
+        
 
         s.quest.isCompleted = true;
         onStepBecameCompleted?.Invoke(currentIndex);
@@ -207,18 +212,46 @@ public class QuestChainRunner : MonoBehaviour
                 return true;
 
             case ReqType.CollectItems:
-                if (!InvSafe()) return false;
-
-                // 메인 요구
-                if (Inv.GetCount(s.requirement.itemId) < Mathf.Max(1, s.requirement.requiredCount))
-                    return false;
-
-                // 추가 수집
-                foreach (var e in s.requirement.extraCollects)
-                    if (Inv.GetCount(e.itemId) < e.count)
+                {
+                    // 메인
+                    string mainIdRaw = s.requirement.itemId;
+                    string mainId = mainIdRaw?.Trim();
+                    if (string.IsNullOrEmpty(mainId))
+                    {
+                        Debug.LogError($"[Runner] Step '{s.stepName}' 메인 itemId가 비어있습니다. (원본='{mainIdRaw}')");
                         return false;
+                    }
 
-                return true;
+                    int mainHave = gameManager.Count_InventoryItem(mainId);
+                    Debug.Log($"[Collect] Main '{mainId}': {mainHave}/{Mathf.Max(1, s.requirement.requiredCount)}");
+
+                    if (mainHave < Mathf.Max(1, s.requirement.requiredCount)) return false;
+
+                    // 추가
+                    var extras = s.requirement.extraCollects;
+                    if (extras != null && extras.Length > 0)
+                    {
+                        for (int i = 0; i < extras.Length; i++)
+                        {
+                            string raw = extras[i].itemId;
+                            string id = raw?.Trim();
+
+                            if (string.IsNullOrEmpty(id))
+                            {
+                                Debug.LogWarning($"[Collect] Step '{s.stepName}' extraCollects[{i}] 가 비어있습니다. (원본='{raw}') → 이 항목은 건너뜀");
+                                continue; // 또는 return false; 로 강제 실패 처리해도 됨
+                            }
+
+                            int need = Mathf.Max(1, extras[i].count);
+                            int have = gameManager.Count_InventoryItem(id);
+                            Debug.Log($"[Collect] Extra '{id}': {have}/{need}");
+
+                            if (have < need) return false;
+                        }
+                    }
+
+                    return true;
+                }
 
             case ReqType.TurnInItem:
                 // 실제 완료 처리는 TryTurnInCurrent에서 실행
@@ -245,6 +278,25 @@ public class QuestChainRunner : MonoBehaviour
         }
 
         RefreshJournal();
+        MaybeNotifyAppear(); // 다음 단계로 넘어왔을 때 등장 이벤트 체크
+    }
+    private void MaybeNotifyAppear()
+    {
+        if (IsChainFinished()) return;
+        var s = steps[currentIndex];
+        if (s.requirement.type == ReqType.CraftRecipeFlag)
+        {
+            Debug.Log($"[Runner] Craft step APPEARED at idx={currentIndex}, channel={craftStepAppearedChannel?.name}");
+            craftStepAppearedChannel?.Raise();
+        }
+    }
+    private void MaybeNotifyComplete(Step s)
+    {
+        if (s.requirement.type == ReqType.CraftRecipeFlag && s.quest.isCompleted)
+        {
+            Debug.Log($"[Runner] Craft step COMPLETED, channel={craftStepCompletedChannel?.name}");
+            craftStepCompletedChannel?.Raise();
+        }
     }
 
     private bool IsChainFinished() => currentIndex >= steps.Count;
@@ -256,42 +308,95 @@ public class QuestChainRunner : MonoBehaviour
         var s = steps[currentIndex];
         var q = s.quest;
 
-        // 본문: QuestSO.questDescription 그대로 사용
-        string text = q != null ? (q.questDescription ?? string.Empty) : string.Empty;
-
-        // 수집 단계면 진행도 줄 추가
-        if (s.requirement.type == ReqType.CollectItems && InvSafe())
+        // SO의 questDescription을 직접 수정
+        if (s.requirement.type == ReqType.CollectItems)
         {
-            var lines = new List<string>();
-
-            // 메인 목표
-            lines.Add($"{Readable(s.requirement.itemId)} ({Inv.GetCount(s.requirement.itemId)}/{Mathf.Max(1, s.requirement.requiredCount)})");
-
-            // 추가 목표
-            foreach (var e in s.requirement.extraCollects)
-                lines.Add($"{Readable(e.itemId)} ({Inv.GetCount(e.itemId)}/{e.count})");
-
-            if (!string.IsNullOrWhiteSpace(text))
-                text += "\n";
-
-            text += string.Join("\n", lines);
+            UpdateQuestDescriptionProgress(s);
         }
+        else
+        {
+            // 수집 단계가 아니면 원문 그대로 이벤트로 흘려보냄
+            string text = q != null ? (q.questDescription ?? string.Empty) : string.Empty;
+            onJournalUpdate?.Invoke(currentIndex, text);
+        }
+    }
+
+    // 진행도 라인 텍스트를 "(현재/필요)"로 바꿔 끼우는 헬퍼
+    private void UpdateQuestDescriptionProgress(Step s)
+    {
+        if (!Application.isPlaying || s.quest == null || s.requirement.type != ReqType.CollectItems) return;
+
+        string text = s.quest.questDescription ?? string.Empty;
+        int replaced = 0;
+
+        void ReplaceLineSafe(ref string t, string rawId, int cur, int req)
+        {
+            var id = rawId?.Trim();
+            if (string.IsNullOrEmpty(id)) return;
+            var pattern = @"(^|\n)" + Regex.Escape(id) + @"\s*\(\s*\d+\s*/\s*\d+\s*\)";
+            var replacement = "$1" + id + $" ({cur}/{req})";
+            var newText = Regex.Replace(t, pattern, replacement, RegexOptions.Multiline);
+            if (!ReferenceEquals(newText, t)) { replaced++; t = newText; }
+        }
+
+        // 메인
+        var mainId = s.requirement.itemId?.Trim();
+        int mainNeed = Mathf.Max(1, s.requirement.requiredCount);
+        int mainCur = string.IsNullOrEmpty(mainId) ? 0 : gameManager.Count_InventoryItem(mainId);
+        ReplaceLineSafe(ref text, mainId, mainCur, mainNeed);
+
+        // 추가
+        var extras = s.requirement.extraCollects;
+        if (extras != null)
+        {
+            for (int i = 0; i < extras.Length; i++)
+            {
+                var id = extras[i].itemId?.Trim();
+                if (string.IsNullOrEmpty(id)) continue; // ← 빈 슬롯 무시
+                int cur = gameManager.Count_InventoryItem(id);
+                int need = Mathf.Max(1, extras[i].count);
+                ReplaceLineSafe(ref text, id, cur, need);
+            }
+        }
+
+        if (replaced == 0)
+        {
+            var sb = new System.Text.StringBuilder(text.TrimEnd());
+            if (sb.Length > 0) sb.Append('\n');
+            if (!string.IsNullOrEmpty(mainId))
+                sb.AppendLine($"{mainId} ({mainCur}/{mainNeed})");
+
+            if (extras != null)
+            {
+                for (int i = 0; i < extras.Length; i++)
+                {
+                    var id = extras[i].itemId?.Trim();
+                    if (string.IsNullOrEmpty(id)) continue;
+                    int cur = gameManager.Count_InventoryItem(id);
+                    sb.AppendLine($"{id} ({cur}/{extras[i].count})");
+                }
+            }
+            text = sb.ToString().TrimEnd();
+        }
+
+        if (s.quest.questDescription != text)
+            s.quest.questDescription = text;
 
         onJournalUpdate?.Invoke(currentIndex, text);
     }
 
-    private string Readable(string itemId)
-        => _readable.TryGetValue(itemId, out var pretty) ? pretty : itemId;
 
-    private bool InvSafe()
+    // (선택) 특정 토큰 블록만 바꾸고 싶을 때 사용 가능
+    private string ReplaceBetween(string src, string beginTag, string endTag, string newContent)
     {
-        if (Inv == null)
-        {
-            Debug.LogWarning("IInventory 구현체가 연결되지 않았습니다.");
-            return false;
-        }
-        return true;
+        int i0 = src.IndexOf(beginTag, StringComparison.Ordinal);
+        int i1 = src.IndexOf(endTag, StringComparison.Ordinal);
+        if (i0 >= 0 && i1 > i0)
+            return src.Substring(0, i0 + beginTag.Length) + "\n" + newContent + "\n" + src.Substring(i1);
+        return src;
     }
+
+
 
     // ====== 외부에서 참조하기 쉬운 헬퍼 (NPC 등에서 사용) ======
     public int CurrentIndex => currentIndex;

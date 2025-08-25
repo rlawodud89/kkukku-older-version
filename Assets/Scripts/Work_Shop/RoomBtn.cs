@@ -7,10 +7,12 @@ public class RoomBtn : MonoBehaviour
 {
     public GameObject confirmPanel;
 
+    private GameManager gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = GameManager.getInstance();
     }
 
     // Update is called once per frame
@@ -26,6 +28,7 @@ public class RoomBtn : MonoBehaviour
 
     public void MoveWorkRoom()
     {
+        gameManager.Set_EndScene("Work_Room");
         SceneManager.LoadScene("Work_Room");
     }
 

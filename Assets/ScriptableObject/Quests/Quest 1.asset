@@ -22,7 +22,7 @@ MonoBehaviour:
   - rewardType: "\uD3EC\uADFC\uC5D0\uB108\uC9C0"
     amount: 50
   questProcess: 0
-  questComplete: 1
+  questComplete: 0
   isCompleted: 0
   getReward: 0
   isSpecial: 0

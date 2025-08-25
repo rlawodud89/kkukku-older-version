@@ -24,7 +24,7 @@ public class MenuController : MonoBehaviour
     public Sprite openSprite;     // 클릭 후 보여줄 이미지
     public Image targetImage;       // 현재 버튼의 이미지
     public Sprite closeSprite;   // 원래 이미지 저장
-    private bool isOpen = true;
+    private bool isOpen;
     private bool isRotating = false;
 
 
@@ -44,8 +44,11 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.getInstance();
+
         isOpen = gameManager.Get_IsOpen();
         targetImage.sprite = isOpen ? openSprite : closeSprite;
+
+        gameManager.OnshopCloseHours += ChangeImage;
     }
 
     // Update is called once per frame
@@ -207,6 +210,9 @@ public class MenuController : MonoBehaviour
 
     public void ShowStoreSignPopup()
     {
+        // 오픈 가능 시간 아니라면 클릭되지 않음
+        if (gameManager.Get_Hours() < 9 || gameManager.Get_Hours() >= 18) return;
+
         if (storeSignPopup != null)
         {
             storeSignPopup.SetActive(true);
@@ -407,6 +413,7 @@ public class MenuController : MonoBehaviour
 
     private void OnConfirm(string placeName)
     {
+        gameManager.Set_EndScene(placeName);
         SceneManager.LoadScene(placeName);
     }
 }

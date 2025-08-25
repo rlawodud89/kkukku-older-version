@@ -5,6 +5,7 @@ public class ItemTree : MonoBehaviour
 {
     [SerializeField] Button item1;
     [SerializeField] Button item2;
+    [SerializeField] ResetBtn resetBtn;
 
     private ItemScript itemScript1;
     private ItemScript itemScript2;
@@ -19,8 +20,15 @@ public class ItemTree : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.getInstance();
+
         audioManager = AudioManager.Instance;
 
+        resetBtn.OnReset += ResetTree;
+        ResetTree();
+    }
+
+    private void ResetTree()
+    {
         //랜덤으로 아이템 버튼 표시
         int random = Random.Range(0, 2);
         item1.gameObject.SetActive(random == 1);

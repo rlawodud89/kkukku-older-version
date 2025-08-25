@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questTitle: "\uC81C\uB300\uB85C \uB41C \uC774\uBD88 (1)"
   questDescription: "\uC774\uBD88\uC744 \uB9CC\uB4E4\uAE30 \uC704\uD55C \uC7AC\uB8CC\uB97C
-    \uBAA8\uC73C\uC790. \n\uC740\uD558\uAFC8\uC2E4(0/1)\n\uD587\uBE5B\uC6B4\uBB34\uC19C(0/2)\n\uBABD\uD658\uC758\uAF43\uC78E(0/2)\n\uCCAD\uC57C\uB2EC\uC870\uAC01(0/1)"
+    \uBAA8\uC73C\uC790.\r\n\uC740\uD558\uAFC8\uC2E4 (129/1)\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
+    (258/2)\r\n\uBABD\uD658\uC758\uAF43\uC78E (258/2)\r\n\uCCAD\uC57C\uB2EC\uC870\uAC01
+    (258/1)"
   rewards:
   - rewardType: "\uC7AC\uD654"
     amount: 5
   questProcess: 0
   questComplete: 0
-  isCompleted: 1
+  isCompleted: 0
   getReward: 0
   isSpecial: 1
   nextQuest: {fileID: 11400000, guid: 11609d7dc30b1ee4fa3364903ce41f25, type: 2}

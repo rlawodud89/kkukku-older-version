@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {

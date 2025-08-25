@@ -6,10 +6,10 @@ public class WorkRoom
     public int workerID { get; set; }
 
     [NotNull]
-    public int stamina { get; set; } = 50;
+    public int stamina { get; set; } = 0;
 
     [NotNull]
-    public bool working { get; set; }
+    public bool working { get; set; } = false;
 
     public float workingPercent { get; set; } = 0f;
 
