@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using static UnityEditor.MaterialProperty;
 using UnityEngine.SceneManagement;
 
 public enum BgType
@@ -63,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
-    private Dictionary<string, LetterScript> Letters = new Dictionary<string, LetterScript>();
+    private Dictionary<string, LetterSO> Letters = new Dictionary<string, LetterSO>();
 
 
     // GameManager에서 사용하는 상수
@@ -97,6 +96,7 @@ public class GameManager : MonoBehaviour
     // 상점 레벨 변경 시 적용되도록 하는 이벤트
     public event Action<int> OnItemShopLevelChanged;
     public event Action<int> OnDesignShopLevelChanged;
+    public event Action<string> OnLevelUpgraded;
 
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         dbManager = DBManager.getInstance();
-        //dbManager.InitDB();
 
         User user = dbManager.Get_User();
         energy = user.energy;
@@ -220,11 +219,10 @@ public class GameManager : MonoBehaviour
         Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questTitle);
-        /*
-        Letters = Addressables.LoadAssetsAsync<LetterScript>("letter", null)
+        Letters = Addressables.LoadAssetsAsync<LetterSO>("letter", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.letterName);
-        */
+                .ToDictionary(i => i.title);
+
 
 
         foreach (var blanket in Blankets)
@@ -354,6 +352,7 @@ public class GameManager : MonoBehaviour
     {
         loomLevel += delta;
         dbManager.Update_LoomLevel(loomLevel);
+        OnLevelUpgraded?.Invoke("Fox");
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
@@ -361,6 +360,7 @@ public class GameManager : MonoBehaviour
     {
         fillerLevel += delta;
         dbManager.Update_FillerLevel(fillerLevel);
+        OnLevelUpgraded?.Invoke("Sheep");
     }
 
     public int Get_DecoLevel() { return decoLevel; }
@@ -368,6 +368,7 @@ public class GameManager : MonoBehaviour
     {
         decoLevel += delta;
         dbManager.Update_DecoLevel(decoLevel);
+        OnLevelUpgraded?.Invoke("Cat");
     }
 
     public bool Get_IsOpen() { return isOpen; }
@@ -539,7 +540,7 @@ public class GameManager : MonoBehaviour
         quest.getReward = false;
         return quest;
     }
-    public LetterScript Get_Letter(string letterName) { return Letters[letterName]; }
+    public LetterSO Get_Letter(string letterName) { return Letters[letterName]; }
 
     public ItemScript Get_InventoryItem(string itemName)
     {
@@ -1005,10 +1006,16 @@ public class GameManager : MonoBehaviour
         dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
 
-    public List<LetterScript> Get_Current_Letter()
+    public int Get_Worker_Stamina(int workerId)
+    {
+        WorkRoom worker = dbManager.Select_Worker_Info(workerId);
+        return worker.stamina;
+    }
+
+    public List<LetterSO> Get_Current_Letter()
     {
         List<LetterBox> letters = dbManager.Select_Current_Letter();
-        List<LetterScript> list = new List<LetterScript>();
+        List<LetterSO> list = new List<LetterSO>();
 
         foreach (LetterBox i in letters)
         {

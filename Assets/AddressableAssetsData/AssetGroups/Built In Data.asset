@@ -605,23 +605,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b32d035c66f4b2c44bf73505ea31d473
-    m_Address: Assets/ScriptableObject/Quests/Quest 4.asset
+  - m_GUID: 52b7dcab56eef4c4ab55b684a3286d1a
+    m_Address: "Assets/ScriptableObject/Letters/\uBBF8\uB4DC\uB098\uC787\uC758 \uD3B8\uC9C0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - quest
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 111a565e83221de4588b2b5cfbe78464
-    m_Address: Assets/ScriptableObject/Quests/Quest 5.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - quest
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aca5a04113defd44286aca7cf5ed2cf6
-    m_Address: Assets/ScriptableObject/Quests/Quest 6.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - quest
+    - letter
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

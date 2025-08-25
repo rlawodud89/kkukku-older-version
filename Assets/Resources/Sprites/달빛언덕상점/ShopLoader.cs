@@ -42,7 +42,7 @@ public class ShopLoader : MonoBehaviour
 
     private void InitContent()
     {
-        stock.Clear();
+        if (shopType != StoreType.WORKER) stock.Clear();
         foreach (Transform child in contentRoot)
         {
             Destroy(child.gameObject);
