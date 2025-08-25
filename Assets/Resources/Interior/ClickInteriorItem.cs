@@ -310,7 +310,9 @@ public class ClickInteriorItem : MonoBehaviour
 
             var d = Physics2D.Distance(col, h);
 
-            if (d.isOverlapped && d.distance < -0.0001f)
+            float margin = -0.05f;  
+
+            if (d.isOverlapped && d.distance < margin)
                 return true;
         }
         return false;
