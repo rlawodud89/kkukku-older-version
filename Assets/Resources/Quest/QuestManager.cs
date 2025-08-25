@@ -98,7 +98,7 @@ public class QuestManager : MonoBehaviour
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
 
-        WipeAllQuestRows();
+        //WipeAllQuestRows();
 
         if (LoadDBQuests())
         {
