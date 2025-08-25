@@ -12,12 +12,12 @@ public class ExitButton : MonoBehaviour
 
     public void CloseScrollView()
     {
-        if (makeFabric==null)
+        if (makeFabric == null)
         {
             makeFabric = FindObjectOfType<Make_Fabric>();
         }
 
-        if (makeFabric.currentBlanket!=null)
+        if (makeFabric.currentBlanket != null)
         {
             makeFabric.currentBlanket = null;
 
@@ -39,12 +39,12 @@ public class ExitButton : MonoBehaviour
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
