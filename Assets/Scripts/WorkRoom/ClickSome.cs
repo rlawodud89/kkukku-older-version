@@ -105,7 +105,7 @@ public class ClickSome : MonoBehaviour
                 scrollView.SetActive(true);
             }
             Panel.SetActive(true);
-            Debug.LogError("Panel");
+            //Debug.LogError("Panel");
 
             if (gameObject.name == "Employee1(Clone)") // 원단 직원
             {
