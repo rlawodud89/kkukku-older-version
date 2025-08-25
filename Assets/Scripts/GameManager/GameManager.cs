@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using static UnityEditor.MaterialProperty;
 using UnityEngine.SceneManagement;
 
 public enum BgType
@@ -63,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
-    private Dictionary<string, LetterScript> Letters = new Dictionary<string, LetterScript>();
+    private Dictionary<string, LetterSO> Letters = new Dictionary<string, LetterSO>();
 
 
     // GameManager에서 사용하는 상수
@@ -115,7 +114,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         dbManager = DBManager.getInstance();
-        //dbManager.InitDB();
 
         User user = dbManager.Get_User();
         energy = user.energy;
@@ -220,11 +218,10 @@ public class GameManager : MonoBehaviour
         Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questTitle);
-        /*
-        Letters = Addressables.LoadAssetsAsync<LetterScript>("letter", null)
+        Letters = Addressables.LoadAssetsAsync<LetterSO>("letter", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.letterName);
-        */
+                .ToDictionary(i => i.title);
+
 
 
         foreach (var blanket in Blankets)
@@ -539,7 +536,7 @@ public class GameManager : MonoBehaviour
         quest.getReward = false;
         return quest;
     }
-    public LetterScript Get_Letter(string letterName) { return Letters[letterName]; }
+    public LetterSO Get_Letter(string letterName) { return Letters[letterName]; }
 
     public ItemScript Get_InventoryItem(string itemName)
     {
@@ -1005,10 +1002,10 @@ public class GameManager : MonoBehaviour
         dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
 
-    public List<LetterScript> Get_Current_Letter()
+    public List<LetterSO> Get_Current_Letter()
     {
         List<LetterBox> letters = dbManager.Select_Current_Letter();
-        List<LetterScript> list = new List<LetterScript>();
+        List<LetterSO> list = new List<LetterSO>();
 
         foreach (LetterBox i in letters)
         {

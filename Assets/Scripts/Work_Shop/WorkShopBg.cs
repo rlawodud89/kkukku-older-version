@@ -22,6 +22,11 @@ public class WorkShopBg : MonoBehaviour
         gameManager.OnBgTimeChanged += NowtimeChanged;
     }
 
+    private void OnDisable()
+    {
+        gameManager.OnBgTimeChanged -= NowtimeChanged;
+    }
+
     private void NowtimeChanged(BgType nowtime)
     {
         SpriteRenderer sr = dayBg.GetComponent<SpriteRenderer>();
