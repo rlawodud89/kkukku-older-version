@@ -605,41 +605,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 847a98563b39a8244b598af6cf99e767
-    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uC0C8\uBCBD\uC218\uC815\uC774\uBD88.asset"
+  - m_GUID: 52b7dcab56eef4c4ab55b684a3286d1a
+    m_Address: "Assets/ScriptableObject/Letters/\uBBF8\uB4DC\uB098\uC787\uC758 \uD3B8\uC9C0.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
-    - blanket
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef30d6fa3e5acde46bec4c09cd84390a
-    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uAFC8\uC2E4\uD06C\uC774\uBD88.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - blanket
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ab4289a1d7b11af4e93f7ffa2d922060
-    m_Address: "Assets/ScriptableObject/Items/Yarns/\uAFC8\uC2E4\uD06C\uC6D0\uB2E8.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - yarn
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2c87c828b511e3e4c81f755f241b7866
-    m_Address: "Assets/ScriptableObject/Items/Cottons/\uAFC8\uC2E4\uD06C\uC19C.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - cotton
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a608079a2f0a37a4aa8b2434a389822e
-    m_Address: "Assets/ScriptableObject/Items/Cottons/\uC0C8\uBCBD\uC218\uC815\uC19C.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - cotton
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 941df7c10325d9c4da1acafa692fd35c
-    m_Address: "Assets/ScriptableObject/Items/Yarns/\uC0C8\uBCBD\uC218\uC815\uC6D0\uB2E8.asset"
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - yarn
+    - letter
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}

@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b845241c147b05140acb39de88eb50c5, type: 3}
   m_Name: "\uC5EC\uC6B0"
   m_EditorClassIdentifier: 
-  displayName: "\uC5EC\uC6B0"
-  icon: {fileID: 21300000, guid: 11d30b73ba2874142845d44653ad8980, type: 3}
+  displayName: "\uC5EC\uC6B0\uC9C1\uC6D0"
+  icon: {fileID: 21300000, guid: 8834e98f0f2c5e049ba958291bfa8850, type: 3}
   price: 3000
   isGold: 0
-  isWorker: 1
   useQuantity: 1
   defaultQty: 1
   minQty: 1

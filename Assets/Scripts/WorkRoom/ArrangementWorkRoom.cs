@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ public class ArrangementWorkRoom : MonoBehaviour
     public Make_Cotton make_Cotton;
     public Make_Sewing make_Sewing;
     public SnacksInventory snackInventory;
+    public ColliderToggleOnEvent colliderToggleOnEvent;
 
     // 게임 메니저
     private GameManager gameManager;
@@ -86,6 +88,12 @@ public class ArrangementWorkRoom : MonoBehaviour
                     {
                         make_Sewing.Add_Employee(employee, employee.progressCircle);
                     }
+                }
+                else if (item.interiorName == "특별제작대")
+                {
+                    colliderToggleOnEvent.target = go;
+                    Collider2D coll = go.GetComponent<Collider2D>();
+                    colliderToggleOnEvent.col2D = coll;
                 }
 
 

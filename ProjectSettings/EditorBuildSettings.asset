@@ -29,5 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Village.unity
     guid: 95492463e6613834daa30a071d96929a
+  - enabled: 1
+    path: Assets/Scenes/Prolog.unity
+    guid: f794714f744c5b6498a9d63e9c67ddab
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 89c988b4c9a87e541aa7924aef15096b, type: 2}
