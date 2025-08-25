@@ -16,7 +16,7 @@ public class ColliderToggleOnEvent : MonoBehaviour
         if (onAppearChannel != null) onAppearChannel.OnRaised += TurnOn;
         if (onCompleteChannel != null) onCompleteChannel.OnRaised += TurnOff;
         Debug.Log($"[Listener:{name}] Subscribed. appear={onAppearChannel?.name}, complete={onCompleteChannel?.name}, " +
-                  $"has3D={(col3D != null)}, has2D={(col2D != null)}, target={(target ? target.name :"null")}");
+                  $"has3D={(col3D != null)}, has2D={(col2D != null)}, target={(target ? target.name : "null")}");
     }
 
     private void OnDisable()

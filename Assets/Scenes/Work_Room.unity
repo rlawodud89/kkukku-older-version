@@ -338,6 +338,7 @@ MonoBehaviour:
   make_Cotton: {fileID: 947283326}
   make_Sewing: {fileID: 1738070359}
   snackInventory: {fileID: 2039721150}
+  colliderToggleOnEvent: {fileID: 403012699}
 --- !u!4 &19552498
 Transform:
   m_ObjectHideFlags: 0
@@ -3326,7 +3327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &403012699
 MonoBehaviour:
   m_ObjectHideFlags: 0
