@@ -98,7 +98,7 @@ public class QuestManager : MonoBehaviour
 
         //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
 
-        //WipeAllQuestRows();
+        WipeAllQuestRows();
 
         if (LoadDBQuests())
         {
@@ -108,16 +108,6 @@ public class QuestManager : MonoBehaviour
         {
             StartNewDay();
         }
-
-        gameManager.Add_InventoryItem("은하꿈실", 1);
-        gameManager.Add_InventoryItem("오로라빛이불", 1);
-        gameManager.Add_InventoryItem("햇빛운무솜", 1);
-        gameManager.Add_InventoryItem("몽환의꽃잎", 1);
-        gameManager.Add_InventoryItem("햇빛운무솜", 1);
-        gameManager.Add_InventoryItem("몽환의꽃잎", 1);
-        gameManager.Add_InventoryItem("청야달조각", 2);
-        Debug.Log($"[INV] 청야달조각: {gameManager.Count_InventoryItem("청야달조각")}");
-        Debug.Log($"[INV] 오로라빛이불: {gameManager.Count_InventoryItem("오로라빛이불")}");
 
     }
 
