@@ -70,14 +70,28 @@ public class BlanketButtonPanel : MonoBehaviour
 
                 btn.onClick.AddListener(() =>
                 {
-                    detailPanel.OpenPanel(capturedData);
+
+                    if (makeFabric.isMaking)
+                    {
+                        Debug.Log("제작 중이므로 다른 블랭킷 선택 불가");
+                        return;
+                    }
 
                     if (makeFabric != null)
                     {
                         makeFabric.currentBlanket = capturedData;
                         Debug.Log($"makeFabric.currentBlanket 설정됨: {capturedData.name}");
                     }
+
+                    if (detailPanel.gameObject.activeSelf)
+                    {
+                        // 패널이 이미 열려 있으면 기존 슬롯 초기화 후 새 데이터 갱신
+                        detailPanel.ResetAllSlots();
+                    }
+
+                    detailPanel.OpenPanel(capturedData);
                 });
+
 
             }
         }
