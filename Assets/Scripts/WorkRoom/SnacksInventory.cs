@@ -11,8 +11,7 @@ public class SnacksInventory : MonoBehaviour
     {
         gameManager = GameManager.getInstance();
 
-        //gameManager.Use_InventoryItem("구름솜사탕버섯", 1);
-        //gameManager.Use_InventoryItem("졸린베리", 1);
+        gameManager.Add_InventoryItem("사탕귤", 10);
     }
     public List<(ItemScript item, int count)> GetSnackInventory()
     {

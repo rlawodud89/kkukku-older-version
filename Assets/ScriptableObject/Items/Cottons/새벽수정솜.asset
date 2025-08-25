@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b66a14e127056b4eb5158dc31f4416f, type: 3}
-  m_Name: "\uB9AC\uBCF8\uC6D0\uB2E8"
+  m_Name: "\uC0C8\uBCBD\uC218\uC815\uC19C"
   m_EditorClassIdentifier: 
-  itemName: "\uB9AC\uBCF8\uC6D0\uB2E8"
-  image: {fileID: 21300000, guid: 37e68012017519441a36c3acfa8e8b1d, type: 3}
-  itemType: 0
+  itemName: "\uC0C8\uBCBD\uC218\uC815\uC19C"
+  image: {fileID: 21300000, guid: 5d32449f84edab94a95e38eabb23aa35, type: 3}
+  itemType: 1
   level: 0
   value: 0
   recipe: []

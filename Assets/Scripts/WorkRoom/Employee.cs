@@ -26,21 +26,25 @@ public class Employee : MonoBehaviour
         gameManager = GameManager.getInstance();
     }
 
+
     public void GiveItem(ItemScript item)
     {
         snacksInventory.GiveSnackToEmployee(item);
-        Debug.Log("GiveSnackToEmployee 호출됨");
+        Debug.Log("GiveSnackToEmployee 호출됨"+item.value);
 
         staminar.Addstamina(item.value);
         ShowFloatingText("+" + item.value);
+
         gameManager.Change_Worker_Stamina(EmployeeID, item.value);
     }
 
     public void Working()
     {
         staminar.Addstamina(-5);
+
         gameManager.Change_Worker_Stamina(EmployeeID, -5);
     }
+
 
     public void ShowFloatingText(string text)
     {
@@ -50,9 +54,11 @@ public class Employee : MonoBehaviour
         ballonPanel.SetActive(true);
         Invoke(nameof(HideFloatingText), 1.5f);
     }
+
     public void HideFloatingText()
     {
         floatingText.gameObject.SetActive(false);
         ballonPanel.SetActive(false);
     }
+
 }

@@ -69,7 +69,7 @@ public class ArrangementWorkRoom : MonoBehaviour
                     Employee employee = go.GetComponent<Employee>();
                     (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
                     employee.EmployeeID = workerID;
-                    employee.staminar.currentStamina = stamina;
+                    employee.staminar.currentStamina=stamina;
                     employee.workItem = workItem;
                     employee.workingPercent = workingPercent;
                     employee.snacksInventory = snackInventory;

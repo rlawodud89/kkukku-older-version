@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Staminar : MonoBehaviour
 {
     public Image fillImage;
-    public float maxStamina = 100f;
-    public float currentStamina = 100f;
+    public float maxStamina;
+    public float currentStamina;
 
     private int lastLevel = -1;
     private GameManager gameManager;
@@ -40,8 +40,6 @@ public class Staminar : MonoBehaviour
                 default: maxStamina = 100f; break;
             }
 
-            // 풀 충전 (레벨업 시)
-            currentStamina = maxStamina;
         }
     }
 
@@ -51,10 +49,13 @@ public class Staminar : MonoBehaviour
         StaminarUI();
     }
 
-    void StaminarUI()
+    public void StaminarUI()
     {
         fillImage.fillAmount = currentStamina / maxStamina;
 
+        Debug.Log("fillAmount"+fillImage.fillAmount);
+        Debug.Log("current" + currentStamina);
+        Debug.Log("max" + maxStamina);
         if (currentStamina < 50)
         {
             fillImage.color = Color.yellow;
@@ -70,8 +71,14 @@ public class Staminar : MonoBehaviour
 
     public void Addstamina(int extrastamina)
     {
-        Debug.Log(extrastamina + "만큼 줄어들었습니다.");
         currentStamina += extrastamina;
         StaminarUI();
+    }
+
+    public void RechargeFullStamina()
+    {
+        currentStamina = maxStamina;
+        StaminarUI();
+        Debug.Log($"[{gameObject.tag}] 풀충전 완료: {currentStamina}/{maxStamina}");
     }
 }
