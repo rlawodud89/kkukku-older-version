@@ -17,42 +17,131 @@ public class DBManager
     private DBManager() { }
     public static DBManager getInstance() { return instance; }
 
+    public bool HaveDB()
+    {
+        var tableInfo = conn.GetTableInfo("User");
+        bool exists = tableInfo.Count > 0;
+        return exists;
+    }
+
     public void InitDB()
     {
-        //conn.CreateTable<User>();
-        //conn.CreateTable<Inventory>();
-        //conn.CreateTable<Design>();
-        //conn.CreateTable<WorkShop>();
-        //conn.CreateTable<ShopTable>();
-        //conn.CreateTable<WorkRoom>();
-        //conn.CreateTable<Interior>();
-        //conn.CreateTable<Tile>();
-        //conn.CreateTable<QuestBox>();
-        //conn.CreateTable<LetterBox>();
+        conn.CreateTable<User>();
+        conn.CreateTable<Inventory>();
+        conn.CreateTable<Design>();
+        conn.CreateTable<WorkShop>();
+        conn.CreateTable<ShopTable>();
+        conn.CreateTable<WorkRoom>();
+        conn.CreateTable<Interior>();
+        conn.CreateTable<Tile>();
+        conn.CreateTable<QuestBox>();
+        conn.CreateTable<LetterBox>();
         conn.CreateTable<StoreItem>();
 
-        //User user = new User();
-        //user.name = "user";
-        //user.energy = 10000;
-        //user.gold = 100000;
-        //user.moonrock = 100000;
-        //user.todayEnergy = 0;
-        //user.todayGold = 0;
-        //user.todayMoonrock = 0;
-        //user.playTime = 0;
-        //user.designshopLevel = 1;
-        //user.itemshopLevel = 1;
-        //user.loomLevel = 1;
-        //user.fillerLevel = 1;
-        //user.decoLevel = 1;
-        //user.endScene = "Work_Shop";
-        //user.isOpen = false;
-        //user.bgSound = 0f;
-        //user.effectSound = 0f;
+        // 사용자 정보
+        User user = new User();
+        user.name = "user";
+        user.energy = 0;
+        user.gold = 1000;
+        user.moonrock = 1000;
+        user.todayEnergy = 0;
+        user.todayGold = 0;
+        user.todayMoonrock = 0;
+        user.playTime = 25200; // Day1 7시
+        user.designshopLevel = 1;
+        user.itemshopLevel = 1;
+        user.loomLevel = 1;
+        user.fillerLevel = 1;
+        user.decoLevel = 1;
+        user.endScene = "Work_Shop";
+        user.isOpen = false;
+        user.bgSound = 0.5f;
+        user.effectSound = 0.5f;
+        conn.Insert(user);
 
-        //conn.Insert(user);
+        // 재료
+        Insert_InventoryItem("꿈실", ItemType.MATERIAL, 6);
+        Insert_InventoryItem("운무솜", ItemType.MATERIAL, 6);
+        Insert_InventoryItem("달조각", ItemType.MATERIAL, 6);
 
-        // TODO: 처음에 기본으로 주는 아이템 저장
+        // 이불 디자인
+        Insert_Design("기본이불");
+
+        // 타일
+        Insert_New_Tile("나무벽", InteriorType.WALL_TILE);
+        Insert_New_Tile("나무바닥", InteriorType.FLOOR_TILE);
+
+        Tile tile = new Tile();
+        tile.tilePos = TilePosType.ROOM_FLOOR;
+        tile.tileName = "나무바닥";
+        conn.Insert(tile);
+        tile.tilePos = TilePosType.ROOM_WALL;
+        tile.tileName = "나무벽";
+        conn.Insert(tile);
+        tile.tilePos = TilePosType.SHOP_FLOOR;
+        tile.tileName = "나무바닥";
+        conn.Insert(tile);
+        tile.tilePos = TilePosType.SHOP_WALL;
+        tile.tileName = "나무벽";
+        conn.Insert(tile);
+
+        // 가게 인테리어
+        Insert_InteriorItem("나무벽장", InteriorType.SHOP_INTERIOR, 1);
+        Insert_InteriorItem("나무진열장", InteriorType.SHOP_INTERIOR, 1);
+
+        WorkShop workShop = new WorkShop();
+        workShop.tableID = 1;
+        workShop.tableName = "나무벽장";
+        conn.Insert(workShop);
+        workShop.tableID = 2;
+        workShop.tableName = "나무벽장";
+        conn.Insert(workShop);
+        workShop.tableID = 3;
+        workShop.tableName = "나무진열장";
+        conn.Insert(workShop);
+        workShop.tableID = 4;
+        workShop.tableName = "나무진열장";
+        conn.Insert(workShop);
+
+        // 작업실 인테리어
+        Insert_InteriorItem("이불보관함", InteriorType.ROOM_INTERIROR, 1);
+        Insert_InteriorItem("재료보관함", InteriorType.ROOM_INTERIROR, 1);
+        Insert_InteriorItem("간식박스", InteriorType.ROOM_INTERIROR, 1);
+        Insert_InteriorItem("특별제작대", InteriorType.ROOM_INTERIROR, 1);
+
+        Set_InteriorItem("이불보관함", -2.925f, 2.9166f);
+        Set_InteriorItem("재료보관함", -5.85f, 0.9722f);
+        Set_InteriorItem("간식박스", -7.8f, 0.4861f);
+        Set_InteriorItem("특별제작대", -5.3625f, -1.21525f);
+
+        // 작업실 직원
+        Insert_InteriorItem("여우직원", InteriorType.WORKER, 1);
+        Insert_InteriorItem("양직원", InteriorType.WORKER, 1);
+        Insert_InteriorItem("고양이직원", InteriorType.WORKER, 1);
+
+        Set_InteriorItem("여우직원", -0.3130001f, -1.70135f);
+        Set_InteriorItem("양직원", 1.1495f, -0.9722f);
+        Set_InteriorItem("고양이직원", 2.612f, -0.24305f);
+
+        Insert_Worker("여우직원", -0.3130001f, -1.70135f);
+        Insert_Worker("양직원", 1.1495f, -0.9722f);
+        Insert_Worker("고양이직원", 2.612f, -0.24305f);
+
+        // 상점 아이템
+        Insert_StoreItem(StoreType.SHOP_INTERIOR, "짙은나무벽장");
+        Insert_StoreItem(StoreType.SHOP_INTERIOR, "흰색벽장");
+        Insert_StoreItem(StoreType.SHOP_INTERIOR, "분홍색진열장");
+
+        Insert_StoreItem(StoreType.ROOM_INTERIROR, "나무의자");
+        Insert_StoreItem(StoreType.ROOM_INTERIROR, "간식박스");
+        Insert_StoreItem(StoreType.ROOM_INTERIROR, "아이보리소파");
+
+        Insert_StoreItem(StoreType.TILE, "통나무벽");
+        Insert_StoreItem(StoreType.TILE, "돌벽");
+        Insert_StoreItem(StoreType.TILE, "흰나무바닥");
+
+        Insert_StoreItem(StoreType.BLANKET, "빨강이불");
+        Insert_StoreItem(StoreType.BLANKET, "우주이불");
     }
 
     public User Get_User()

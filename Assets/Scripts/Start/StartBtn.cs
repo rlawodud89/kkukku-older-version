@@ -14,7 +14,15 @@ public class StartBtn : MonoBehaviour
 
     public void ClickStartBtn()
     {
-        User user = dbManager.Get_User();
-        SceneManager.LoadScene(user.endScene);
+        if (!dbManager.HaveDB())
+        {
+            dbManager.InitDB();
+            SceneManager.LoadScene("Prolog");
+        }
+        else
+        {
+            User user = dbManager.Get_User();
+            SceneManager.LoadScene(user.endScene);
+        }
     }
 }

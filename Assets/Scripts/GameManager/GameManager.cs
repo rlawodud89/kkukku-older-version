@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Linq;
 using System;
-using static UnityEditor.MaterialProperty;
 using UnityEngine.SceneManagement;
 
 public enum BgType
@@ -63,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
-    private Dictionary<string, LetterScript> Letters = new Dictionary<string, LetterScript>();
+    private Dictionary<string, LetterSO> Letters = new Dictionary<string, LetterSO>();
 
 
     // GameManager에서 사용하는 상수
@@ -73,6 +72,7 @@ public class GameManager : MonoBehaviour
     private static int eveningHours = 15;
     private static int nightHours = 22;
     private static int endHours = 0;
+    private static int shopCloseHours = 18;
     private static float oneEnergyLevel = 3844;
     private static float dbSaveTimer = 0f;    // DB 저장 주기 타이머
     private static float dbSaveInterval = 1f; // 1초마다 저장 (원하는 값으로 변경 가능)
@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
     public event Action<BgType> OnBgTimeChanged;
     public event Action OnDayEnded;
     public bool isDayEndPanel;
+    public event Action OnshopCloseHours;
 
     // 가게에서 게임 매니저 값에 따라 이불장, 표지판 바뀔 수 있도록 하는 이벤트
     public event Action<bool> OnOpenChanged;
@@ -113,7 +114,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         dbManager = DBManager.getInstance();
-        //dbManager.InitDB();
 
         User user = dbManager.Get_User();
         energy = user.energy;
@@ -168,7 +168,14 @@ public class GameManager : MonoBehaviour
             bgTime = BgType.NIGHT;
             OnBgTimeChanged?.Invoke(bgTime);
         }
-
+        else if (hours == shopCloseHours)
+        {
+            if (isOpen)
+            {
+                Set_IsOpen(false);
+                OnshopCloseHours?.Invoke();
+            }
+        }
 
         dbSaveTimer += Time.deltaTime;
         if (dbSaveTimer >= dbSaveInterval)
@@ -211,11 +218,10 @@ public class GameManager : MonoBehaviour
         Quests = Addressables.LoadAssetsAsync<QuestSO>("quest", null)
                 .WaitForCompletion()
                 .ToDictionary(i => i.questTitle);
-        /*
-        Letters = Addressables.LoadAssetsAsync<LetterScript>("letter", null)
+        Letters = Addressables.LoadAssetsAsync<LetterSO>("letter", null)
                 .WaitForCompletion()
-                .ToDictionary(i => i.letterName);
-        */
+                .ToDictionary(i => i.title);
+
 
 
         foreach (var blanket in Blankets)
@@ -443,7 +449,7 @@ public class GameManager : MonoBehaviour
         {
             randomIdx = UnityEngine.Random.Range(0, Blankets.Count);
             randomBlanket = Blankets.ElementAt(randomIdx);
-        } while (randomBlanket.Value.itemName == "기본이불");
+        } while (randomBlanket.Value.itemName == "기본이불" || randomBlanket.Value.isSpecial);
 
         return randomBlanket.Value;
     }
@@ -484,8 +490,15 @@ public class GameManager : MonoBehaviour
     public InteriorScript Get_RoomInterior(string interiorName) { return Room_Interiors[interiorName]; }
     public InteriorScript Get_Random_RoomInterior()
     {
-        int randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
-        var randomInterior = Room_Interiors.ElementAt(randomIdx);
+        KeyValuePair<string, InteriorScript> randomInterior;
+
+        int randomIdx;
+        do
+        {
+            randomIdx = UnityEngine.Random.Range(0, Room_Interiors.Count);
+            randomInterior = Room_Interiors.ElementAt(randomIdx);
+        } while (randomInterior.Value.interiorName == "특별제작대");
+
         return randomInterior.Value;
     }
 
@@ -523,7 +536,7 @@ public class GameManager : MonoBehaviour
         quest.getReward = false;
         return quest;
     }
-    public LetterScript Get_Letter(string letterName) { return Letters[letterName]; }
+    public LetterSO Get_Letter(string letterName) { return Letters[letterName]; }
 
     public ItemScript Get_InventoryItem(string itemName)
     {
@@ -723,6 +736,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Inventory i in inven)
         {
+            if (Get_Blanket(i.itemName).isSpecial) continue;
             result.Add((Get_Blanket(i.itemName), i.count));
         }
 
@@ -988,10 +1002,16 @@ public class GameManager : MonoBehaviour
         dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
 
-    public List<LetterScript> Get_Current_Letter()
+    public int Get_Worker_Stamina(int workerId)
+    {
+        WorkRoom worker = dbManager.Select_Worker_Info(workerId);
+        return worker.stamina;
+    }
+
+    public List<LetterSO> Get_Current_Letter()
     {
         List<LetterBox> letters = dbManager.Select_Current_Letter();
-        List<LetterScript> list = new List<LetterScript>();
+        List<LetterSO> list = new List<LetterSO>();
 
         foreach (LetterBox i in letters)
         {

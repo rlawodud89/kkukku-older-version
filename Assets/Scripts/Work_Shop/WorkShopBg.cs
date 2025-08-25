@@ -7,9 +7,11 @@ using UnityEngine.UI;
 public class WorkShopBg : MonoBehaviour
 {
     public GameObject dayBg;
-    public GameObject eveningBg;
-    public GameObject nightBg;
-    
+
+    private Color dayColor = Color.white;                    // 낮: 원본 그대로
+    private Color eveningColor = new Color(0.757f, 0.561f, 0.561f);   // 붉은 노을
+    private Color nightColor = new Color(0.357f, 0.361f, 0.416f);    // 거의 검은 밤
+
     private GameManager gameManager;
 
     void Start()
@@ -20,25 +22,25 @@ public class WorkShopBg : MonoBehaviour
         gameManager.OnBgTimeChanged += NowtimeChanged;
     }
 
+    private void OnDisable()
+    {
+        gameManager.OnBgTimeChanged -= NowtimeChanged;
+    }
+
     private void NowtimeChanged(BgType nowtime)
     {
-        if(nowtime == BgType.DAY)
+        SpriteRenderer sr = dayBg.GetComponent<SpriteRenderer>();
+        if (nowtime == BgType.DAY)
         {
-            dayBg.SetActive(true);
-            eveningBg.SetActive(false);
-            nightBg.SetActive(false);
+            sr.color = dayColor;
         }
-        else if(nowtime == BgType.EVENING)
+        else if (nowtime == BgType.EVENING)
         {
-            dayBg.SetActive(false);
-            eveningBg.SetActive(true);
-            nightBg.SetActive(false);
+            sr.color = eveningColor;
         }
         else // BgType.NIGHT
         {
-            dayBg.SetActive(false);
-            eveningBg.SetActive(false);
-            nightBg.SetActive(true);
+            sr.color = nightColor;
         }
     }
 

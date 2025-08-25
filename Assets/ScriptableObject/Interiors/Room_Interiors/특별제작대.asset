@@ -15,8 +15,8 @@ MonoBehaviour:
   interiorName: "\uD2B9\uBCC4\uC81C\uC791\uB300"
   interiorType: 1
   image: {fileID: 21300000, guid: 8dce99cd3bde84a4980f4632662594e0, type: 3}
-  prefab: {fileID: 7267364814479298920, guid: 904f0a12a663e434194ead4fc38018db, type: 3}
+  prefab: {fileID: 46905762285492363, guid: 4c24d0ba5cd2f4e4eac4dd969f26ae3b, type: 3}
   value: 3000
-  tableType: 0
+  tableType: 2
   fullImage: {fileID: 0}
   workType: 3
