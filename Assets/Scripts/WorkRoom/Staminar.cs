@@ -74,11 +74,4 @@ public class Staminar : MonoBehaviour
         currentStamina += extrastamina;
         StaminarUI();
     }
-
-    public void RechargeFullStamina()
-    {
-        currentStamina = maxStamina;
-        StaminarUI();
-        Debug.Log($"[{gameObject.tag}] 풀충전 완료: {currentStamina}/{maxStamina}");
-    }
 }

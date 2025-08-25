@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
+
 public class PanelHoverToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Tooltip("마우스를 올렸을 때 켜질 Panel")]
@@ -11,14 +11,18 @@ public class PanelHoverToggle : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public Employee employee;
 
+    private GameManager gameManager;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        if (gameManager == null)
+        {
+            gameManager=GameManager.getInstance();
+        }
         if (targetPanel != null)
         {
             targetPanel.SetActive(true);
-            staminarText.text = (employee.staminar.fillImage.fillAmount*100).ToString() +" / "+ employee.staminar.maxStamina.ToString();
+            staminarText.text = gameManager.Get_Worker_Stamina(employee.EmployeeID).ToString() +" / "+ employee.staminar.maxStamina.ToString();
         }
     }
 
