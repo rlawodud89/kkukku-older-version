@@ -739,6 +739,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Inventory i in inven)
         {
+            if (Get_Blanket(i.itemName).isSpecial) continue;
             result.Add((Get_Blanket(i.itemName), i.count));
         }
 
