@@ -1002,6 +1002,12 @@ public class GameManager : MonoBehaviour
         dbManager.Update_Worker_WorkingPercent(workerID, workingPercent);
     }
 
+    public int Get_Worker_Stamina(int workerId)
+    {
+        WorkRoom worker = dbManager.Select_Worker_Info(workerId);
+        return worker.stamina;
+    }
+
     public List<LetterSO> Get_Current_Letter()
     {
         List<LetterBox> letters = dbManager.Select_Current_Letter();
