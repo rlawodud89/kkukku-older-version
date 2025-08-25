@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: QuestGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: QuestGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 999f8ebd5a0be0248822aa717e32d6d4
+  m_SerializeEntries: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 122f83def930dc64685d6744bf2f0f31, type: 2}
+    - {fileID: 11400000, guid: a42ebaa44f711394fb9be48b1bd5c6fe, type: 2}

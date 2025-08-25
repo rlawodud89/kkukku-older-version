@@ -18,6 +18,10 @@ public class EmployeeDropZone : MonoBehaviour, IDropHandler
 
             // 드롭 성공 표시 (dragClone 삭제는 ItemDrag가 알아서 함)
             draggedItem.MarkAsDropped();
+
+            // 퀘스트
+            AddQuestProcess.Instance.AddProcessToQuest("직원에게 간식주기");
+
         }
     }
 }

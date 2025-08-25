@@ -3,7 +3,9 @@ guid: be7bd590138acad45876c49ecaa1dda1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - employee: {instanceID: 0}
+  - quest5: {fileID: 11400000, guid: 111a565e83221de4588b2b5cfbe78464, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

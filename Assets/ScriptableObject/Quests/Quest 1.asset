@@ -21,9 +21,9 @@ MonoBehaviour:
     amount: 50
   - rewardType: "\uD3EC\uADFC\uC5D0\uB108\uC9C0"
     amount: 50
-  questProcess: 0
-  questComplete: 0
-  isCompleted: 0
-  getReward: 0
+  questProcess: 1
+  questComplete: 1
+  isCompleted: 1
+  getReward: 1
   isSpecial: 0
   nextQuest: {fileID: 0}

@@ -21,8 +21,6 @@ public class FishingController : MonoBehaviour
     private ItemScript currentdata;
     private GameManager gameManager;
 
-
-
     public float minDelay = 4f;
     public float maxDelay = 7f;
 
@@ -58,6 +56,8 @@ public class FishingController : MonoBehaviour
         {
             checkpanel.SetActive(true);
         }
+
+        AddQuestProcess.Instance.AddProcessToQuest("낚시하기");
     }
 
     public void click_fishingstopbtn()
