@@ -96,7 +96,10 @@ public class GameManager : MonoBehaviour
     // 상점 레벨 변경 시 적용되도록 하는 이벤트
     public event Action<int> OnItemShopLevelChanged;
     public event Action<int> OnDesignShopLevelChanged;
-    public event Action<string> OnLevelUpgraded;
+
+    public bool isFoxUpgraded;
+    public bool isSheepUpgraded;
+    public bool isCatUpgraded;
 
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
@@ -352,7 +355,7 @@ public class GameManager : MonoBehaviour
     {
         loomLevel += delta;
         dbManager.Update_LoomLevel(loomLevel);
-        OnLevelUpgraded?.Invoke("Fox");
+        isFoxUpgraded = true;
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
@@ -360,7 +363,7 @@ public class GameManager : MonoBehaviour
     {
         fillerLevel += delta;
         dbManager.Update_FillerLevel(fillerLevel);
-        OnLevelUpgraded?.Invoke("Sheep");
+        isSheepUpgraded = true;
     }
 
     public int Get_DecoLevel() { return decoLevel; }
@@ -368,7 +371,7 @@ public class GameManager : MonoBehaviour
     {
         decoLevel += delta;
         dbManager.Update_DecoLevel(decoLevel);
-        OnLevelUpgraded?.Invoke("Cat");
+        isCatUpgraded = true;
     }
 
     public bool Get_IsOpen() { return isOpen; }
