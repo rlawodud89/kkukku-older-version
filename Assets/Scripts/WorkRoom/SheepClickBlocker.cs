@@ -19,7 +19,7 @@ public class SheepClickBlocker : MonoBehaviour
     {
         if (makeCotton != null)
         {
-            col.enabled = !makeCotton.isMaking;
+           // col.enabled = !makeCotton.isMaking;
         }
     }
 }

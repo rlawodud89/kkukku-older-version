@@ -5817,6 +5817,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDayEndPanel: 0
+  isFoxUpgraded: 0
+  isSheepUpgraded: 0
+  isCatUpgraded: 0
 --- !u!1 &571433417
 GameObject:
   m_ObjectHideFlags: 0
@@ -6160,7 +6163,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &579718281
@@ -10457,8 +10460,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 27.145, y: -0.000030518}
-  m_SizeDelta: {x: 163.71, y: 50}
+  m_AnchoredPosition: {x: 23.555, y: -0.000030518}
+  m_SizeDelta: {x: 196.86, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1069381724
 MonoBehaviour:
@@ -10480,7 +10483,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: -8628383430526681325, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
@@ -18063,8 +18068,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -88, y: 0.000022888}
-  m_SizeDelta: {x: 66.58, y: 62.6726}
+  m_AnchoredPosition: {x: -97.791, y: -0.000056293}
+  m_SizeDelta: {x: 58.723, y: 62.673}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1898305606
 MonoBehaviour:

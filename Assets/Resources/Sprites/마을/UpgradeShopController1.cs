@@ -39,10 +39,6 @@ public class UpgradeShopController1 : MonoBehaviour
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel();
 
-        gameManager.Change_LoomLevel(-2);
-        gameManager.Change_FillerLevel(-1);
-
-        //gameManager.Change_Gold(100000);
         Init_UpgradePrice();
     }
 

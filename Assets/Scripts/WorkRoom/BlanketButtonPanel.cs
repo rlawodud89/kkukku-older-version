@@ -11,6 +11,7 @@ public class BlanketButtonPanel : MonoBehaviour
     public StoragePanel storagePanel;
     public Make_Fabric makeFabric;
 
+    private GameManager gameManager;
 
     void Start()
     {
@@ -22,6 +23,14 @@ public class BlanketButtonPanel : MonoBehaviour
         if (makeFabric == null)
         {
             makeFabric = FindObjectOfType<Make_Fabric>();
+        }
+
+        if (gameManager == null)
+        {
+            gameManager= GameManager.getInstance();
+            gameManager.Add_InventoryItem("달조각", 10);
+            gameManager.Add_InventoryItem("운무솜", 10);
+            gameManager.Add_InventoryItem("꿈실", 10);
         }
 
         storagePanel.InitScroll();
@@ -70,12 +79,6 @@ public class BlanketButtonPanel : MonoBehaviour
 
                 btn.onClick.AddListener(() =>
                 {
-
-                    if (makeFabric.isMaking)
-                    {
-                        Debug.Log("제작 중이므로 다른 블랭킷 선택 불가");
-                        return;
-                    }
 
                     if (makeFabric != null)
                     {

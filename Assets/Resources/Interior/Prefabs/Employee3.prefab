@@ -168,7 +168,6 @@ GameObject:
   - component: {fileID: 2823590790122983981}
   - component: {fileID: 4094619204103445221}
   - component: {fileID: -3627912887171286963}
-  - component: {fileID: -4023752519714707786}
   m_Layer: 8
   m_Name: Employee3
   m_TagString: Employee
@@ -738,19 +737,6 @@ PolygonCollider2D:
       - {x: 2.27, y: 1.4}
       - {x: 2.24, y: 1.4}
   m_UseDelaunayMesh: 0
---- !u!114 &-4023752519714707786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135591602930972715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81e99b7546e0f934695bd5099b913449, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  makeSewing: {fileID: 0}
 --- !u!1 &3384213819642887950
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,8 +772,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.0578, y: -0.2311}
-  m_SizeDelta: {x: 1.3695, y: 0.15421}
+  m_AnchoredPosition: {x: -0.0472, y: -0.23015}
+  m_SizeDelta: {x: 1.3801, y: 0.1542}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &8273639973169905315
 CanvasRenderer:
@@ -840,12 +826,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fillImage: {fileID: 8225870975050498735}
-  maxStamina: 100
-  currentStamina: 100
-  employee: {fileID: 1516786107655328985}
-  isFox: 0
-  isSheep: 0
-  isCat: 0
+  maxStamina: 0
+  currentStamina: 0
 --- !u!1 &3873933518540793123
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,8 +863,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.09549999, y: 0.005499989}
-  m_SizeDelta: {x: 0.54, y: 1.0209}
+  m_AnchoredPosition: {x: 0.09495002, y: 0.005100012}
+  m_SizeDelta: {x: 0.3678, y: -0.0547}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4372728600027677877
 CanvasRenderer:
@@ -912,7 +894,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f11d54aa1b416564ba05a025c14f3556, type: 3}
+  m_Sprite: {fileID: -514098516, guid: f11d54aa1b416564ba05a025c14f3556, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1224,6 +1206,7 @@ MonoBehaviour:
   Image: {fileID: 8601151969829134831}
   completeImage: {fileID: 7057921026145191790}
   maxProgress: 0
+  elapsed: 0
 --- !u!1 &6390978546849318818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1400,7 +1383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.3, y: 7.14}
+  m_AnchoredPosition: {x: 0.22, y: 7.82}
   m_SizeDelta: {x: 1.675, y: 0.941}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7520550791099742579
@@ -1424,7 +1407,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &1127542388761707637
 MonoBehaviour:

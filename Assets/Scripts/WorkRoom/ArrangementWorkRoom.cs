@@ -73,7 +73,7 @@ public class ArrangementWorkRoom : MonoBehaviour
                     employee.EmployeeID = workerID;
                     employee.staminar.currentStamina=stamina;
                     employee.workItem = workItem;
-                    employee.workingPercent = workingPercent;
+                    employee.progressCircle.elapsed = workingPercent;
                     employee.snacksInventory = snackInventory;
 
                     if (item.workType == WorkType.FABRIC)

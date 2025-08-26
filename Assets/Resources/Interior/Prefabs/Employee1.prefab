@@ -66,7 +66,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &6376667173265695448
 MonoBehaviour:
@@ -143,7 +143,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.00000011920929, y: -0.1728}
+  m_AnchoredPosition: {x: -0.0134500265, y: -0.1728}
   m_SizeDelta: {x: 1.3, y: 0.1722}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &4855839868853605953
@@ -199,10 +199,6 @@ MonoBehaviour:
   fillImage: {fileID: 8103090445092005162}
   maxStamina: 0
   currentStamina: 0
-  employee: {fileID: 4840742540608868119}
-  isFox: 0
-  isSheep: 0
-  isCat: 0
 --- !u!1 &3984560615933879456
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +411,6 @@ GameObject:
   - component: {fileID: 8649965860795541141}
   - component: {fileID: 5930385863424333925}
   - component: {fileID: 31223717318583021}
-  - component: {fileID: -1139136237252043346}
   m_Layer: 8
   m_Name: Employee1
   m_TagString: Employee
@@ -522,7 +517,7 @@ MonoBehaviour:
   ItemButton: {fileID: 8953443906905116516}
   staminar: {fileID: 3669420642402250336}
   snacksInventory: {fileID: 0}
-  progressCircle: {fileID: 5222719666945288384}
+  progressCircle: {fileID: 6117269777612422179}
   EmployeeName: Fox
   EmployeeID: 0
   workItem: {fileID: 0}
@@ -1165,19 +1160,6 @@ PolygonCollider2D:
       - {x: 2.32, y: 1.4599999}
       - {x: 2.29, y: 1.4699999}
   m_UseDelaunayMesh: 0
---- !u!114 &-1139136237252043346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5889071331556939620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e83d551c4825f24bbdcd57d974e2431, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  makeFabric: {fileID: 0}
 --- !u!1 &7233673522256725747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,7 +1323,7 @@ GameObject:
   - component: {fileID: 8189280700743136867}
   - component: {fileID: 3184484735704083847}
   - component: {fileID: 8680174319807299406}
-  - component: {fileID: 5222719666945288384}
+  - component: {fileID: 6117269777612422179}
   m_Layer: 8
   m_Name: fullcirclebar
   m_TagString: Fox
@@ -1406,7 +1388,7 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5222719666945288384
+--- !u!114 &6117269777612422179
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1422,6 +1404,7 @@ MonoBehaviour:
   Image: {fileID: 3071041676019380407}
   completeImage: {fileID: 7930102199904451408}
   maxProgress: 0
+  elapsed: 0
 --- !u!1 &7957190823381917047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1800,8 +1783,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.19154806}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.14941299, y: 0.047628418}
-  m_SizeDelta: {x: 0.47215873, y: 1.0315434}
+  m_AnchoredPosition: {x: 0.1304, y: 0.0414}
+  m_SizeDelta: {x: 0.3588, y: -0.0233}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9190708501781955881
 CanvasRenderer:
@@ -1831,7 +1814,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f11d54aa1b416564ba05a025c14f3556, type: 3}
+  m_Sprite: {fileID: -514098516, guid: f11d54aa1b416564ba05a025c14f3556, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

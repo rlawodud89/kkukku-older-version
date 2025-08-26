@@ -13,6 +13,14 @@ public class PanelHoverToggle : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     private GameManager gameManager;
 
+
+    void Update()
+    {
+
+     
+
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (gameManager == null)
@@ -22,7 +30,8 @@ public class PanelHoverToggle : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (targetPanel != null)
         {
             targetPanel.SetActive(true);
-            staminarText.text = gameManager.Get_Worker_Stamina(employee.EmployeeID).ToString() +" / "+ employee.staminar.maxStamina.ToString();
+
+            staminarText.text = gameManager.Get_Worker_Stamina(employee.EmployeeID).ToString() + " / " + employee.staminar.maxStamina.ToString();
         }
     }
 
