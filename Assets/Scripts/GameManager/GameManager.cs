@@ -347,12 +347,16 @@ public class GameManager : MonoBehaviour
         OnItemShopLevelChanged?.Invoke(itemshopLevel);
     }
 
+    public bool isFoxUpgraded;
+    public bool isSheepUpgraded;
+    public bool isCatUpgraded;
     public int Get_LoomLevel() { return loomLevel; }
     public void Change_LoomLevel(int delta)
     {
         loomLevel += delta;
         dbManager.Update_LoomLevel(loomLevel);
-        OnLevelUpgraded?.Invoke("Fox");
+        // 업그레이드 상태를 기록
+        isFoxUpgraded = true; // 플래그 설정
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
@@ -360,16 +364,20 @@ public class GameManager : MonoBehaviour
     {
         fillerLevel += delta;
         dbManager.Update_FillerLevel(fillerLevel);
-        OnLevelUpgraded?.Invoke("Sheep");
+        isFoxUpgraded = true;
     }
 
     public int Get_DecoLevel() { return decoLevel; }
+
     public void Change_DecoLevel(int delta)
     {
         decoLevel += delta;
         dbManager.Update_DecoLevel(decoLevel);
-        OnLevelUpgraded?.Invoke("Cat");
+        isCatUpgraded=true;
+            
     }
+
+
 
     public bool Get_IsOpen() { return isOpen; }
     public void Set_IsOpen(bool isOpen)

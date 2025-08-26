@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 6625900654845509648}
   - component: {fileID: 6966703774479296587}
   - component: {fileID: 8809448391930442653}
-  - component: {fileID: -7242301983912189736}
   m_Layer: 8
   m_Name: Employee2
   m_TagString: Employee
@@ -775,19 +774,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   makeCotton: {fileID: 0}
---- !u!114 &-7242301983912189736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 617330059877456786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df428d2fc4381a644a3e59a80688fb67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employee: {fileID: 7301909816914147668}
 --- !u!1 &2031494580365274392
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,6 +865,10 @@ MonoBehaviour:
   fillImage: {fileID: 5331031050048178894}
   maxStamina: 100
   currentStamina: 100
+  employee: {fileID: 7301909816914147668}
+  isFox: 0
+  isSheep: 0
+  isCat: 0
 --- !u!1 &2089539083767274884
 GameObject:
   m_ObjectHideFlags: 0

@@ -197,8 +197,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fillImage: {fileID: 8103090445092005162}
-  maxStamina: 100
-  currentStamina: 100
+  maxStamina: 0
+  currentStamina: 0
+  employee: {fileID: 4840742540608868119}
+  isFox: 0
+  isSheep: 0
+  isCat: 0
 --- !u!1 &3984560615933879456
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +416,6 @@ GameObject:
   - component: {fileID: 5930385863424333925}
   - component: {fileID: 31223717318583021}
   - component: {fileID: -1139136237252043346}
-  - component: {fileID: 3002767906306944394}
   m_Layer: 8
   m_Name: Employee1
   m_TagString: Employee
@@ -1175,19 +1178,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   makeFabric: {fileID: 0}
---- !u!114 &3002767906306944394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5889071331556939620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df428d2fc4381a644a3e59a80688fb67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employee: {fileID: 4840742540608868119}
 --- !u!1 &7233673522256725747
 GameObject:
   m_ObjectHideFlags: 0

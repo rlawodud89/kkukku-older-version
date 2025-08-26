@@ -16972,6 +16972,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDayEndPanel: 0
+  isFoxUpgraded: 0
+  isSheepUpgraded: 0
+  isCatUpgraded: 0
 --- !u!4 &1873553952
 Transform:
   m_ObjectHideFlags: 0

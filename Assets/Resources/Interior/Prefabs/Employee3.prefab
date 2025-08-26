@@ -169,7 +169,6 @@ GameObject:
   - component: {fileID: 4094619204103445221}
   - component: {fileID: -3627912887171286963}
   - component: {fileID: -4023752519714707786}
-  - component: {fileID: -5639566515639233598}
   m_Layer: 8
   m_Name: Employee3
   m_TagString: Employee
@@ -752,19 +751,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   makeSewing: {fileID: 0}
---- !u!114 &-5639566515639233598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135591602930972715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df428d2fc4381a644a3e59a80688fb67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employee: {fileID: 4840742540608868119, guid: b8193b00f650de34e916a2abdb0c7a45, type: 3}
 --- !u!1 &3384213819642887950
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,6 +842,10 @@ MonoBehaviour:
   fillImage: {fileID: 8225870975050498735}
   maxStamina: 100
   currentStamina: 100
+  employee: {fileID: 1516786107655328985}
+  isFox: 0
+  isSheep: 0
+  isCat: 0
 --- !u!1 &3873933518540793123
 GameObject:
   m_ObjectHideFlags: 0

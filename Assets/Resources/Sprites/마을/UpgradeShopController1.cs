@@ -27,8 +27,6 @@ public class UpgradeShopController1 : MonoBehaviour
 
     private GameManager gameManager;
     public Action<SpeechType> speechType;
-    public static event Action<string> OnUpgrade; // 업그레이드 태그 전달
-
 
     void Awake()
     {
@@ -41,6 +39,10 @@ public class UpgradeShopController1 : MonoBehaviour
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel();
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel();
 
+        gameManager.Change_LoomLevel(-2);
+        gameManager.Change_FillerLevel(-1);
+
+        //gameManager.Change_Gold(100000);
         Init_UpgradePrice();
     }
 
@@ -141,8 +143,6 @@ public class UpgradeShopController1 : MonoBehaviour
         speechType?.Invoke(SpeechType.Trigger);
         Init_UpgradePrice();
 
-        OnUpgrade?.Invoke("Fox"); // 업그레이드 태그 전송
-
     }
 
     void DoFillerUpgrade()
@@ -152,8 +152,6 @@ public class UpgradeShopController1 : MonoBehaviour
         fillerLevelText.text = "Lv. " + gameManager.Get_FillerLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
         Init_UpgradePrice();
-
-        OnUpgrade?.Invoke("Sheep");
     }
 
     void DoDecoTableUpgrade()
@@ -163,8 +161,6 @@ public class UpgradeShopController1 : MonoBehaviour
         decoLevelText.text = "Lv. " + gameManager.Get_DecoLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
         Init_UpgradePrice();
-
-        OnUpgrade?.Invoke("Cat");
     }
 
     private bool CanBuy(int value)

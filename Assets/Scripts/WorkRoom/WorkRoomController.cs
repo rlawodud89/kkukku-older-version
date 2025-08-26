@@ -2,39 +2,58 @@ using UnityEngine;
 
 public class WorkRoomController : MonoBehaviour
 {
-    public Employee employee;
     private GameManager gameManager;
+
+
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     void OnEnable()
     {
-        UpgradeShopController1.OnUpgrade += OnUpgradeHandler;
+        gameManager = GameManager.getInstance();
+        gameManager.OnLevelUpgraded += OnUpgradeHandler;
+        Debug.Log("[WorkRoomController] 이벤트 구독 완료");
     }
 
     void OnDisable()
     {
-        UpgradeShopController1.OnUpgrade -= OnUpgradeHandler;
+        if (gameManager != null)
+        {
+            gameManager.OnLevelUpgraded -= OnUpgradeHandler;
+            Debug.Log("[WorkRoomController] 이벤트 해제");
+        }
     }
 
     private void OnUpgradeHandler(string tag)
     {
+        Debug.Log($"[WorkRoomController] OnUpgradeHandler 호출됨: 받은 태그={tag}");
 
-        if (gameManager == null)
-        {
-            gameManager = GameManager.getInstance();
-        }
+        // 씬에 있는 모든 Employee 검색
+        Employee[] employees = FindObjectsOfType<Employee>();
 
-        if (gameObject.tag == tag)
+        foreach (var emp in employees)
         {
-            float delta = employee.staminar.maxStamina - employee.staminar.currentStamina;
-            if (delta > 0)
+            // 이름으로 필터링: Employee1(Clone)
+            if (emp.gameObject.name == "Employee1(Clone)")
             {
-                gameManager.Change_Worker_Stamina(employee.EmployeeID, (int)delta);
-                employee.staminar.currentStamina = employee.staminar.maxStamina;
-                employee.staminar.StaminarUI();
-                Debug.Log($"[WorkRoom] {employee.EmployeeName}({tag}) 스태미나 +{delta} 풀충전 완료!");
+                float delta = emp.staminar.maxStamina - emp.staminar.currentStamina;
+                if (delta > 0)
+                {
+                    emp.staminar.currentStamina = emp.staminar.maxStamina;
+                    emp.staminar.StaminarUI();
+
+                    // DB에도 반영
+                    gameManager.Change_Worker_Stamina(emp.EmployeeID, (int)delta);
+
+                    Debug.Log($"[WorkRoomController] {emp.EmployeeName} 스태미너 +{delta} → 풀충전 완료!");
+                }
+                else
+                {
+                    Debug.Log($"[WorkRoomController] {emp.EmployeeName} 이미 풀스태미나 상태.");
+                }
             }
         }
     }
-
-
 }
