@@ -509,6 +509,7 @@ MonoBehaviour:
   iconImage: {fileID: 8706372524011348995}
   nameText: {fileID: 2646925494959079287}
   priceText: {fileID: 6012809868924245670}
+  descText: {fileID: 0}
   buyButton: {fileID: 7490808858792498858}
   coinImage: {fileID: 0}
   qtyRow: {fileID: 6480376739599842996}

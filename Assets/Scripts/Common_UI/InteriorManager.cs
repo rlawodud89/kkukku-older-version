@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class InteriorManager : MonoBehaviour
 {
@@ -206,7 +207,7 @@ public class InteriorManager : MonoBehaviour
         if(item.interiorType == InteriorType.WORKER)
         {
             Employee employee = itemObject.GetComponent<Employee>();
-            (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
+            (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
             employee.EmployeeID = workerID;
             employee.staminar.currentStamina = stamina;
             employee.workItem = workItem;
