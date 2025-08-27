@@ -17,4 +17,5 @@ public class ItemData : ScriptableObject
 
     [Header("고용 카드일 경우")]
     public GameObject recruitPrefab;     // 고용할 유닛 프리팹 (없으면 일반 카드)
+    public string description;
 }

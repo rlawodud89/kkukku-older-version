@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
     private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
-    private static int eveningHours = 15;
+    private static int eveningHours = 17;
     private static int nightHours = 22;
     private static int endHours = 0;
     private static int shopCloseHours = 18;
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
             if (isOpen)
             {
                 Set_IsOpen(false);
-                OnshopCloseHours?.Invoke();
+                //OnshopCloseHours?.Invoke();
             }
         }
 
@@ -408,7 +408,7 @@ public class GameManager : MonoBehaviour
     public void Go_Next_Days()
     {
         isDayEndPanel = false;
-        playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        playTime += gameStartTime;
         dbManager.Update_PlayTime(playTime);
 
         todayGold = 0;
@@ -420,9 +420,10 @@ public class GameManager : MonoBehaviour
         if (currentScene.name != "Work_Shop")
         {
             Set_EndScene("Work_Shop");
-            SceneManager.LoadScene("Work_Shop");
         }
+        Fader.GoConcurrent("Loading_Scene");
     }
+
 
 
 
@@ -460,6 +461,19 @@ public class GameManager : MonoBehaviour
         } while (randomBlanket.Value.itemName == "기본이불" || randomBlanket.Value.isSpecial);
 
         return randomBlanket.Value;
+    }
+    public List<ItemScript> Get_Special_Blankets()
+    {
+        List<ItemScript> list = new List<ItemScript>();
+        foreach (var item in Blankets)
+        {
+            if (item.Value.isSpecial)
+            {
+                list.Add(item.Value);
+            }
+        }
+
+        return list;
     }
 
     public ItemScript Get_Snack(string snackName) { return Snacks[snackName]; }
@@ -523,14 +537,6 @@ public class GameManager : MonoBehaviour
         } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "흙바닥");
 
         return randomTile.Value;
-    }
-
-    public CustomerScript Get_Customer(string customerName) { return Customers[customerName]; }
-    public CustomerScript Get_Random_Customer()
-    {
-        int randomIdx = UnityEngine.Random.Range(0, Customers.Count);
-        var randomCustomer = Customers.ElementAt(randomIdx);
-        return randomCustomer.Value;
     }
 
     public QuestSO Get_Quest(string questName) { return Quests[questName]; }

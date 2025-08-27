@@ -29,7 +29,8 @@ public class RoomBtn : MonoBehaviour
     public void MoveWorkRoom()
     {
         gameManager.Set_EndScene("Work_Room");
-        SceneManager.LoadScene("Work_Room");
+        //SceneManager.LoadScene("Work_Room");
+        Fader.GoConcurrent("Work_Room");
     }
 
     public void CancelMove()
