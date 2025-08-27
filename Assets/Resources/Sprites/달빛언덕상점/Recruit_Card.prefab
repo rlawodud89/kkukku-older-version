@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 25}
+  m_SizeDelta: {x: 0, y: 27.9651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1604861708922393814
 CanvasRenderer:
@@ -267,6 +267,7 @@ MonoBehaviour:
   iconImage: {fileID: 8706372524011348995}
   nameText: {fileID: 2646925494959079287}
   priceText: {fileID: 6012809868924245670}
+  descText: {fileID: 8728637978733863744}
   buyButton: {fileID: 7490808858792498858}
   coinImage: {fileID: 3660646331944265156}
   qtyRow: {fileID: 0}
@@ -403,7 +404,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0.15527344, w: 0}
+  m_margin: {x: 0, y: 0, z: -19.488007, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -846,11 +847,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Desc
-
-    Desc
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
   m_sharedMaterial: {fileID: -8628383430526681325, guid: 6f3e7f7476ea5ec4d8f39e0180a65eb6, type: 2}
@@ -1068,7 +1065,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -0.00012207031, w: -0.5551758}
+  m_margin: {x: 0, y: 0, z: -28.167908, w: -0.5551758}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1131,7 +1128,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 18.5, y: 0}
-  m_SizeDelta: {x: 25, y: 0}
+  m_SizeDelta: {x: 27.9651, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1970141485876812225
 CanvasRenderer:

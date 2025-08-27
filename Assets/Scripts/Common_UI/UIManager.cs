@@ -20,13 +20,15 @@ public class UIManager : MonoBehaviour
 
     IEnumerator LoadCommonUI()
     {
-        var uiScene= SceneManager.GetSceneByName("Common_UI");
+        var uiScene = SceneManager.GetSceneByName("Common_UI");
 
-        if(!uiScene.IsValid()||!uiScene.isLoaded)
+        if (!uiScene.IsValid() || !uiScene.isLoaded)
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Common_UI", LoadSceneMode.Additive);
             yield return new WaitUntil(() => asyncLoad.isDone);
         }
     }
+
+
 }
 

@@ -15,16 +15,16 @@ MonoBehaviour:
   itemName: "\uC6B0\uC8FC\uC774\uBD88"
   image: {fileID: 21300000, guid: 37993ad8dc0245043a89fac45052ec9e, type: 3}
   itemType: 4
-  level: 0
+  isSpecial: 0
+  level: 2
   value: 1500
   recipe:
-  - itemName: "\uC6B4\uBB34\uC19C"
-    count: 3
-  - itemName: "\uB2EC\uC870\uAC01"
-    count: 3
-  - itemName: "\uAFC8\uC2E4"
-    count: 3
-  designValue: 5000
+  - itemName: "\uBCC4\uBE5B\uAFC8\uC2E4"
+    count: 5
+  - itemName: "\uD587\uBE5B\uC6B4\uBB34\uC19C"
+    count: 2
+  - itemName: "\uC740\uBE5B\uB2EC\uC870\uAC01"
+    count: 5
+  designValue: 7500
   yarnName: "\uC6B0\uC8FC\uC6D0\uB2E8"
   cottonName: "\uC6B0\uC8FC\uC19C"
-  fullImage: {fileID: 0}

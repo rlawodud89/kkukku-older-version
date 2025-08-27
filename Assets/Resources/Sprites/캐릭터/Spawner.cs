@@ -67,8 +67,24 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        if (spawnButton == null)   // 버튼이 없으면 자동 시작
-            StartSpawning();
+        //if (spawnButton == null)   // 버튼이 없으면 자동 시작
+        //    StartSpawning();
+    }
+
+    void OnEnable()
+    {
+        // 활성화되면 자동 시작
+        StartSpawning();
+    }
+
+    void OnDisable()
+    {
+        // 비활성화되면 루프 멈춤
+        if (loop != null)
+        {
+            StopCoroutine(loop);
+            loop = null;
+        }
     }
 
     public void StartSpawning()

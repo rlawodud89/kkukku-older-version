@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class ArrangementWorkRoom : MonoBehaviour
 {
@@ -43,6 +44,12 @@ public class ArrangementWorkRoom : MonoBehaviour
 
         installedInteriors = gameManager.Get_Current_RoomInterior();
 
+        //SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+
+    void OnEnable()
+    {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -54,6 +61,11 @@ public class ArrangementWorkRoom : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (gameManager == null) gameManager = GameManager.getInstance();
+
+        itemParent = GameObject.Find("Pixels")?.transform;
+        installedInteriors = gameManager.Get_Current_RoomInterior();
+
         // 씬이 로드될 때 실행할 코드 작성 (예: 특정 오브젝트 활성화, 데이터 로드 등)
         if (scene.name == "Work_Room") // 특정 씬에서만 동작하도록 조건 추가 가능
         {
@@ -70,7 +82,7 @@ public class ArrangementWorkRoom : MonoBehaviour
                 if (item.interiorType == InteriorType.WORKER)
                 {
                     Employee employee = go.GetComponent<Employee>();
-                    (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
+                    (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
                     employee.EmployeeID = workerID;
                     employee.staminar.currentStamina = stamina;
                     employee.workItem = workItem;

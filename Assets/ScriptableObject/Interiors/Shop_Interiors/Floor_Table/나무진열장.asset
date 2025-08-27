@@ -16,7 +16,7 @@ MonoBehaviour:
   interiorType: 0
   image: {fileID: -1565511095, guid: 314d6b7d0edd52c44bfb8b2a207a6f30, type: 3}
   prefab: {fileID: 0}
-  value: 5000
-  roominteriorType: 0
+  value: 0
+  tableType: 0
   fullImage: {fileID: -2094978095, guid: 314d6b7d0edd52c44bfb8b2a207a6f30, type: 3}
   workType: 3

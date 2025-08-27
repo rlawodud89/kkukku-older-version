@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class InteriorManager : MonoBehaviour
 {
@@ -84,6 +85,23 @@ public class InteriorManager : MonoBehaviour
     void Update()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        clickInteriorItem = FindObjectOfType<ClickInteriorItem>();
+        itemParent = GameObject.Find("Pixels")?.transform;
     }
 
     public void CategorySelect(string category)
@@ -201,10 +219,10 @@ public class InteriorManager : MonoBehaviour
             Debug.LogWarning($"Failed to use Interior Item: {item.name}");
         }
 
-        if(item.interiorType == InteriorType.WORKER)
+        if (item.interiorType == InteriorType.WORKER)
         {
             Employee employee = itemObject.GetComponent<Employee>();
-            (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
+            (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
             employee.EmployeeID = workerID;
             employee.staminar.currentStamina = stamina;
             employee.workItem = workItem;
@@ -345,7 +363,7 @@ public class InteriorManager : MonoBehaviour
     public void ClickInteriorButton()
     {
         if (interiorMode) return;
-        
+
         interiorMode = true;
 
         tileButton.SetActive(true);

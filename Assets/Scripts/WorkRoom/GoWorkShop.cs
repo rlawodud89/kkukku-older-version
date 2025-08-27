@@ -28,7 +28,8 @@ public class GoWorkShop : MonoBehaviour
     public void MoveWorkShop()
     {
         gameManager.Set_EndScene("Work_Shop");
-        SceneManager.LoadScene("Work_Shop");     
+        //SceneManager.LoadScene("Work_Shop");
+        Fader.GoConcurrent("Work_Shop");
     }
 
     public void CancelMove()

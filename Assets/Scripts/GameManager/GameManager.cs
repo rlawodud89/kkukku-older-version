@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
     private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
-    private static int eveningHours = 15;
+    private static int eveningHours = 17;
     private static int nightHours = 22;
     private static int endHours = 0;
     private static int shopCloseHours = 18;
@@ -96,7 +96,10 @@ public class GameManager : MonoBehaviour
     // 상점 레벨 변경 시 적용되도록 하는 이벤트
     public event Action<int> OnItemShopLevelChanged;
     public event Action<int> OnDesignShopLevelChanged;
-    public event Action<string> OnLevelUpgraded;
+
+    public bool isFoxUpgraded;
+    public bool isSheepUpgraded;
+    public bool isCatUpgraded;
 
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
@@ -174,7 +177,7 @@ public class GameManager : MonoBehaviour
             if (isOpen)
             {
                 Set_IsOpen(false);
-                OnshopCloseHours?.Invoke();
+                //OnshopCloseHours?.Invoke();
             }
         }
 
@@ -352,7 +355,7 @@ public class GameManager : MonoBehaviour
     {
         loomLevel += delta;
         dbManager.Update_LoomLevel(loomLevel);
-        OnLevelUpgraded?.Invoke("Fox");
+        isFoxUpgraded = true;
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
@@ -360,7 +363,7 @@ public class GameManager : MonoBehaviour
     {
         fillerLevel += delta;
         dbManager.Update_FillerLevel(fillerLevel);
-        OnLevelUpgraded?.Invoke("Sheep");
+        isSheepUpgraded = true;
     }
 
     public int Get_DecoLevel() { return decoLevel; }
@@ -368,7 +371,7 @@ public class GameManager : MonoBehaviour
     {
         decoLevel += delta;
         dbManager.Update_DecoLevel(decoLevel);
-        OnLevelUpgraded?.Invoke("Cat");
+        isCatUpgraded = true;
     }
 
     public bool Get_IsOpen() { return isOpen; }
@@ -404,7 +407,7 @@ public class GameManager : MonoBehaviour
     public void Go_Next_Days()
     {
         isDayEndPanel = false;
-        playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        playTime += gameStartTime;
         dbManager.Update_PlayTime(playTime);
 
         todayGold = 0;
@@ -416,9 +419,10 @@ public class GameManager : MonoBehaviour
         if (currentScene.name != "Work_Shop")
         {
             Set_EndScene("Work_Shop");
-            SceneManager.LoadScene("Work_Shop");
         }
+        Fader.GoConcurrent("Loading_Scene");
     }
+
 
 
 
@@ -456,6 +460,19 @@ public class GameManager : MonoBehaviour
         } while (randomBlanket.Value.itemName == "기본이불" || randomBlanket.Value.isSpecial);
 
         return randomBlanket.Value;
+    }
+    public List<ItemScript> Get_Special_Blankets()
+    {
+        List<ItemScript> list = new List<ItemScript>();
+        foreach (var item in Blankets)
+        {
+            if (item.Value.isSpecial)
+            {
+                list.Add(item.Value);
+            }
+        }
+
+        return list;
     }
 
     public ItemScript Get_Snack(string snackName) { return Snacks[snackName]; }
@@ -516,17 +533,9 @@ public class GameManager : MonoBehaviour
         {
             randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
             randomTile = Tiles.ElementAt(randomIdx);
-        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "나무바닥");
+        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "흙바닥");
 
         return randomTile.Value;
-    }
-
-    public CustomerScript Get_Customer(string customerName) { return Customers[customerName]; }
-    public CustomerScript Get_Random_Customer()
-    {
-        int randomIdx = UnityEngine.Random.Range(0, Customers.Count);
-        var randomCustomer = Customers.ElementAt(randomIdx);
-        return randomCustomer.Value;
     }
 
     public QuestSO Get_Quest(string questName) { return Quests[questName]; }
@@ -983,17 +992,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public (int workerID, int stamina, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
+    public (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);
         WorkRoom worker = dbManager.Select_Worker_Info(workerID);
 
-        return (workerID, worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
+        return (workerID, worker.stamina, worker.startTime, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
     public void Change_Worker_Stamina(int workerID, int delta)
     {
         dbManager.Change_Worker_Stamina(workerID, delta);
+    }
+
+    public void Set_Worker_StartTime(int workerID, DateTime startTime)
+    {
+        dbManager.Update_Worker_StartTime(workerID, startTime);
     }
 
     public void Set_Worker_workingItem(int workerID, string workingItemName)

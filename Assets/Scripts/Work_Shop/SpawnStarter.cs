@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpawnStarter : MonoBehaviour
 {
@@ -16,13 +17,29 @@ public class SpawnStarter : MonoBehaviour
         OpenChanged(gameManager.Get_IsOpen());
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = GameManager.getInstance();
+        gameManager.OnOpenChanged += OpenChanged;
+        OpenChanged(gameManager.Get_IsOpen());
+    }
+
     private void OpenChanged(bool isOpen)
     {
+        if (spawner == null || spawner.Equals(null)) return; // 이미 Destroy된 경우 안전 탈출
+
         if (isOpen)
         {
             spawner.SetActive(true);
-            Spawner spawner1 = spawner.GetComponent<Spawner>();
-            spawner1.StartSpawning();
         }
         else
         {

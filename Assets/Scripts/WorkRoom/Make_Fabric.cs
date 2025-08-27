@@ -56,7 +56,7 @@ public class Make_Fabric : MonoBehaviour
             CurrentID = employee.EmployeeID;
 
             if (employee.workingPercent != 0f) // 작업 중일 때
-            { 
+            {
                 progressCircle.OnComplete = () =>
                 {
                     gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0f);
@@ -156,7 +156,7 @@ public class Make_Fabric : MonoBehaviour
             fabric_button.onClick.RemoveAllListeners();
             fabric_button.onClick.AddListener(() =>
             {
-                isMaking=false;
+                isMaking = false;
                 ballon_Panel.SetActive(false);
                 fabric_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();

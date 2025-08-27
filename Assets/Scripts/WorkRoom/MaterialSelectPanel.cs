@@ -59,11 +59,10 @@ public class MaterialSelectPanel : MonoBehaviour
     {
         if (targetSlot != null && int.TryParse(CountInput.text, out int cnt))
         {
-            targetSlot.SetData((selectedSprite, cnt)); // MaterialUISlot이 Sprite 기반으로 SetData 있어야 함
+            targetSlot.SetData((selectedItem, selectedSprite, cnt)); // MaterialUISlot이 Sprite 기반으로 SetData 있어야 함
             CountInput.text = "";
 
             gameManager.Use_InventoryItem(selectedItem.itemName, cnt);
-
         }
 
         targetSlot = null;

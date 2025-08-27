@@ -16,7 +16,7 @@ MonoBehaviour:
   interiorType: 0
   image: {fileID: -1008968776, guid: 141297e1d0cd2394b8cb77908e7a3a45, type: 3}
   prefab: {fileID: 0}
-  value: 0
+  value: 7000
   tableType: 1
   fullImage: {fileID: 480175253, guid: 148488a97b9d4804db22cbf930dfc59c, type: 3}
   workType: 3

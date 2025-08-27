@@ -21,3 +21,4 @@ MonoBehaviour:
   minQty: 1
   maxQty: 99
   recruitPrefab: {fileID: 0}
+  description: "\uC9C1\uC870"
