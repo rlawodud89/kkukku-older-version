@@ -10873,8 +10873,6 @@ MonoBehaviour:
   CompletePanel: {fileID: 950211963}
   CompleteImage: {fileID: 330235870}
   CompleteText: {fileID: 691055389}
-  specialBlankets:
-  - {fileID: 11400000, guid: 1831b8959b9aca147a4ac27e5fc6cb9d, type: 2}
 --- !u!1 &1269022811
 GameObject:
   m_ObjectHideFlags: 0
@@ -17687,6 +17685,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDayEndPanel: 0
+  isFoxUpgraded: 0
+  isSheepUpgraded: 0
+  isCatUpgraded: 0
 --- !u!4 &1873553952
 Transform:
   m_ObjectHideFlags: 0

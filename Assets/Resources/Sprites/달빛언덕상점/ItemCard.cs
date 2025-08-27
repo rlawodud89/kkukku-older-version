@@ -2,23 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Runtime.CompilerServices;
 
 public class ItemCard : MonoBehaviour
 {
-    [Header("ÇÊ¼ö UI")]
+    [Header("í•„ìˆ˜ UI")]
     [SerializeField] Image iconImage;
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text priceText;
+    [SerializeField] TMP_Text descText;
     [SerializeField] Button buyButton;
     [SerializeField] Image coinImage;
 
-    [Header("¼ö·® UI (¾ø¾îµµ OK)")]
-    [SerializeField] GameObject qtyRow;     // ¾øÀ¸¸é ºñ¿öµÖµµ µÊ
+    [Header("ìˆ˜ëŸ‰ UI (ì—†ì–´ë„ OK)")]
+    [SerializeField] GameObject qtyRow;     // ì—†ìœ¼ë©´ ë¹„ì›Œë‘¬ë„ ë¨
     [SerializeField] Button incButton;
     [SerializeField] Button decButton;
     [SerializeField] TMP_Text qtyText;
 
-    [Header("ÀçÈ­ »çÁø")]
+    [Header("ì¬í™” ì‚¬ì§„")]
     public Sprite goldSprite;
     public Sprite moonrockSprite;
 
@@ -28,25 +30,26 @@ public class ItemCard : MonoBehaviour
 
     Action<ItemCard> onBuy;
 
-    /// <summary>ShopLoader¿¡¼­ Instantiate ÈÄ ¹Ù·Î È£Ãâ</summary>
+    /// <summary>ShopLoaderì—ì„œ Instantiate í›„ ë°”ë¡œ í˜¸ì¶œ</summary>
     public void Init(ItemData data, Action<ItemCard> buyCallback)
     {
         Data = data;
         onBuy = buyCallback;
         IsRecruit = !data.useQuantity;
 
-        // UI ¼¼ÆÃ
+        // UI ì„¸íŒ…
         iconImage.sprite = data.icon;
         nameText.text = data.displayName;
         priceText.text = data.price.ToString("N0");
+        descText.text = data.description == null ? "" : data.description;
         coinImage.sprite = data.isGold ? goldSprite : moonrockSprite;
 
-        // ±âÁ¸ ¸®½º³Ê Á¤¸®(Ç®¸µ ´ëºñ)
+        // ê¸°ì¡´ ë¦¬ìŠ¤ë„ˆ ì •ë¦¬(í’€ë§ ëŒ€ë¹„)
         buyButton.onClick.RemoveAllListeners();
         if (incButton) incButton.onClick.RemoveAllListeners();
         if (decButton) decButton.onClick.RemoveAllListeners();
 
-        // ¼ö·® UI Ã³¸®
+        // ìˆ˜ëŸ‰ UI ì²˜ë¦¬
         bool hasQtyUI = data.useQuantity && qtyRow && incButton && decButton && qtyText;
         if (hasQtyUI)
         {

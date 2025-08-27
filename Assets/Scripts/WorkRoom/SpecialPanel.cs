@@ -12,15 +12,16 @@ public class SpecialPanel : MonoBehaviour
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
 
-    public List<ItemScript> specialBlankets;
-
     private GameManager gameManager;
     private ItemScript CanBlanket;
+    private List<ItemScript> specialBlankets;
 
     void Start()
     {
         gameManager = GameManager.getInstance();
         resultBtn.gameObject.SetActive(false);
+
+        specialBlankets = gameManager.Get_Special_Blankets();
 
         foreach (var slot in slots)
         {
@@ -33,7 +34,7 @@ public class SpecialPanel : MonoBehaviour
 
     void SlotCheck()
     {
-        if (!isSlotFull()) return; 
+        if (!isSlotFull()) return;
 
         CanBlanket = CheckRecipe();
         if (CanBlanket != null)
