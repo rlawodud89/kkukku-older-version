@@ -460,6 +460,19 @@ public class GameManager : MonoBehaviour
 
         return randomBlanket.Value;
     }
+    public List<ItemScript> Get_Special_Blankets()
+    {
+        List<ItemScript> list = new List<ItemScript>();
+        foreach (var item in Blankets)
+        {
+            if (item.Value.isSpecial)
+            {
+                list.Add(item.Value);
+            }
+        }
+
+        return list;
+    }
 
     public ItemScript Get_Snack(string snackName) { return Snacks[snackName]; }
     public ItemScript Get_Random_Snack()
@@ -522,14 +535,6 @@ public class GameManager : MonoBehaviour
         } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "흙바닥");
 
         return randomTile.Value;
-    }
-
-    public CustomerScript Get_Customer(string customerName) { return Customers[customerName]; }
-    public CustomerScript Get_Random_Customer()
-    {
-        int randomIdx = UnityEngine.Random.Range(0, Customers.Count);
-        var randomCustomer = Customers.ElementAt(randomIdx);
-        return randomCustomer.Value;
     }
 
     public QuestSO Get_Quest(string questName) { return Quests[questName]; }

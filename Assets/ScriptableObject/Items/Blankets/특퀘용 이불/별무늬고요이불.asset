@@ -17,7 +17,7 @@ MonoBehaviour:
   itemType: 4
   isSpecial: 1
   level: 0
-  value: 2500
+  value: 0
   recipe:
   - itemName: "\uC740\uD558\uAFC8\uC2E4"
     count: 1
