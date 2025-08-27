@@ -15,6 +15,8 @@ public class TilePanelManager : MonoBehaviour
     private List<InteriorScript> floorTiles;
     private List<InteriorScript> wallTiles;
 
+    private QuestManager questManager;
+
     void Start()
     {
         gameManager = GameManager.getInstance();
@@ -23,6 +25,8 @@ public class TilePanelManager : MonoBehaviour
 
         InitScroll();
         ClickFloorChooseBtn();
+
+        questManager= QuestManager.Instance;
     }
 
     private void InitScroll()
@@ -67,7 +71,13 @@ public class TilePanelManager : MonoBehaviour
     {
         string currentSceneName = SceneManager.GetActiveScene().name;  // 현재 씬
         TilePosType tilePos;
-        if (currentSceneName == "Work_Shop") tilePos = TilePosType.SHOP_FLOOR;
+        if (currentSceneName == "Work_Shop") {
+            tilePos = TilePosType.SHOP_FLOOR;
+
+            // 퀘스트
+            AddQuestProcess.Instance.AddProcessToQuest("인테리어 바꾸기");
+
+        }
         else if (currentSceneName == "Work_Room") tilePos = TilePosType.ROOM_FLOOR;
         else return;
 

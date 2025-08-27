@@ -33,6 +33,8 @@ public class TableBtn : MonoBehaviour
             Table1Btn.SetActive(false);
             Table2Btn.SetActive(false);
         }
-        
+
+         //퀘스트
+         AddQuestProcess.Instance.AddProcessToQuest("인테리어 바꾸기");
     }
 }

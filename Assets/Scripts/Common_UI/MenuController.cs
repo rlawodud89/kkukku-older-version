@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour
     public GameObject interiorButton;
     public float spacing = 60f;          // 버튼 사이 간격
     public float delay = 0.05f;          // 애니메이션 간 딜레이
-    public float fadeTime = 0.5f;        // 투명도 애니메이션 시간
+    public float fadeTime = 0.2f;        // 투명도 애니메이션 시간
     private bool isMenuOpen = false;
 
     public GameObject storeSign;
@@ -40,6 +40,8 @@ public class MenuController : MonoBehaviour
 
     private GameManager gameManager;
 
+    private AudioManager audioManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,9 @@ public class MenuController : MonoBehaviour
         isOpen = gameManager.Get_IsOpen();
         targetImage.sprite = isOpen ? openSprite : closeSprite;
 
-        gameManager.OnOpenChanged += OpenChanged;
+        gameManager.OnshopCloseHours += ChangeImage;
+
+        audioManager = AudioManager.Instance;
     }
 
     // Update is called once per frame
@@ -84,7 +88,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (currentSceneName == "Moonlight_Hill" || currentSceneName == "Cloud_Pond")
+        if (currentSceneName == "Moonlight_Hill"||currentSceneName == "Cloud_Pond"||currentSceneName == "Village")
         {
             energy.SetActive(false);
             energyLevel.SetActive(false);
@@ -129,6 +133,8 @@ public class MenuController : MonoBehaviour
 
     public void ToggleMenuItems()
     {
+        audioManager.PlaySFX("swoosh");  // 효과음
+
         StopAllCoroutines();
 
         if (isMenuOpen)
@@ -137,6 +143,8 @@ public class MenuController : MonoBehaviour
             StartCoroutine(ShowMenu());
 
         isMenuOpen = !isMenuOpen;
+
+        
     }
 
     IEnumerator ShowMenu()
@@ -230,20 +238,11 @@ public class MenuController : MonoBehaviour
                 confirmText.text = $"가게를 여시겠습니까?";
 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
-                yesButton.onClick.AddListener(() =>
-                {
-                    //ChangeImage();
-                    storeSignPopup.SetActive(false);
-                    gameManager.Set_IsOpen(true);
-
-                });
+                yesButton.onClick.AddListener(() => { ChangeImage(); storeSignPopup.SetActive(false); gameManager.Set_IsOpen(true); });
 
                 // No 버튼 클릭 시 팝업 닫기
                 Button noButton = storeSignPopup.transform.Find("NoButton").GetComponent<Button>();
-                noButton.onClick.AddListener(() =>
-                {
-                    storeSignPopup.SetActive(false);
-                });
+                noButton.onClick.AddListener(() => { storeSignPopup.SetActive(false); });
 
             }
             else
@@ -269,11 +268,6 @@ public class MenuController : MonoBehaviour
                 Debug.LogError("Text 컴포넌트가 storeSignPopup 안에 없습니다.");
             }
         }
-    }
-
-    public void OpenChanged(bool isopen)
-    {
-        ChangeImage();
     }
 
     public void ChangeImage()
@@ -340,6 +334,7 @@ public class MenuController : MonoBehaviour
             mapPanel.SetActive(true);
 
     }
+
 
 
     public void SeeEnergyLevel()
@@ -427,7 +422,6 @@ public class MenuController : MonoBehaviour
     private void OnConfirm(string placeName)
     {
         gameManager.Set_EndScene(placeName);
-        //SceneManager.LoadScene(placeName);
-        Fader.GoConcurrent(placeName);
+        SceneManager.LoadScene(placeName);
     }
 }

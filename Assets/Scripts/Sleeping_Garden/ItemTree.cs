@@ -15,10 +15,13 @@ public class ItemTree : MonoBehaviour
     private static int MAXCOUNT = 5;
 
     private GameManager gameManager;
+    private AudioManager audioManager;
 
     void Start()
     {
         gameManager = GameManager.getInstance();
+
+        audioManager = AudioManager.Instance;
 
         resetBtn.OnReset += ResetTree;
         ResetTree();
@@ -58,7 +61,11 @@ public class ItemTree : MonoBehaviour
             item1.gameObject.SetActive(false);
             gameManager.Add_InventoryItem(itemScript1.itemName, 1);
             Debug.Log(itemScript1.itemName + "채집");
+            AddQuestProcess.Instance.AddProcessToQuest("이불재료 채집");
         }
+
+        // 효과음
+        audioManager.PlaySFX("shine");
     }
 
     public void ClickItem2()
@@ -70,6 +77,10 @@ public class ItemTree : MonoBehaviour
             item2.gameObject.SetActive(false);
             gameManager.Add_InventoryItem(itemScript2.itemName, 1);
             Debug.Log(itemScript2.itemName + "채집");
+            AddQuestProcess.Instance.AddProcessToQuest("이불재료 채집");
         }
+
+        // 효과음
+        audioManager.PlaySFX("shine");
     }
 }
