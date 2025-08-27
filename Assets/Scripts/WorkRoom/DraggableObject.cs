@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class DraggableObject : MonoBehaviour
@@ -11,6 +12,23 @@ public class DraggableObject : MonoBehaviour
     private InteriorManager interiorManager;
 
     void Start()
+    {
+        //cam = Camera.main;
+        //interiorManager = FindObjectOfType<InteriorManager>();
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         cam = Camera.main;
         interiorManager = FindObjectOfType<InteriorManager>();

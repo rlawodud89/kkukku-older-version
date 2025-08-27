@@ -39,10 +39,16 @@ public class ArrangementWorkRoom : MonoBehaviour
 #endif
         }
 
-        itemParent = GameObject.Find("Pixels")?.transform;
+        //itemParent = GameObject.Find("Pixels")?.transform;
 
-        installedInteriors = gameManager.Get_Current_RoomInterior();
+        //installedInteriors = gameManager.Get_Current_RoomInterior();
 
+        //SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+
+    void OnEnable()
+    {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -54,6 +60,11 @@ public class ArrangementWorkRoom : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (gameManager == null) gameManager = GameManager.getInstance();
+
+        itemParent = GameObject.Find("Pixels")?.transform;
+        installedInteriors = gameManager.Get_Current_RoomInterior();
+
         // 씬이 로드될 때 실행할 코드 작성 (예: 특정 오브젝트 활성화, 데이터 로드 등)
         if (scene.name == "Work_Room") // 특정 씬에서만 동작하도록 조건 추가 가능
         {

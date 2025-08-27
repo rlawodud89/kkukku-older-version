@@ -40,14 +40,14 @@ public class ClickInteriorItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rend = GetComponent<Renderer>();
-        rend.material = normalMaterial;
+        //rend = GetComponent<Renderer>();
+        //rend.material = normalMaterial;
 
-        interiorManager = FindObjectOfType<InteriorManager>();
+        //interiorManager = FindObjectOfType<InteriorManager>();
 
-        cam = Camera.main;
+        //cam = Camera.main;
 
-        col = GetComponent<Collider2D>();
+        //col = GetComponent<Collider2D>();
 
         // 게임 매니저
         gameManager = GameManager.getInstance();
@@ -57,10 +57,37 @@ public class ClickInteriorItem : MonoBehaviour
         //Debug.Log($"Initial Position: {initialPosition}");
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        rend = GetComponent<Renderer>();
+        rend.material = normalMaterial;
+
+        interiorManager = FindObjectOfType<InteriorManager>();
+
+        cam = Camera.main;
+
+        col = GetComponent<Collider2D>();
+
+        gameManager = GameManager.getInstance();
+    }
+
 
     // Update is called once per frame
     void Update()
     {
+        if (interiorManager == null) return;
+
         if (!interiorManager.interiorMode)
         {
             selected = false;

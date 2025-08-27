@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     // GameManager에서 사용하는 상수
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
-    private static float gameDuration = 5f; // 75초(1.25분)에 1시간 (30분에 24시간)
+    private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 22;
