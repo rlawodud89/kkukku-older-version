@@ -23,7 +23,7 @@ public class SoundOption : MonoBehaviour
 
     private GameManager gameManager;
 
-    void Start()
+    void Awake()
     {
         // 게임메니저
         gameManager= GameManager.getInstance();
@@ -39,7 +39,7 @@ public class SoundOption : MonoBehaviour
     }
 
     void Update() {
-        if(BGMSlider.value == 0.001f)
+        if(BGMSlider.value == 0.0001f)
         {
             BGMSoundButton.GetComponent<Image>().sprite=soundOffSprite;
         }
@@ -48,7 +48,7 @@ public class SoundOption : MonoBehaviour
             BGMSoundButton.GetComponent<Image>().sprite=soundOnSprite;
         }
 
-        if(SFXSlider.value == 0.001f)
+        if(SFXSlider.value == 0.0001f)
         {
             SFXSoundButton.GetComponent<Image>().sprite=soundOffSprite;
         }
@@ -79,14 +79,14 @@ public class SoundOption : MonoBehaviour
             if(soundButton.name == "BGMSoundButton")
             {
                 audioMixer.SetFloat("BGM", -80f); // BGM 음소거
-                BGMSlider.value = 0.001f;
-                gameManager.Set_BgSound(0.001f); // DB에 저장
+                BGMSlider.value = 0.0001f;
+                gameManager.Set_BgSound(0.0001f); // DB에 저장
             }
             else if(soundButton.name == "SFXSoundButton")
             {
                 audioMixer.SetFloat("SFX", -80f); // SFX 음소거
-                SFXSlider.value = 0.001f;
-                gameManager.Set_EffectSound(0.001f); // DB에 저장
+                SFXSlider.value = 0.0001f;
+                gameManager.Set_EffectSound(0.0001f); // DB에 저장
             }
         }
         else

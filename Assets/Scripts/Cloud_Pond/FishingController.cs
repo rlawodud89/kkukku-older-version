@@ -35,6 +35,8 @@ public class FishingController : MonoBehaviour
     }
     public void click_fishingbtn()
     {
+        AudioManager.Instance.PlaySFX("fishing");  // 효과음
+
         if (gameManager == null)
         {
             gameManager = GameManager.getInstance();

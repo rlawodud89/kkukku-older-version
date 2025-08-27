@@ -8,9 +8,17 @@ public class PopupManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> allPopups;
 
+    private AudioManager audioManager;
+
+    void Start(){
+        audioManager = AudioManager.Instance;
+    }
+
 
     public void ShowOnly(GameObject targetPopup)
     {
+        audioManager.PlaySFX("pop");
+
         foreach (var popup in allPopups)
         {
             popup.SetActive(false);

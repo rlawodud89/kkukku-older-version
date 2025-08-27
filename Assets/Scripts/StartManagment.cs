@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class StartManagment : MonoBehaviour
 {
+    public AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,8 @@ public class StartManagment : MonoBehaviour
 
     public void StartGame()
     {
+         audioSource.Play();  // 효과음
+
         // PlayerPrefs에 FirstPlay 값이 있는지 확인
         if(!PlayerPrefs.HasKey("FirstPlayer"))
         {

@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
 
     public static AudioManager Instance { get; private set; }
-    [SerializeField] private AudioSource bgmAudioSource;
+    public AudioMixer audioMixer;
+    [SerializeField] public AudioSource bgmAudioSource;
     [SerializeField] private AudioSource sfxAudioSource;
+
+    private GameManager gameManager;
+
 
     void Awake()
     {
@@ -20,19 +25,41 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // AudioSource 준비
+        // 게임메니저
+        gameManager= GameManager.getInstance();
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager is not initialized.");
+        }
+
+         // AudioSource 준비
         if(bgmAudioSource == null)
         {
             bgmAudioSource = transform.GetChild(0).GetComponent<AudioSource>();
             bgmAudioSource.loop = true;
+            bgmAudioSource.playOnAwake = false;
         }
 
-        // BGM 시작
-        if(!bgmAudioSource.isPlaying&&bgmAudioSource.clip != null)
+        
+        // audioMixer 할당
+        if(audioMixer == null)
         {
-            bgmAudioSource.Play();
+            var grp=bgmAudioSource.outputAudioMixerGroup;
+            audioMixer = grp.audioMixer;
         }
     }
+
+    void Start()
+    {
+        // BGM 시작
+        audioMixer.SetFloat("BGM", Mathf.Log10(gameManager.Get_BgSound()) * 20);
+        bgmAudioSource.Play();
+        //Debug.Log("BGM Volume: " + bgmAudioSource.volume);
+
+        audioMixer.SetFloat("SFX", Mathf.Log10(gameManager.Get_EffectSound()) * 20);
+    }
+
 
     // SFX 재생 (사운드 클립 인자로 받아 설정)
     public void PlaySFX(string clipName)

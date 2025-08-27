@@ -12045,7 +12045,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 581380184}
   m_HandleRect: {fileID: 914080082}
   m_Direction: 0
-  m_MinValue: 0.001
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -13626,6 +13626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccbefda6747a2e44e89fe463fa493c97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: 9edccc08178ff3345a9e893758943145, type: 2}
   bgmAudioSource: {fileID: 0}
   sfxAudioSource: {fileID: 0}
 --- !u!1 &1407400220
@@ -18979,7 +18980,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 218086294}
   m_HandleRect: {fileID: 41154912}
   m_Direction: 0
-  m_MinValue: 0.001
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -19060,7 +19061,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
