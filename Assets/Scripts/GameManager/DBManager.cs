@@ -68,18 +68,18 @@ public class DBManager
         Insert_Design("기본이불");
 
         // 타일
+        Insert_New_Tile("흙바닥", InteriorType.FLOOR_TILE);
         Insert_New_Tile("나무벽", InteriorType.WALL_TILE);
-        Insert_New_Tile("나무바닥", InteriorType.FLOOR_TILE);
 
         Tile tile = new Tile();
         tile.tilePos = TilePosType.ROOM_FLOOR;
-        tile.tileName = "나무바닥";
+        tile.tileName = "흙바닥";
         conn.Insert(tile);
         tile.tilePos = TilePosType.ROOM_WALL;
         tile.tileName = "나무벽";
         conn.Insert(tile);
         tile.tilePos = TilePosType.SHOP_FLOOR;
-        tile.tileName = "나무바닥";
+        tile.tileName = "흙바닥";
         conn.Insert(tile);
         tile.tilePos = TilePosType.SHOP_WALL;
         tile.tileName = "나무벽";
@@ -685,6 +685,13 @@ public class DBManager
     {
         WorkRoom worker = conn.Find<WorkRoom>(workerID);
         worker.stamina += delta;
+        conn.Update(worker);
+    }
+
+    public void Update_Worker_StartTime(int workerID, DateTime startTime)
+    {
+        WorkRoom worker = conn.Find<WorkRoom>(workerID);
+        worker.startTime = startTime;
         conn.Update(worker);
     }
 
