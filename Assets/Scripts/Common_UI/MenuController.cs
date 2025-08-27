@@ -40,6 +40,8 @@ public class MenuController : MonoBehaviour
 
     private GameManager gameManager;
 
+    private AudioManager audioManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +51,9 @@ public class MenuController : MonoBehaviour
         targetImage.sprite = isOpen ? openSprite : closeSprite;
 
         gameManager.OnOpenChanged += OpenChanged;
+        //gameManager.OnshopCloseHours += ChangeImage;
+
+        audioManager = AudioManager.Instance;
     }
 
     // Update is called once per frame
@@ -84,7 +89,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (currentSceneName == "Moonlight_Hill" || currentSceneName == "Cloud_Pond")
+        if (currentSceneName == "Moonlight_Hill"||currentSceneName == "Cloud_Pond"||currentSceneName == "Village")
         {
             energy.SetActive(false);
             energyLevel.SetActive(false);
@@ -129,6 +134,8 @@ public class MenuController : MonoBehaviour
 
     public void ToggleMenuItems()
     {
+        audioManager.PlaySFX("swoosh");  // 효과음
+
         StopAllCoroutines();
 
         if (isMenuOpen)
@@ -137,6 +144,8 @@ public class MenuController : MonoBehaviour
             StartCoroutine(ShowMenu());
 
         isMenuOpen = !isMenuOpen;
+
+        
     }
 
     IEnumerator ShowMenu()

@@ -157,6 +157,11 @@ public class Make_Sewing : MonoBehaviour
     public void ClickCompleteBtn()
     {
         CompletePanel.SetActive(false);
+        
+        // 퀘스트
+        AddQuestProcess.Instance.AddProcessToQuest("이불 제작");
+
+
     }
 
     public void Add_Employee(Employee employee, ProgressCircle progressCircle)

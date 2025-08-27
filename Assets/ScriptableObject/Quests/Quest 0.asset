@@ -12,19 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e72915851eaf404580531e0e6667159, type: 3}
   m_Name: Quest 0
   m_EditorClassIdentifier: 
-  questTitle: "\uAC00\uAC8C \uD655\uC7A5"
-  questDescription: "\uC774\uBD88\uC744 \uCC3E\uB294 \uC190\uB2D8\uB4E4\uC774 \uD558\uB098\uB458
-    \uB298\uC5B4\uB098\uACE0 \uC788\uC5B4\uC694.  \uC791\uC740 \uAC00\uAC8C\uAC00
-    \uC774\uC81C\uB294 \uC870\uAE08 \uB2F5\uB2F5\uD574\uC84C\uB124\uC694.  \uC870\uAE08\uB9CC
-    \uB354 \uB113\uD600\uC11C \uB204\uAD6C\uB098 \uD3B8\uD788 \uC26C\uC5B4\uAC08
-    \uC218 \uC788\uB294 \uACF5\uAC04\uC73C\uB85C \uBC14\uAFD4\uBCFC\uAE4C\uC694?"
+  questTitle: "\uC778\uD14C\uB9AC\uC5B4 \uBC14\uAFB8\uAE30"
+  questImage: {fileID: 21300000, guid: b8d5a15780a7fe0439e48f0ad0a8644c, type: 3}
+  questDescription: "\uC544\uC774\uD15C\uC758 \uB514\uC790\uC778\uC744 \uBC14\uAFD4
+    \uC774\uBD88\uAC00\uAC8C\uB97C \uB354 \uD3EC\uADFC\uD558\uAC8C \uAFB8\uBA70\uBCF4\uC138\uC694.\r"
   rewards:
   - rewardType: "\uC6D4\uC11D"
     amount: 5
   - rewardType: "\uC7AC\uD654"
     amount: 5
   questProcess: 0
-  questComplete: 0
+  questComplete: 1
   isCompleted: 0
   getReward: 0
   isSpecial: 0

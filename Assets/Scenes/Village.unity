@@ -553,6 +553,7 @@ MonoBehaviour:
   stock: []
   popup: {fileID: 1797094300}
   shopType: 0
+  quest1: {fileID: 11400000, guid: 1198ba20ff406e64c80e79a3d33f8a1c, type: 2}
 --- !u!114 &107304520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2320,7 +2321,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1610228993}
   m_HandleRect: {fileID: 1610228992}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3069,6 +3070,7 @@ MonoBehaviour:
   stock: []
   popup: {fileID: 1797094300}
   shopType: 2
+  quest1: {fileID: 11400000, guid: 1198ba20ff406e64c80e79a3d33f8a1c, type: 2}
 --- !u!114 &566617511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3491,7 +3493,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &673589620
@@ -9182,6 +9184,7 @@ MonoBehaviour:
   stock: []
   popup: {fileID: 1797094300}
   shopType: 1
+  quest1: {fileID: 11400000, guid: 1198ba20ff406e64c80e79a3d33f8a1c, type: 2}
 --- !u!114 &1685907210
 MonoBehaviour:
   m_ObjectHideFlags: 0

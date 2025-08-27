@@ -343,6 +343,11 @@ public class ShopLoader : MonoBehaviour
     {
         if (card.IsRecruit) // 수량 필요없는 경우
         {
+            // 퀘스트
+            if (card.Data.price <= gameManager.Get_Gold()){
+                AddQuestProcess.Instance.AddProcessToQuest("인테리어 아이템 구매하기");
+            }
+
             Debug.Log($"디자인 ! : {card.Data.displayName}");
 
             if (shopType == StoreType.SHOP_INTERIOR) // 가게 인테리어 (수량 필요없이 겉만 바뀜)

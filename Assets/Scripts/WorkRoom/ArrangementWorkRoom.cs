@@ -40,6 +40,7 @@ public class ArrangementWorkRoom : MonoBehaviour
 #endif
         }
 
+
         itemParent = GameObject.Find("Pixels")?.transform;
 
         installedInteriors = gameManager.Get_Current_RoomInterior();

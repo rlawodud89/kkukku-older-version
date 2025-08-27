@@ -8,6 +8,7 @@ public class QuestSO : ScriptableObject
 {
     // 퀘스트에 대한 다양한 정보들
     public string questTitle;        // 퀘스트 제목
+    public Sprite questImage;       // 퀘스트 이미지
     [TextArea(5, 10)]
     public string questDescription;  // 퀘스트 설명
     public Reward[] rewards;          // 퀘스트 보상 종류와 양 (보상 클래스 배열)

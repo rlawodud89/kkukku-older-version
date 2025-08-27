@@ -33,6 +33,8 @@ public class ResetBtn : MonoBehaviour
 
     private IEnumerator Shake()
     {
+        AudioManager.Instance.PlaySFX("running");  // 효과음
+
         float elapsed = 0f;
 
         if (hideObject != null)

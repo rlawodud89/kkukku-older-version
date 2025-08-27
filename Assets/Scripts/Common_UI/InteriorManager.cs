@@ -50,8 +50,6 @@ public class InteriorManager : MonoBehaviour
     private GameObject Home_Button;
     private GameObject RoomBtn;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -247,6 +245,9 @@ public class InteriorManager : MonoBehaviour
             {
                 Make_Sewing.Instance.Add_Employee(employee, employee.progressCircle);
             }
+
+            // 퀘스트
+            AddQuestProcess.Instance.AddProcessToQuest("직원 고용하기");
         }
 
         // 인벤토리 아이템 다시 얻어오기 
@@ -257,6 +258,7 @@ public class InteriorManager : MonoBehaviour
     public void ClickTableItem(InteriorScript item)
     {
         PanelClose();
+
 
         if (item.tableType == TableType.WALL_TABLE)
         {
@@ -279,6 +281,7 @@ public class InteriorManager : MonoBehaviour
             table2.interiorScript = item;
         }
 
+       
     }
 
     public void PanelOpen()
