@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
@@ -97,10 +98,10 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnItemShopLevelChanged;
     public event Action<int> OnDesignShopLevelChanged;
 
-
     public bool isFoxUpgraded;
     public bool isSheepUpgraded;
     public bool isCatUpgraded;
+
 
     //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
     private GameManager() { }
@@ -349,13 +350,13 @@ public class GameManager : MonoBehaviour
         dbManager.Update_ItemShopLevel(itemshopLevel);
         OnItemShopLevelChanged?.Invoke(itemshopLevel);
     }
+
     public int Get_LoomLevel() { return loomLevel; }
     public void Change_LoomLevel(int delta)
     {
         loomLevel += delta;
         dbManager.Update_LoomLevel(loomLevel);
-        // 업그레이드 상태를 기록
-        isFoxUpgraded = true; // 플래그 설정
+        isFoxUpgraded = true;
     }
 
     public int Get_FillerLevel() { return fillerLevel; }
@@ -367,16 +368,12 @@ public class GameManager : MonoBehaviour
     }
 
     public int Get_DecoLevel() { return decoLevel; }
-
     public void Change_DecoLevel(int delta)
     {
         decoLevel += delta;
         dbManager.Update_DecoLevel(decoLevel);
         isCatUpgraded = true;
-
     }
-
-
 
     public bool Get_IsOpen() { return isOpen; }
     public void Set_IsOpen(bool isOpen)
@@ -523,7 +520,7 @@ public class GameManager : MonoBehaviour
         {
             randomIdx = UnityEngine.Random.Range(0, Tiles.Count);
             randomTile = Tiles.ElementAt(randomIdx);
-        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "나무바닥");
+        } while (randomTile.Value.interiorName == "나무벽" || randomTile.Value.interiorName == "흙바닥");
 
         return randomTile.Value;
     }
@@ -990,17 +987,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public (int workerID, int stamina, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
+    public (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) Get_Worker_Info(float x, float y)
     {
         int workerID = dbManager.Select_Worker_ID(x, y);
         WorkRoom worker = dbManager.Select_Worker_Info(workerID);
 
-        return (workerID, worker.stamina, Get_InventoryItem(worker.workItem), worker.workingPercent);
+        return (workerID, worker.stamina, worker.startTime, Get_InventoryItem(worker.workItem), worker.workingPercent);
     }
 
     public void Change_Worker_Stamina(int workerID, int delta)
     {
         dbManager.Change_Worker_Stamina(workerID, delta);
+    }
+
+    public void Set_Worker_StartTime(int workerID, DateTime startTime)
+    {
+        dbManager.Update_Worker_StartTime(workerID, startTime);
     }
 
     public void Set_Worker_workingItem(int workerID, string workingItemName)

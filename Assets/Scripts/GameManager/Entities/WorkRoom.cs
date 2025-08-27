@@ -1,4 +1,5 @@
 using SQLite4Unity3d;
+using System;
 
 public class WorkRoom
 {
@@ -8,8 +9,7 @@ public class WorkRoom
     [NotNull]
     public int stamina { get; set; } = 0;
 
-    [NotNull]
-    public bool working { get; set; } = false;
+    public DateTime startTime { get; set; }
 
     public float workingPercent { get; set; } = 0f;
 
