@@ -50,8 +50,10 @@ public class MenuController : MonoBehaviour
         isOpen = gameManager.Get_IsOpen();
         targetImage.sprite = isOpen ? openSprite : closeSprite;
 
-        audioManager = AudioManager.Instance;
         gameManager.OnOpenChanged += OpenChanged;
+        //gameManager.OnshopCloseHours += ChangeImage;
+
+        audioManager = AudioManager.Instance;
     }
 
     // Update is called once per frame

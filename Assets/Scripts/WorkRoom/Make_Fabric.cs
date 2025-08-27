@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class Make_Fabric : MonoBehaviour
     public GameObject Panel;
     public GameObject Panel2;
     public GameObject Scroll_View;
+    public TextMeshProUGUI announce_text;
 
     private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
     private int CurrentID;
@@ -21,8 +23,6 @@ public class Make_Fabric : MonoBehaviour
     public FabricDetailPanelController detailPanelController;
 
     private GameManager gameManager;
-    private bool can_make = false;
-    public bool isMaking;
 
     private void Awake()
     {
@@ -48,40 +48,36 @@ public class Make_Fabric : MonoBehaviour
         {
             detailPanelController = FindObjectOfType<FabricDetailPanelController>();
         }
-
-        foreach (var e in Employees)
-        {
-            Employee employee = e.Value.employee;
-            ProgressCircle progressCircle = e.Value.progressCircle;
-            CurrentID = employee.EmployeeID;
-
-            if (employee.workingPercent != 0f) // 작업 중일 때
-            {
-                progressCircle.OnComplete = () =>
-                {
-                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0f);
-                    showfabric();
-                };
-
-                progressCircle.CompleteCircle(employee.EmployeeID, employee.workingPercent);
-            }
-            else if (employee.workItem != null) // 작업 다 끝나고 수령하지 않았을 때
-            {
-                showfabric();
-            }
-        }
     }
 
     public void ClickMakebtn()
     {
+
+        bool can_make = false;
+
+        // 딕셔너리에서 현재 직원을 가져옵니다.
         Employee current_employee = Employees[CurrentID].employee;
         ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
-        can_make = Check_Recipe(currentBlanket);
+
+        // 람다식에 사용할 로컬 변수 생성
+        Employee employeeForLambda = current_employee;
+
+        if (current_employee.lackStamina())
+        {
+            Debug.Log("스태미너가 부족합니다!");
+            ShowAnnounceText("스태미너가 부족합니다.", 2f);
+            return;
+        }
+        else
+        {
+            // 작업자가 놀고 있다면, 레시피를 확인합니다.
+            can_make = Check_Recipe(currentBlanket);
+        }
 
         if (can_make)
         {
-            isMaking = true;
             for (int i = 0; i < currentBlanket.recipe.Count; i++)
+
             {
                 gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
                 Debug.Log(currentBlanket.recipe[i].itemName + currentBlanket.recipe[i].count + "만큼 감소");
@@ -96,28 +92,53 @@ public class Make_Fabric : MonoBehaviour
             }
             detailPanelController.OpenPanel(currentBlanket);
 
-
             Panel.SetActive(false);
             Panel2.SetActive(false);
             Scroll_View.SetActive(false);
 
             current_employee.Working();
 
+            // 안전하게 로컬 변수에 저장
+            Employee employeeCopy = employeeForLambda;
+            ItemScript blanketCopy = currentBlanket;
+
             progress_circle.OnComplete = () =>
             {
-                gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
-                Debug.Log(currentBlanket.yarnName + "만듦");
-                showfabric();
+                gameManager.Set_Worker_WorkingPercent(employeeCopy.EmployeeID, 0f);
+
+                if (blanketCopy != null)
+                {
+                    Debug.Log(blanketCopy.yarnName + "만듦");
+                }
+                else
+                {
+                    Debug.LogWarning("blanketCopy가 null입니다!");
+                }
+
+                showfabric(employeeCopy);
             };
 
             progress_circle.CompleteCircle(current_employee.EmployeeID);
-            can_make = false;
         }
         else
         {
-            Debug.Log("제작할 수 없습니다!");
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
         }
+    }
 
+    private void ShowAnnounceText(string text, float duration)
+    {
+        if (announce_text == null) return;
+
+        announce_text.text = text;
+        announce_text.gameObject.SetActive(true);
+        StartCoroutine(HideAnnounceTextAfterDelay(duration));
+    }
+
+    private IEnumerator HideAnnounceTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        announce_text.gameObject.SetActive(false);
     }
 
     private bool Check_Recipe(ItemScript currentBlanket)
@@ -140,33 +161,41 @@ public class Make_Fabric : MonoBehaviour
     }
 
 
-    void showfabric()
+    public void showfabric(Employee employee)
     {
-        Employee current_employee = Employees[CurrentID].employee;
-        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
-        GameObject ballon_Panel = current_employee.ballonPanel;
-        Button fabric_button = current_employee.ItemButton;
+        GameObject ballon_Panel = employee.ballonPanel;
+        Button fabric_button = employee.ItemButton;
+        ProgressCircle progress_circle = Employees[employee.EmployeeID].progressCircle;
 
-        if (current_employee.workItem != null)
+        if (employee.workItem != null)
         {
             ballon_Panel.SetActive(true);
             fabric_button.gameObject.SetActive(true);
-            fabric_button.image.sprite = current_employee.workItem.image;
+            fabric_button.image.sprite = employee.workItem.image;
 
             fabric_button.onClick.RemoveAllListeners();
             fabric_button.onClick.AddListener(() =>
             {
-                isMaking = false;
                 ballon_Panel.SetActive(false);
                 fabric_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
-                gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
-                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
+                if (employee.workingPercent > 0)
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0);
+                    employee.workingPercent = 0;
+                }
+
+                gameManager.Set_Worker_workingItem(employee.EmployeeID, null);
+                gameManager.Add_InventoryItem(employee.workItem.itemName, 1);
+
+                employee.workItem = null;
+                progress_circle.elapsed = 0f;
+                employee.isWorking = false;
 
                 cottonPanel?.SetSelectedBlanket();
-
             });
+
 
         }
         else
@@ -178,6 +207,13 @@ public class Make_Fabric : MonoBehaviour
     public void Add_Employee(Employee employee, ProgressCircle progressCircle)
     {
         Employees.Add(employee.EmployeeID, (employee, progressCircle));
+
+        employee.OnWorkComplete = () => {
+            showfabric(employee);
+        };
+
+        // 직원이 추가될 때 자신의 상태를 스스로 초기화하도록 합니다.
+        employee.InitializeWorker();
     }
 
     public void Remove_Employee(int employeeID)

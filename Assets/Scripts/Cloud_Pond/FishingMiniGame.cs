@@ -17,21 +17,37 @@ public class FishingMiniGame : MonoBehaviour
     private bool goingRight = true;
     public bool miniGameRunning = false;
 
+    private float timer = 0f;         // ⏱ 타이머
+    private float timeLimit = 5f;     // 제한 시간 (초)
+
     void Update()
     {
         if (!miniGameRunning) return;
+
+        // 타이머 증가
+        timer += Time.deltaTime;
+        if (timer >= timeLimit)
+        {
+            Debug.Log("⏰ 시간 초과! 실패!");
+            fishing_text.text = " 실패! 재료를 놓쳤습니다.";
+            FinishMiniGame(false);
+            return;
+        }
+
         // 포인터 좌우 왕복
         float move = speed * Time.deltaTime * (goingRight ? 1 : -1);
         pointer.anchoredPosition += new Vector2(move, 0);
 
-        // 경계 체크 (왼쪽 -200, 오른쪽 200 기준)
+        // 경계 체크
         if (pointer.anchoredPosition.x >= 160) goingRight = false;
         if (pointer.anchoredPosition.x <= -160) goingRight = true;
 
         // Space 키로 성공 여부 판단
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (RectTransformUtility.RectangleContainsScreenPoint(successZone, pointer.position))
+            // ✅ localPosition으로 비교 (UI 좌표계 기준)
+            if (pointer.localPosition.x >= successZone.localPosition.x - successZone.sizeDelta.x / 2 &&
+                pointer.localPosition.x <= successZone.localPosition.x + successZone.sizeDelta.x / 2)
             {
                 Debug.Log("🎯 성공! 재료 획득");
                 FinishMiniGame(true);
@@ -61,12 +77,18 @@ public class FishingMiniGame : MonoBehaviour
         pointer.anchoredPosition = new Vector2(-160, 5); // 시작 위치
         goingRight = true;
         miniGameRunning = true;
+
+        // ⏱ 타이머 초기화
+        timer = 0f;
+
         // 성공 구간 위치 랜덤 (-100~100 범위)
         successZone.anchoredPosition = new Vector2(Random.Range(-100f, 100f), 5);
 
         // 성공 구간 크기 랜덤 (가로만 변경, 세로는 그대로)
-        float randomWidth = Random.Range(40f, 100f); // 최소 40px ~ 최대 120px
+        float randomWidth = Random.Range(40f, 100f);
         successZone.sizeDelta = new Vector2(randomWidth, successZone.sizeDelta.y);
+
+        fishing_text.text = " 낚시 중... ";
         Debug.Log("🎣 미니게임 시작!");
     }
 
@@ -79,8 +101,12 @@ public class FishingMiniGame : MonoBehaviour
             currentdata = gameManager.Get_Random_Material();
             materialsInventory.AddMaterial(currentdata);
             gameManager.Add_InventoryItem(currentdata.itemName, 1);
-            fishing_text.text = currentdata.name + "획득!";
+            fishing_text.text = currentdata.name + " 획득!";
             Debug.Log($"{currentdata.itemName} 획득!");
+        }
+        else
+        {
+            Debug.Log("🎣 미니게임 실패!");
         }
     }
 

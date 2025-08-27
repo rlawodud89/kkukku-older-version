@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
@@ -1141,6 +1142,4 @@ public class GameManager : MonoBehaviour
             uniqueList.Add(itemScript.itemName);
         }
     }
-
-
 }
