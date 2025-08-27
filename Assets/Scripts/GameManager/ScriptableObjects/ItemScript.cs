@@ -16,7 +16,6 @@ public class ItemScript : ScriptableObject
     public int value;
 
     [Header("이불 제작 때 필요한 재료 이름, 수량 리스트")]
-
     public List<RecipeEntry> recipe; 
 
     [Header("이불 디자인 가격")]
@@ -25,9 +24,6 @@ public class ItemScript : ScriptableObject
     [Header("이불 솜, 원단 단계에 해당하는 아이템 이름")]
     public string yarnName;
     public string cottonName;
-
-    [Header("이불창 찼을 때 이미지")]
-    public Sprite fullImage;
 }
 
 [System.Serializable]

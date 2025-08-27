@@ -84,7 +84,6 @@ public class Make_Sewing : MonoBehaviour
 
         progress_circle.OnComplete = () =>
         {
-
             gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
             Debug.Log("완성");
             showsewing();
@@ -122,7 +121,7 @@ public class Make_Sewing : MonoBehaviour
                 isMaking = false;
 
                 gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
-                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); //원단 추가
+                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); // 이불 추가
 
             });
 

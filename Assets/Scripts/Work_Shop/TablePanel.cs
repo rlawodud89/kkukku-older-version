@@ -24,6 +24,11 @@ public class TablePanel : MonoBehaviour
         gameManager.OnTableBlanketChanged += TableBlanketChanged;
     }
 
+    void OnDestroy()
+    {
+        gameManager.OnTableBlanketChanged -= TableBlanketChanged;
+    }
+
     void Start()
     {
         AddPanel.gameObject.SetActive(false);
@@ -118,6 +123,11 @@ public class TablePanel : MonoBehaviour
 
     public void Delete_In_BlanketBtnDic(string blanketName)
     {
+        if (BlanketBtnDic.TryGetValue(blanketName, out var btn))
+        {
+            if (SelectedBtn == btn) SelectedBtn = null;
+        }
+
         BlanketBtnDic.Remove(blanketName);
         if (BlanketBtnDic.Count == 0) OnFullChanged?.Invoke(false);
     }
@@ -132,7 +142,10 @@ public class TablePanel : MonoBehaviour
         }
         else // 이불 삭제되었다면
         {
-            BlanketBtnDic[blanketName].Change_BlanketCount(delta);
+            if (BlanketBtnDic.TryGetValue(blanketName, out var btn) && btn != null)
+            {
+                btn.Change_BlanketCount(delta);
+            }
         }
     }
 

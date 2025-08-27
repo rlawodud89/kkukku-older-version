@@ -611,6 +611,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - letter
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1831b8959b9aca147a4ac27e5fc6cb9d
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD2B9\uD018\uC6A9 \uC774\uBD88/\uBCC4\uBB34\uB2AC\uACE0\uC694\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8b390fc3155c5794b97c2e635a1e2b28, type: 2}
   m_SchemaSet:

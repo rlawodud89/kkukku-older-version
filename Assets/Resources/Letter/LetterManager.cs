@@ -14,13 +14,16 @@ public class LetterManager : MonoBehaviour
     //public GameObject sleepingImagePrefab; // 잠자는 이미지 프리팹
     public GameObject letterContentPanel; // 편지 내용 패널
 
-    public LetterSO[] letters;
+    public List<LetterSO> letters;
 
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        // 테스트
+        gameManager = GameManager.getInstance();
+        letters = gameManager.Get_Current_Letter();
+        
         foreach (LetterSO letter in letters)
         {
             AddLetter(letter);
