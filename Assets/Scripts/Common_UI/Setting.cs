@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Setting : MonoBehaviour
 {
@@ -27,8 +28,9 @@ public class Setting : MonoBehaviour
         this.gameObject.SetActive(true);
     }
 
-    public void ClickSaveGame()
+    // 프롤로그 다시보기
+    public void ClickReplayButton()
     {
-        // 게임 저장 로직
+        SceneManager.LoadScene("Prolog");
     }
 }

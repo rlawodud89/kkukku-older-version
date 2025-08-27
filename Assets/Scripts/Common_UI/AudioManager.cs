@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
+
 
 public class AudioManager : MonoBehaviour
 {
@@ -48,6 +50,13 @@ public class AudioManager : MonoBehaviour
             var grp=bgmAudioSource.outputAudioMixerGroup;
             audioMixer = grp.audioMixer;
         }
+
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
     void Start()
@@ -58,6 +67,19 @@ public class AudioManager : MonoBehaviour
         //Debug.Log("BGM Volume: " + bgmAudioSource.volume);
 
         audioMixer.SetFloat("SFX", Mathf.Log10(gameManager.Get_EffectSound()) * 20);
+    }
+
+    private void OnActiveSceneChanged(Scene prev, Scene next)
+    {
+        if (next.name == "Prolog")
+        {
+            bgmAudioSource.Stop();
+        }
+        else
+        {
+            audioMixer.SetFloat("BGM", Mathf.Log10(gameManager.Get_BgSound()) * 20);
+            bgmAudioSource.Play();
+        }
     }
 
 
