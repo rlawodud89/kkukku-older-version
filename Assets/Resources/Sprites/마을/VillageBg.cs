@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class VillageBg : MonoBehaviour
@@ -23,6 +24,22 @@ public class VillageBg : MonoBehaviour
         gameManager.OnBgTimeChanged += ChangeBg;
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = GameManager.getInstance();
+        ChangeBg(gameManager.Get_BgTime());
+        gameManager.OnBgTimeChanged += ChangeBg;
+    }
+
     private void ChangeBg(BgType bgType)
     {
         if (bgType == BgType.DAY)
@@ -36,7 +53,7 @@ public class VillageBg : MonoBehaviour
         else if (bgType == BgType.EVENING)
         {
             BgImage.sprite = eveningSprite;
-            foreach(Image t in Objects)
+            foreach (Image t in Objects)
             {
                 t.color = eveningColor;
             }

@@ -16,19 +16,20 @@ public class Make_Sewing : MonoBehaviour
     public GameObject BallonPanel;
     public GameObject CompletePanel;
 
+    public TextMeshProUGUI announce_text;
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
 
     private GameManager gameManager;
     private ItemScript currentBlanket;
-    public bool isMaking;
+
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);  // 중복 방지
+            Destroy(gameObject);
             return;
         }
 
@@ -40,91 +41,97 @@ public class Make_Sewing : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.getInstance();
-
-        foreach (var e in Employees)
-        {
-            Employee employee = e.Value.employee;
-            ProgressCircle progressCircle = e.Value.progressCircle;
-            CurrentID = employee.EmployeeID;
-
-            if (employee.workingPercent != 0f)
-            {
-                progressCircle.OnComplete = () =>
-                {
-                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0f);
-                    showsewing();
-                };
-
-                progressCircle.CompleteCircle(employee.EmployeeID, employee.workingPercent);
-            }
-            else if (employee.workItem != null)
-            {
-                showsewing();
-            }
-        }
     }
 
-  
-
-    public void HandleMakeClicked(ItemScript currentSewing)
+    public void HandleMakeClicked(ItemScript currentSewing, BlanketSlotUI slotUI)
     {
         Employee current_employee = Employees[CurrentID].employee;
+
+        if (current_employee.isWorking)
+        {
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
+            return;
+        }
+
+        if (current_employee.lackStamina())
+        {
+            Debug.Log("스태미너가 부족합니다!");
+            ShowAnnounceText("스태미너가 부족합니다.", 2f);
+            return;
+        }
+
         ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
+
+        // 람다식에 사용할 로컬 변수 생성
+        Employee employeeForLambda = current_employee;
+
+
+        gameManager.Use_InventoryItem(currentSewing.itemName, 1);
+
+
+        if (gameManager.Count_InventoryItem(currentSewing.itemName) > 0)
+        {
+            // 재료가 남아있으면 개수만 업데이트합니다.
+            slotUI.SetData(currentSewing, gameManager.Count_InventoryItem(currentSewing.itemName));
+        }
+        else
+        {
+            // 재료가 없으면 슬롯을 비웁니다.
+            slotUI.ClearSlot();
+        }
 
         currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
         current_employee.workItem = currentBlanket;
         gameManager.Set_Worker_workingItem(current_employee.EmployeeID, currentBlanket.itemName);
 
-        Debug.Log("Make_Sewing에서 Make 버튼 클릭됨 감지!");
-        gameManager.Use_InventoryItem(currentBlanket.cottonName, 1);
-
-        isMaking = true;
         sewingPanel.SetActive(false);
+
         current_employee.Working();
 
-        progress_circle.OnComplete = () =>
-        {
-            gameManager.Set_Worker_WorkingPercent(current_employee.EmployeeID, 0f);
-            Debug.Log("완성");
-            showsewing();
-        };
-
         progress_circle.CompleteCircle(current_employee.EmployeeID);
-
     }
 
-
-    void showsewing()
+    // showsewing 함수가 Employee 객체를 인수로 받도록 수정
+    public void showsewing(Employee employee)
     {
-        Employee current_employee = Employees[CurrentID].employee;
-        ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
-        GameObject ballon_Panel = current_employee.ballonPanel;
-        Button sewing_button = current_employee.ItemButton;
+        ProgressCircle progress_circle = Employees[employee.EmployeeID].progressCircle;
+        GameObject ballon_Panel = employee.ballonPanel;
+        Button sewing_button = employee.ItemButton;
 
-        if (current_employee.workItem != null)
+        if (employee.workItem != null)
         {
             ballon_Panel.SetActive(true);
             sewing_button.gameObject.SetActive(true);
-            sewing_button.image.sprite = current_employee.workItem.image;
+            sewing_button.image.sprite = employee.workItem.image;
+
+            ItemScript finishedItem = employee.workItem;
 
             sewing_button.onClick.RemoveAllListeners();
             sewing_button.onClick.AddListener(() =>
             {
-
                 ballon_Panel.SetActive(false);
                 sewing_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
                 CompletePanel.SetActive(true);
-                CompleteImage.sprite = current_employee.workItem.image;
-                CompleteText.text = current_employee.workItem.itemName + "이 완성되었습니다!";
-                isMaking = false;
+                CompleteImage.sprite = finishedItem.image;
+                CompleteText.text = finishedItem.itemName + "이 완성되었습니다!";
 
-                gameManager.Set_Worker_workingItem(current_employee.EmployeeID, null);
-                gameManager.Add_InventoryItem(current_employee.workItem.itemName, 1); // 이불 추가
+                // 진행도 초기화
+                if (employee.workingPercent > 0)
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0);
+                    employee.workingPercent = 0;
+                }
 
+                // 작업 완료 처리
+                gameManager.Set_Worker_workingItem(employee.EmployeeID, null);
+                gameManager.Add_InventoryItem(finishedItem.itemName, 1);
+
+                employee.workItem = null;
+                progress_circle.elapsed = 0f;
+                employee.isWorking = false;
             });
-
         }
         else
         {
@@ -132,14 +139,41 @@ public class Make_Sewing : MonoBehaviour
         }
     }
 
+    private void ShowAnnounceText(string text, float duration)
+    {
+        if (announce_text == null) return;
+
+        announce_text.text = text;
+        announce_text.gameObject.SetActive(true);
+        StartCoroutine(HideAnnounceTextAfterDelay(duration));
+    }
+
+    private IEnumerator HideAnnounceTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        announce_text.gameObject.SetActive(false);
+    }
+
     public void ClickCompleteBtn()
     {
         CompletePanel.SetActive(false);
+        
+        // 퀘스트
+        AddQuestProcess.Instance.AddProcessToQuest("이불 제작");
+
+
     }
 
     public void Add_Employee(Employee employee, ProgressCircle progressCircle)
     {
         Employees.Add(employee.EmployeeID, (employee, progressCircle));
+
+        employee.OnWorkComplete = () => {
+            showsewing(employee);
+        };
+
+        // 직원이 추가될 때 자신의 상태를 스스로 초기화하도록 합니다.
+        employee.InitializeWorker();
     }
 
     public void Remove_Employee(int employeeID)

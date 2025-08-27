@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpawnStarter : MonoBehaviour
 {
@@ -13,6 +14,22 @@ public class SpawnStarter : MonoBehaviour
         gameManager = GameManager.getInstance();
         gameManager.OnOpenChanged += OpenChanged;
 
+        OpenChanged(gameManager.Get_IsOpen());
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = GameManager.getInstance();
+        gameManager.OnOpenChanged += OpenChanged;
         OpenChanged(gameManager.Get_IsOpen());
     }
 

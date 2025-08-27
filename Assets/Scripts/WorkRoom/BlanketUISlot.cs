@@ -12,12 +12,18 @@ public class BlanketSlotUI : MonoBehaviour
     private ItemScript currentData;
     private int count = 0;
 
+    private Make_Cotton makeCottonInstance;
+    private Make_Sewing makeSewingInstance;
+
     private void Awake()
     {
         if (button != null)
         {
             button.onClick.AddListener(OnSlotButtonClicked);
         }
+
+        makeCottonInstance = Make_Cotton.Instance;
+        makeSewingInstance = Make_Sewing.Instance;
     }
 
     public bool HasData(ItemScript data) => currentData == data;
@@ -73,7 +79,7 @@ public class BlanketSlotUI : MonoBehaviour
             countText.text = "";
     }
 
-    private void UpdateCountText()
+    public void UpdateCountText()
     {
         countText.text = currentData != null ? count.ToString() : "";
     }
@@ -96,31 +102,39 @@ public class BlanketSlotUI : MonoBehaviour
 
 
     public void OnMakeButtonClicked()
+
     {
+
         if (currentData == null) return;
+
+
 
         checkPanel.SetActive(false);
 
+
+
         if (currentData.itemType == ItemType.YARN)
         {
-            Make_Cotton.Instance?.HandleMakeClicked(currentData);
+            if (makeCottonInstance != null)
+            {
+                // 재료 소모 및 UI 업데이트는 Make... 스크립트에서 처리하도록 합니다.
+                makeCottonInstance.HandleMakeClicked(currentData, this);
+            }
             Debug.Log("yarn");
         }
+
         else if (currentData.itemType == ItemType.COTTON)
         {
-            Make_Sewing.Instance?.HandleMakeClicked(currentData);
+            if (makeSewingInstance != null)
+            {
+                // 재료 소모 및 UI 업데이트는 Make... 스크립트에서 처리하도록 합니다.
+                makeSewingInstance.HandleMakeClicked(currentData, this);
+            }
             Debug.Log("cotton");
         }
 
-        if (count > 1)
-        {
-            count -= 1;
-            UpdateCountText();
-        }
-        else
-        {
-            ClearSlot();
-        }
     }
+
+
 
 }

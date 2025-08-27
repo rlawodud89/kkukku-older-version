@@ -50,8 +50,6 @@ public class InteriorManager : MonoBehaviour
     private GameObject Home_Button;
     private GameObject RoomBtn;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -87,6 +85,23 @@ public class InteriorManager : MonoBehaviour
     void Update()
     {
         currentSceneName = SceneManager.GetActiveScene().name;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        clickInteriorItem = FindObjectOfType<ClickInteriorItem>();
+        itemParent = GameObject.Find("Pixels")?.transform;
     }
 
     public void CategorySelect(string category)
@@ -204,7 +219,7 @@ public class InteriorManager : MonoBehaviour
             Debug.LogWarning($"Failed to use Interior Item: {item.name}");
         }
 
-        if(item.interiorType == InteriorType.WORKER)
+        if (item.interiorType == InteriorType.WORKER)
         {
             Employee employee = itemObject.GetComponent<Employee>();
             (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
@@ -230,6 +245,9 @@ public class InteriorManager : MonoBehaviour
             {
                 Make_Sewing.Instance.Add_Employee(employee, employee.progressCircle);
             }
+
+            // 퀘스트
+            AddQuestProcess.Instance.AddProcessToQuest("직원 고용하기");
         }
 
         // 인벤토리 아이템 다시 얻어오기 
@@ -240,6 +258,7 @@ public class InteriorManager : MonoBehaviour
     public void ClickTableItem(InteriorScript item)
     {
         PanelClose();
+
 
         if (item.tableType == TableType.WALL_TABLE)
         {
@@ -262,6 +281,7 @@ public class InteriorManager : MonoBehaviour
             table2.interiorScript = item;
         }
 
+       
     }
 
     public void PanelOpen()
@@ -343,7 +363,7 @@ public class InteriorManager : MonoBehaviour
     public void ClickInteriorButton()
     {
         if (interiorMode) return;
-        
+
         interiorMode = true;
 
         tileButton.SetActive(true);

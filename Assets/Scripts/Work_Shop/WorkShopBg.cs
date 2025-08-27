@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -22,14 +23,28 @@ public class WorkShopBg : MonoBehaviour
         gameManager.OnBgTimeChanged += NowtimeChanged;
     }
 
-    private void OnDisable()
+    void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         gameManager.OnBgTimeChanged -= NowtimeChanged;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = GameManager.getInstance();
+
+        NowtimeChanged(gameManager.Get_BgTime());
+        gameManager.OnBgTimeChanged += NowtimeChanged;
     }
 
     private void NowtimeChanged(BgType nowtime)
     {
         SpriteRenderer sr = dayBg.GetComponent<SpriteRenderer>();
+
         if (nowtime == BgType.DAY)
         {
             sr.color = dayColor;

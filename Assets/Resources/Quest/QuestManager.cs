@@ -43,7 +43,7 @@ public class QuestManager : MonoBehaviour
             gameManager.Add_Quest(q.questTitle);
         }
 
-        startAlertIcon.SetActive(activeQuests.Count > 0);
+        //startAlertIcon.SetActive(activeQuests.Count > 0);
 
         if (thenStart) StartQuest(activeQuests);
 
@@ -191,6 +191,8 @@ public class QuestManager : MonoBehaviour
         LoadDBQuests(); ////특별퀘스트 로드
         StartCoroutine(LoadQuestsByLabel_Addressables("quest", 3, thenStart: true));
         StartQuest(activeQuests); // 새로 로드한 퀘스트 시작
+
+        startAlertIcon.SetActive(activeQuests.Count > 0);
     }
     //------------------------시계연결
 
@@ -216,7 +218,7 @@ public class QuestManager : MonoBehaviour
         {
             Debug.Log($"데베에서 불러온 퀘스트: {quest.questTitle}");
         }
-        startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
+        //startAlertIcon.SetActive(activeQuests.Count > 0); // 퀘스트가 있으면 아이콘 표시
         return true;
     }
 
@@ -229,6 +231,7 @@ public class QuestManager : MonoBehaviour
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
             questButtons.Add(questButton);
             questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
+            questButton.transform.Find("QuestImage").GetComponent<UnityEngine.UI.Image>().sprite = currentQuest.questImage;
             if (currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
             else
@@ -912,4 +915,4 @@ public class QuestManager : MonoBehaviour
 
     }
 
-}
+}

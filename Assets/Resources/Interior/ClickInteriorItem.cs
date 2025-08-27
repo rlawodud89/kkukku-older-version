@@ -57,10 +57,37 @@ public class ClickInteriorItem : MonoBehaviour
         //Debug.Log($"Initial Position: {initialPosition}");
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        rend = GetComponent<Renderer>();
+        rend.material = normalMaterial;
+
+        interiorManager = FindObjectOfType<InteriorManager>();
+
+        cam = Camera.main;
+
+        col = GetComponent<Collider2D>();
+
+        gameManager = GameManager.getInstance();
+    }
+
 
     // Update is called once per frame
     void Update()
     {
+        if (interiorManager == null) return;
+
         if (!interiorManager.interiorMode)
         {
             selected = false;
@@ -310,7 +337,9 @@ public class ClickInteriorItem : MonoBehaviour
 
             var d = Physics2D.Distance(col, h);
 
-            if (d.isOverlapped && d.distance < -0.0001f)
+            float margin = -0.05f;  
+
+            if (d.isOverlapped && d.distance < margin)
                 return true;
         }
         return false;

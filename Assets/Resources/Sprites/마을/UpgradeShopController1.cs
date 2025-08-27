@@ -128,6 +128,9 @@ public class UpgradeShopController1 : MonoBehaviour
             DoDecoTableUpgrade);
     }
 
+
+
+
     void DoLoomUpgrade()
     {
         gameManager.Change_Gold(-loomPrice);
@@ -135,6 +138,7 @@ public class UpgradeShopController1 : MonoBehaviour
         loomLevelText.text = "Lv. " + gameManager.Get_LoomLevel().ToString();
         speechType?.Invoke(SpeechType.Trigger);
         Init_UpgradePrice();
+
     }
 
     void DoFillerUpgrade()

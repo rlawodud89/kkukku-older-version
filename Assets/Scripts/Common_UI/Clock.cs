@@ -12,6 +12,7 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private Transform clockHandTransform;
     private GameObject timeTextObject;
+    private TMP_Text timeText;
 
     public GameObject DayEndPanel;
     public TMP_Text goldText;
@@ -28,6 +29,8 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         clockHandTransform.localRotation = Quaternion.Euler(0, 0, 46);
 
         timeTextObject = transform.Find("TimeText")?.gameObject;
+        if (timeTextObject != null)
+            timeText = timeTextObject.GetComponent<TMP_Text>();
 
         InvokeRepeating("AddOneMinute", 0f, 1.25f);
         //InvokeRepeating("AddOneMinute", 0f, 0.05f); 
@@ -59,7 +62,7 @@ public class Clock : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         // 게임 시간 출력
         //Debug.Log("게임 시간: " + gameTimeFormatted);
 
-        TextMeshProUGUI timeText = this.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI timeText = this.GetComponentInChildren<TextMeshProUGUI>(true);
         if (timeText != null)
         {
             timeText.text = gameTimeFormatted;  // UI에 게임 시간 표시

@@ -384,7 +384,7 @@ MonoBehaviour:
     - room_interior
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d3449d73605036469aa630327d8f031
-    m_Address: Quest/Quest 0
+    m_Address: Assets/ScriptableObject/Quests/Quest 0.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - quest
@@ -613,6 +613,36 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1831b8959b9aca147a4ac27e5fc6cb9d
     m_Address: "Assets/ScriptableObject/Items/Blankets/\uD2B9\uD018\uC6A9 \uC774\uBD88/\uBCC4\uBB34\uB2AC\uACE0\uC694\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b32d035c66f4b2c44bf73505ea31d473
+    m_Address: Assets/ScriptableObject/Quests/Quest 4.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 111a565e83221de4588b2b5cfbe78464
+    m_Address: Assets/ScriptableObject/Quests/Quest 5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aca5a04113defd44286aca7cf5ed2cf6
+    m_Address: Assets/ScriptableObject/Quests/Quest 6.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - quest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 847a98563b39a8244b598af6cf99e767
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uC0C8\uBCBD\uC218\uC815\uC774\uBD88.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - blanket
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef30d6fa3e5acde46bec4c09cd84390a
+    m_Address: "Assets/ScriptableObject/Items/Blankets/\uD504\uB9AC\uBBF8\uC5C4\uC774\uBD88/\uAFC8\uC2E4\uD06C\uC774\uBD88.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - blanket

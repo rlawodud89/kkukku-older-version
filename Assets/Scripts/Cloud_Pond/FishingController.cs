@@ -21,8 +21,6 @@ public class FishingController : MonoBehaviour
     private ItemScript currentdata;
     private GameManager gameManager;
 
-
-
     public float minDelay = 4f;
     public float maxDelay = 7f;
 
@@ -37,6 +35,8 @@ public class FishingController : MonoBehaviour
     }
     public void click_fishingbtn()
     {
+        AudioManager.Instance.PlaySFX("fishing");  // 효과음
+
         if (gameManager == null)
         {
             gameManager = GameManager.getInstance();
@@ -58,6 +58,8 @@ public class FishingController : MonoBehaviour
         {
             checkpanel.SetActive(true);
         }
+
+        AddQuestProcess.Instance.AddProcessToQuest("낚시하기");
     }
 
     public void click_fishingstopbtn()

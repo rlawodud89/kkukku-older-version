@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SleepingGardenBg : MonoBehaviour
@@ -17,6 +18,22 @@ public class SleepingGardenBg : MonoBehaviour
     Color nightColor = new Color(0.3f, 0.3f, 1.1f);
 
     void Start()
+    {
+        gameManager = GameManager.getInstance();
+        ChangeBg(gameManager.Get_BgTime());
+        gameManager.OnBgTimeChanged += ChangeBg;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         gameManager = GameManager.getInstance();
         ChangeBg(gameManager.Get_BgTime());

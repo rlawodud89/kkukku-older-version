@@ -156,8 +156,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0.7718, y: -2.026}
+  m_SizeDelta: {x: 21.5436, y: 24.0519}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &129143574
 MonoBehaviour:
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 3123709, guid: 6133d18da485edc4e8e867d7b29df6ca, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -532,8 +532,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000013828, y: -7}
-  m_SizeDelta: {x: 71.2639, y: 35.093}
+  m_AnchoredPosition: {x: 0.000013828, y: 0.8735}
+  m_SizeDelta: {x: 71.2639, y: 19.346}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &209735156
 MonoBehaviour:
@@ -739,18 +739,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 233223301}
-        m_TargetAssemblyTypeName: AddQuestProcess, Assembly-CSharp
-        m_MethodName: AddProcessToQuest
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: d49498dd4eb09ab4a97004492d16e41b, type: 2}
-          m_ObjectArgumentAssemblyTypeName: QuestSO, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &232147307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,50 +777,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232147304}
   m_CullTransparentMesh: 1
---- !u!1 &233223300
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 233223302}
-  - component: {fileID: 233223301}
-  m_Layer: 0
-  m_Name: QuestMananger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &233223301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 233223300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60d0c4317d81d1749aaf39bee3223c47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &233223302
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 233223300}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 532.6056, y: 286.95325, z: -1.4942616}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &364696511
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,7 +830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -15.739}
+  m_AnchoredPosition: {x: 11, y: -10}
   m_SizeDelta: {x: 883.1368, y: 450.13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368345490
@@ -1057,7 +1001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.46670532, y: -15.739014}
+  m_AnchoredPosition: {x: 0.4666748, y: -15.739014}
   m_SizeDelta: {x: -316.68, y: -244.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473545984
@@ -1264,7 +1208,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.46675, y: 100.27}
+  m_AnchoredPosition: {x: 0.46675, y: -139.31}
   m_SizeDelta: {x: 637.4266, y: 26.4863}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &594950990
@@ -1837,8 +1781,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -0.0000038147}
+  m_AnchoredPosition: {x: 3, y: 2.1660976}
+  m_SizeDelta: {x: 24.8877, y: 4.3322}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &866458177
 MonoBehaviour:
@@ -1909,8 +1853,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 246559558, guid: a6691c12efd68f54286ad99b2e23c672, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2116,6 +2060,7 @@ MonoBehaviour:
   checkpanel: {fileID: 733657346}
   materialsInventory: {fileID: 1251304083}
   fishingminigame: {fileID: 1835099941}
+  quest3: {fileID: 11400000, guid: d49498dd4eb09ab4a97004492d16e41b, type: 2}
   minDelay: 3
   maxDelay: 6
 --- !u!4 &1183092197
@@ -2541,7 +2486,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f7d8f8dd6637df4f97f96bad3401f1e, type: 3}
+  m_Sprite: {fileID: 2106109541, guid: 3f7d8f8dd6637df4f97f96bad3401f1e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2716,8 +2661,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: 0.40239978}
-  m_SizeDelta: {x: 182.1271, y: 38.1171}
+  m_AnchoredPosition: {x: 24.2213, y: 0.40239978}
+  m_SizeDelta: {x: 180.5697, y: 38.1171}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1715838668
 MonoBehaviour:
@@ -2790,7 +2735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 0.89964306, b: 0.745283, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3152,6 +3097,5 @@ SceneRoots:
   - {fileID: 1183092197}
   - {fileID: 1585861046}
   - {fileID: 1100642840}
-  - {fileID: 233223302}
   - {fileID: 1251304084}
   - {fileID: 1835099940}

@@ -14,17 +14,17 @@ public class FabricDetailPanelController : MonoBehaviour
 
     public Sprite defaultMaterialSprite; // 기본 이미지 (인스펙터에서 연결)
     private GameManager gameManager;
-    
+
 
     private void Start()
     {
-        if (gameManager== null)
+        if (gameManager == null)
         {
             gameManager = GameManager.getInstance();
         }
     }
 
-    
+
     public void OpenPanel(ItemScript blanket)
     {
 
