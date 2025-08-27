@@ -39,9 +39,9 @@ public class ArrangementWorkRoom : MonoBehaviour
 #endif
         }
 
-        //itemParent = GameObject.Find("Pixels")?.transform;
+        itemParent = GameObject.Find("Pixels")?.transform;
 
-        //installedInteriors = gameManager.Get_Current_RoomInterior();
+        installedInteriors = gameManager.Get_Current_RoomInterior();
 
         //SceneManager.sceneLoaded += OnSceneLoaded;
     }

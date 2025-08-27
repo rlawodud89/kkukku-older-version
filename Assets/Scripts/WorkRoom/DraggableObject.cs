@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class DraggableObject : MonoBehaviour
 {
-    public Tilemap tilemap;          
+    public Tilemap tilemap;
     private Vector3 offset;
     private bool dragging = false;
     private Camera cam;
@@ -13,8 +13,8 @@ public class DraggableObject : MonoBehaviour
 
     void Start()
     {
-        //cam = Camera.main;
-        //interiorManager = FindObjectOfType<InteriorManager>();
+        cam = Camera.main;
+        interiorManager = FindObjectOfType<InteriorManager>();
     }
 
     void OnEnable()
@@ -49,6 +49,8 @@ public class DraggableObject : MonoBehaviour
 
     void OnMouseUp()
     {
+        if (interiorManager == null) interiorManager = FindObjectOfType<InteriorManager>();
+
         if (!interiorManager.interiorMode)
             return;
 

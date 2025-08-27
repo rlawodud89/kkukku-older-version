@@ -40,14 +40,14 @@ public class ClickInteriorItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //rend = GetComponent<Renderer>();
-        //rend.material = normalMaterial;
+        rend = GetComponent<Renderer>();
+        rend.material = normalMaterial;
 
-        //interiorManager = FindObjectOfType<InteriorManager>();
+        interiorManager = FindObjectOfType<InteriorManager>();
 
-        //cam = Camera.main;
+        cam = Camera.main;
 
-        //col = GetComponent<Collider2D>();
+        col = GetComponent<Collider2D>();
 
         // 게임 매니저
         gameManager = GameManager.getInstance();

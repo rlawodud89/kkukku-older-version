@@ -89,6 +89,23 @@ public class InteriorManager : MonoBehaviour
         currentSceneName = SceneManager.GetActiveScene().name;
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 씬이 언로드될 때 콜백 함수 제거
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        clickInteriorItem = FindObjectOfType<ClickInteriorItem>();
+        itemParent = GameObject.Find("Pixels")?.transform;
+    }
+
     public void CategorySelect(string category)
     {
         switch (category)
@@ -204,7 +221,7 @@ public class InteriorManager : MonoBehaviour
             Debug.LogWarning($"Failed to use Interior Item: {item.name}");
         }
 
-        if(item.interiorType == InteriorType.WORKER)
+        if (item.interiorType == InteriorType.WORKER)
         {
             Employee employee = itemObject.GetComponent<Employee>();
             (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(spawnPos.x, spawnPos.y);
@@ -343,7 +360,7 @@ public class InteriorManager : MonoBehaviour
     public void ClickInteriorButton()
     {
         if (interiorMode) return;
-        
+
         interiorMode = true;
 
         tileButton.SetActive(true);
