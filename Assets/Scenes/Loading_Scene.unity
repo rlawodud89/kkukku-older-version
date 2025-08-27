@@ -179,13 +179,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 321644026}
+  m_Texture: {fileID: 314876683}
   m_UVRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 1
-    height: 0.9067524
+    height: 0.8874598
 --- !u!222 &16775612
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241747837}
   m_CullTransparentMesh: 1
---- !u!28 &321644026
+--- !u!28 &314876683
 Texture2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -786,6 +786,7 @@ GameObject:
   - component: {fileID: 1303085196}
   - component: {fileID: 1303085195}
   - component: {fileID: 1303085194}
+  - component: {fileID: 1303085198}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -880,6 +881,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1303085198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303085193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04cb5426a13c72442857471d9d9e404d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextSceneName: Work_Shop
+  minLoadingTime: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
