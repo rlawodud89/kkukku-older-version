@@ -10,6 +10,7 @@ public class Make_Cotton : MonoBehaviour
 
     public GameObject cottonPanel;
     public SewingPanel sewingPanel;
+    public CottonPanel cotton_panel;
     public TextMeshProUGUI announce_text;
 
     private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
@@ -65,16 +66,7 @@ public class Make_Cotton : MonoBehaviour
 
         gameManager.Use_InventoryItem(currentYarn.itemName, 1);
 
-        if (gameManager.Count_InventoryItem(currentYarn.itemName) > 0)
-        {
-            // 재료가 남아있으면 개수만 업데이트합니다.
-            slotUI.SetData(currentYarn, gameManager.Count_InventoryItem(currentYarn.itemName));
-        }
-        else
-        {
-            // 재료가 없으면 슬롯을 비웁니다.
-            slotUI.ClearSlot();
-        }
+        cotton_panel.RefreshInventoryUI();
 
         currentCotton = gameManager.Yarn_to_Cotton(currentYarn.itemName);
         current_employee.workItem = currentCotton;
