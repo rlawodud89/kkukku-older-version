@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class Make_Fabric : MonoBehaviour
     public GameObject Panel;
     public GameObject Panel2;
     public GameObject Scroll_View;
+    public TextMeshProUGUI announce_text;
 
     private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
     private int CurrentID;
@@ -21,7 +23,6 @@ public class Make_Fabric : MonoBehaviour
     public FabricDetailPanelController detailPanelController;
 
     private GameManager gameManager;
-    private bool can_make = false;
 
     private void Awake()
     {
@@ -51,6 +52,9 @@ public class Make_Fabric : MonoBehaviour
 
     public void ClickMakebtn()
     {
+
+        bool can_make = false;
+
         // 딕셔너리에서 현재 직원을 가져옵니다.
         Employee current_employee = Employees[CurrentID].employee;
         ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
@@ -58,10 +62,11 @@ public class Make_Fabric : MonoBehaviour
         // 람다식에 사용할 로컬 변수 생성
         Employee employeeForLambda = current_employee;
 
-        if (current_employee.isWorking)
+        if (current_employee.lackStamina())
         {
-            Debug.Log("작업자가 이미 바쁩니다!");
-            can_make = false; // 작업 중이므로 제작 불가
+            Debug.Log("스태미너가 부족합니다!");
+            ShowAnnounceText("스태미너가 부족합니다.", 2f);
+            return;
         }
         else
         {
@@ -72,6 +77,7 @@ public class Make_Fabric : MonoBehaviour
         if (can_make)
         {
             for (int i = 0; i < currentBlanket.recipe.Count; i++)
+
             {
                 gameManager.Use_InventoryItem(currentBlanket.recipe[i].itemName, currentBlanket.recipe[i].count);
                 Debug.Log(currentBlanket.recipe[i].itemName + currentBlanket.recipe[i].count + "만큼 감소");
@@ -92,21 +98,47 @@ public class Make_Fabric : MonoBehaviour
 
             current_employee.Working();
 
-            // 람다식에 로컬 변수를 사용하여 클로저 버그 방지
+            // 안전하게 로컬 변수에 저장
+            Employee employeeCopy = employeeForLambda;
+            ItemScript blanketCopy = currentBlanket;
+
             progress_circle.OnComplete = () =>
             {
-                gameManager.Set_Worker_WorkingPercent(employeeForLambda.EmployeeID, 0f);
-                Debug.Log(currentBlanket.yarnName + "만듦");
-                showfabric(employeeForLambda);
+                gameManager.Set_Worker_WorkingPercent(employeeCopy.EmployeeID, 0f);
+
+                if (blanketCopy != null)
+                {
+                    Debug.Log(blanketCopy.yarnName + "만듦");
+                }
+                else
+                {
+                    Debug.LogWarning("blanketCopy가 null입니다!");
+                }
+
+                showfabric(employeeCopy);
             };
 
             progress_circle.CompleteCircle(current_employee.EmployeeID);
-            can_make = false;
         }
         else
         {
-            Debug.Log("제작할 수 없습니다!");
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
         }
+    }
+
+    private void ShowAnnounceText(string text, float duration)
+    {
+        if (announce_text == null) return;
+
+        announce_text.text = text;
+        announce_text.gameObject.SetActive(true);
+        StartCoroutine(HideAnnounceTextAfterDelay(duration));
+    }
+
+    private IEnumerator HideAnnounceTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        announce_text.gameObject.SetActive(false);
     }
 
     private bool Check_Recipe(ItemScript currentBlanket)
@@ -148,11 +180,23 @@ public class Make_Fabric : MonoBehaviour
                 fabric_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
+                if (employee.workingPercent > 0)
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0);
+                    employee.workingPercent = 0;
+                }
+
                 gameManager.Set_Worker_workingItem(employee.EmployeeID, null);
                 gameManager.Add_InventoryItem(employee.workItem.itemName, 1);
 
+                employee.workItem = null;
+                progress_circle.elapsed = 0f;
+                employee.isWorking = false;
+
                 cottonPanel?.SetSelectedBlanket();
             });
+
+
         }
         else
         {

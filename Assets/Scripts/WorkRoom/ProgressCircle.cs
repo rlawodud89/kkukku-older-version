@@ -1,18 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class ProgressCircle : MonoBehaviour
 {
+    [Header("UI Elements")]
     public Image fillImage;
     public Image Image;
     public Image completeImage;
 
+
+    [Header("Progress Settings")]
     public float maxProgress;
 
     private bool isRunning = false;
-    public System.Action OnComplete;  // 외부에서 할당 가능
 
+    public System.Action OnComplete;  // 외부에서 할당 가능
     public System.Action OnTaskComplete;
 
     private GameManager gameManager;
@@ -22,12 +26,12 @@ public class ProgressCircle : MonoBehaviour
     public float elapsed = 0f;
     private int lastLevel = -1;
 
+
     private void Start()
     {
         if (gameManager == null)
             gameManager = GameManager.getInstance();
 
-        // 시작 시 레벨 체크
         UpdateMaxProgress();
         ProgressInit();
     }
@@ -67,26 +71,26 @@ public class ProgressCircle : MonoBehaviour
 
         Debug.Log($"[{gameObject.tag}] level={level}, maxProgress={maxProgress}");
     }
+
+
     public void CompleteCircle(int workerID, float startElapsed = 0f)
     {
         this.workerID = workerID;
         elapsed = startElapsed;
 
-        if (!isRunning)
-        {
-            ProgressInit();
-            StartCoroutine(FillOverTime());
-        }
-        else
+        if (isRunning)
         {
             Debug.Log("현재 실행 중입니다. 작업을 완료해주세요.");
             return;
         }
+
+        ProgressInit();
+        StartCoroutine(FillOverTime());
+        gameManager.Set_Worker_StartTime(workerID, DateTime.Now);
     }
 
     public void ProgressInit()
     {
-        isRunning = false;
 
         fillImage.fillAmount = 1;
         Image.gameObject.SetActive(true);
@@ -102,7 +106,11 @@ public class ProgressCircle : MonoBehaviour
         while (elapsed < maxProgress)
         {
             elapsed += Time.deltaTime;
+
+
             float progress = Mathf.Clamp01(1 - (elapsed / maxProgress));
+            
+            
             fillImage.fillAmount = progress;
 
 
@@ -111,8 +119,7 @@ public class ProgressCircle : MonoBehaviour
             // 항상 카메라를 향하게
             transform.forward = Camera.main.transform.forward;
 
-            //Debug.LogWarning(elapsed);
-
+            
             yield return null;
         }
 
@@ -121,17 +128,12 @@ public class ProgressCircle : MonoBehaviour
         Image.gameObject.SetActive(false);
         completeImage.gameObject.SetActive(true);
 
+        gameManager.Set_Worker_WorkingPercent(workerID, 0);
+        Debug.Log(workerID + "완료해서 0으로함.");
+        isRunning = false;
 
-        if (OnTaskComplete != null)
-        {
-            // OnTaskComplete 이벤트를 호출하여 Employee에게 작업 완료를 알립니다.
-            OnTaskComplete.Invoke();
-        }
-
-        if (OnComplete != null)
-        {
-            OnComplete.Invoke();
-        }
+        OnTaskComplete?.Invoke();
+        OnComplete?.Invoke();
 
     }
 

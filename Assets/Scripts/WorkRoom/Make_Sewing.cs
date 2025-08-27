@@ -16,13 +16,14 @@ public class Make_Sewing : MonoBehaviour
     public GameObject BallonPanel;
     public GameObject CompletePanel;
 
+    public TextMeshProUGUI announce_text;
     public Button SewingButton;
     public Image CompleteImage;
     public TextMeshProUGUI CompleteText;
 
     private GameManager gameManager;
     private ItemScript currentBlanket;
-    public bool isMaking;
+
 
     private void Awake()
     {
@@ -45,12 +46,19 @@ public class Make_Sewing : MonoBehaviour
     public void HandleMakeClicked(ItemScript currentSewing, BlanketSlotUI slotUI)
     {
         Employee current_employee = Employees[CurrentID].employee;
+
         if (current_employee.isWorking)
         {
-            Debug.Log("작업자가 이미 다른 작업을 하고 있습니다!");
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
             return;
         }
 
+        if (current_employee.lackStamina())
+        {
+            Debug.Log("스태미너가 부족합니다!");
+            ShowAnnounceText("스태미너가 부족합니다.", 2f);
+            return;
+        }
 
         ProgressCircle progress_circle = Employees[CurrentID].progressCircle;
 
@@ -58,10 +66,7 @@ public class Make_Sewing : MonoBehaviour
         Employee employeeForLambda = current_employee;
 
 
-        currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
-        current_employee.workItem = currentBlanket;
-        gameManager.Set_Worker_workingItem(current_employee.EmployeeID, currentBlanket.itemName);
-
+        gameManager.Use_InventoryItem(currentSewing.itemName, 1);
 
 
         if (gameManager.Count_InventoryItem(currentSewing.itemName) > 0)
@@ -75,15 +80,19 @@ public class Make_Sewing : MonoBehaviour
             slotUI.ClearSlot();
         }
 
-        isMaking = true;
+        currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
+        current_employee.workItem = currentBlanket;
+        gameManager.Set_Worker_workingItem(current_employee.EmployeeID, currentBlanket.itemName);
+
         sewingPanel.SetActive(false);
+
         current_employee.Working();
 
         progress_circle.CompleteCircle(current_employee.EmployeeID);
     }
 
     // showsewing 함수가 Employee 객체를 인수로 받도록 수정
-    void showsewing(Employee employee)
+    public void showsewing(Employee employee)
     {
         ProgressCircle progress_circle = Employees[employee.EmployeeID].progressCircle;
         GameObject ballon_Panel = employee.ballonPanel;
@@ -95,6 +104,8 @@ public class Make_Sewing : MonoBehaviour
             sewing_button.gameObject.SetActive(true);
             sewing_button.image.sprite = employee.workItem.image;
 
+            ItemScript finishedItem = employee.workItem;
+
             sewing_button.onClick.RemoveAllListeners();
             sewing_button.onClick.AddListener(() =>
             {
@@ -103,18 +114,44 @@ public class Make_Sewing : MonoBehaviour
                 progress_circle.ProgressInit();
 
                 CompletePanel.SetActive(true);
-                CompleteImage.sprite = employee.workItem.image;
-                CompleteText.text = employee.workItem.itemName + "이 완성되었습니다!";
-                isMaking = false;
+                CompleteImage.sprite = finishedItem.image;
+                CompleteText.text = finishedItem.itemName + "이 완성되었습니다!";
 
+                // 진행도 초기화
+                if (employee.workingPercent > 0)
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0);
+                    employee.workingPercent = 0;
+                }
+
+                // 작업 완료 처리
                 gameManager.Set_Worker_workingItem(employee.EmployeeID, null);
-                gameManager.Add_InventoryItem(employee.workItem.itemName, 1);
+                gameManager.Add_InventoryItem(finishedItem.itemName, 1);
+
+                employee.workItem = null;
+                progress_circle.elapsed = 0f;
+                employee.isWorking = false;
             });
         }
         else
         {
             Debug.Log("null");
         }
+    }
+
+    private void ShowAnnounceText(string text, float duration)
+    {
+        if (announce_text == null) return;
+
+        announce_text.text = text;
+        announce_text.gameObject.SetActive(true);
+        StartCoroutine(HideAnnounceTextAfterDelay(duration));
+    }
+
+    private IEnumerator HideAnnounceTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        announce_text.gameObject.SetActive(false);
     }
 
     public void ClickCompleteBtn()

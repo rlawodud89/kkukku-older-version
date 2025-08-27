@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor.UIElements;
 using static UnityEditor.Progress;
+using System;
 
 public class Employee : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Employee : MonoBehaviour
     public Button ItemButton;
 
     public System.Action OnWorkComplete;
-    public bool isWorking { get; private set; } = false;
+    public bool isWorking { get; set; } = false;
 
     public Staminar staminar;
     public SnacksInventory snacksInventory;
@@ -43,17 +44,13 @@ public class Employee : MonoBehaviour
 
     void Update()
     {
-        // ProgressCircle의 현재 진행도(elapsed)를 기준으로 isWorking을 판단합니다.
-        // 작업이 시작되었고 아직 완료되지 않았을 때만 true입니다.
+
         if (progressCircle.elapsed > 0 && progressCircle.elapsed < progressCircle.maxProgress)
-        {
             isWorking = true;
-        }
         else
-        {
             isWorking = false;
-        }
     }
+
 
     public void InitializeWorker()
     {
@@ -66,12 +63,35 @@ public class Employee : MonoBehaviour
         float x = this.transform.position.x;
         float y = this.transform.position.y;
 
-        (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
+        (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
         this.workItem = workItem;
         this.workingPercent= workingPercent;
 
         Debug.Log(workerID +" "+ workingPercent);
+
         progressCircle.RefreshMaxProgress();
+
+        // [핵심 수정] 작업 시작 시간이 있다면 진행도를 다시 계산합니다.
+        if (startTime != DateTime.MinValue && workingPercent < progressCircle.maxProgress)
+        {
+            // 씬을 나간 시간과 작업 시작 시간의 차이를 계산합니다.
+            double timePassed = DateTime.Now.Subtract(startTime).TotalSeconds;
+
+            // 지난 시간을 기존 진행도에 더합니다.
+            workingPercent += (float)timePassed;
+
+            // 진행도가 최대치를 넘기지 않도록 합니다.
+            workingPercent = Mathf.Min(workingPercent, progressCircle.maxProgress);
+            gameManager.Set_Worker_WorkingPercent(EmployeeID, workingPercent);
+            Debug.Log(workingPercent);
+        }
+
+
+        if (workItem == null || workingPercent <= 0)
+        {
+            progressCircle.elapsed = 0f;
+            isWorking = false;
+        }
 
         // 1. 작업이 '진행 중'일 때
         // workingPercent가 0보다 크고, 아직 완료되지 않았을 경우
@@ -80,6 +100,7 @@ public class Employee : MonoBehaviour
             progressCircle.ProgressInit();
             progressCircle.CompleteCircle(workerID, workingPercent);
         }
+
 
         // 2. 작업이 '완료'되었을 때
         // workingPercent가 maxProgress와 같거나 클 경우
@@ -93,14 +114,17 @@ public class Employee : MonoBehaviour
             progressCircle.ProgressInit();
             progressCircle.completeImage.gameObject.SetActive(true);
             progressCircle.fillImage.gameObject.SetActive(false);
-            progressCircle.Image.gameObject.SetActive(false); 
+            progressCircle.Image.gameObject.SetActive(false);
         }
         // 3. 작업이 '없는' 상태이거나, 진행도가 0일 때
         else
         {
             progressCircle.ProgressInit();
+
         }
     }
+
+
 
     public void GiveItem(ItemScript item)
     {
@@ -117,19 +141,22 @@ public class Employee : MonoBehaviour
         gameManager.Change_Worker_Stamina(EmployeeID, item.value);
     }
 
-    public void Working()
+
+    public bool lackStamina()
     {
-
-        if (staminar.currentStamina<5)
+        if (staminar.currentStamina < 5)
         {
-            Debug.Log("스태미너가 부족합니다!");
-            return;
+            return true;
         }
+        return false;
 
+    }
+
+    public void Working() { 
         staminar.Addstamina(-5);
-
         gameManager.Change_Worker_Stamina(EmployeeID, -5);
     }
+
 
 
     public void ShowFloatingText(string text)

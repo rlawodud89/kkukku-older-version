@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
@@ -69,7 +70,7 @@ public class ArrangementWorkRoom : MonoBehaviour
                 if (item.interiorType == InteriorType.WORKER)
                 {
                     Employee employee = go.GetComponent<Employee>();
-                    (int workerID, int stamina, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
+                    (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
                     employee.EmployeeID = workerID;
                     employee.staminar.currentStamina=stamina;
                     employee.workItem = workItem;

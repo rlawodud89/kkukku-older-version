@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class Make_Cotton : MonoBehaviour
 
     public GameObject cottonPanel;
     public SewingPanel sewingPanel;
+    public TextMeshProUGUI announce_text;
 
     private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
     private int CurrentID;
@@ -44,7 +46,14 @@ public class Make_Cotton : MonoBehaviour
         
         if (current_employee.isWorking)
         {
-            Debug.Log("작업자가 이미 다른 작업을 하고 있습니다!");
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
+            return;
+        }
+
+        if (current_employee.lackStamina())
+        {
+            Debug.Log("스태미너가 부족합니다!");
+            ShowAnnounceText("스태미너가 부족합니다.", 2f);
             return;
         }
 
@@ -54,7 +63,6 @@ public class Make_Cotton : MonoBehaviour
         Employee employeeForLambda = current_employee;
 
 
-        Debug.Log("Make_Cotton에서 Make 버튼 클릭됨 감지!");
         gameManager.Use_InventoryItem(currentYarn.itemName, 1);
 
         if (gameManager.Count_InventoryItem(currentYarn.itemName) > 0)
@@ -79,7 +87,7 @@ public class Make_Cotton : MonoBehaviour
     }
 
 
-    void showcotton(Employee employee)
+    public void showcotton(Employee employee)
     {
         ProgressCircle progress_circle = Employees[employee.EmployeeID].progressCircle;
         GameObject ballon_Panel = employee.ballonPanel;
@@ -91,6 +99,9 @@ public class Make_Cotton : MonoBehaviour
             cotton_button.gameObject.SetActive(true);
             cotton_button.image.sprite = employee.workItem.image;
 
+            // 안전하게 로컬 변수에 저장
+            ItemScript finishedItem = employee.workItem;
+
             cotton_button.onClick.RemoveAllListeners();
             cotton_button.onClick.AddListener(() =>
             {
@@ -98,8 +109,21 @@ public class Make_Cotton : MonoBehaviour
                 cotton_button.gameObject.SetActive(false);
                 progress_circle.ProgressInit();
 
+                // 진행도 초기화
+                if (employee.workingPercent > 0)
+                {
+                    gameManager.Set_Worker_WorkingPercent(employee.EmployeeID, 0);
+                    employee.workingPercent = 0;
+                }
+
+                // 작업 완료 처리
                 gameManager.Set_Worker_workingItem(employee.EmployeeID, null);
-                gameManager.Add_InventoryItem(employee.workItem.itemName, 1);
+                gameManager.Add_InventoryItem(finishedItem.itemName, 1);
+
+                employee.workItem = null;
+                progress_circle.elapsed = 0f;
+                employee.isWorking = false;
+
                 sewingPanel?.SetSelectedBlanket();
             });
         }
@@ -108,6 +132,22 @@ public class Make_Cotton : MonoBehaviour
             Debug.Log("null");
         }
     }
+
+    private void ShowAnnounceText(string text, float duration)
+    {
+        if (announce_text == null) return;
+
+        announce_text.text = text;
+        announce_text.gameObject.SetActive(true);
+        StartCoroutine(HideAnnounceTextAfterDelay(duration));
+    }
+
+    private IEnumerator HideAnnounceTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        announce_text.gameObject.SetActive(false);
+    }
+
 
     public void Add_Employee(Employee employee, ProgressCircle progressCircle)
     {
