@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ClickSome : MonoBehaviour
@@ -15,6 +16,23 @@ public class ClickSome : MonoBehaviour
     private GameManager gameManager;
 
     void Start()
+    {
+        interiorManager = FindObjectOfType<InteriorManager>();
+        gameManager = GameManager.getInstance();
+
+        canvasTransform = GameObject.Find("UICanvas")?.transform;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         interiorManager = FindObjectOfType<InteriorManager>();
         gameManager = GameManager.getInstance();

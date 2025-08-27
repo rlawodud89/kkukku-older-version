@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 
@@ -20,6 +21,23 @@ public class TileManager : MonoBehaviour
         gameManager.OnTileChanged += TileChanged;
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = GameManager.getInstance();
+        Sprite current_tile = gameManager.Get_Current_Tile(posType);
+        ReplaceAllWallTiles(SpriteToTile(current_tile));
+
+        gameManager.OnTileChanged += TileChanged;
+    }
 
     private void ReplaceAllWallTiles(TileBase selectedWallTile)
     {
