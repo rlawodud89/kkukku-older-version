@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour
     public GameObject interiorButton;
     public float spacing = 60f;          // 버튼 사이 간격
     public float delay = 0.05f;          // 애니메이션 간 딜레이
-    public float fadeTime = 0.2f;        // 투명도 애니메이션 시간
+    public float fadeTime = 0.5f;        // 투명도 애니메이션 시간
     private bool isMenuOpen = false;
 
     public GameObject storeSign;
@@ -413,6 +413,7 @@ public class MenuController : MonoBehaviour
     private void OnConfirm(string placeName)
     {
         gameManager.Set_EndScene(placeName);
-        SceneManager.LoadScene(placeName);
+        //SceneManager.LoadScene(placeName);
+        Fader.GoConcurrent(placeName);
     }
 }

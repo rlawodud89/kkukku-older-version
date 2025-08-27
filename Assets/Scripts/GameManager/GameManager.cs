@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     // GameManager에서 사용하는 상수
     private static float gameStartTime = 25200; // 오전 7시 (7 * 3600)
-    private static float gameDuration = 75f; // 75초(1.25분)에 1시간 (30분에 24시간)
+    private static float gameDuration = 5f; // 75초(1.25분)에 1시간 (30분에 24시간)
     private static int dayHours = 7;
     private static int eveningHours = 15;
     private static int nightHours = 22;
@@ -407,7 +407,7 @@ public class GameManager : MonoBehaviour
     public void Go_Next_Days()
     {
         isDayEndPanel = false;
-        playTime += gameStartTime; // 0시 0분 되면 아침 시간(7시 0분)으로 넘어감
+        playTime += gameStartTime;
         dbManager.Update_PlayTime(playTime);
 
         todayGold = 0;
@@ -419,9 +419,10 @@ public class GameManager : MonoBehaviour
         if (currentScene.name != "Work_Shop")
         {
             Set_EndScene("Work_Shop");
-            SceneManager.LoadScene("Work_Shop");
         }
+        Fader.GoConcurrent("Loading_Scene");
     }
+
 
 
 
