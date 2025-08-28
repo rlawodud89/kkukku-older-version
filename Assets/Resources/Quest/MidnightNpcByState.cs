@@ -59,19 +59,27 @@ public class MidnightNpcByState : MonoBehaviour
         if (state != null) state.OnIndexChanged -= HandleIndexChanged;
     }
 
+    /*
     private void HandleIndexChanged(int newIndex)
     {
         var sc = GetActiveScenario(newIndex);
-        bool shouldShow = (sc != null) && sc.stepQuest != null && !sc.stepQuest.isCompleted;
-        if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
-    }
+        bool completed = (sc?.stepQuest != null) && sc.stepQuest.isCompleted;
+        bool shouldShow = (sc != null) && sc.stepQuest != null && !completed;
 
+        Debug.Log($"[Midnight] idx={newIndex}, sc={(sc != null ? sc.stepIndex.ToString() : "null")}, " +
+                  $"quest={(sc?.stepQuest ? sc.stepQuest.name : "null")}, isCompleted={completed}, " +
+                  $"rootActive={rootToToggle?.activeSelf}, stateID={(state ? state.GetInstanceID() : 0)}");
+
+        if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
+    }*/
+
+    /*
     private Scenario GetActiveScenario(int idx)
     {
         for (int i = 0; i < scenarios.Count; i++)
             if (scenarios[i].stepIndex == idx) return scenarios[i];
         return null;
-    }
+    }*/
 
     public void OnClickButton() { TryInteract(); } // UI Button.onClick에 연결
 
@@ -145,4 +153,32 @@ public class MidnightNpcByState : MonoBehaviour
 
         _turnInLock = false;
     }
+
+    // 옵션으로 Runner를 참조 받아서, 인덱스로 현재 퀘스트를 확인
+    public QuestChainRunner runner;
+
+    private void HandleIndexChanged(int newIndex)
+    {
+        var sc = GetActiveScenario(newIndex);
+        bool shouldShow = (sc != null) && sc.stepQuest != null && !sc.stepQuest.isCompleted;
+        if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
+    }
+
+    // 인덱스 매칭 실패 시, 현재 단계의 퀘스트와 '참조 동일성'으로도 매칭 시도
+    private Scenario GetActiveScenario(int idx)
+    {
+        // 1) 인덱스로 먼저 찾기
+        for (int i = 0; i < scenarios.Count; i++)
+            if (scenarios[i].stepIndex == idx) return scenarios[i];
+
+        // 2) 실패하면 현재 단계의 QuestSO와 같은 참조를 가진 시나리오를 찾기
+        var curQuest = runner ? runner.GetQuestAt(idx) : null;
+        if (curQuest)
+        {
+            for (int i = 0; i < scenarios.Count; i++)
+                if (scenarios[i].stepQuest == curQuest) return scenarios[i];
+        }
+        return null;
+    }
+
 }
