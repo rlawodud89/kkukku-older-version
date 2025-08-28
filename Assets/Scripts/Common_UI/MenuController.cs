@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 using TMPro;
-using UnityEditor.Tilemaps;
 using System.Linq;
 
 
@@ -128,7 +126,7 @@ public class MenuController : MonoBehaviour
         }
 
         menuAlertIcon.SetActive(shouldShow);
-        Debug.Log($"🔔 menuAlertIcon.SetActive({shouldShow})");
+        //Debug.Log($"🔔 menuAlertIcon.SetActive({shouldShow})");
     }
 
 

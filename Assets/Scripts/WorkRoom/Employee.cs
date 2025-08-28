@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.UIElements;
-using static UnityEditor.Progress;
 using System;
 
 public class Employee : MonoBehaviour
