@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: "\uC720\uB2C8\uCF58_Quest 4"
   m_EditorClassIdentifier: 
   questTitle: "\uC81C\uB300\uB85C \uB41C \uC774\uBD88 (2)"
+  questImage: {fileID: 0}
   questDescription: "\uBAA8\uC740 \uC7AC\uB8CC\uB97C \uC0AC\uC6A9\uD574\uC11C \uAC1C\uC778
     \uC81C\uC791\uB300\uC5D0\uC11C '\uBCC4\uBB34\uB2AC\uACE0\uC694 \uC774\uBD88'\uC744
     \uB9CC\uB4E4\uC790.\n\uC740\uD558\uAFC8\uC2E4 x1\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
