@@ -28,9 +28,6 @@ public class BlanketButtonPanel : MonoBehaviour
         if (gameManager == null)
         {
             gameManager= GameManager.getInstance();
-            gameManager.Add_InventoryItem("달조각", 10);
-            gameManager.Add_InventoryItem("운무솜", 10);
-            gameManager.Add_InventoryItem("꿈실", 10);
         }
 
         storagePanel.InitScroll();
