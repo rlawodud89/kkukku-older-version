@@ -54,6 +54,15 @@ public class MenuController : MonoBehaviour
         audioManager = AudioManager.Instance;
     }
 
+    private void OnDestroy()
+    {
+        if (gameManager != null)
+        {
+            gameManager.OnOpenChanged -= OpenChanged;
+        }
+    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -237,13 +246,13 @@ public class MenuController : MonoBehaviour
                 confirmText.text = $"가게를 여시겠습니까?";
 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
+                yesButton.onClick.RemoveAllListeners(); // 중복 제거
                 yesButton.onClick.AddListener(() =>
                 {
-                    //ChangeImage();
                     storeSignPopup.SetActive(false);
                     gameManager.Set_IsOpen(true);
-
                 });
+
 
                 // No 버튼 클릭 시 팝업 닫기
                 Button noButton = storeSignPopup.transform.Find("NoButton").GetComponent<Button>();
