@@ -911,8 +911,6 @@ public class QuestManager : MonoBehaviour
             if (title) title.color = specialTitleColor;
             if (result) result.color = specialTitleColor;
         }
-
-
     }
 
 }
