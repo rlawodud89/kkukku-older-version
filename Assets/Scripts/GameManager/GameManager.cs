@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, InteriorScript> Workers = new Dictionary<string, InteriorScript>();
     private Dictionary<string, InteriorScript> Tiles = new Dictionary<string, InteriorScript>();
 
-    private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
     private Dictionary<string, LetterSO> Letters = new Dictionary<string, LetterSO>();
 
