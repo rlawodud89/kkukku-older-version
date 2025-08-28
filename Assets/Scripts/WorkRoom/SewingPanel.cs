@@ -44,7 +44,7 @@ public class SewingPanel : MonoBehaviour
         RefreshInventoryUI();
     }
 
-    private void RefreshInventoryUI()
+    public void RefreshInventoryUI()
     {
         if (gameManager == null)
             gameManager = GameManager.getInstance();

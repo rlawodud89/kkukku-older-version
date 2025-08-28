@@ -9,10 +9,13 @@ public class SnackSlotUI : MonoBehaviour
     public TextMeshProUGUI countText;
     public Sprite defaultSprite;
 
+    public Image Text_image;
+
     public void SetData(ItemScript data, int count)
     {
         icon.sprite = data.image;
         countText.text = count.ToString();
+        Text_image.gameObject.SetActive(true);
         gameObject.SetActive(true);
     }
 
@@ -21,5 +24,6 @@ public class SnackSlotUI : MonoBehaviour
         Debug.Log("clear");
         icon.sprite = defaultSprite;
         countText.text = "";
+        Text_image.gameObject.SetActive(false);
     }
 }

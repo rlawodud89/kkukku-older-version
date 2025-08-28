@@ -9059,6 +9059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cottonPanel: {fileID: 481227446}
   sewingPanel: {fileID: 618415793}
+  cotton_panel: {fileID: 101457252}
   announce_text: {fileID: 1625625721}
   BallonPanel: {fileID: 0}
   CottonButton: {fileID: 0}
@@ -12969,8 +12970,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.1261, y: -152}
-  m_SizeDelta: {x: 799.76, y: 50}
+  m_AnchoredPosition: {x: -19.053, y: -152}
+  m_SizeDelta: {x: 601.826, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1625625721
 MonoBehaviour:
@@ -16395,6 +16396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sewingPanel: {fileID: 715886591}
+  sewing_panel: {fileID: 618415793}
   BallonPanel: {fileID: 0}
   CompletePanel: {fileID: 1501528578}
   announce_text: {fileID: 1625625721}

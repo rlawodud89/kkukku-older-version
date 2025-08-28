@@ -54,25 +54,14 @@ public class MenuController : MonoBehaviour
         audioManager = AudioManager.Instance;
     }
 
-    void OnEnable()
+    private void OnDestroy()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (gameManager != null)
+        {
+            gameManager.OnOpenChanged -= OpenChanged;
+        }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        gameManager = GameManager.getInstance();
-
-        isOpen = gameManager.Get_IsOpen();
-        targetImage.sprite = isOpen ? openSprite : closeSprite;
-
-        gameManager.OnOpenChanged += OpenChanged;
-        audioManager = AudioManager.Instance;
-    }
 
     // Update is called once per frame
     void Update()
@@ -107,7 +96,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (currentSceneName == "Moonlight_Hill" || currentSceneName == "Cloud_Pond" || currentSceneName == "Village")
+        if (currentSceneName == "Moonlight_Hill"||currentSceneName == "Cloud_Pond"||currentSceneName == "Village")
         {
             energy.SetActive(false);
             energyLevel.SetActive(false);
@@ -163,7 +152,7 @@ public class MenuController : MonoBehaviour
 
         isMenuOpen = !isMenuOpen;
 
-
+        
     }
 
     IEnumerator ShowMenu()
@@ -257,13 +246,13 @@ public class MenuController : MonoBehaviour
                 confirmText.text = $"가게를 여시겠습니까?";
 
                 Button yesButton = storeSignPopup.transform.Find("YesButton").GetComponent<Button>();
+                yesButton.onClick.RemoveAllListeners(); // 중복 제거
                 yesButton.onClick.AddListener(() =>
                 {
-                    //ChangeImage();
                     storeSignPopup.SetActive(false);
                     gameManager.Set_IsOpen(true);
-
                 });
+
 
                 // No 버튼 클릭 시 팝업 닫기
                 Button noButton = storeSignPopup.transform.Find("NoButton").GetComponent<Button>();

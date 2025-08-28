@@ -81,7 +81,7 @@ public class Employee : MonoBehaviour
             // 진행도가 최대치를 넘기지 않도록 합니다.
             workingPercent = Mathf.Min(workingPercent, progressCircle.maxProgress);
             gameManager.Set_Worker_WorkingPercent(EmployeeID, workingPercent);
-            Debug.Log(workingPercent);
+
         }
 
 

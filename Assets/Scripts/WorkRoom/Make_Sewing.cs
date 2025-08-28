@@ -9,6 +9,7 @@ public class Make_Sewing : MonoBehaviour
     public static Make_Sewing Instance { get; private set; }
 
     public GameObject sewingPanel;
+    public SewingPanel sewing_panel;
 
     private Dictionary<int, (Employee employee, ProgressCircle progressCircle)> Employees;
     private int CurrentID;
@@ -68,17 +69,7 @@ public class Make_Sewing : MonoBehaviour
 
         gameManager.Use_InventoryItem(currentSewing.itemName, 1);
 
-
-        if (gameManager.Count_InventoryItem(currentSewing.itemName) > 0)
-        {
-            // 재료가 남아있으면 개수만 업데이트합니다.
-            slotUI.SetData(currentSewing, gameManager.Count_InventoryItem(currentSewing.itemName));
-        }
-        else
-        {
-            // 재료가 없으면 슬롯을 비웁니다.
-            slotUI.ClearSlot();
-        }
+        sewing_panel.RefreshInventoryUI();
 
         currentBlanket = gameManager.Cotton_to_Blanket(currentSewing.itemName);
         current_employee.workItem = currentBlanket;
