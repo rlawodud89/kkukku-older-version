@@ -17,7 +17,11 @@ MonoBehaviour:
   questDescription: "\uC5F4\uC2EC\uD788 \uC77C\uD558\uB294 \uC9C1\uC6D0\uC5D0\uAC8C
     \uAC04\uC2DD\uC744 \uC8FC\uACE0 \uD798\uC744 \uBD81\uB3CB\uC6CC \uC8FC\uC138\uC694.
     \r"
-  rewards: []
+  rewards:
+  - rewardType: "\uC6D4\uC11D"
+    amount: 200
+  - rewardType: "\uC7AC\uD654"
+    amount: 200
   questProcess: 0
   questComplete: 1
   isCompleted: 0
