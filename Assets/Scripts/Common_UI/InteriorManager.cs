@@ -308,6 +308,11 @@ public class InteriorManager : MonoBehaviour
                 Table1Btn.SetActive(false);
                 Table2Btn.SetActive(false);
 
+                // 다른 버튼들 안보이게
+                InteriorInventoryButton.SetActive(false);
+                InteriorExitButton.SetActive(false);
+                tileButton.SetActive(false);
+
                 shopInteriorPanel.SetActive(true);
                 SetTableItem();
             }
@@ -322,7 +327,7 @@ public class InteriorManager : MonoBehaviour
             {
                 roomInteriorPanel.SetActive(false);
 
-                // 다른 버튼들 안보이게
+                // 다른 버튼들 보이게
                 InteriorInventoryButton.SetActive(true);
                 InteriorExitButton.SetActive(true);
                 tileButton.SetActive(true);
@@ -333,6 +338,11 @@ public class InteriorManager : MonoBehaviour
             if (shopInteriorPanel != null)
             {
                 shopInteriorPanel.SetActive(false);
+
+                // 다른 버튼들 보이게
+                InteriorInventoryButton.SetActive(true);
+                InteriorExitButton.SetActive(true);
+                tileButton.SetActive(true);
             }
         }
     }
