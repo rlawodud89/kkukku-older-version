@@ -73,12 +73,12 @@ public class AudioManager : MonoBehaviour
     {
         if (next.name == "Prolog")
         {
-            bgmAudioSource.Stop();
+            bgmAudioSource.Pause();
         }
         else
         {
             audioMixer.SetFloat("BGM", Mathf.Log10(gameManager.Get_BgSound()) * 20);
-            bgmAudioSource.Play();
+            bgmAudioSource.UnPause();
         }
     }
 
