@@ -38,7 +38,7 @@ public class DBManager
         testdbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop_test.db");
 #endif
         // SQLite 연결
-        conn = new SQLiteConnection(testdbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
+        conn = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
     }
 
     public bool HaveDB()
