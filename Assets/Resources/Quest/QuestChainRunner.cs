@@ -260,8 +260,17 @@ public class QuestChainRunner : MonoBehaviour
                 return false;
 
             case ReqType.CraftRecipeFlag:
-                return craftedFlags.Contains(s.requirement.itemId);
+                {
+                    // 필요하면 수량도 쓰도록 requiredCount 사용(없으면 1로)
+                    string id = s.requirement.itemId?.Trim();
+                    if (string.IsNullOrEmpty(id)) return false;
 
+                    int need = Mathf.Max(1, s.requirement.requiredCount);
+                    bool craftedRuntime = craftedFlags.Contains(id);
+                    bool existsInDb = gameManager.Count_InventoryItem(id) >= need;
+
+                    return craftedRuntime || existsInDb;
+                }
             default:
                 return false;
         }
