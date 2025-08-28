@@ -23,7 +23,7 @@ MonoBehaviour:
     amount: 200
   questProcess: 1
   questComplete: 1
-  isCompleted: 1
-  getReward: 1
+  isCompleted: 0
+  getReward: 0
   isSpecial: 0
   nextQuest: {fileID: 0}

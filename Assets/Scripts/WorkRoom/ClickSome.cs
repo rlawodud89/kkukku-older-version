@@ -89,10 +89,6 @@ public class ClickSome : MonoBehaviour
         {
             SetPanel(this.gameObject);
         }
-        else
-        {
-            Debug.Log($"Panel and ScrollView are already set for {this.gameObject.name}");
-        }
     }
 
     void OnMouseDown()

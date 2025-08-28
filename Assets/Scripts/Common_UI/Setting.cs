@@ -9,13 +9,13 @@ public class Setting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void PanelClose()
@@ -28,9 +28,17 @@ public class Setting : MonoBehaviour
         this.gameObject.SetActive(true);
     }
 
-    // 프롤로그 다시보기
-    public void ClickReplayButton()
+    public void ClickProlog()
     {
         SceneManager.LoadScene("Prolog");
+    }
+
+    public void ClickExit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 }

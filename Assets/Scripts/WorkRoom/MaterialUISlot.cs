@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MaterialUISlot : MonoBehaviour
 {
     public Image image;        // 슬롯에 표시될 이미지
+    public Image Text_image;
     public TextMeshProUGUI countTexts;
     public Sprite defaultSprite;
 
@@ -26,6 +27,10 @@ public class MaterialUISlot : MonoBehaviour
         if (image != null)
             image.sprite = currentData.image;
 
+
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(true); // ✅ 다시 활성화
+
         UpdateCountText();
 
     }
@@ -41,6 +46,9 @@ public class MaterialUISlot : MonoBehaviour
 
         if (countTexts != null)
             countTexts.text = "";
+
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(false); // ✅ 비활성화
     }
 
     private void UpdateCountText()

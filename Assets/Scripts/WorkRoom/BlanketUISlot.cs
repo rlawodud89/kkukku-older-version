@@ -8,6 +8,7 @@ public class BlanketSlotUI : MonoBehaviour
     public TextMeshProUGUI countText;
     public GameObject checkPanel;
     public Sprite defaultSprite;
+    public Image Text_image;
 
     private ItemScript currentData;
     private int count = 0;
@@ -24,6 +25,10 @@ public class BlanketSlotUI : MonoBehaviour
 
         makeCottonInstance = Make_Cotton.Instance;
         makeSewingInstance = Make_Sewing.Instance;
+
+        // 시작 시 숫자 배경 꺼두기
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(false);
     }
 
     public bool HasData(ItemScript data) => currentData == data;
@@ -77,11 +82,17 @@ public class BlanketSlotUI : MonoBehaviour
 
         if (countText != null)
             countText.text = "";
+
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(false); // ✅ 배경 비활성화
     }
 
     public void UpdateCountText()
     {
         countText.text = currentData != null ? count.ToString() : "";
+
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(currentData != null); // ✅ 아이템 있을 때만 켜기
     }
 
     private void OnSlotButtonClicked()
