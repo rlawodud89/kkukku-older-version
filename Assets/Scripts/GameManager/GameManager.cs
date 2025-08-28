@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     private DBManager dbManager;
 
-
     // 사용자 정보
     private int days;
     private int hours;
@@ -61,7 +60,6 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, InteriorScript> Workers = new Dictionary<string, InteriorScript>();
     private Dictionary<string, InteriorScript> Tiles = new Dictionary<string, InteriorScript>();
 
-    private Dictionary<string, CustomerScript> Customers = new Dictionary<string, CustomerScript>();
     private Dictionary<string, QuestSO> Quests = new Dictionary<string, QuestSO>();
     private Dictionary<string, LetterSO> Letters = new Dictionary<string, LetterSO>();
 
@@ -103,20 +101,35 @@ public class GameManager : MonoBehaviour
     public bool isCatUpgraded;
 
 
-    //싱글톤 패턴 위한 private 생성자, 인스턴스 반환 정적 메서드
-    private GameManager() { }
-    public static GameManager getInstance() { return instance; }
+    //싱글톤 패턴 위한 인스턴스 반환 정적 메서드
+    public static GameManager getInstance()
+    {
+        if (instance == null)
+        {
+            // 혹시 아직 할당 안 됐으면 찾기 시도
+            instance = FindObjectOfType<GameManager>();
+
+            // 그래도 없으면 새로 만들기
+            if (instance == null)
+            {
+                GameObject go = new GameObject("GameManager");
+                instance = go.AddComponent<GameManager>();
+            }
+        }
+        return instance;
+    }
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
         {
             Destroy(gameObject);
-            return; // 기존 인스턴스 유지, 새 객체는 바로 리턴
         }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
 
         dbManager = DBManager.getInstance();
 
@@ -178,9 +191,10 @@ public class GameManager : MonoBehaviour
             if (isOpen)
             {
                 Set_IsOpen(false);
-                //OnshopCloseHours?.Invoke();
             }
         }
+
+        if (dbManager == null) dbManager = DBManager.getInstance();
 
         dbSaveTimer += Time.deltaTime;
         if (dbSaveTimer >= dbSaveInterval)

@@ -90,13 +90,7 @@ public class QuestManager : MonoBehaviour
             gameManager = GameManager.getInstance();
             yield return null; // 한 프레임 대기
         }
-        // 퀘스트 데이터 로드
-        //QuestSO quest = Resources.Load<QuestSO>("Quest1"); 
-        //StartQuest(quest);  // 퀘스트 시작
 
-        //StartQuest(quests);   // 나중에 아침 시작할 때 퀘스트 주는걸로 바꾸기 
-
-        //// 사용자가 껏다 켯을때, 저장되었을 때 상태 불러오기 ////
 
         //WipeAllQuestRows();
 
@@ -109,15 +103,6 @@ public class QuestManager : MonoBehaviour
             StartNewDay();
         }
 
-        //gameManager.Add_InventoryItem("은하꿈실", 1);
-        //gameManager.Add_InventoryItem("오로라빛이불", 1);
-        //gameManager.Add_InventoryItem("햇빛운무솜", 1);
-        //gameManager.Add_InventoryItem("몽환의꽃잎", 1);
-        //gameManager.Add_InventoryItem("햇빛운무솜", 1);
-        //gameManager.Add_InventoryItem("몽환의꽃잎", 1);
-        //gameManager.Add_InventoryItem("청야달조각", 2);
-        //Debug.Log($"[INV] 청야달조각: {gameManager.Count_InventoryItem("청야달조각")}");
-        //Debug.Log($"[INV] 오로라빛이불: {gameManager.Count_InventoryItem("오로라빛이불")}");
 
     }
 
@@ -231,7 +216,17 @@ public class QuestManager : MonoBehaviour
             GameObject questButton = Instantiate(questButtonPrefab, scrollContent.transform);
             questButtons.Add(questButton);
             questButton.transform.Find("QuestTitle").GetComponent<TMPro.TextMeshProUGUI>().text = currentQuest.questTitle;
-            questButton.transform.Find("QuestImage").GetComponent<UnityEngine.UI.Image>().sprite = currentQuest.questImage;
+            if (currentQuest.questImage == null)
+            {
+                Debug.Log("퀘스트이미지 없음");
+                questButton.transform.Find("QuestImage").gameObject.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("퀘스트이미지 있음");
+                questButton.transform.Find("QuestImage").GetComponent<UnityEngine.UI.Image>().sprite = currentQuest.questImage;
+            }
+            
             if (currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
             else
@@ -713,9 +708,10 @@ public class QuestManager : MonoBehaviour
         {
             activeQuests.Add(quest);
             PlusQuest(quest);   // ★ 특퀘 버튼 생성
+            gameManager.Add_Quest(quest.questTitle);
         }
 
-        // 데베에 추가
+
         PanelOpen();
 
         // 버튼 경유 말고 바로 내용 패널 띄우기
@@ -802,8 +798,13 @@ public class QuestManager : MonoBehaviour
         questButtons.Clear();
 
         // scrollContent 밑에 혹시 남아있는 자식도 깔끔히 제거
-        foreach (Transform child in scrollContent.transform)
-            Destroy(child.gameObject);
+        if(scrollContent.transform != null)
+        {
+            foreach (Transform child in scrollContent.transform)
+                if (child != null)
+                    Destroy(child.gameObject);
+        }
+        
     }
 
 

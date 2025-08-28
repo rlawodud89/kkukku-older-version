@@ -25,13 +25,9 @@ public class StartManagment : MonoBehaviour
         audioSource.Play();  // 효과음
 
         // PlayerPrefs에 FirstPlay 값이 있는지 확인
-        if (!PlayerPrefs.HasKey("FirstPlayer"))
+        if (!dbManager.HaveDB())
         {
-            // 처음 실행이므로 프롤로그로 이동
-            PlayerPrefs.SetInt("FirstPlayer", 1);
-            PlayerPrefs.Save();
-
-            if (!dbManager.HaveDB()) dbManager.InitDB();
+            dbManager.InitDB();
             SceneManager.LoadScene("Prolog");
         }
         else
