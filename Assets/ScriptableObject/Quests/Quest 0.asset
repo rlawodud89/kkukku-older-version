@@ -18,9 +18,9 @@ MonoBehaviour:
     \uC774\uBD88\uAC00\uAC8C\uB97C \uB354 \uD3EC\uADFC\uD558\uAC8C \uAFB8\uBA70\uBCF4\uC138\uC694.\r"
   rewards:
   - rewardType: "\uC6D4\uC11D"
-    amount: 5
+    amount: 200
   - rewardType: "\uC7AC\uD654"
-    amount: 5
+    amount: 100
   questProcess: 0
   questComplete: 1
   isCompleted: 0

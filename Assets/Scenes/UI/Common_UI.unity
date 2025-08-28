@@ -851,8 +851,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -31, y: -40.886738}
-  m_SizeDelta: {x: 655.7958, y: 441.0766}
+  m_AnchoredPosition: {x: -42.09834, y: -40.886738}
+  m_SizeDelta: {x: 633.5991, y: 441.0766}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &52821442
 MonoBehaviour:
@@ -5000,8 +5000,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 249}
-  m_SizeDelta: {x: 280.8313, y: 68.7176}
+  m_AnchoredPosition: {x: 0.000015259, y: 251}
+  m_SizeDelta: {x: 351.92, y: 68.7176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &521116292
 MonoBehaviour:
@@ -10063,7 +10063,7 @@ GameObject:
   - component: {fileID: 1038829944}
   - component: {fileID: 1038829943}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ReplayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

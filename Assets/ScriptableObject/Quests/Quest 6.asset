@@ -16,7 +16,11 @@ MonoBehaviour:
   questImage: {fileID: 21300000, guid: e0d351a12ce14024ea6b89d303fdf7ef, type: 3}
   questDescription: "\uC218\uBA74\uC815\uC6D0\uC5D0\uC11C \uC774\uBD88\uC7AC\uB8CC\uB97C
     \uCC44\uC9D1\uD574\uBCF4\uC138\uC694."
-  rewards: []
+  rewards:
+  - rewardType: "\uC7AC\uD654"
+    amount: 150
+  - rewardType: "\uC6D4\uC11D"
+    amount: 200
   questProcess: 0
   questComplete: 1
   isCompleted: 0

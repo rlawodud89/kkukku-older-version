@@ -18,8 +18,10 @@ MonoBehaviour:
     \uD574\uBD10\uC694."
   rewards:
   - rewardType: "\uC6D4\uC11D"
-    amount: 10
-  questProcess: 4
+    amount: 200
+  - rewardType: "\uC7AC\uD654"
+    amount: 100
+  questProcess: 0
   questComplete: 1
   isCompleted: 0
   getReward: 0
