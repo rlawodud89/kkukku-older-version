@@ -8,6 +8,7 @@ public class MaterialUISlotBtn : MonoBehaviour
     public Button button;                // 슬롯 버튼 (Image 포함)
     public TextMeshProUGUI countTexts;
 
+    public Image Text_image;
     private ItemScript currentData;
     private int count = 0;
 
@@ -30,6 +31,9 @@ public class MaterialUISlotBtn : MonoBehaviour
             button.gameObject.SetActive(true);       // 보이게
         }
 
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(true); // ✅ 비활성화
+
         UpdateCountText();
     }
 
@@ -46,6 +50,9 @@ public class MaterialUISlotBtn : MonoBehaviour
 
         if (countTexts != null)
             countTexts.text = "";
+
+        if (Text_image != null)
+            Text_image.gameObject.SetActive(false); // ✅ 비활성화
     }
 
     private void UpdateCountText()
