@@ -7,16 +7,12 @@ using System.Linq;
 
 public class DBManager
 {
-    private static DBManager instance = new DBManager();
-    private static string dbPath_NotBuild = "Assets/StreamingAssets/comforter_shop.db";
+    private static DBManager instance;
     private static string dbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop.db");
-    private static string testdbPath_NotBuild = "Assets/StreamingAssets/comforter_shop_test.db";
-    private static string testdbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop_test.db");
-    private static SQLiteConnection conn;
+    private static SQLiteConnection conn = new SQLiteConnection(dbPath);
     private static string userName = "user";
 
     //싱글톤 패턴 위한 인스턴스 반환 정적 메서드
-    // 싱글톤 접근
     public static DBManager getInstance()
     {
         if (instance == null)
@@ -24,21 +20,6 @@ public class DBManager
             instance = new DBManager();
         }
         return instance;
-    }
-
-    // private 생성자
-    private DBManager()
-    {
-        // 런타임 시점에서 안전하게 경로 세팅
-#if UNITY_EDITOR
-        dbPath = System.IO.Path.Combine(Application.dataPath, "StreamingAssets/comforter_shop.db");
-        testdbPath = System.IO.Path.Combine(Application.dataPath, "StreamingAssets/comforter_shop_test.db");
-#else
-        dbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop.db");
-        testdbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop_test.db");
-#endif
-        // SQLite 연결
-        conn = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
     }
 
     public bool HaveDB()

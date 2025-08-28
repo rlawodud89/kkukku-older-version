@@ -18,12 +18,12 @@ MonoBehaviour:
     \uC0AC\uC11C \uAC00\uAC8C \uBD84\uC704\uAE30\uB97C \uC5C5\uADF8\uB808\uC774\uB4DC\uD574\uC694.\r"
   rewards:
   - rewardType: "\uC6D4\uC11D"
-    amount: 50
+    amount: 100
   - rewardType: "\uD3EC\uADFC\uC5D0\uB108\uC9C0"
-    amount: 50
+    amount: 200
   questProcess: 1
   questComplete: 1
-  isCompleted: 1
-  getReward: 1
+  isCompleted: 0
+  getReward: 0
   isSpecial: 0
   nextQuest: {fileID: 0}

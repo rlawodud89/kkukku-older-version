@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: "\uC720\uB2C8\uCF58_Quest 1"
   m_EditorClassIdentifier: 
   questTitle: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C\uB85C"
+  questImage: {fileID: 0}
   questDescription: "\uBBF8\uB4DC\uB098\uC787\uC5D0\uAC8C '\uC624\uB85C\uB77C\uBE5B\uC774\uBD88'\uB97C
     \uAC00\uC838\uB2E4 \uC8FC\uC790.\n\uBBF8\uB4DC\uB098\uC787\uC740 \uB9C8\uC744\uC5D0
     \uC788\uB2E4."
   rewards:
   - rewardType: "\uC7AC\uD654"
-    amount: 5
+    amount: 150
   questProcess: 0
   questComplete: 0
   isCompleted: 0

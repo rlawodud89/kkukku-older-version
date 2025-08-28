@@ -42,6 +42,8 @@ public class VillageBg : MonoBehaviour
 
     private void ChangeBg(BgType bgType)
     {
+        if (BgImage == null) return;
+
         if (bgType == BgType.DAY)
         {
             BgImage.sprite = daySprite;

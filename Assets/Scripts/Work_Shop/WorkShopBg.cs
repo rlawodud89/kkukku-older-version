@@ -17,6 +17,8 @@ public class WorkShopBg : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("WorkShopBg Start");
+
         gameManager = GameManager.getInstance();
 
         NowtimeChanged(gameManager.Get_BgTime());
@@ -43,6 +45,8 @@ public class WorkShopBg : MonoBehaviour
 
     private void NowtimeChanged(BgType nowtime)
     {
+        if (dayBg == null) return;
+
         SpriteRenderer sr = dayBg.GetComponent<SpriteRenderer>();
 
         if (nowtime == BgType.DAY)
