@@ -8,8 +8,10 @@ using System.Linq;
 public class DBManager
 {
     private static DBManager instance = new DBManager();
-    private static string dbPath = "Assets/StreamingAssets/comforter_shop.db";
-    private static string testdbPath = "Assets/StreamingAssets/comforter_shop_test.db";
+    private static string dbPath_NotBuild = "Assets/StreamingAssets/comforter_shop.db";
+    private static string dbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop.db");
+    private static string testdbPath_NotBuild = "Assets/StreamingAssets/comforter_shop_test.db";
+    private static string testdbPath = System.IO.Path.Combine(Application.streamingAssetsPath, "comforter_shop_test.db");
     private static SQLiteConnection conn = new SQLiteConnection(testdbPath);
     private static string userName = "user";
 
