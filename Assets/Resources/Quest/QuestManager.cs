@@ -802,10 +802,13 @@ public class QuestManager : MonoBehaviour
         questButtons.Clear();
 
         // scrollContent 밑에 혹시 남아있는 자식도 깔끔히 제거
+        if(scrollContent.transform != null)
+        {
+            foreach (Transform child in scrollContent.transform)
+                if (child != null)
+                    Destroy(child.gameObject);
+        }
         
-        foreach (Transform child in scrollContent.transform)
-            if (child != null)
-                Destroy(child.gameObject);
     }
 
 
