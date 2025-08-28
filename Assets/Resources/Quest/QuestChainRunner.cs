@@ -82,7 +82,9 @@ public class QuestChainRunner : MonoBehaviour
     // 제작 성공/특정 산출물 플래그
     private readonly HashSet<string> craftedFlags = new();
 
-
+    [Header("체인 완료 시 지급할 편지(선택)")]
+    [Tooltip("체인(모든 단계) 완료하면 이 이름의 편지를 한번만 지급합니다.")]
+    public string letterNameOnComplete;   // 예: "제대로 된 이불"
     // ====== Unity ======
 
     private IEnumerator Start()
@@ -272,14 +274,18 @@ public class QuestChainRunner : MonoBehaviour
 
         if (IsChainFinished())
         {
+            // ★ 여기서 편지 지급 시도
+            TryGrantCompletionLetterOnce();
+
             onChainCompleted?.Invoke();
             if (state != null) state.SetChainCompleted(true);
             return;
         }
 
         RefreshJournal();
-        MaybeNotifyAppear(); // 다음 단계로 넘어왔을 때 등장 이벤트 체크
+        MaybeNotifyAppear();
     }
+
     private void MaybeNotifyAppear()
     {
         if (IsChainFinished()) return;
@@ -396,7 +402,23 @@ public class QuestChainRunner : MonoBehaviour
         return src;
     }
 
+    
+    // ===[ 완료 편지 지급 헬퍼 ]==========================
+    private void TryGrantCompletionLetterOnce()
+    {
+        // 이름이 비었으면 아무 것도 안 함
+        var name = letterNameOnComplete?.Trim();
+        if (string.IsNullOrEmpty(name) || gameManager == null) return;
 
+        // 이미 있는지 확인(중복 방지)
+        var currentLetters = gameManager.Get_Current_Letter(); // List<LetterScript>
+        bool alreadyHas = currentLetters != null && currentLetters.Exists(l => l.letterName == name);
+        if (alreadyHas) return;
+
+        // 지급
+        Debug.Log($"[QuestChainRunner] 체인 완료! 편지 지급: {name}");
+        gameManager.Add_Letter(name);
+    }
 
     // ====== 외부에서 참조하기 쉬운 헬퍼 (NPC 등에서 사용) ======
     public int CurrentIndex => currentIndex;
@@ -404,5 +426,7 @@ public class QuestChainRunner : MonoBehaviour
     public QuestSO GetQuestAt(int index) => (index >= 0 && index < steps.Count) ? steps[index].quest : null;
     public ReqType GetReqTypeAt(int index) => (index >= 0 && index < steps.Count) ? steps[index].requirement.type : ReqType.None;
     public string GetReqItemIdAt(int index) => (index >= 0 && index < steps.Count) ? steps[index].requirement.itemId : null;
+
+
 }
 
