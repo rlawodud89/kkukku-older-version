@@ -412,7 +412,7 @@ public class QuestChainRunner : MonoBehaviour
 
         // 이미 있는지 확인(중복 방지)
         var currentLetters = gameManager.Get_Current_Letter(); // List<LetterScript>
-        bool alreadyHas = currentLetters != null && currentLetters.Exists(l => l.letterName == name);
+        bool alreadyHas = currentLetters != null && currentLetters.Exists(l => l.title == name);
         if (alreadyHas) return;
 
         // 지급
