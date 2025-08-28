@@ -4324,8 +4324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fa44d020c178ad419c939cb91985e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerSpawn: 1
-  oneShot: 1
   prefab: {fileID: 2327600310463068422, guid: fe16e0180d60b784bbe085aee0edfc5f, type: 3}
   spawnPoint: {fileID: 854647195}
   grid: {fileID: 1730844466}
