@@ -17,6 +17,8 @@ public class WorkShopBg : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("WorkShopBg Start");
+
         gameManager = GameManager.getInstance();
 
         NowtimeChanged(gameManager.Get_BgTime());
