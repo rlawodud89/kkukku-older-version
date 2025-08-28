@@ -2060,7 +2060,6 @@ MonoBehaviour:
   checkpanel: {fileID: 733657346}
   materialsInventory: {fileID: 1251304083}
   fishingminigame: {fileID: 1835099941}
-  quest3: {fileID: 11400000, guid: d49498dd4eb09ab4a97004492d16e41b, type: 2}
   minDelay: 3
   maxDelay: 6
 --- !u!4 &1183092197
@@ -2429,6 +2428,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409431200}
   m_CullTransparentMesh: 1
+--- !u!1 &1444117990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1444117992}
+  - component: {fileID: 1444117991}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1444117991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444117990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b611d22eaf7c0394d9cd07afe4ecbe34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDayEndPanel: 0
+  isFoxUpgraded: 0
+  isSheepUpgraded: 0
+  isCatUpgraded: 0
+--- !u!4 &1444117992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444117990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 239.52225, y: 193.7833, z: -2.5460927}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1519789192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3099,3 +3146,4 @@ SceneRoots:
   - {fileID: 1100642840}
   - {fileID: 1251304084}
   - {fileID: 1835099940}
+  - {fileID: 1444117992}

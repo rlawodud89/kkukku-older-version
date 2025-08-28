@@ -45,6 +45,8 @@ public class WorkShopBg : MonoBehaviour
 
     private void NowtimeChanged(BgType nowtime)
     {
+        if (dayBg == null) return;
+
         SpriteRenderer sr = dayBg.GetComponent<SpriteRenderer>();
 
         if (nowtime == BgType.DAY)

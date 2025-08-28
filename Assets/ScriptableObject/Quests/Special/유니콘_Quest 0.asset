@@ -20,7 +20,7 @@ MonoBehaviour:
     (93/1)"
   rewards:
   - rewardType: "\uC7AC\uD654"
-    amount: 5
+    amount: 150
   questProcess: 0
   questComplete: 0
   isCompleted: 0

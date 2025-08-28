@@ -21,7 +21,7 @@ MonoBehaviour:
     \uC774\uBD88\uC744 \uB9CC\uB4E4\uC5B4\uC8FC\uC2DC\uACA0\uC5B4\uC694?\u201D"
   rewards:
   - rewardType: "\uC7AC\uD654"
-    amount: 5
+    amount: 150
   questProcess: 0
   questComplete: 0
   isCompleted: 0
