@@ -325,7 +325,11 @@ public class GameManager : MonoBehaviour
     }
 
     public int Get_EnergyLevel() { return (int)(energy / oneEnergyLevel); }
-    public float Get_EnergyPercent() { return ((energy % oneEnergyLevel) / oneEnergyLevel) * 100; }
+    public float Get_EnergyPercent()
+    {
+        float percent = ((energy % oneEnergyLevel) / oneEnergyLevel) * 100f;
+        return Mathf.Round(percent * 100f) / 100f;  // 소수점 둘째자리까지 반올림
+    }
     public void Change_Energy(int delta)
     {
         if (delta <= 0) return;
