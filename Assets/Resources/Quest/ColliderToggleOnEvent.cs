@@ -28,16 +28,12 @@ public class ColliderToggleOnEvent : MonoBehaviour
     private void TurnOn()
     {
         Debug.Log($"[Listener:{name}] TurnOn()");
-        if (target) target.SetActive(true);
-        if (col3D) col3D.enabled = true;
         if (col2D) col2D.enabled = true;
     }
 
     private void TurnOff()
     {
         Debug.Log($"[Listener:{name}] TurnOff()");
-        if (target) target.SetActive(false);
-        if (col3D) col3D.enabled = false;
         if (col2D) col2D.enabled = false;
     }
 }
