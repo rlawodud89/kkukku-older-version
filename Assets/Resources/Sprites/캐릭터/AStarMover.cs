@@ -14,7 +14,7 @@ public class AStarMover : MonoBehaviour
     public bool allowDiagonal = false;
     public float arriveThreshold = 0.05f;
     public float waitAtShelfSeconds = 1.0f;
-    public float waitAtCashierSeconds = 1.0f;
+    public float waitAtCashierSeconds = 1.0f;  // 캐셔 앞에서 더 이상 안 멈추지만 필드 유지(디자이너용)
     public bool autoStart = true;
 
     [Header("Obstacle")]
@@ -43,7 +43,7 @@ public class AStarMover : MonoBehaviour
     [Tooltip("결제 금액 대비 에너지 증가 비율(금액 * 계수)")]
     public float energyPerGold = 0.02f;
 
-    int _pendingPayment = 0;
+    // int _pendingPayment = 0;               // ★ CHANGED: 즉시 결제로 변경 → 사용 안 함, 제거
     bool _pickedBlanket = false;
     int _buyVisitIndex = 0;
 
@@ -64,8 +64,6 @@ public class AStarMover : MonoBehaviour
     // 상태
     bool _questAccepted = false;
     bool _waitPanelClose = false;   // ★ 패널 닫힘을 기다릴지 여부
-
-
 
     // ───────────── Init 주입 ─────────────
     public void Init(Grid g, NavPoint start, NavPoint[] doors, NavPoint[] shelves, NavPoint cashier)
@@ -156,7 +154,6 @@ public class AStarMover : MonoBehaviour
     }
 
     // ───────────── 퀘스트 루틴 ─────────────
-    // 수락 처리: 수락만 하고, 떠나지는 않음 (패널 닫힘까지 대기)
     public void AcceptQuest()
     {
         if (_questAccepted) return;
@@ -166,9 +163,7 @@ public class AStarMover : MonoBehaviour
         _waitPanelClose = true; // ★ 패널 닫힘 신호 올 때까지 기다림
         QuestManager.Instance?.OpenQuestFromNpc(this, offeredQuest); // ★ 퀘스트 전달
     }
-  
 
-    // 퀘스트 패널이 닫혔을 때 QuestManager가 불러줄 메서드
     public void OnQuestPanelClosed()
     {
         _waitPanelClose = false; // 이제 떠나도 됨
@@ -183,19 +178,15 @@ public class AStarMover : MonoBehaviour
 
         ShowMarker(true);
 
-        // ★ 수락되거나 시간초과까지 대기
         float t = 0f;
         while (t < questWaitSeconds && !_questAccepted) { t += Time.deltaTime; yield return null; }
         ShowMarker(false);
 
-        // ★ 수락된 경우: 패널이 닫힐 때까지 추가 대기
         if (_questAccepted)
         {
-            // 안전장치로 무한대기 방지하고 싶다면 타임아웃도 가능
             while (_waitPanelClose) yield return null;
         }
 
-        // 이후 퇴장
         if (doorPoints != null && doorPoints.Length > 0)
             yield return MoveToPoint(FindNearestPoint(doorPoints), reserve: false);
         if (startPoint) yield return MoveToPoint(startPoint, reserve: false);
@@ -221,12 +212,14 @@ public class AStarMover : MonoBehaviour
             yield return MoveToPoint(p, reserve: !p.allowOverlap);
             yield return new WaitForSeconds(waitAtShelfSeconds);
 
+            // 한 번만 픽업(=즉시 결제)
             if (!_pickedBlanket && _buyVisitIndex > 0 && i == _buyVisitIndex)
                 TryPickBlanketAtPoint(p);
         }
 
-        if (_pendingPayment > 0)
-            yield return PayAtCashier();
+        // ★ CHANGED: 항상 캐셔 앞을 '지나만' 감(대기/정산 없음)
+        if (cashierPoint)
+            yield return MoveToPoint(cashierPoint, reserve: !cashierPoint.allowOverlap);
 
         if (doorPoints != null && doorPoints.Length > 0)
             yield return MoveToPoint(FindNearestPoint(doorPoints), reserve: false);
@@ -242,32 +235,20 @@ public class AStarMover : MonoBehaviour
         if (gm == null) { Debug.LogWarning("GameManager 인스턴스가 없습니다."); return; }
 
         int price = gm.Use_RandomOne_BlanketInTable(p.tableId);
-        if (price > 0)
+        if (price > 0 && !_pickedBlanket)
         {
-            _pendingPayment += price;
             _pickedBlanket = true;
-            Debug.Log($"[AStarMover] Picked blanket: table {p.tableId}, price {price}");
-        }
-    }
 
-    IEnumerator PayAtCashier()
-    {
-        if (_pendingPayment <= 0) yield break;
-        if (!cashierPoint) yield break;
-
-        yield return MoveToPoint(cashierPoint, reserve: !cashierPoint.allowOverlap);
-        yield return new WaitForSeconds(waitAtCashierSeconds);
-
-        var gm = GameManager.getInstance();
-        if (gm != null)
-        {
-            gm.Change_Gold(_pendingPayment);
-            int energyDelta = Mathf.RoundToInt(_pendingPayment * energyPerGold);
+            // ★ CHANGED: 픽업 즉시 결제(씬 전환/소멸에도 안전)
+            gm.Change_Gold(price);
+            int energyDelta = Mathf.RoundToInt(price * energyPerGold);
             if (energyDelta != 0) gm.Change_Energy(energyDelta);
-        }
 
-        _pendingPayment = 0;
+            Debug.Log($"[AStarMover] 즉시 결제: table {p.tableId}, price {price} (캐셔 대기 없음)");
+        }
     }
+
+    // PayAtCashier() 제거됨  // ★ CHANGED
 
     // ───────────── 마커 표시(스프라이트) ─────────────
     void OnMouseDown() { if (questMode) AcceptQuest(); }
@@ -460,4 +441,3 @@ public class AStarMover : MonoBehaviour
 
     void OnDisable() => CellReservation.ReleaseAll(this);
 }
-
