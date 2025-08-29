@@ -53,13 +53,16 @@ public class FishingController : MonoBehaviour
 
             fishing_btn.gameObject.SetActive(false);
             fishing_closebtn.gameObject.SetActive(true);
+
+            // 퀘스트
+            AddQuestProcess.Instance.AddProcessToQuest("낚시하기");
         }
         else
         {
             checkpanel.SetActive(true);
         }
 
-        AddQuestProcess.Instance.AddProcessToQuest("낚시하기");
+        
     }
 
     public void click_fishingstopbtn()
