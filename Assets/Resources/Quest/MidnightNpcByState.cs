@@ -1,7 +1,7 @@
+// MidnightNpcByState.cs
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,10 +44,11 @@ public class MidnightNpcByState : MonoBehaviour
     private IEnumerator Start()
     {
         if (rootToToggle == null) rootToToggle = gameObject;
+
         while (gameManager == null)
         {
             gameManager = GameManager.getInstance();
-            yield return null; // 한 프레임 대기
+            yield return null;
         }
 
         if (state != null) state.OnIndexChanged += HandleIndexChanged;
@@ -59,7 +60,6 @@ public class MidnightNpcByState : MonoBehaviour
         if (state != null) state.OnIndexChanged -= HandleIndexChanged;
     }
 
-    
     private void HandleIndexChanged(int newIndex)
     {
         var sc = GetActiveScenario(newIndex);
@@ -67,19 +67,13 @@ public class MidnightNpcByState : MonoBehaviour
         bool shouldShow = (sc != null) && sc.stepQuest != null && !completed;
 
         Debug.Log($"[Midnight] idx={newIndex}, sc={(sc != null ? sc.stepIndex.ToString() : "null")}, " +
-                  $"quest={(sc?.stepQuest ? sc.stepQuest.name : "null")}, isCompleted={completed}, " +
-                  $"rootActive={rootToToggle?.activeSelf}, stateID={(state ? state.GetInstanceID() : 0)}");
+                  $"quest={(sc?.stepQuest ? sc.stepQuest.name : "null")}, " +
+                  $"isCompleted={completed}, rootActive={(rootToToggle ? rootToToggle.activeSelf : (bool?)null)}, " +
+                  $"stateID={(state ? state.GetInstanceID() : 0)}");
 
-        if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
+        if (rootToToggle && rootToToggle.activeSelf != shouldShow)
+            rootToToggle.SetActive(shouldShow);
     }
-
-    /*
-    private Scenario GetActiveScenario(int idx)
-    {
-        for (int i = 0; i < scenarios.Count; i++)
-            if (scenarios[i].stepIndex == idx) return scenarios[i];
-        return null;
-    }*/
 
     public void OnClickButton() { TryInteract(); } // UI Button.onClick에 연결
 
@@ -130,11 +124,9 @@ public class MidnightNpcByState : MonoBehaviour
         if (hideNpcAfterThanks && rootToToggle.activeSelf)
             rootToToggle.SetActive(false);
 
-       
         // ★ 보상 패널을 QuestManager에서 열게 함
         float delay = (thanksPanel != null) ? thanksSeconds : 0f;
         StartCoroutine(OpenRewardAfterDelay(sc.stepQuest, delay));
-        
     }
 
     private void HideThanksPanel()
@@ -142,7 +134,7 @@ public class MidnightNpcByState : MonoBehaviour
         if (thanksPanel != null) thanksPanel.SetActive(false);
     }
 
-    private System.Collections.IEnumerator OpenRewardAfterDelay(QuestSO quest, float delay)
+    private IEnumerator OpenRewardAfterDelay(QuestSO quest, float delay)
     {
         if (delay > 0f) yield return new WaitForSeconds(delay);
         if (thanksPanel != null) thanksPanel.SetActive(false);
@@ -154,31 +146,23 @@ public class MidnightNpcByState : MonoBehaviour
         _turnInLock = false;
     }
 
-    // 옵션으로 Runner를 참조 받아서, 인덱스로 현재 퀘스트를 확인
-    public QuestChainRunner runner;
-    /*
-    private void HandleIndexChanged(int newIndex)
-    {
-        var sc = GetActiveScenario(newIndex);
-        bool shouldShow = (sc != null) && sc.stepQuest != null && !sc.stepQuest.isCompleted;
-        if (rootToToggle.activeSelf != shouldShow) rootToToggle.SetActive(shouldShow);
-    }*/
-
     // 인덱스 매칭 실패 시, 현재 단계의 퀘스트와 '참조 동일성'으로도 매칭 시도
     private Scenario GetActiveScenario(int idx)
     {
-        // 1) 인덱스로 먼저 찾기
+        // 1) 인덱스 매칭 우선
         for (int i = 0; i < scenarios.Count; i++)
             if (scenarios[i].stepIndex == idx) return scenarios[i];
 
-        // 2) 실패하면 현재 단계의 QuestSO와 같은 참조를 가진 시나리오를 찾기
-        var curQuest = runner ? runner.GetQuestAt(idx) : null;
-        if (curQuest)
+        // 2) 실패하면 같은 state를 쓰는 러너가 있으면 현재 단계 QuestSO로 참조 매칭
+        if (QuestChainRunner.TryGetRunner(state, out var runner))
         {
-            for (int i = 0; i < scenarios.Count; i++)
-                if (scenarios[i].stepQuest == curQuest) return scenarios[i];
+            var curQuest = runner.GetQuestAt(idx);
+            if (curQuest)
+            {
+                for (int i = 0; i < scenarios.Count; i++)
+                    if (scenarios[i].stepQuest == curQuest) return scenarios[i];
+            }
         }
         return null;
     }
-
 }
