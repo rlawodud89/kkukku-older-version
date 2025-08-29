@@ -3410,9 +3410,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onAppearChannel: {fileID: 11400000, guid: a423964b0e55abe4aa484cc06c0f989c, type: 2}
   onCompleteChannel: {fileID: 11400000, guid: 1618ae3d27b3e9c48845faf37818d894, type: 2}
-  target: {fileID: 0}
+  target: {fileID: 46905762285492363, guid: 4c24d0ba5cd2f4e4eac4dd969f26ae3b, type: 3}
   col3D: {fileID: 0}
-  col2D: {fileID: 0}
+  col2D: {fileID: 4903639167590142346, guid: 4c24d0ba5cd2f4e4eac4dd969f26ae3b, type: 3}
 --- !u!4 &403012700
 Transform:
   m_ObjectHideFlags: 0
