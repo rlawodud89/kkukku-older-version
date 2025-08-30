@@ -30,7 +30,8 @@ public class Employee : MonoBehaviour
 
         if (progressCircle != null)
         {
-            progressCircle.OnTaskComplete = () => {
+            progressCircle.OnTaskComplete = () =>
+            {
                 if (OnWorkComplete != null)
                 {
                     // ProgressCircle의 작업이 완료되면, OnWorkComplete 이벤트를 호출합니다.
@@ -54,7 +55,7 @@ public class Employee : MonoBehaviour
     {
         if (gameManager == null)
         {
-            gameManager=GameManager.getInstance();
+            gameManager = GameManager.getInstance();
         }
         // Worker의 위치를 기반으로 GameManager에서 저장된 정보를 불러옵니다.
         // 여기서 x, y는 Worker 오브젝트의 위치를 사용한다고 가정합니다.
@@ -63,9 +64,9 @@ public class Employee : MonoBehaviour
 
         (int workerID, int stamina, DateTime startTime, ItemScript workItem, float workingPercent) = gameManager.Get_Worker_Info(x, y);
         this.workItem = workItem;
-        this.workingPercent= workingPercent;
+        this.workingPercent = workingPercent;
 
-        Debug.Log(workerID +" "+ workingPercent);
+        Debug.Log(workerID + " " + workingPercent);
 
         progressCircle.RefreshMaxProgress();
 
@@ -127,9 +128,9 @@ public class Employee : MonoBehaviour
     public void GiveItem(ItemScript item)
     {
         snacksInventory.GiveSnackToEmployee(item);
-        Debug.Log("GiveSnackToEmployee 호출됨"+item.value);
+        Debug.Log("GiveSnackToEmployee 호출됨" + item.value);
 
-        if (staminar.currentStamina+item.value > staminar.maxStamina)
+        if (staminar.currentStamina + item.value > staminar.maxStamina)
         {
             Debug.Log("스태미너가 충분합니다!");
         }
@@ -150,7 +151,8 @@ public class Employee : MonoBehaviour
 
     }
 
-    public void Working() { 
+    public void Working()
+    {
         staminar.Addstamina(-5);
         gameManager.Change_Worker_Stamina(EmployeeID, -5);
     }

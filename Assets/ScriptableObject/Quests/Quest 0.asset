@@ -21,7 +21,7 @@ MonoBehaviour:
     amount: 200
   - rewardType: "\uC7AC\uD654"
     amount: 100
-  questProcess: 0
+  questProcess: 2
   questComplete: 1
   isCompleted: 0
   getReward: 0

@@ -23,6 +23,6 @@ MonoBehaviour:
   questProcess: 0
   questComplete: 0
   isCompleted: 0
-  getReward: 0
+  getReward: 1
   isSpecial: 1
   nextQuest: {fileID: 11400000, guid: 66e68def1237ae34ea358c10158f1c30, type: 2}

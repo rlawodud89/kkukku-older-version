@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interiorName: "\uC9D9\uC740\uB098\uBB34\uBC14\uB2E5"
   interiorType: 4
-  image: {fileID: 21300000, guid: d3f164f1b5702f948bf9f1c87912e786, type: 3}
+  image: {fileID: 21300000, guid: 53d79ea68d10c024894111d303fd2a77, type: 3}
   prefab: {fileID: 0}
   value: 15000
   tableType: 2
