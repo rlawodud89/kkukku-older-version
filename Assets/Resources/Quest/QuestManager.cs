@@ -92,7 +92,18 @@ public class QuestManager : MonoBehaviour
         }
 
 
-        WipeAllQuestRows();
+        
+        //WipeAllQuestRows();
+        /*
+        int count = gameManager.Count_InventoryItem("별무늬고요이불");
+        if (count <= 0)
+        {
+            Debug.Log($"[InventoryUtils] '{"별무늬고요이불"}' 없음(0개).");
+        }
+
+        // 개수만큼 한 번에 소모(삭제)
+        gameManager.Use_InventoryItem("별무늬고요이불", count);
+        Debug.Log($"[InventoryUtils] '{"별무늬고요이불"}' {count}개 삭제 완료.");*/
 
 
         if (LoadDBQuests())

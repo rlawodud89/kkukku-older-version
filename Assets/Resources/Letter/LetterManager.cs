@@ -23,12 +23,11 @@ public class LetterManager : MonoBehaviour
     {
         gameManager = GameManager.getInstance();
         letters = gameManager.Get_Current_Letter();
-        
+        //gameManager.Remove_Letter("미드나잇의 편지");
         foreach (LetterSO letter in letters)
         {
             AddLetter(letter);
         }
-
     }
 
     // Update is called once per frame
