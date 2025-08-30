@@ -62,6 +62,13 @@ public class Make_Fabric : MonoBehaviour
         // 람다식에 사용할 로컬 변수 생성
         Employee employeeForLambda = current_employee;
 
+        if (current_employee.isWorking)
+        {
+            ShowAnnounceText("이미 작업 중입니다.", 2f);
+            return;
+        }
+
+
         if (current_employee.lackStamina())
         {
             Debug.Log("스태미너가 부족합니다!");
@@ -122,7 +129,7 @@ public class Make_Fabric : MonoBehaviour
         }
         else
         {
-            ShowAnnounceText("이미 작업 중입니다.", 2f);
+            ShowAnnounceText("이미 작업 중이거나 재료가 부족합니다.", 2f);
         }
     }
 

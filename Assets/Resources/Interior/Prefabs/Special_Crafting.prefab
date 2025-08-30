@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 342341465455250432}
   - component: {fileID: 1849355292039782345}
   - component: {fileID: 1325363092059515528}
-  - component: {fileID: 4681305029000174490}
   m_Layer: 8
   m_Name: Special_Crafting
   m_TagString: Untagged
@@ -188,22 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74285e8f0f949a44829af5b77998b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollView: {fileID: 0}
-  Panel: {fileID: 0}
---- !u!114 &4681305029000174490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 46905762285492363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4c2f8ce25453924eb812cb0b850961a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   onAppearChannel: {fileID: 11400000, guid: a423964b0e55abe4aa484cc06c0f989c, type: 2}
   onCompleteChannel: {fileID: 11400000, guid: 1618ae3d27b3e9c48845faf37818d894, type: 2}
-  target: {fileID: 46905762285492363}
-  col3D: {fileID: 0}
-  col2D: {fileID: 4903639167590142346}
+  scrollView: {fileID: 0}
+  Panel: {fileID: 0}

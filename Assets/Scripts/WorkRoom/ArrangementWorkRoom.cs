@@ -102,9 +102,9 @@ public class ArrangementWorkRoom : MonoBehaviour
                 }
                 else if (item.interiorName == "특별제작대")
                 {
-                    colliderToggleOnEvent.target = go;
-                    Collider2D coll = go.GetComponent<Collider2D>();
-                    colliderToggleOnEvent.col2D = coll;
+                    //colliderToggleOnEvent.target = go;
+                    //Collider2D coll = go.GetComponent<Collider2D>();
+                    //colliderToggleOnEvent.col2D = coll;
                 }
 
 

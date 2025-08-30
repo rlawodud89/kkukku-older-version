@@ -282,19 +282,19 @@ MonoBehaviour:
     - yarn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ce89a9082ccd49f4b9d208cddf464ee8
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uD759\uD0C0\uC77C.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uD759\uBC14\uB2E5.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 411d58b8d83befd4da67c1b43ab4175b
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB3CC\uBCBD.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uB3CC\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5ca3e44558eb2a4382345b1a569dcb2
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/\uB098\uBB34\uBCBD.asset"
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uD1B5\uB098\uBB34\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - tile
@@ -437,8 +437,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - tile
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8cf3ced0e14a5b3449fcf9fa2804e6f0
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uD770\uB098\uBB34\uBCBD.asset"
+  - m_GUID: 161f0143aafaf7e4d9be8a8011db9645
+    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Wall_Tiles/\uD770\uB3CC\uBCBD.asset"
     m_ReadOnly: 0
     m_SerializedLabels:
     - tile
@@ -563,8 +563,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - cotton
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 134a578d4105a274ba9267839b85fd5c
-    m_Address: "Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/\uB3CC\uBC14\uB2E5.asset"
+  - m_GUID: fad5ae6f9b7a30148a2b72e0f49531d4
+    m_Address: Assets/ScriptableObject/Interiors/Tiles/Floor_Tiles/NewInterior.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - tile

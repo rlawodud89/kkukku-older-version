@@ -1,11 +1,18 @@
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D.IK;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class ClickSome : MonoBehaviour
 {
+    [Header("채널 연결(같은 에셋을 양쪽에서 참조해야 함)")]
+    public VoidEventChannelSO onAppearChannel;
+    public VoidEventChannelSO onCompleteChannel;
+
     private Transform canvasTransform;
     public GameObject scrollView;
     public GameObject Panel;
@@ -14,6 +21,7 @@ public class ClickSome : MonoBehaviour
 
     private InteriorManager interiorManager;
     private GameManager gameManager;
+    private bool specialOn = false;
 
     void Start()
     {
@@ -26,10 +34,17 @@ public class ClickSome : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        //if (onAppearChannel != null) onAppearChannel.OnRaised += TurnOn;
+        //if (onCompleteChannel != null) onCompleteChannel.OnRaised += TurnOff;
     }
+
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        //if (onAppearChannel != null) onAppearChannel.OnRaised -= TurnOn;
+        //if (onCompleteChannel != null) onCompleteChannel.OnRaised -= TurnOff;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -108,6 +123,18 @@ public class ClickSome : MonoBehaviour
         {
             Debug.Log("UI 위 클릭 → Table 클릭 무시");
             return;
+        }
+
+        if (gameObject.name == "Special_Crafting(Clone)")
+        {
+            var quests = gameManager.Get_Current_Quest();
+            specialOn = false;
+            foreach (var q in quests)
+            {
+                if (q.questTitle == "제대로 된 이불 (2)") specialOn = true;
+            }
+
+            if (!specialOn) return;
         }
 
         float movedDistance = Vector3.Distance(Input.mousePosition, mouseDownPos);

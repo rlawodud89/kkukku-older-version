@@ -92,7 +92,7 @@ public class QuestManager : MonoBehaviour
         }
 
 
-        WipeAllQuestRows();
+        //WipeAllQuestRows();
 
 
         if (LoadDBQuests())
