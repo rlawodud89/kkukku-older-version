@@ -100,7 +100,7 @@ public class ClickSome : MonoBehaviour
 
     void Update()
     {
-        if (Panel == null || scrollView == null)
+        if ((Panel == null && scrollView == null) || (Panel == null && gameObject.name == "Special_Crafting(Clone)"))
         {
             SetPanel(this.gameObject);
         }

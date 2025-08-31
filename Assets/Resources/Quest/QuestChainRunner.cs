@@ -174,6 +174,7 @@ public class QuestChainRunner : MonoBehaviour
             if (CheckRequirementMet(step))
             {
                 q.isCompleted = true;
+                gameManager.Set_Quest_IsCompleted(q.questTitle, true);
                 MaybeNotifyComplete(step);
                 onStepBecameCompleted?.Invoke(currentIndex);
                 RefreshJournal();
@@ -207,6 +208,7 @@ public class QuestChainRunner : MonoBehaviour
         gameManager.Use_InventoryItem(itemId, amount);
 
         s.quest.isCompleted = true;
+        gameManager.Set_Quest_IsCompleted(s.quest.questTitle, true);
         onStepBecameCompleted?.Invoke(currentIndex);
         RefreshJournal();
         return true;
@@ -283,7 +285,9 @@ public class QuestChainRunner : MonoBehaviour
 
                     int need = Mathf.Max(1, s.requirement.requiredCount);
                     bool craftedRuntime = craftedFlags.Contains(id);
+                    Debug.Log("craftedRuntime: " + craftedRuntime);
                     bool existsInDb = gameManager.Count_InventoryItem(id) >= need;
+                    Debug.Log("existsInDb: " + existsInDb);
                     return craftedRuntime || existsInDb;
                 }
             default:

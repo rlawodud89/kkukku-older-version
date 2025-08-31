@@ -15,9 +15,9 @@ MonoBehaviour:
   questTitle: "\uC81C\uB300\uB85C \uB41C \uC774\uBD88 (1)"
   questImage: {fileID: 0}
   questDescription: "\uC774\uBD88\uC744 \uB9CC\uB4E4\uAE30 \uC704\uD55C \uC7AC\uB8CC\uB97C
-    \uBAA8\uC73C\uC790.\r\n\uC740\uD558\uAFC8\uC2E4 (114/1)\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
-    (220/2)\r\n\uBABD\uD658\uC758\uAF43\uC78E (231/2)\r\n\uCCAD\uC57C\uB2EC\uC870\uAC01
-    (244/1)"
+    \uBAA8\uC73C\uC790.\r\n\uC740\uD558\uAFC8\uC2E4 (112/1)\r\n\uD587\uBE5B\uC6B4\uBB34\uC19C
+    (216/2)\r\n\uBABD\uD658\uC758\uAF43\uC78E (226/2)\r\n\uCCAD\uC57C\uB2EC\uC870\uAC01
+    (242/1)"
   rewards:
   - rewardType: "\uC7AC\uD654"
     amount: 150
