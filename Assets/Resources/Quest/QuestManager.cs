@@ -227,7 +227,7 @@ public class QuestManager : MonoBehaviour
                 Debug.Log("퀘스트이미지 있음");
                 questButton.transform.Find("QuestImage").GetComponent<UnityEngine.UI.Image>().sprite = currentQuest.questImage;
             }
-            
+
             if (currentQuest.isCompleted)
                 questButton.transform.Find("ResultText").GetComponent<TMPro.TextMeshProUGUI>().text = "완료!";
             else
@@ -545,6 +545,8 @@ public class QuestManager : MonoBehaviour
     // 퀘스트 진행 상태 업데이트
     public void AddProcessToQuest(QuestSO quest, int amount)
     {
+        if (gameManager == null) gameManager = GameManager.getInstance();
+
         // 퀘스트 진행 상태 업데이트
         quest.questProcess += amount;
 
@@ -552,10 +554,12 @@ public class QuestManager : MonoBehaviour
         if (quest.questProcess >= quest.questComplete)
         {
             quest.isCompleted = true; // 퀘스트 완료 상태로 변경
+            gameManager.Set_Quest_IsCompleted(quest.questTitle, true);
             Debug.Log($"퀘스트 '{quest.questTitle}' 완료!");
         }
         else
         {
+            gameManager.Set_Quest_Process(quest.questTitle, quest.questProcess);
             Debug.Log($"퀘스트 '{quest.questTitle}' 진행 중: {quest.questProcess} / {quest.questComplete}");
         }
     }
@@ -566,7 +570,7 @@ public class QuestManager : MonoBehaviour
     {
         if (quest.getReward) return;
         quest.getReward = true; // 보상 수령 상태 업데이트
-
+        gameManager.Set_Quest_GetReward(quest.questTitle, true);
 
         foreach (var reward in quest.rewards)
         {
@@ -792,21 +796,32 @@ public class QuestManager : MonoBehaviour
         });
 
     }
+
     private void DestroyAllQuestButtons()
     {
-        foreach (var go in questButtons)
-            if (go) Destroy(go);
-        questButtons.Clear();
-
-        // scrollContent 밑에 혹시 남아있는 자식도 깔끔히 제거
-        if(scrollContent.transform != null)
+        if (questButtons != null)
         {
-            foreach (Transform child in scrollContent.transform)
-                if (child != null)
-                    Destroy(child.gameObject);
+            // 중복 파괴 최소화를 원하면: scrollContent 자식인 경우는 건너뛰는 필터를 넣어도 됨.
+            foreach (var go in questButtons)
+            {
+                if (go != null) Destroy(go);
+            }
+            questButtons.Clear();
         }
-        
+
+        // scrollContent null 가드
+        if (scrollContent != null)
+        {
+            // 역순 인덱스 루프: 열거 중 변경 이슈 회피
+            var t = scrollContent.transform;
+            for (int i = t.childCount - 1; i >= 0; i--)
+            {
+                var child = t.GetChild(i);
+                if (child != null) Destroy(child.gameObject);
+            }
+        }
     }
+
 
 
     // 보상 수령 직후, 짧은 딜레이 + 페이드/스케일로 다음 퀘스트 내용 등장

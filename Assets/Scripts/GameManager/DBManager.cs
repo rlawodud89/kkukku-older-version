@@ -653,6 +653,7 @@ public class DBManager
     public void Update_Quest_Process(string questName, int process)
     {
         QuestBox quest = conn.Find<QuestBox>(questName);
+        if (quest == null) return;
         quest.process = process;
         conn.Update(quest);
     }
@@ -660,6 +661,7 @@ public class DBManager
     public void Update_Quest_IsCompleted(string questName, bool isCompleted)
     {
         QuestBox quest = conn.Find<QuestBox>(questName);
+        if (quest == null) return;
         quest.isCompleted = isCompleted;
         conn.Update(quest);
     }
@@ -667,6 +669,7 @@ public class DBManager
     public void Update_Quest_GetReward(string questName, bool getReward)
     {
         QuestBox quest = conn.Find<QuestBox>(questName);
+        if (quest == null) return;
         quest.getReward = getReward;
         conn.Update(quest);
     }
