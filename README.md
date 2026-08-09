@@ -29,6 +29,33 @@ git clone https://github.com/rlawodud89/kkukku-older-version.git
 | 낚시    | 움직이는 바가 중앙 범위에 들어오는 순간 스페이스바를 눌러 재료를 획득합니다.                        |
 | 상점    | 신성 재료, 직원, 인테리어, 도구 등을 구매하고 수량을 조절합니다.                             |
 
+## 🎮 게임 플레이
+
+### 🛏️ 이불 가게
+
+<p align="center">
+  <img src="./images/가게.png" width="600">
+</p>
+
+### 🔨 이불 작업실
+
+<p align="center">
+  <img src="./images/작업실.png" width="600">
+</p>
+
+### 🌿 채집 & 🎣 낚시
+
+<p align="center">
+  <img src="./images/채집.png" width="400">
+  <img src="./images/낚시.png" width="400">
+</p>
+
+### 🏪 상점
+
+<p align="center">
+  <img src="./images/상점.png" width="600">
+</p>
+
 ## 🏗️ 게임 아키텍처
 
 ### SQLite + ScriptableObject 하이브리드 데이터 관리
@@ -43,7 +70,7 @@ git clone https://github.com/rlawodud89/kkukku-older-version.git
 * [GameManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/GameManager.cs)
 * [DBManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/DBManager.cs)
 * [DB Entities](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/Entities)
-* [ScriptableObject](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/ScriptableObject)
+* [ScriptableObject](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/ScriptableObjects)
 
 ### 중앙 저장 관리자
 
