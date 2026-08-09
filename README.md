@@ -40,10 +40,10 @@ git clone https://github.com/rlawodud89/kkukku-older-version.git
 
 관련 코드:
 
-* [GameManager](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager.cs)
-* [DBManager](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/DBManager.cs)
-* [DB Entities](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Entities)
-* [ScriptableObject](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/ScriptableObject)
+* [GameManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/GameManager.cs)
+* [DBManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/DBManager.cs)
+* [DB Entities](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/Entities)
+* [ScriptableObject](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/ScriptableObject)
 
 ### 중앙 저장 관리자
 
