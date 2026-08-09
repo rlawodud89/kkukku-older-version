@@ -13,7 +13,7 @@
 
 1. 리포지터리를 Clone합니다.
 2. Unity Hub에서 프로젝트를 엽니다.
-3. 원하는 씬을 실행하거나 Build Settings에서 Windows 빌드를 생성합니다.
+3. Build Settings에서 Windows 빌드를 생성합니다.
 
 ```bash
 git clone https://github.com/rlawodud89/kkukku-older-version.git
