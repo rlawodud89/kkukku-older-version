@@ -66,9 +66,6 @@ git clone https://github.com/rlawodud89/kkukku-older-version.git
 * **ScriptableObject**: 아이템 이름, 판매 가격 등 런타임 중 변경되지 않는 게임 데이터
 
 관련 코드:
-
-* [GameManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/GameManager.cs)
-* [DBManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/DBManager.cs)
 * [DB Entities](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/Entities)
 * [ScriptableObject](https://github.com/rlawodud89/kkukku-older-version/tree/main/Assets/Scripts/GameManager/ScriptableObjects)
 
@@ -81,6 +78,8 @@ Gameplay Script
       ↓
  GameManager
       ↓
+  DBManager
+      ↓
    SQLite
 ```
 
@@ -88,6 +87,10 @@ Gameplay Script
 * 데이터 변경 시 `GameManager`가 SQLite에 저장합니다.
 * 데이터가 필요할 때 `GameManager`가 SQLite에서 조회해 반환합니다.
 * `ScriptableObject`는 변경되지 않는 게임 데이터를 관리합니다.
+
+관련 코드:
+* [GameManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/GameManager.cs)
+* [DBManager](https://github.com/rlawodud89/kkukku-older-version/blob/main/Assets/Scripts/GameManager/DBManager.cs)
 
 ## 🔄 리마스터 버전
 
